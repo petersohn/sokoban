@@ -1,10 +1,3 @@
-/*
- * Node.cpp
- *
- *  Created on: 1 Feb 2011
- *      Author: eszabpt
- */
-
 #include "Node.h"
 
 using namespace std;
@@ -13,7 +6,7 @@ Node::Node():depth(0), cost(0)
 {
 }
 
-Node::Node(const State &stones, int stone, const Point &d, NodeContainer ans, int c):
+Node::Node(const State &stones, int stone, const Point &d, Ptr ans, int c):
 	ansector_(ans),state_(stones),stone_(stone),d_(d)
 {
 	if (ans.get() == NULL)

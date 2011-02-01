@@ -1,16 +1,8 @@
-/*
- * Node.h
- *
- *  Created on: 1 Feb 2011
- *      Author: eszabpt
- */
-
 #ifndef NODE_H_
 #define NODE_H_
 
 #include <boost/shared_ptr.hpp>
-
-class State;
+#include "State.h"
 
 class Node {
 public:

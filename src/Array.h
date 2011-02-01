@@ -4,7 +4,7 @@
 template<class T>
 class Array {
 	T *data;
-	size_t width, height, size;
+	size_t width_, height_, size_;
 public:
 	typedef T valueType;
 
@@ -25,21 +25,21 @@ public:
 		return data[pos];
 	}
 	T& operator[](const Point &p) {
-		return data[p.y*width + p.x];
+		return data[p.y*width_ + p.x];
 	}
 	const T& operator[](const Point &p) const {
-		return data[p.y*width + p.x];
+		return data[p.y*width_ + p.x];
 	}
-	size_t getSize() const { return size; }
-	size_t getWidth() const { return width; }
-	size_t getHeight() const { return height; }
+	size_t size() const { return size_; }
+	size_t width() const { return width_; }
+	size_t height() const { return height_; }
 	void reset(size_t newWidth, size_t newHeight);
 	void reset(size_t newWidth, size_t newHeight, const T& defValue) {
 		reset(newWidth, newHeight);
 		fill(defValue);
 	}
 	void fill(const T &value) {
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size_; i++)
 			data[i] = value;
 	}
 	void zero() {
@@ -52,55 +52,55 @@ public:
 
 template<class T>
 Array<T>::Array():
-	width(0), height(0), size(0), data(NULL)
+	width_(0), height_(0), size_(0), data(NULL)
 {
 
 }
 
 template<class T>
 Array<T>::Array(size_t width, size_t height):
-	width(width), height(height), size(width*height)
+	width_(width), height_(height), size_(width*height)
 {
-	data = new T[size];
+	data = new T[size_];
 }
 
 template<class T>
 Array<T>::Array(size_t width, size_t height, const T& defValue):
-	width(width), height(height), size(width*height)
+	width_(width), height_(height), size_(width*height)
 {
-	data = new T[size];
+	data = new T[size_];
 	fill(defValue);
 }
 
 template<class T>
 Array<T>::Array(const Array &other):
-	width(other.width), height(other.height)
+	width_(other.width_), height_(other.height_)
 {
-	data = new T[size];
-	for (int i = 0; i < size; i++)
+	data = new T[size_];
+	for (int i = 0; i < size_; i++)
 		data[i] = other[i];
 }
 
 template<class T>
 Array<T>& Array<T>::operator=(const Array &other) {
 	delete[] data;
-	width = other.width;
-	height = other.height;
-	size = width * height;
-	data = new T[size];
-	for (int i = 0; i < size; i++)
+	width_ = other.width_;
+	height_ = other.height_;
+	size_ = width_ * height_;
+	data = new T[size_];
+	for (int i = 0; i < size_; i++)
 		data[i] = other[i];
 	return *this;
 }
 
 template<class T>
 void Array<T>::reset(size_t newWidth, size_t newHeight) {
-	width = newWidth;
-	height = newHeight;
-	size = newWidth * newHeight;
+	width_ = newWidth;
+	height_ = newHeight;
+	size_ = newWidth * newHeight;
 	if (data != NULL)
 		delete[] data;
-	data = new T[size];
+	data = new T[size_];
 }
 
 #endif /* ARRAY_H_ */

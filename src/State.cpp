@@ -1,11 +1,5 @@
-/*
- * State.cpp
- *
- *  Created on: 1 Feb 2011
- *      Author: eszabpt
- */
-
 #include "State.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -58,6 +52,12 @@ void State::moveStone(int stone, const Point &p)
 {
 	stones[stone] = p;
 	hash();
+}
+
+VisitedState::VisitedState(const Node &other):
+		State(other.state()),
+		currentPos(operator[](other.stone()) - other.d())
+{
 }
 
 
