@@ -5,13 +5,16 @@
 #include "Problem.h"
 
 class Status {
-	Problem::Ptr problem;
-	VisitedState state;
-	Array<bool> reachable;
-	Array<uint> stoneAt;
-	Array<Problem::FieldType> fields;
+	Problem::ConstPtr problem_;
+	VisitedState state_;
+	Array<bool> reachable_;
+	Array<uint> stoneAt_;
+	Array<Problem::FieldType> fields_;
+	void copy(const Status &other);
 public:
-	Status();
+	Status(const Problem::ConstPtr &problem);
+	Status(const Status &other);
+
 };
 
 #endif /* STATUS_H_ */

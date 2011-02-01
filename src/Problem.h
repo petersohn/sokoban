@@ -11,6 +11,7 @@ class Problem:public boost::noncopyable {
 public:
 	enum FieldType { ftWall, ftFloor, ftStone };
 	typedef boost::shared_ptr<Problem> Ptr;
+	typedef boost::shared_ptr<const Problem> ConstPtr;
 private:
 	size_t stoneNum_;
 	Array<FieldType> table_;
