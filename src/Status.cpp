@@ -17,7 +17,7 @@ Status::Status(const Problem &problem):
 void Status::calculateStoneAt() {
 	fieldAt_.reset(problem()->width(), problem()->height());
 	for (int i = 0; i < state_.size(); ++i) {
-		fieldAt[state[i]] = i;
+		fieldAt_[state[i]] = i;
 	}
 }
 
