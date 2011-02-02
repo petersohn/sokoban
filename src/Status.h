@@ -23,7 +23,6 @@ private:
 
 	void calculateStoneAt();
 	void calculateReachable();
-	bool moveStone(int stone, const Point & p);
 public:
 	Status(const Problem &problem);
 
@@ -36,6 +35,7 @@ public:
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
 	FieldType fields(const Point &p) const { return arrayAt(fields_, p); }
+	bool moveStone(int stone, const Point & p);
 //	const std::vector<CheckFunction>& checkFunctions() const { return checkFunctions_; }
 //	std::vector<CheckFunction>& checkFunctions() { return checkFunctions_; }
 };
