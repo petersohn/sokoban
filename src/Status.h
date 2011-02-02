@@ -20,7 +20,7 @@ private:
 	bool reachOK_;
 	std::vector<CheckFunction> checkFunctions_;
 
-	void calculate();
+	void calculateStoneAt();
 	void calculateReachable();
 	bool moveStone(int stone, const Point & p);
 public:
