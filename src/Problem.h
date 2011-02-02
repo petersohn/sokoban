@@ -1,6 +1,7 @@
 #ifndef PROBLEM_H_
 #define PROBLEM_H_
 
+#include "Common.h"
 #include "Array.h"
 #include <boost/shared_ptr.hpp>
 
@@ -28,20 +29,19 @@ public:
 	size_t height() const { return table_.height(); }
 	size_t stoneNum() const { return stoneNum_; }
 	FieldType table(const Point &p) const {
-		if (p.x >= 0 && p.y >= 0 && p.x < width() && p.y < height())
-			return table_[p];
-		return ftWall;
+		return arrayAt<FieldType, ftWall>(table_, p);
 	}
 	FieldType bareTable(const Point &p) const {
-		if (p.x >= 0 && p.y >= 0 && p.x < width() && p.y < height())
-			return table_[p] == ftStone ? ftFloor : table_[p];
-		return ftWall;
+		return arrayAt<FieldType, ftWall>(table_, p) == ftStone ?
+				ftFloor :
+				arrayAt<FieldType, ftWall>(table_, p);
 	}
 	const VisitedState& beginningState() const {
 		if (!visitedStateOK())
 			initState();
 		return beginningState_;
 	}
+	const Point& destination() { return destination_; }
 
 	void reload(const char *filename);
 	void clearStones();

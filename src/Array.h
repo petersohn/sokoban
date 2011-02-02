@@ -1,6 +1,8 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
 
+#include "Point.h"
+
 template<class T>
 class Array {
 	T *data;
@@ -104,6 +106,13 @@ void Array<T>::reset(size_t newWidth, size_t newHeight) {
 	if (data != NULL)
 		delete[] data;
 	data = new T[size_];
+}
+
+template<class T, T Def>
+inline const T& arrayAt(const Array<T> &arr, const Point &p) {
+	if (p.x >= 0 && p.y >= 0 && p.x < arr.width() && p.y < arr.height())
+			return arr[p];
+		return Def;
 }
 
 #endif /* ARRAY_H_ */

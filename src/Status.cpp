@@ -22,13 +22,19 @@ void Status::calculateStoneAt() {
 }
 
 void Status::calculateReachable() {
-
+	floodFill(fields_, state().currentPos(), reachable_);
+	reachOK_ = true;
 }
 
 bool Status::moveStone(int stone, const Point & p) {
-
+	if (fields(state()[stone]) != ftStone && fields(p) != ftFloor)
+		return false;
+	fields_[state()[stone]] = ftFloor;
+	state().moveStone(stone, p);
+	if (p != problem().destination())
+	{
+		fields_[p] = ftStone;
+		stoneAt_[p] = stone;
+	}
 }
 
-bool Status::step(int stone, const Point &d) {
-
-}

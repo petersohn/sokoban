@@ -1,6 +1,7 @@
 #ifndef STATUS_H_
 #define STATUS_H_
 
+#include "Common.h"
 #include "Array.h"
 #include "Problem.h"
 #include <boost/shared_ptr.hpp>
@@ -10,13 +11,13 @@
 class Status {
 public:
 	typedef boost::shared_ptr<Status> Ptr;
-	typedef boost::function<bool(Status&)> CheckFunction;
+//	typedef boost::function<bool(Status&)> CheckFunction;
 private:
 	Problem::ConstPtr problem_;
 	VisitedState state_;
 	Array<bool> reachable_;
 	Array<uint> stoneAt_;
-	Array<Problem::FieldType> fields_;
+	Array<FieldType> fields_;
 	bool reachOK_;
 	std::vector<CheckFunction> checkFunctions_;
 
@@ -34,11 +35,9 @@ public:
 		return reachable_[p];
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
-	Problem::FieldType fields(const Point &p) const { return fields_[p]; }
-	const std::vector<CheckFunction>& checkFunctions() const { return checkFunctions_; }
-	std::vector<CheckFunction>& checkFunctions() { return checkFunctions_; }
-
-	bool step(int stone, const Point &d);
+	FieldType fields(const Point &p) const { return arrayAt(fields_, p); }
+//	const std::vector<CheckFunction>& checkFunctions() const { return checkFunctions_; }
+//	std::vector<CheckFunction>& checkFunctions() { return checkFunctions_; }
 };
 
 #endif /* STATUS_H_ */

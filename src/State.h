@@ -33,7 +33,10 @@ public:
 	bool operator==(const State &other) const;
 	bool operator<(const State &other) const;
 	void moveStone(int stone, const Point &p);
-	const Point& operator[](int stone) const { return stones[stone]; }
+	const Point& operator[](int stone) const {
+		assert(stone >= 0 && stone < stones_.size());
+		return stones_[stone];
+	}
 	size_t size() const { return stones.size(); }
 };
 
