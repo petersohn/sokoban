@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Problem::Problem():width_(0), height_(0), stoneNum_(0) {
+Problem::Problem():width_(0), height_(0), stoneNum_(0), stateOK_(false) {
 }
 
 void Problem::reload(const char *filename) {
@@ -16,7 +16,8 @@ void Problem::reload(const char *filename) {
 	file >> height >> width;
 	string line;
 	getline(file, line); // dummy
-	table_.reset(width, height, 0);
+	table_.reset(width, height, ftFloor);
+	bareTable_.reset(width, height, ftFloor);
 	stoneNum_ = 0;
 	table_.zero();
 
@@ -35,25 +36,24 @@ void Problem::reload(const char *filename) {
 			case 'X':
 			case 'x':
 				destination_ = p;
-				table_[p] = F_FLOOR;
+				setTable(p, ftFloor);
 				destinationOK = true;
 				break;
 			case 'Y':
 			case 'y':
 				startPos = p;
-				table_[p] = F_FLOOR;
+				setTable(p, ftFloor);
 				startPosOK = true;
 				break;
 			case '.':
-				startField[p] = F_FLOOR;
+				setTable(p, ftFloor);
 				break;
 			case 'o':
 			case 'O':
-				table_[p] = F_STONE;
-				++stoneNum_;
+				setTable(p, ftStone);
 				break;
 			default:
-				table_[p] = F_WALL;
+				setTable(p, ftWall);
 			}
 		}
 		cerr << endl;
@@ -63,16 +63,15 @@ void Problem::reload(const char *filename) {
 	cerr << endl;
 	if (stoneNum == 0 || !startPosOK || !destinationOK)
 		throw exception(); // TODO exception handling
-	initState();
-	beginningState_.currentPos_ = startPos;
+	stateOK_ = false;
 }
 
 void Problem::initState() {
 	vector<Point> newStones;
 	newStones.reserve(stoneNum());
 	Point p;
-	for (p.y = 0; p.y < height; ++p.y)
-		for (p.x = 0; p.x < width; ++p.x)
+	for (p.y = 0; p.y < height(); ++p.y)
+		for (p.x = 0; p.x < width(); ++p.x)
 		{
 			if (table(p) == F_STONE)
 			{
@@ -80,5 +79,47 @@ void Problem::initState() {
 			}
 		}
 	beginningState_.setStones(newStones);
-	stones.currentPos = Point(startPos);
+	beginningState_.currentPos = Point(startPos);
+}
+
+void Problem::clearStones() {
+	Point p;
+	for (p.y = 0; p.y < height(); ++p.y)
+		for (p.x = 0; p.x < width(); ++p.x) {
+			table_[p] = bareTable(p);
+		}
+	stoneNum_ = 0;
+	stateOK_ = false;
+}
+
+void Problem::setTable(const Point &p, FieldType f) {
+	if (table[p] == f)
+		return;
+	if (f == ftStone)
+		++stoneNum_;
+	else
+	if (table_[p] == ftStone)
+		--stoneNum_;
+	table_[p] = f;
+	stateOK_ = false;
+}
+
+bool Problem::addStone(const Point &p) {
+	if (table(p) == ftFloor) {
+		table_[p] = ftStone;
+		++stoneNum_;
+		stateOK_ = false;
+		return true;
+	}
+	return false;
+}
+
+bool Problem::removeStone(const Point &p) {
+	if (table(p) == ftStone) {
+		table_[p] = ftFloor;
+		--stoneNum_;
+		stateOK_ = false;
+		return true;
+	}
+	return false;
 }
