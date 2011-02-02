@@ -2,12 +2,11 @@
 #define PROBLEM_H_
 
 #include "Array.h"
-#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 class VisitedState;
 
-class Problem:public boost::noncopyable {
+class Problem {
 public:
 	enum FieldType { ftWall, ftFloor, ftStone };
 	typedef boost::shared_ptr<Problem> Ptr;
