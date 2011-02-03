@@ -1,6 +1,9 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+#include <exception>
+#include <boost/shared_ptr.hpp>
+
 template<class T> class Array;
 class Point;
 

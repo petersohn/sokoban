@@ -9,8 +9,8 @@ class VisitedState;
 
 class Problem {
 public:
-	typedef boost::shared_ptr<Problem> Ptr;
-	typedef boost::shared_ptr<const Problem> ConstPtr;
+//	typedef boost::shared_ptr<Problem> Ptr;
+//	typedef boost::shared_ptr<const Problem> ConstPtr;
 private:
 	size_t stoneNum_;
 	Array<FieldType> table_;
@@ -48,6 +48,15 @@ public:
 	void setTable(const Point &p, FieldType f);
 	bool addStone(const Point &p);
 	bool removeStone(const Point &p);
+};
+
+class FixedProblem {
+	Problem problem_;
+public:
+	typedef boost::shared_ptr<const FixedProblem> Ptr;
+
+	FixedProblem(const Problem &p): problem_(p) {}
+	const Problem &problem() const { return problem_; }
 };
 
 #endif /* PROBLEM_H_ */

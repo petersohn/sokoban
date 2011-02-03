@@ -14,6 +14,12 @@ Status::Status(const Problem &problem):
 	calculateStoneAt();
 }
 
+Status::Status(const Problem &problem, const Node &node):
+
+{
+
+}
+
 void Status::calculateStoneAt() {
 	fieldAt_.reset(problem()->width(), problem()->height());
 	for (int i = 0; i < state_.size(); ++i) {

@@ -13,7 +13,7 @@ public:
 	typedef boost::shared_ptr<Status> Ptr;
 //	typedef boost::function<bool(Status&)> CheckFunction;
 private:
-	Problem::ConstPtr problem_;
+	FixedProblem::Ptr problem_;
 	VisitedState state_;
 	Array<bool> reachable_;
 	Array<uint> stoneAt_;
@@ -25,8 +25,9 @@ private:
 	void calculateReachable();
 public:
 	Status(const Problem &problem);
+	explicit Status(const Problem &problem, const Node &node);
 
-	Problem::ConstPtr problem() const { return problem_; }
+	Problem& problem() const { return problem_->problem(); }
 	const VisitedState& state() const { return state_; }
 	bool reachable(const Point &p) const {
 		if (!reachOK_)
