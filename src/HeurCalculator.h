@@ -3,10 +3,17 @@
 
 class Status;
 
+namespace boost {
+	template<class T>
+	class shared_ptr;
+}
+
 class HeurCalculator {
 public:
-	virtual ~HeurCalculator() = 0;
+	typedef boost::shared_ptr<HeurCalculator> Ptr;
+	virtual ~HeurCalculator() {}
 	virtual int calculate(Status &) = 0;
+	static Ptr create();
 };
 
 #endif /* HEURCALCULATOR_H_ */

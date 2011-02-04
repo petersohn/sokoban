@@ -29,12 +29,12 @@ public:
 	size_t height() const { return table_.height(); }
 	size_t stoneNum() const { return stoneNum_; }
 	FieldType table(const Point &p) const {
-		return arrayAt<FieldType, ftWall>(table_, p);
+		return arrayAt<FieldType>(table_, p, ftWall);
 	}
 	FieldType bareTable(const Point &p) const {
-		return arrayAt<FieldType, ftWall>(table_, p) == ftStone ?
+		return arrayAt<FieldType>(table_, p, ftWall) == ftStone ?
 				ftFloor :
-				arrayAt<FieldType, ftWall>(table_, p);
+				arrayAt<FieldType>(table_, p, ftWall);
 	}
 	const VisitedState& beginningState() const {
 		if (!visitedStateOK())

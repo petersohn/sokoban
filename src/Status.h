@@ -19,15 +19,16 @@ private:
 	Array<uint> stoneAt_;
 	Array<FieldType> fields_;
 	bool reachOK_;
-	std::vector<CheckFunction> checkFunctions_;
+//	std::vector<CheckFunction> checkFunctions_;
 
-	void calculateStoneAt();
 	void calculateReachable();
+	void init();
+	void initNode(const Node &node);
 public:
-	Status(const Problem &problem);
-	explicit Status(const Problem &problem, const Node &node);
+	explicit Status(FixedProblem::Ptr problem);
+	explicit Status(FixedProblem::Ptr problem, const Node &node);
 
-	Problem& problem() const { return problem_->problem(); }
+	const Problem& problem() const { return problem_->problem(); }
 	const VisitedState& state() const { return state_; }
 	bool reachable(const Point &p) const {
 		if (!reachOK_)
@@ -35,7 +36,7 @@ public:
 		return reachable_[p];
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
-	FieldType fields(const Point &p) const { return arrayAt(fields_, p); }
+	FieldType fields(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
 	bool moveStone(int stone, const Point & p);
 //	const std::vector<CheckFunction>& checkFunctions() const { return checkFunctions_; }
 //	std::vector<CheckFunction>& checkFunctions() { return checkFunctions_; }

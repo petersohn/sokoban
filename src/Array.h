@@ -108,11 +108,11 @@ void Array<T>::reset(size_t newWidth, size_t newHeight) {
 	data = new T[size_];
 }
 
-template<class T, T Def>
-inline const T& arrayAt(const Array<T> &arr, const Point &p) {
+template<class T>
+inline const T& arrayAt(const Array<T> &arr, const Point &p, const T& def) {
 	if (p.x >= 0 && p.y >= 0 && p.x < arr.width() && p.y < arr.height())
 			return arr[p];
-		return Def;
+		return def;
 }
 
 #endif /* ARRAY_H_ */
