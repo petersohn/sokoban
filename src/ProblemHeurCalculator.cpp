@@ -1,8 +1,11 @@
-#include "TableHeurCalculator.h"
+#include "ProblemHeurCalculator.h"
 
-ProblemHeurCalculator::ProblemHeurCalculator(FixedProblem::Ptr problem):
-	problem_(problem)
+int ProblemHeurCalculator::calculate(const Status & status)
 {
-
+	if (problem_ != status.problemPtr()) {
+		problem_ = status.problemPtr();
+		init();
+	}
+	calculate();
 }
 

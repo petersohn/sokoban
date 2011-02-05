@@ -8,10 +8,14 @@
 
 class ProblemHeurCalculator: public HeurCalculator {
 	FixedProblem::Ptr problem_;
+	virtual int doCalculate(const Status &status) = 0;
+	virtual void init() = 0;
 public:
-	ProblemHeurCalculator(FixedProblem::Ptr problem);
+	ProblemHeurCalculator() {}
+	virtual int calculate(const Status &status);
 
 	const Problem& problem() const { return problem_->problem(); }
+	FixedProblem::Ptr problemPtr() const { return problem_; }
 };
 
 #endif /* TABLEHEURCALCULATOR_H_ */
