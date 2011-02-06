@@ -3,20 +3,20 @@
 
 #include "Common.h"
 #include "Array.h"
+#include "Table.h"
 #include <boost/shared_ptr.hpp>
 
 class VisitedState;
 
 class Problem {
 public:
-//	typedef boost::shared_ptr<Problem> Ptr;
-//	typedef boost::shared_ptr<const Problem> ConstPtr;
+	typedef boost::shared_ptr<Problem> Ptr;
 private:
 	size_t stoneNum_;
-	Array<FieldType> table_;
+	Array<bool> stones_;
 	VisitedState beginningState_;
 	bool stateOK_;
-	Point destination_;
+	FixedTable::Ptr table_;
 
 	void initState();
 public:
@@ -24,39 +24,36 @@ public:
 	explicit Problem(const char *filename) {
 		reload(filename);
 	}
+	explicit Problem(FixedTable::Ptr table) {
+		reset(table);
+	}
 
 	size_t width() const { return table_.width(); }
 	size_t height() const { return table_.height(); }
 	size_t stoneNum() const { return stoneNum_; }
-	FieldType table(const Point &p) const {
-		return arrayAt<FieldType>(table_, p, ftWall);
+	const Table& table() { return table_->get(); }
+	FixedTable::Ptr tablePtr() { return table_; }
+	FieldType value(const Point &p) const {
+		return (value().wall(p) ? ftWall :
+				(stones_[p] ? ftStone : ftFloor));
 	}
-	FieldType bareTable(const Point &p) const {
-		return arrayAt<FieldType>(table_, p, ftWall) == ftStone ?
-				ftFloor :
-				arrayAt<FieldType>(table_, p, ftWall);
+	FieldType tableValue(const Point &p) const {
+		return value().wall(p) ? ftWall : ftFloor;
 	}
 	const VisitedState& beginningState() const {
 		if (!visitedStateOK())
 			initState();
 		return beginningState_;
 	}
-	const Point& destination() { return destination_; }
+	const Point& destination() const { return table().destination(); }
 
 	void reload(const char *filename);
+	void reset(FixedTable::Ptr table);
 	void clearStones();
-	void setTable(const Point &p, FieldType f);
 	bool addStone(const Point &p);
 	bool removeStone(const Point &p);
 };
 
-class FixedProblem {
-	Problem problem_;
-public:
-	typedef boost::shared_ptr<const FixedProblem> Ptr;
-
-	FixedProblem(const Problem &p): problem_(p) {}
-	const Problem &problem() const { return problem_; }
-};
+typedef FixedObject<Problem> FixedProblem;
 
 #endif /* PROBLEM_H_ */

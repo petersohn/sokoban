@@ -28,7 +28,7 @@ public:
 	explicit Status(FixedProblem::Ptr problem);
 	explicit Status(FixedProblem::Ptr problem, const Node &node);
 
-	const Problem& problem() const { return problem_->problem(); }
+	const Problem& problem() const { return problem_->get(); }
 	FixedProblem::Ptr problemPtr() const { return problem_; }
 	const VisitedState& state() const { return state_; }
 	bool reachable(const Point &p) const {

@@ -19,7 +19,19 @@ struct MinMax {
 	int minX, maxX, minY, maxY;
 };
 
-enum FieldType { ftWall, ftFloor, ftStone };
+template<class T>
+class FixedObject {
+	T value_;
+public:
+	typedef boost::shared_ptr<const FixedObject<T> > Ptr;
+	typedef T value_type;
+
+	FixedObject(const T &val): value_(val) {}
+	const T &get() const { return value_; }
+};
+
+
+enum FieldType { ftFloor, ftWall, ftStone };
 
 void floodFill(const Array<FieldType> &table, const Point &p0, Array<bool> &result,
 			std::deque<int> *border = NULL, MinMax *minmax = NULL);

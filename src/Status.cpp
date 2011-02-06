@@ -22,7 +22,7 @@ void Status::init() {
 	Point p;
 	for (p.y = 0; p.y < problem()->height(); ++p.y)
 		for (p.x = 0; p.x < problem()->width(); ++p.x)  {
-			fields_[p] = problem_->table(p);
+			fields_[p] = problem_->value(p);
 		}
 	for (int i = 0; i < state_.size(); ++i) {
 		stoneAt_[state_[i]] = i;
@@ -33,7 +33,7 @@ void Status::initNode(const Node &node) {
 	Point p;
 	for (p.y = 0; p.y < problem()->height(); ++p.y)
 		for (p.x = 0; p.x < problem()->width(); ++p.x)  {
-			fields_[p] = problem_->bareTable(p);
+			fields_[p] = problem_->tableValue(p);
 		}
 	for (size_t i = 0; i < state_.size(); ++i)
 		if (state_[i] != problem()->destination())

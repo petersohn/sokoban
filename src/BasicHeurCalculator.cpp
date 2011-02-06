@@ -1,10 +1,3 @@
-/*
- * BasicHeurCalculator.cpp
- *
- *  Created on: 2011.02.04.
- *      Author: peet
- */
-
 #include "BasicHeurCalculator.h"
 
 virtual int BasicHeurCalculator::init() {
@@ -39,8 +32,8 @@ bool BasicHeurCalculator::checkDistance(const Point & p, const Point & d, int di
 {
 	Point pd = p+d;
 	bool result =
-			problem().bareTable(pd) != ftWall &&
-			problem().bareTable(p+d*2) != ftWall &&
+			problem().tableValue(pd) != ftWall &&
+			problem().tableValue(p+d*2) != ftWall &&
 			(distances_[pd] == 0 || distances_[pd] > dist);
 	if (result)
 		distances_[pd] = dist;

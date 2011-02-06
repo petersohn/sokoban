@@ -14,7 +14,7 @@ public:
 	ProblemHeurCalculator() {}
 	virtual int calculate(const Status &status);
 
-	const Problem& problem() const { return problem_->problem(); }
+	const Problem& problem() const { return problem_->get(); }
 	FixedProblem::Ptr problemPtr() const { return problem_; }
 };
 

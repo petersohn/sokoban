@@ -16,14 +16,13 @@ void Problem::reload(const char *filename) {
 	file >> height >> width;
 	string line;
 	getline(file, line); // dummy
-	table_.reset(width, height, ftFloor);
-	bareTable_.reset(width, height, ftFloor);
-	stoneNum_ = 0;
-	table_.zero();
 
 	bool startPosOK = false, destinationOK = false;
+	int stoneNum = 0;
 	Point p;
 	Point startPos;
+	Array<bool> stones(width, height);
+	Table table(width, height);
 	while (file.good())
 	{
 		getline(file, line);
@@ -35,25 +34,31 @@ void Problem::reload(const char *filename) {
 			{
 			case 'X':
 			case 'x':
-				destination_ = p;
-				setTable(p, ftFloor);
+				table.destination(p);
+				stones[p] = false;
+				table.setWall(p, false);
 				destinationOK = true;
 				break;
 			case 'Y':
 			case 'y':
 				startPos = p;
-				setTable(p, ftFloor);
+				stones[p] = false;
+				table.setWall(p, false);
 				startPosOK = true;
 				break;
 			case '.':
-				setTable(p, ftFloor);
+				stones[p] = false;
+				table.setWall(p, false);
 				break;
 			case 'o':
 			case 'O':
-				setTable(p, ftStone);
+				stones[p] = true;
+				table.setWall(p, false);
+				++stoneNum;
 				break;
 			default:
-				setTable(p, ftWall);
+				stones[p] = false;
+				table.setWall(p, true);
 			}
 		}
 		cerr << endl;
@@ -62,7 +67,10 @@ void Problem::reload(const char *filename) {
 	}
 	cerr << endl;
 	if (stoneNum == 0 || !startPosOK || !destinationOK)
-		throw exception(); // TODO exception handling
+		throw SokobanException(); // TODO exception handling
+	table_.reset(new FixedTable(table));
+	stoneNum_ = stoneNum;
+	stones_ = stones;
 	stateOK_ = false;
 }
 
@@ -73,7 +81,7 @@ void Problem::initState() {
 	for (p.y = 0; p.y < height(); ++p.y)
 		for (p.x = 0; p.x < width(); ++p.x)
 		{
-			if (table(p) == F_STONE)
+			if (value(p) == ftStone)
 			{
 				newStones.push_back(p);
 			}
@@ -82,30 +90,23 @@ void Problem::initState() {
 	beginningState_.currentPos = Point(startPos);
 }
 
+void Problem::reset(FixedTable::Ptr table) {
+	table_ = table;
+	clearStones();
+}
+
 void Problem::clearStones() {
 	Point p;
 	for (p.y = 0; p.y < height(); ++p.y)
 		for (p.x = 0; p.x < width(); ++p.x) {
-			table_[p] = bareTable(p);
+			stones_[p] = false;
 		}
 	stoneNum_ = 0;
 	stateOK_ = false;
 }
 
-void Problem::setTable(const Point &p, FieldType f) {
-	if (table[p] == f)
-		return;
-	if (f == ftStone)
-		++stoneNum_;
-	else
-	if (table_[p] == ftStone)
-		--stoneNum_;
-	table_[p] = f;
-	stateOK_ = false;
-}
-
 bool Problem::addStone(const Point &p) {
-	if (table(p) == ftFloor) {
+	if (value(p) == ftFloor) {
 		table_[p] = ftStone;
 		++stoneNum_;
 		stateOK_ = false;
@@ -115,7 +116,7 @@ bool Problem::addStone(const Point &p) {
 }
 
 bool Problem::removeStone(const Point &p) {
-	if (table(p) == ftStone) {
+	if (value(p) == ftStone) {
 		table_[p] = ftFloor;
 		--stoneNum_;
 		stateOK_ = false;
