@@ -1,11 +1,11 @@
 #include "ProblemHeurCalculator.h"
 
-int ProblemHeurCalculator::calculate(const Status & status)
+int ProblemHeurCalculator::calculate(const Status & status) const
 {
-	if (problem_ != status.problemPtr()) {
-		problem_ = status.problemPtr();
+	if (table_ != status.problem().tablePtr()) {
+		table_ = status.problem().tablePtr();
 		init();
 	}
-	calculate();
+	doCalculate();
 }
 

@@ -14,6 +14,7 @@ public:
 private:
 	size_t stoneNum_;
 	Array<bool> stones_;
+	Point startPos_;
 	VisitedState beginningState_;
 	bool stateOK_;
 	FixedTable::Ptr table_;
@@ -45,11 +46,13 @@ public:
 			initState();
 		return beginningState_;
 	}
+	const Point& startPos() const { return startPos_; }
 	const Point& destination() const { return table().destination(); }
 
 	void reload(const char *filename);
 	void reset(FixedTable::Ptr table);
 	void clearStones();
+	void startPos(const Point &p);
 	bool addStone(const Point &p);
 	bool removeStone(const Point &p);
 };

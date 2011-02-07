@@ -71,6 +71,7 @@ void Problem::reload(const char *filename) {
 	table_.reset(new FixedTable(table));
 	stoneNum_ = stoneNum;
 	stones_ = stones;
+	startPos_ = startPos;
 	stateOK_ = false;
 }
 
@@ -87,7 +88,7 @@ void Problem::initState() {
 			}
 		}
 	beginningState_.setStones(newStones);
-	beginningState_.currentPos = Point(startPos);
+	beginningState_.currentPos(startPos_);
 }
 
 void Problem::reset(FixedTable::Ptr table) {
@@ -113,6 +114,12 @@ bool Problem::addStone(const Point &p) {
 		return true;
 	}
 	return false;
+}
+
+void Problem::startPos(const Point & p)
+{
+	startPos_ = p;
+	beginningState_.currentPos(startPos_);
 }
 
 bool Problem::removeStone(const Point &p) {

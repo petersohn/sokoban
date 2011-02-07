@@ -6,7 +6,7 @@
 
 class BasicHeurCalculator: public ProblemHeurCalculator {
 	Array<int> distances_;
-	virtual int doCalculate(const Status &status);
+	virtual int doCalculate(const Status &status) const;
 	virtual void init();
 
 	bool checkDistance(const Point & p, const Point & d, int dist);

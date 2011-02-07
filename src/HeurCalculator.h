@@ -12,7 +12,7 @@ class HeurCalculator {
 public:
 	typedef boost::shared_ptr<HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}
-	virtual int calculate(const Status &) = 0;
+	virtual int calculate(const Status &) const = 0;
 	static Ptr create();
 };
 

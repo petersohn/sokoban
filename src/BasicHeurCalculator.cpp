@@ -1,8 +1,8 @@
 #include "BasicHeurCalculator.h"
 
-virtual int BasicHeurCalculator::init() {
+int BasicHeurCalculator::init() {
 	distances_.reset(width, height, 0);
-	distances_[problem().destination()] = 1;
+	distances_[table().destination()] = 1;
 	bool touched;
 	Point p;
 	do {
@@ -28,12 +28,20 @@ virtual int BasicHeurCalculator::init() {
 			distances[p]--;
 }
 
+int BasicHeurCalculator::doCalculate(const Status & status) const
+{
+	int result = 0;
+	for (int i = 0; i < status.state().size(); ++i)
+		result += distances_[status.state[i]];
+	return result;
+}
+
 bool BasicHeurCalculator::checkDistance(const Point & p, const Point & d, int dist)
 {
 	Point pd = p+d;
 	bool result =
-			problem().tableValue(pd) != ftWall &&
-			problem().tableValue(p+d*2) != ftWall &&
+			! table().wall(pd) &&
+			!table().wall(p+d*2) &&
 			(distances_[pd] == 0 || distances_[pd] > dist);
 	if (result)
 		distances_[pd] = dist;

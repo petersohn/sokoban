@@ -3,19 +3,19 @@
 
 #include "HeurCalculator.h"
 #include "Array.h"
-#include "Problem.h"
+#include "Table.h"
 #include <boost/scoped_ptr.hpp>
 
 class ProblemHeurCalculator: public HeurCalculator {
-	FixedProblem::Ptr problem_;
-	virtual int doCalculate(const Status &status) = 0;
+	FixedTable::Ptr table_;
+	virtual int doCalculate(const Status &status) const = 0;
 	virtual void init() = 0;
 public:
 	ProblemHeurCalculator() {}
-	virtual int calculate(const Status &status);
+	virtual int calculate(const Status &status) const;
 
-	const Problem& problem() const { return problem_->get(); }
-	FixedProblem::Ptr problemPtr() const { return problem_; }
+	const Table& table() const { return table_->get(); }
+	FixedTable::Ptr problemPtr() const { return table_; }
 };
 
 #endif /* TABLEHEURCALCULATOR_H_ */
