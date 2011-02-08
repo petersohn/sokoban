@@ -1,6 +1,8 @@
 #include "AdvancedHeurCalculator.h"
 #include "Status.h"
 #include "Solver.h"
+#include "Node.h"
+#include <vector>
 
 void AdvancedHeurCalculator::init()
 {
@@ -51,28 +53,41 @@ void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
 				goto ki;
 ki:
 	Array<bool> reach(width, height, false);
-	floodFill(pp, reach);
+	Status st(problem);
+	floodFill(st, pp, reach);
 	Partition part;
 	part.heur = -1;
 	if (p == destination)
 		part.heur = 0;
-	else
-		solveIt();
+	else {
+		Solver s(problem, calculator_);
+		std::vector<Node::Ptr> res = s.solve();
+		if (res.size() != 0)
+			part.heur = (*res.rbegin())->cost();
+	}
 	part.reachable = reach;
-	if (part.heur < 0 && state.get() != NULL)
-		part.heur = state->cost;
-	partitions[p].push_back(part);
+	partitions_[p].push_back(part);
 	for (pp.y = 0; pp.y < height; pp.y++)
 		for (pp.x = 0; pp.x < width; pp.x++)
 			if (reach[pp] && kell[pp])
 			{
 				kell[pp] = false;
-				kellNum--;
+				--kellNum;
 			}
 }
 
 int AdvancedHeurCalculator::doCalculate(const Status & status)
 {
+	std::vector<Partition>::iterator it;
+	for (it = partitions[p].begin();
+		it != partitions[p].end(); ++it)
+	{
+		if (it->reachable[status.state().currentPos()])
+			break;
+	}
+	if (it != partitions[p].end())
+		return it->heur;
+	return -1;
 }
 
 

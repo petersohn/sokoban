@@ -45,12 +45,12 @@ void Status::initNode(const Node &node) {
 }
 
 void Status::calculateReachable() {
-	floodFill(fields_, state().currentPos(), reachable_);
+	floodFill(*this, state().currentPos(), reachable_);
 	reachOK_ = true;
 }
 
 bool Status::moveStone(int stone, const Point & p) {
-	if (fields(state()[stone]) != ftStone && fields(p) != ftFloor)
+	if (value(state()[stone]) != ftStone && value(p) != ftFloor)
 		return false;
 	fields_[state()[stone]] = ftFloor;
 	state().moveStone(stone, p);

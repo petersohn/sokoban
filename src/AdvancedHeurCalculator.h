@@ -2,6 +2,7 @@
 #define ADVANCEDHEURCALCULATOR_H_
 
 #include "BasicHeurCalculator.h"
+#include <vector>
 
 class AdvancedHeurCalculator: public ProblemHeurCalculator {
 	struct Partition
@@ -15,7 +16,7 @@ class AdvancedHeurCalculator: public ProblemHeurCalculator {
 	};
 
 
-	Array<Partition> partitions_;
+	Array<std::vector<Partition> > partitions_;
 	BasicHeurCalculator::Ptr calculator_;
 	virtual int doCalculate(const Status &status);
 	virtual void init();

@@ -37,7 +37,7 @@ public:
 		return reachable_[p];
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
-	FieldType fields(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
+	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
 	bool moveStone(int stone, const Point & p);
 //	const std::vector<CheckFunction>& checkFunctions() const { return checkFunctions_; }
 //	std::vector<CheckFunction>& checkFunctions() { return checkFunctions_; }

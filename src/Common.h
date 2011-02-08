@@ -6,6 +6,7 @@
 
 template<class T> class Array;
 class Point;
+class Status;
 
 class SokobanException:public std::exception
 {
@@ -33,7 +34,7 @@ public:
 
 enum FieldType { ftFloor, ftWall, ftStone };
 
-void floodFill(const Array<FieldType> &table, const Point &p0, Array<bool> &result,
+void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			std::deque<int> *border = NULL, MinMax *minmax = NULL);
 
 #endif /* COMMON_H_ */

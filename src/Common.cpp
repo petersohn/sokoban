@@ -2,13 +2,13 @@
 #include "Array.h"
 #include <algorithm>
 
-static void floodFillIter(const Array<FieldType> &table, const Point & p, Array<bool> &result,
+static void floodFillIter(const Status &table, const Point & p, Array<bool> &result,
 		deque<int> *border, MinMax *minmax)
 {
-	if (arrayAt<FieldType, ftWall>(table, p) != ftStone || result[p])
+	if (table.value(p) != ftFloor || result[p])
 	{
-		if (border != NULL && arrayAt<FieldType, ftWall>(table, p) == ftStone)
-			border->push_back(stoneAt[p]);
+		if (border != NULL && table.value(p) == ftStone)
+			border->push_back(table.stoneAt(p));
 		return;
 	}
 	result[p] = true;
@@ -24,7 +24,7 @@ static void floodFillIter(const Array<FieldType> &table, const Point & p, Array<
 	floodFillIter(p+p0m1, result, border, minmax);
 }
 
-void floodFill(const Array<FieldType> &table, const Point &p0, Array<bool> &result,
+void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			std::deque<int> *border, MinMax *minmax) {
 	result.fill(false);
 	if (minmax != NULL) {

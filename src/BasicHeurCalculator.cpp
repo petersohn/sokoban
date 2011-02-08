@@ -1,5 +1,6 @@
 #include "BasicHeurCalculator.h"
 
+
 int BasicHeurCalculator::init() {
 	distances_.reset(width, height, 0);
 	distances_[table().destination()] = 1;
