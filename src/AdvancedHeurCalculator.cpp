@@ -9,7 +9,6 @@ void AdvancedHeurCalculator::init()
 	Array<bool> kell(width, height, false);
 	partitions_.reset(width, height);
 	Point p;
-	Problem simpleProblem(table());
 	for (p.y = 0; p.y < table().height(); p.y++)
 		for (p.x = 0; p.x < table().width(); p.x++)
 		{
@@ -53,7 +52,7 @@ void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
 				goto ki;
 ki:
 	Array<bool> reach(width, height, false);
-	Status st(problem);
+	Status st(problem.table(), problem.beginningState());
 	floodFill(st, pp, reach);
 	Partition part;
 	part.heur = -1;

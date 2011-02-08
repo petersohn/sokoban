@@ -1,6 +1,12 @@
 #include "Common.h"
 #include "Array.h"
+#include "Status.h"
+#include "Node.h"
+#include "Table.h"
 #include <algorithm>
+
+
+using namespace std;
 
 static void floodFillIter(const Status &table, const Point & p, Array<bool> &result,
 		deque<int> *border, MinMax *minmax)
@@ -34,4 +40,48 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 		minmax->maxY = 0;
 	}
 	floodFillIter(table, p0, result, border, minmax);
+}
+
+void dumpStatus(std::ostream &file, const Status &status,
+		const std::string &title = "", Array<bool> *highlight = NULL)
+{
+	string prefix = /*(node->bad) ? "! " : */"";
+	if (title.length() > 0)
+		file << prefix << title << ": (" << node.cost() << " + " << node.heur()
+			<< " = " << node.costFgv() << ")" << endl;
+	file << prefix;
+	for (int i = 0; i < node.state().size(); i++)
+		file << node.state()[i].x << "," << node.state()[i].y << " ";
+	file << "(" << node->heur() << ")" << endl;
+	Point p;
+	for (p.y = 0; p.y < height; p.y++)
+	{
+		file << prefix;
+		for (p.x = 0; p.x < width; p.x++)
+		{
+			file.width(3);
+			file << right;
+			if (stones.currentPos == p)
+				file << 'Y';
+			else if (destination == p)
+				file << 'X';
+			else if (fieldAt(p) == F_WALL)
+				file << '*';
+			else if (fieldAt(p) == F_FLOOR)
+			{
+				if (highlight != NULL && (*highlight)[p])
+					file << "+";
+				else
+					file << '.';
+			} else if (fieldAt(p) == F_STONE)
+			{
+				if (node.get() != NULL && stoneAt[p] == node->stone)
+					file << 'O';
+				else
+					file << 'o';
+			}
+		}
+		file << endl;
+	}
+	file << endl;
 }

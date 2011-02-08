@@ -1,52 +1,49 @@
 #include "Status.h"
 
-Status::Status(FixedProblem::Ptr problem):
-	problem_(problem),
-	state_(problem()->beginningState()),
-	fields_(problem()->width(), problem()->height()),
+Status::Status(FixedTable::Ptr table, const VisitedState &state):
+	table_(table),
+	state_(state),
+	fields_(table->width(), table->height()),
 	reachOK(false)
 {
 	init();
 }
 
-Status::Status(FixedProblem::Ptr problem, const Node &node):
-		problem_(problem),
-		state_(node.state()),
-		fields_(problem()->width(), problem()->height()),
+Status::Status(FixedTable::Ptr table, const Node &node):
+		table_(table),
+		state_(node),
+		fields_(table->width(), table->height()),
 		reachOK(false)
 {
-	initNode(node);
+	init();
 }
 
 void Status::init() {
 	Point p;
-	for (p.y = 0; p.y < problem()->height(); ++p.y)
-		for (p.x = 0; p.x < problem()->width(); ++p.x)  {
-			fields_[p] = problem_->value(p);
+	for (p.y = 0; p.y < table().height(); ++p.y)
+		for (p.x = 0; p.x < table().width(); ++p.x)  {
+			fields_[p] = table().wall(p) ? ftWall : ftFloor;
 		}
 	for (int i = 0; i < state_.size(); ++i) {
+		fields_[state_[i]] = ftStone;
 		stoneAt_[state_[i]] = i;
 	}
-}
-
-void Status::initNode(const Node &node) {
-	Point p;
-	for (p.y = 0; p.y < problem()->height(); ++p.y)
-		for (p.x = 0; p.x < problem()->width(); ++p.x)  {
-			fields_[p] = problem_->tableValue(p);
-		}
-	for (size_t i = 0; i < state_.size(); ++i)
-		if (state_[i] != problem()->destination())
-		{
-			fields_[state_[i]] = ftStone;
-			stoneAt_[state_[i]] = i;
-		}
-	state_.currentPos = state_[node.stone()] - node.d();
 }
 
 void Status::calculateReachable() {
 	floodFill(*this, state().currentPos(), reachable_);
 	reachOK_ = true;
+}
+
+bool Status::addStone(const Point &p) {
+	if (value(p) != ftFloor)
+		return false;
+	fields_[p] = ftStone;
+	state_.
+}
+
+bool Status::removeStone(const Point &p) {
+
 }
 
 bool Status::moveStone(int stone, const Point & p) {
