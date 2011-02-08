@@ -57,6 +57,6 @@ public:
 	bool removeStone(const Point &p);
 };
 
-typedef FixedObject<Problem> FixedProblem;
+//typedef FixedObject<Problem> FixedProblem;
 
 #endif /* PROBLEM_H_ */
