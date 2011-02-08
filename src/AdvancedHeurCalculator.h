@@ -1,7 +1,7 @@
 #ifndef ADVANCEDHEURCALCULATOR_H_
 #define ADVANCEDHEURCALCULATOR_H_
 
-#include "BasicHeurCalculator.h"
+#include "ProblemHeurCalculator.h"
 #include <vector>
 
 class AdvancedHeurCalculator: public ProblemHeurCalculator {
@@ -17,14 +17,14 @@ class AdvancedHeurCalculator: public ProblemHeurCalculator {
 
 
 	Array<std::vector<Partition> > partitions_;
-	BasicHeurCalculator::Ptr calculator_;
+	HeurCalculator::Ptr calculator_;
 	virtual int doCalculate(const Status &status);
 	virtual void init();
 
 	void initPartition(const Point &p, Array<bool> &kell,
 			int &kellNum, Problem &problem);
 public:
-	AdvancedHeurCalculator(BasicHeurCalculator::Ptr calculator):
+	AdvancedHeurCalculator(HeurCalculator::Ptr calculator):
 		calculator_(calculator)
 	{}
 };
