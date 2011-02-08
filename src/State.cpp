@@ -48,6 +48,19 @@ bool State::operator<(const State &other) const
 	return result < 0;
 }
 
+int State::addStone(const Point & p)
+{
+	stones_.push_back(p);
+	hash();
+	return stones_.size() - 1;
+}
+
+void State::removeStone(int stone)
+{
+	stones_.erase(stones_.begin()+stone);
+	hash();
+}
+
 void State::moveStone(int stone, const Point &p)
 {
 	stones[stone] = p;
@@ -59,5 +72,8 @@ VisitedState::VisitedState(const Node &other):
 		currentPos(operator[](other.stone()) - other.d())
 {
 }
+
+
+
 
 

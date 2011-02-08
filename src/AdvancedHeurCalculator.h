@@ -17,6 +17,7 @@ class AdvancedHeurCalculator: public ProblemHeurCalculator {
 
 
 	Array<std::vector<Partition> > partitions_;
+	Array<bool> goodTiles_;
 	HeurCalculator::Ptr calculator_;
 	virtual int doCalculate(const Status &status);
 	virtual void init();

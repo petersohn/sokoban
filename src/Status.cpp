@@ -39,11 +39,21 @@ bool Status::addStone(const Point &p) {
 	if (value(p) != ftFloor)
 		return false;
 	fields_[p] = ftStone;
-	state_.
+	fieldAt_[p] = state_.addStone(p);
+	reachOK_ = false;
 }
 
 bool Status::removeStone(const Point &p) {
+	if (value(p) != ftStone)
+		return false;
+	fields_[p] = ftFloor;
+	state_.removeStone(stoneAt(p));
+	reachOK_ = false;
+}
 
+void Status::state(const VisitedState &value) {
+	state_ = value;
+	init();
 }
 
 bool Status::moveStone(int stone, const Point & p) {

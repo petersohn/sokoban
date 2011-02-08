@@ -12,22 +12,20 @@ void AdvancedHeurCalculator::init()
 	for (p.y = 0; p.y < table().height(); p.y++)
 		for (p.x = 0; p.x < table().width(); p.x++)
 		{
-			if (simpleProblem.tableValue(p) == ftWall)
+			if (table().value(p) == ftWall)
 				continue;
-			simpleProblem.addStone(p);
 			int kellNum = 0;
 			Point pp;
 			for (pp.y = 0; pp.y < height; pp.y++)
 				for (pp.x = 0; pp.x < width; pp.x++)
-					if (simpleProblem.tableValue(p) == ftFloor)
+					if (table().value(p) == ftFloor)
 					{
 						kell[pp] = true;
 						++kellNum;
 					} else
 						kell[pp] = false;
 			while (kellNum > 0)
-				initPartition(p, kell, kellNum, simpleProblem);
-			simpleProblem.removeStone(p);
+				initPartition(p, kell, kellNum);
 		}
 	goodTiles.reset(width, height, false);
 	for (p.y = 0; p.y < height; p.y++)
@@ -43,7 +41,7 @@ void AdvancedHeurCalculator::init()
 }
 
 void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
-		int &kellNum, Problem &problem)
+		int &kellNum)
 {
 	Point pp;
 	for (pp.y = 0; pp.y < height; pp.y++)
@@ -51,9 +49,11 @@ void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
 			if (kell[pp])
 				goto ki;
 ki:
+	VisitedState state;
+	state.addStone(p);
+	Status status(tablePtr(), state);
 	Array<bool> reach(width, height, false);
-	Status st(problem.table(), problem.beginningState());
-	floodFill(st, pp, reach);
+	floodFill(status, pp, reach);
 	Partition part;
 	part.heur = -1;
 	if (p == destination)

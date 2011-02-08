@@ -11,10 +11,6 @@ class State {
 	void hash();
 	void copyFrom(const State &other);
 public:
-	void setStones(const std::vector<Point> &stones) {
-		stones_=stones;
-		hash();
-	}
 
 	State():hashCode_(0), heur_(0) {}
 	explicit State(const std::vector<Point> stones) {
@@ -29,10 +25,17 @@ public:
 	}
 
 	int heur() const { return heur_; }
+	void heur(int value) { heur_ = value; }
 
 	bool operator==(const State &other) const;
 	bool operator<(const State &other) const;
 	void moveStone(int stone, const Point &p);
+	int addStone(const Point &p);
+	void removeStone(int stone);
+	void setStones(const std::vector<Point> &stones) {
+		stones_=stones;
+		hash();
+	}
 	const Point& operator[](int stone) const {
 		assert(stone >= 0 && stone < stones_.size());
 		return stones_[stone];
