@@ -3,6 +3,7 @@
 #include "Solver.h"
 #include "Node.h"
 #include <vector>
+#include <algorithm>
 
 void AdvancedHeurCalculator::init()
 {
@@ -75,18 +76,32 @@ ki:
 			}
 }
 
-int AdvancedHeurCalculator::doCalculate(const Status & status)
+int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &p) const
 {
 	std::vector<Partition>::iterator it;
-	for (it = partitions[p].begin();
-		it != partitions[p].end(); ++it)
-	{
-		if (it->reachable[status.state().currentPos()])
-			break;
+	if (status.state().currentPos() == p) {
+		int min = -1;
+		for (it = partitions_[p].begin();
+			it != partitions_[p].end(); ++it) {
+			if (it->heur >= 0) {
+				min = it->heur;
+				break;
+			}
+		}
+		while (++it != partitions_[p].end())
+			if (it->heur < min)
+				min = it->heur;
+	} else {
+		for (it = partitions_[p].begin();
+			it != partitions_[p].end(); ++it)
+		{
+			if (it->reachable[status.state().currentPos()])
+				break;
+		}
+		if (it != partitions[p].end())
+			return it->heur;
+		return -1;
 	}
-	if (it != partitions[p].end())
-		return it->heur;
-	return -1;
 }
 
 

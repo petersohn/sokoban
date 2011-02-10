@@ -1,10 +1,10 @@
 #ifndef ADVANCEDHEURCALCULATOR_H_
 #define ADVANCEDHEURCALCULATOR_H_
 
-#include "ProblemHeurCalculator.h"
+#include "StoneBasedHeurCalculator.h"
 #include <vector>
 
-class AdvancedHeurCalculator: public ProblemHeurCalculator {
+class AdvancedHeurCalculator: public TableHeurCalculator {
 	struct Partition
 	{
 		Array<bool> reachable;
@@ -19,7 +19,7 @@ class AdvancedHeurCalculator: public ProblemHeurCalculator {
 	Array<std::vector<Partition> > partitions_;
 	Array<bool> goodTiles_;
 	HeurCalculator::Ptr calculator_;
-	virtual int doCalculate(const Status &status);
+	virtual int doCalculateStone(const Status &status, const Point &p) const;
 	virtual void init();
 
 	void initPartition(const Point &p, Array<bool> &kell,

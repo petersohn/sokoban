@@ -29,12 +29,9 @@ int BasicHeurCalculator::init() {
 			distances[p]--;
 }
 
-int BasicHeurCalculator::doCalculate(const Status & status) const
+int BasicHeurCalculator::doCalculateStone(const Status &status, const Point &p) const
 {
-	int result = 0;
-	for (int i = 0; i < status.state().size(); ++i)
-		result += distances_[status.state[i]];
-	return result;
+	return distances_[p];
 }
 
 bool BasicHeurCalculator::checkDistance(const Point & p, const Point & d, int dist)
