@@ -91,6 +91,7 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &
 		while (++it != partitions_[p].end())
 			if (it->heur < min)
 				min = it->heur;
+		return min;
 	} else {
 		for (it = partitions_[p].begin();
 			it != partitions_[p].end(); ++it)
@@ -100,8 +101,8 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &
 		}
 		if (it != partitions[p].end())
 			return it->heur;
-		return -1;
 	}
+	return -1;
 }
 
 
