@@ -3,6 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "State.h"
+#include "HeurCalculator.h"
 
 class Node {
 public:
@@ -30,7 +31,7 @@ public:
 	}
 	static Ptr create(const State &stones, int stone, const Point &d,
 			Ptr ans, int c, int heur) {
-		return createNew(new Node(stones, stone, d, ans, c));
+		return createNew(new Node(stones, stone, d, ans, c, heur));
 	}
 	Node(const Node &other) {
 		copy(other);

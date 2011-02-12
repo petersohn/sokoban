@@ -41,8 +41,7 @@ bool State::operator==(const State &other) const
 bool State::operator<(const State &other) const
 {
 	int result = heur() - other.heur();
-	if (result == 0)
-	{
+	if (result == 0) {
 		result = hashCode() - other.hashCode();
 	}
 	return result < 0;
