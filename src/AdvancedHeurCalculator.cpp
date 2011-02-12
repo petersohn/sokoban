@@ -28,17 +28,6 @@ void AdvancedHeurCalculator::init()
 			while (kellNum > 0)
 				initPartition(p, kell, kellNum);
 		}
-	goodTiles.reset(width, height, false);
-	for (p.y = 0; p.y < height; p.y++)
-		for (p.x = 0; p.x < width; p.x++) {
-			for (vector<Partition>::iterator it = partitions[p].begin();
-					it != partitions[p].end(); ++it) {
-				if (it->heur >= 0) {
-					goodTiles[p] = true;
-					break;
-				}
-			}
-		}
 }
 
 void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,

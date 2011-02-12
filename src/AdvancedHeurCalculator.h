@@ -17,7 +17,6 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 
 
 	Array<std::vector<Partition> > partitions_;
-	Array<bool> goodTiles_;
 	HeurCalculator::Ptr calculator_;
 	virtual int doCalculateStone(const Status &status, const Point &p) const;
 	virtual void init();

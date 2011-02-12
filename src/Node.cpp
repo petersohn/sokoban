@@ -6,8 +6,13 @@ Node::Node():depth(0), cost(0)
 {
 }
 
-Node::Node(const State &stones, int stone, const Point &d, Ptr ans, int c):
-	ansector_(ans),state_(stones),stone_(stone),d_(d)
+Node::Node(const State &stones, int stone, const Point &d, Ptr ans,
+		int c, int heur):
+	ansector_(ans),
+	state_(stones),
+	heur_(heur),
+	stone_(stone),
+	d_(d)
 {
 	if (ans.get() == NULL)
 	{
@@ -18,14 +23,13 @@ Node::Node(const State &stones, int stone, const Point &d, Ptr ans, int c):
 		depth_ = ans->depth + 1;
 		cost_ = ans->cost + c;
 	}
-	costFgv_ = cost + heur();
 }
 
 void Node::copy(const Node &other) {
 	state_ = other.state();
 	depth_ = other.depth();
 	cost_ = other.cost();
-	costFgv_ = other.costFgv();
+	heur_ = other.heur();
 	stone_ = other.stone();
 	d_ = other.d();
 	// ansector is not copied

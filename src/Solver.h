@@ -9,9 +9,10 @@
 class Solver {
 	HeurCalculator::Ptr calculator_;
 
+	std::vector<Node::Ptr> expandNodes(Node::Ptr node);
+	void expandNode(Node::Ptr node, int stone, const Point &d, std::vector<Node::Ptr> &result);
 public:
 	Solver(HeurCalculator::Ptr calculator):
-		problem_(problem),
 		calculator_(calculator)
 	{}
 

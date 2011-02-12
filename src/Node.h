@@ -9,16 +9,16 @@ public:
 	typedef boost::shared_ptr<Node> Ptr;
 private:
 	Ptr ansector_;
-
 	State state_;
-	int depth_;
-	int cost_;
-	int costFgv_;
+	int heur_;
 	int stone_;
 	Point d_;
+	int depth_;
+	int cost_;
 
 	Node();
-	Node(const State &stones, int stone, const Point &d, Ptr ans, int c);
+	Node(const State &stones, int stone, const Point &d, Ptr ans,
+			int c, int heur);
 	void copy(const Node &other);
 	static Ptr createNew(Node *np) {
 		Ptr n(np);
@@ -29,7 +29,7 @@ public:
 		return createNew(new Node());
 	}
 	static Ptr create(const State &stones, int stone, const Point &d,
-			Ptr ans, int c) {
+			Ptr ans, int c, int heur) {
 		return createNew(new Node(stones, stone, d, ans, c));
 	}
 	Node(const Node &other) {
@@ -40,13 +40,13 @@ public:
 		return *this;
 	}
 	std::deque<Node> pathToRoot();
-	int heur() const { return state.getHeur(); }
+	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
 	const Ptr& ansector() const { return ansector_; }
 	const State &state() const { return state_; }
 	int depth() const { return depth_; }
 	int cost() const { return cost_; }
-	int costFgv() const { return costFgv_; }
+	int costFgv() const { return cost_ + heur_; }
 	int stone() const { return stone_; }
 	const Point& d() const { return d_; }
 	bool operator<(const Node &other) const

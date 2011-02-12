@@ -41,9 +41,9 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			std::deque<int> *border = NULL, MinMax *minmax = NULL);
 
 void dumpStatus(std::ostream &file, const Status &status,
-		const std::string &title = "", Array<bool> *highlight = NULL);
+		std::string title = "", Array<bool> *highlight = NULL);
 
-void dumpNode(std::ostream &file, const Table &table,
-		const std::string &title = "", Array<bool> *highlight = NULL);
+void dumpNode(std::ostream &file, const Table &table, const Node &node,
+		std::string title = "", Array<bool> *highlight = NULL);
 
 #endif /* COMMON_H_ */

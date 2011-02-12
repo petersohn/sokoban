@@ -7,7 +7,6 @@
 class State {
 	std::vector<Point> stones_;
 	int hashCode_;
-	int heur_;
 	void hash();
 	void copyFrom(const State &other);
 public:
@@ -23,9 +22,6 @@ public:
 		copyFrom(other);
 		return *this;
 	}
-
-	int heur() const { return heur_; }
-	void heur(int value) { heur_ = value; }
 
 	bool operator==(const State &other) const;
 	bool operator<(const State &other) const;
