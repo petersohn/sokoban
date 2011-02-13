@@ -7,19 +7,23 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <vector>
+#include <deque>
 
 class Status {
 public:
 	typedef boost::shared_ptr<Status> Ptr;
+	typedef std::deque<int> BorderType;
 private:
 	FixedTable::Ptr table_;
 	VisitedState state_;
-	Array<bool> reachable_;
 	Array<uint> stoneAt_;
 	Array<FieldType> fields_;
-	bool reachOK_;
 
-	void calculateReachable();
+	mutable Array<bool> reachable_;
+	mutable BorderType border_;
+	mutable bool reachOK_;
+
+	void calculateReachable() const;
 	void init();
 public:
 	explicit Status(FixedTable::Ptr table, const VisitedState &state);
@@ -32,6 +36,11 @@ public:
 		if (!reachOK_)
 			calculateReachable();
 		return reachable_[p];
+	}
+	const BorderType& border() const {
+		if (!reachOK_)
+			calculateReachable();
+		return border_;
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
 	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }

@@ -30,8 +30,9 @@ void Status::init() {
 	}
 }
 
-void Status::calculateReachable() {
-	floodFill(*this, state().currentPos(), reachable_);
+void Status::calculateReachable() const {
+	reachable_.reset(width(), height(), false);
+	floodFill(*this, state().currentPos(), reachable_, border_);
 	reachOK_ = true;
 }
 
