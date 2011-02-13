@@ -28,6 +28,7 @@ class InternalSolver {
 	void expandNode(const VisitedState &state, int stone,
 			const Point &d, Node::Ptr base);
 	void checkStone(const Status &status, int stone);
+	bool stoneMovable(const Status &status, int stone, set<int> &volt);
 	void addVisitedState(const VisitedState &state);
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
@@ -111,7 +112,7 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 			pushQueue(node);
 			addVisitedState(status.state());
 			if (enableDump)
-				dumpStatus(dumpFile_, status, "Felvéve");
+				dumpNode(dumpFile_, table_, node, "Felvéve");
 			maxDepth_ = std::max(node->depth(), maxDepth_);
 			if (enableLog && ++expandedNodes_ % 10000 == 0)
 				cerr << boost::format("%d (%d, %d [%d])") %
@@ -122,7 +123,37 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 }
 
 void InternalSolver::checkStone(const Status &status, int stone) {
+	std::set<int> volt;
+	bool result = stoneMovable(status, stone, volt) && checkCorridors(status, stone);
+	return result;
+}
 
+bool InternalSolver::stoneMovable(const Status &status, int stone, set<int> &volt)
+{
+	Point p = status.state()[stone];
+	volt.insert(stone);
+	int count = 0;
+	if (isMovable(status, p+p10, volt, count) &&
+			isMovable(status, p+pm10, volt, count) && count > 0)
+		return true;
+	count = 0;
+	return (isMovable(status, p+p01, volt, count) &&
+			isMovable(status, p+p0m1, volt, count) && count > 0);
+}
+
+bool InternalSolver::isMovable(const Status &status, const Point & p, set<int> &volt, int &count)
+{
+	if (status.value(p) == ftFloor)
+	{
+		if (calculator_->calculateStone(status, p) >= 0)
+			++count;
+		return true;
+	}
+	if (status.value(p) == ftWall)
+		return false;
+	if (volt.count(status.stoneAt(p)) != 0)
+		return false;
+	return stoneMovable(status, stoneAt[p], volt);
 }
 
 void InternalSolver::addVisitedState(const VisitedState &state) {
