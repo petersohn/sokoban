@@ -22,7 +22,7 @@ public:
 	}
 	const Point& destination() const { return destination; }
 
-	void setWall(const Point &p, bool value) {
+	void wall(const Point &p, bool value) {
 		walls_[p] = value;
 	}
 	void destination(const Point& p) {

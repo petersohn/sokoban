@@ -46,6 +46,8 @@ void dumpStatus(std::ostream &file, const Status &status,
 void dumpNode(std::ostream &file, const Table &table, const Node &node,
 		std::string title = "", Array<bool> *highlight = NULL);
 
+Status loadFromFile(const char *filename);
+
 template<class T>
 std::deque<T> intersect(std::deque<T> l1, std::deque<T> l2)
 {

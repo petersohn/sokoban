@@ -44,7 +44,9 @@ public:
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
 	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
+	const Point &currentPos() const { return state_.currentPos(); }
 
+	bool currentPos(const Point &p);
 	void state(const VisitedState &value);
 	bool addStone(const Point &p);
 	bool removeStone(const Point &p);

@@ -85,8 +85,8 @@ inline std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 
 
 void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
-	if (pushStones(state))
-		return;
+/*	if (pushStones(Status(state)))
+		return;*/
 	for (int i = 0; i < state.size(); ++i)
 	{
 		if (state[i] == destination)
@@ -245,11 +245,11 @@ bool InternalSolver::checkCorridorEnding(const Status &status,
 
 bool InternalSolver::pushStones(const Status &status)
 {
-	Array<bool> destReachable(width, height, false);
+/*	Array<bool> destReachable(width, height, false);
 	std::deque<VisitedState> pushList;
 	bool touched;
 	bool touched2 = false;
-	Node::Ptr tmp;
+	Node::Ptr node;
 	do {
 		touched = false;
 		std::deque<int> destBorder;
@@ -257,7 +257,7 @@ bool InternalSolver::pushStones(const Status &status)
 		std::deque<int> border = intersect(status.border(), destBorder);
 		for (std::deque<int>::const_iterator it = border.begin();
 				it != border.end(); ++it) {
-			tmp = pushStone(status, *it);
+			node = pushStone(status, *it);
 			if (tmp.get() != NULL) {
 				maxDepth_ = std::max(state->depth, maxDepth);
 				touched = true;
@@ -274,8 +274,8 @@ bool InternalSolver::pushStones(const Status &status)
 		return true;
 	}
 	else
-		return false;
-//	return touched ? P_PUSHED : P_NOTPUSHED;
+		return false;*/
+	return false;
 }
 
 void InternalSolver::addVisitedState(const VisitedState &state) {

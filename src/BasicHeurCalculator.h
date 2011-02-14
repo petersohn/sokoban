@@ -1,7 +1,7 @@
 #ifndef BASICHEURCALCULATOR_H_
 #define BASICHEURCALCULATOR_H_
 
-#include "StoneBasedHeurCalculator.h"
+#include "TableHeurCalculator.h"
 #include "Array.h"
 
 class BasicHeurCalculator: public TableHeurCalculator {
