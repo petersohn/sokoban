@@ -41,6 +41,7 @@ void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
 ki:
 	VisitedState state;
 	state.addStone(p);
+	state.currentPos(pp);
 	Status status(tablePtr(), state);
 	Array<bool> reach(width, height, false);
 	floodFill(status, pp, reach);
@@ -49,8 +50,8 @@ ki:
 	if (p == destination)
 		part.heur = 0;
 	else {
-		Solver s(problem, calculator_);
-		std::vector<Node::Ptr> res = s.solve();
+		Solver s();
+		std::vector<Node::Ptr> res = s.solve(status, calculator_);
 		if (res.size() != 0)
 			part.heur = (*res.rbegin())->cost();
 	}

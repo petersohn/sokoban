@@ -1,29 +1,34 @@
-#include "sokoban.h"
+#include "Common.h"
+#include "Status.h"
+#include "Options.h"
+#include "Node.h"
+#include "Solver.h"
+#include "HeurCalculator.h"
 #include <time.h>
 #include <iostream>
+#include <deque>
 #include <boost/format.hpp>
 
 using namespace std;
 
+
 int main(int argc, char** argv) {
-	if (argc < 2)
-	{
-		cerr << "Nincs megadva bemeneti fájl!" << endl;
-		return 1;
-	}
-	Sokoban game(argv[1]);
+	Options opts;
 	
+	Status st(loadFromFile(opts.filename().c_str()));
+
 	clock_t time0 = clock();
-	vector<pair<Point, Point> > solution = game.solve();
+	Solver s();
+	std::deque<Node::Ptr> solution = s.solve(st, HeurCalculator::create(), true, opts.enableDump());
 	clock_t time = clock() - time0;
-	cerr << "Ido:" << (double)time/CLOCKS_PER_SEC << endl;
+	cerr << "Time:" << (double)time/CLOCKS_PER_SEC << endl;
 	if (solution.size() == 0)
-		cerr << "Nincs megoldas." << endl;
+		cerr << "No solution." << endl;
 	else
 	{
 		for (size_t i = 0; i < solution.size(); i++)
 		{
-			cout << boost::format("(%2d, %2d) --> (%2d, %2d)") %
+			cout << boost::format("(%2d, %2d) --> %s") %
 					solution[i].first.x % solution[i].first.y %
 					solution[i].second.x % solution[i].second.y << endl;
 		}

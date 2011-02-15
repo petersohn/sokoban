@@ -13,7 +13,7 @@ private:
 	Point destination_;
 public:
 	Table() {}
-	Table(size_t width, size_t height):walls_(width, height, false) {}
+	Table(size_t width, size_t height):walls_(width, height, true) {}
 
 	size_t width() { return walls_.width(); }
 	size_t height() { return walls_.height(); }

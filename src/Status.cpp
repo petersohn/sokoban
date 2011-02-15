@@ -56,6 +56,7 @@ bool Status::removeStone(const Point &p) {
 
 void Status::state(const VisitedState &value) {
 	state_ = value;
+	reachOK_ = false;
 	init();
 }
 
