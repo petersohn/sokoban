@@ -1,7 +1,16 @@
 sokoban_SOURCES = main.cpp \
-	node.cpp \
-	sokoban.cpp \
-	state.cpp
+	AdvancedHeurCalculator.cpp \
+	BasicHeurCalculator.cpp \
+	Common.cpp \
+	Dumper.cpp \
+	HeurCalculator.cpp \
+	Node.cpp \
+	Point.cpp \
+	Solver.cpp \
+	State.cpp \
+	Status.cpp \
+	Table.cpp \
+	TableHeurCalculator.cpp
 
 bin_PROGRAMS = sokoban
 

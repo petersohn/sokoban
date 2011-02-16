@@ -11,16 +11,17 @@ public:
 private:
 	Array<bool> walls_;
 	Point destination_;
+	size_t a;
 public:
 	Table() {}
 	Table(size_t width, size_t height):walls_(width, height, true) {}
 
-	size_t width() { return walls_.width(); }
-	size_t height() { return walls_.height(); }
+	size_t width() const { return walls_.width(); }
+	size_t height() const { return walls_.height(); }
 	bool wall(const Point &p) const {
 		return arrayAt<bool>(walls_, p, true);
 	}
-	const Point& destination() const { return destination; }
+	const Point& destination() const { return destination_; }
 
 	void wall(const Point &p, bool value) {
 		walls_[p] = value;
@@ -31,6 +32,8 @@ public:
 	}
 };
 
+
 typedef FixedObject<Table> FixedTable;
+
 
 #endif /* TABLE_H_ */

@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "Array.h"
 #include "Table.h"
+#include "State.h"
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <vector>
@@ -26,11 +27,16 @@ private:
 	void calculateReachable() const;
 	void init();
 public:
+	static Status loadFromFile(const char *filename);
+
+	explicit Status(FixedTable::Ptr table);
 	explicit Status(FixedTable::Ptr table, const VisitedState &state);
 	explicit Status(FixedTable::Ptr table, const Node &node);
 
 	const Table& table() const { return table_->get(); }
 	FixedTable::Ptr tablePtr() const { return table_; }
+	size_t width() const { return table().width(); }
+	size_t height() const { return table().height(); }
 	const VisitedState& state() const { return state_; }
 	bool reachable(const Point &p) const {
 		if (!reachOK_)
@@ -52,5 +58,9 @@ public:
 	bool removeStone(const Point &p);
 	bool moveStone(int stone, const Point & p);
 };
+
+void floodFill(const Status &table, const Point &p0, Array<bool> &result,
+			std::deque<int> *border = NULL, MinMax *minmax = NULL);
+
 
 #endif /* STATUS_H_ */

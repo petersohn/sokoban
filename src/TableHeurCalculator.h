@@ -12,7 +12,7 @@ class TableHeurCalculator: public HeurCalculator {
 	virtual int doCalculateStone(const Status &status, const Point &p) = 0;
 public:
 	TableHeurCalculator() {}
-	virtual int calculateStatus(const Status &status) const;
+	virtual int calculateStatus(const Status &status);
 	virtual int calculateStone(const Status &status, const Point &p);
 
 	const Table& table() const { return table_->get(); }

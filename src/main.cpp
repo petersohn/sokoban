@@ -13,12 +13,12 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-	Options opts;
+	Options opts(argc, argv);
 	
-	Status st(loadFromFile(opts.filename().c_str()));
+	Status st(Status::loadFromFile(opts.filename().c_str()));
 
 	clock_t time0 = clock();
-	Solver s();
+	Solver s;
 	std::deque<Node::Ptr> solution = s.solve(st, HeurCalculator::create(), true, opts.enableDump());
 	clock_t time = clock() - time0;
 	cerr << "Time:" << (double)time/CLOCKS_PER_SEC << endl;
@@ -26,11 +26,18 @@ int main(int argc, char** argv) {
 		cerr << "No solution." << endl;
 	else
 	{
-		for (size_t i = 0; i < solution.size(); i++)
+		for (std::deque<Node::Ptr>::iterator it = solution.begin();
+				it != solution.end(); ++it)
 		{
+			Node::Ptr node = *it;
+			Point from(node->state()[node->stone()] - node->d());
+			std::string dir =
+					node->d().x > 0 ? "right" :
+					node->d().x < 0 ? "left" :
+					node->d().y > 0 ? "down" :
+					node->d().y < 0 ? "up" : "???";
 			cout << boost::format("(%2d, %2d) --> %s") %
-					solution[i].first.x % solution[i].first.y %
-					solution[i].second.x % solution[i].second.y << endl;
+					from.x % from.y % dir << endl;
 		}
 	}
 }

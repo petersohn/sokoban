@@ -11,7 +11,7 @@ class State {
 	void copyFrom(const State &other);
 public:
 
-	State():hashCode_(0), heur_(0) {}
+	State():hashCode_(0) {}
 	explicit State(const std::vector<Point> stones) {
 		setStones(stones);
 	}
@@ -36,7 +36,7 @@ public:
 		assert(stone >= 0 && stone < stones_.size());
 		return stones_[stone];
 	}
-	size_t size() const { return stones.size(); }
+	size_t size() const { return stones_.size(); }
 };
 
 class Node;

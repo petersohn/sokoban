@@ -5,11 +5,14 @@
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 #include <string>
+#include <deque>
+#include <queue>
 
 template<class T> class Array;
 class Point;
 class Status;
 class Node;
+class Table;
 
 class SokobanException:public std::exception
 {
@@ -34,19 +37,7 @@ public:
 	const T &get() const { return value_; }
 };
 
-
 enum FieldType { ftFloor, ftWall, ftStone };
-
-void floodFill(const Status &table, const Point &p0, Array<bool> &result,
-			std::deque<int> *border = NULL, MinMax *minmax = NULL);
-
-void dumpStatus(std::ostream &file, const Status &status,
-		std::string title = "", Array<bool> *highlight = NULL);
-
-void dumpNode(std::ostream &file, const Table &table, const Node &node,
-		std::string title = "", Array<bool> *highlight = NULL);
-
-Status loadFromFile(const char *filename);
 
 template<class T>
 std::deque<T> intersect(std::deque<T> l1, std::deque<T> l2)

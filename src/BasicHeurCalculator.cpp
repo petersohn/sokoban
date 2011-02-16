@@ -1,35 +1,35 @@
 #include "BasicHeurCalculator.h"
 
 
-int BasicHeurCalculator::init() {
-	distances_.reset(width, height, 0);
+void BasicHeurCalculator::init() {
+	distances_.reset(table().width(), table().height(), 0);
 	distances_[table().destination()] = 1;
 	bool touched;
 	Point p;
 	do {
 		touched = false;
-		for (p.y = 0; p.y < height; p.y++)
-			for (p.x = 0; p.x < width; p.x++)
+		for (p.y = 0; p.y < table().height(); p.y++)
+			for (p.x = 0; p.x < table().width(); p.x++)
 			{
 				if (distances_[p] == 0)
 					continue;
-				int newDist = distances[p]+1;
-				if (checkDistance(p, p10, newDist))
+				int newDist = distances_[p]+1;
+				if (checkDistance(p, Point::p10, newDist))
 					touched = true;
-				if (checkDistance(p, pm10, newDist))
+				if (checkDistance(p, Point::pm10, newDist))
 					touched = true;
-				if (checkDistance(p, p01, newDist))
+				if (checkDistance(p, Point::p01, newDist))
 					touched = true;
-				if (checkDistance(p, p0m1, newDist))
+				if (checkDistance(p, Point::p0m1, newDist))
 					touched = true;
 			}
 	} while (touched);
-	for (p.y = 0; p.y < height; p.y++)
-		for (p.x = 0; p.x < width; p.x++)
-			distances[p]--;
+	for (p.y = 0; p.y < table().height(); p.y++)
+		for (p.x = 0; p.x < table().width(); p.x++)
+			distances_[p]--;
 }
 
-int BasicHeurCalculator::doCalculateStone(const Status &status, const Point &p) const
+int BasicHeurCalculator::doCalculateStone(const Status &status, const Point &p)
 {
 	return distances_[p];
 }

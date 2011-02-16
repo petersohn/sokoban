@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Node::Node():depth(0), cost(0)
+Node::Node():heur_(-1), stone_(-1), depth_(0), cost_(0)
 {
 }
 
@@ -20,8 +20,8 @@ Node::Node(const State &stones, int stone, const Point &d, Ptr ans,
 		cost_ = c;
 	} else
 	{
-		depth_ = ans->depth + 1;
-		cost_ = ans->cost + c;
+		depth_ = ans->depth_ + 1;
+		cost_ = ans->cost_ + c;
 	}
 }
 
