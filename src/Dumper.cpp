@@ -19,19 +19,19 @@ void dumpStatus(std::ostream &file, const Status &status,
 			else if (status.table().destination() == p)
 				output[p] = 'X';
 			else if (status.value(p) == ftWall)
-				file << '*';
+				output[p] = '*';
 			else if (status.value(p) == ftFloor)
 			{
 				if (highlight != NULL && (*highlight)[p])
-					file << "+";
+					output[p] = '+';
 				else
-					file << '.';
+					output[p] = '.';
 			} else if (status.value(p) == ftStone)
 			{
 				if (highlight != NULL && (*highlight)[p])
-					file << 'O';
+					output[p] = 'O';
 				else
-					file << 'o';
+					output[p] = 'o';
 			}
 		}
 	}
@@ -51,7 +51,7 @@ void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
 	if (highlight != NULL)
 		highlight2 = *highlight;
 	else
-		highlight2.reset(status.width(), status.height());
+		highlight2.reset(status.width(), status.height(), false);
 	highlight2[node.state()[node.stone()]] = true;
 	dumpStatus(file, status, title, &highlight2);
 

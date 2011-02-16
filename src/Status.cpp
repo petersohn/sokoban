@@ -5,6 +5,7 @@
 Status::Status(FixedTable::Ptr table):
 	table_(table),
 	state_(),
+	stoneAt_(table->get().width(), table->get().height()),
 	fields_(table->get().width(), table->get().height()),
 	reachOK_(false)
 {
@@ -15,6 +16,7 @@ Status::Status(FixedTable::Ptr table):
 Status::Status(FixedTable::Ptr table, const VisitedState &state):
 	table_(table),
 	state_(state),
+	stoneAt_(table->get().width(), table->get().height()),
 	fields_(table->get().width(), table->get().height()),
 	reachOK_(false)
 {
@@ -24,6 +26,7 @@ Status::Status(FixedTable::Ptr table, const VisitedState &state):
 Status::Status(FixedTable::Ptr table, const Node &node):
 		table_(table),
 		state_(node),
+		stoneAt_(table->get().width(), table->get().height()),
 		fields_(table->get().width(), table->get().height()),
 		reachOK_(false)
 {
@@ -70,6 +73,11 @@ void Status::state(const VisitedState &value) {
 	state_ = value;
 	reachOK_ = false;
 	init();
+}
+
+bool Status::currentPos(const Point & p) {
+	state_.currentPos(p);
+	return true;
 }
 
 bool Status::moveStone(int stone, const Point & p) {
@@ -125,6 +133,7 @@ Status Status::loadFromFile(const char *filename) {
 			case 'o':
 			case 'O':
 				t.wall(p, false);
+				vs.addStone(p);
 				++stoneNum;
 				break;
 			default:

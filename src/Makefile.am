@@ -5,6 +5,7 @@ sokoban_SOURCES = main.cpp \
 	Dumper.cpp \
 	HeurCalculator.cpp \
 	Node.cpp \
+	Options.cpp \
 	Point.cpp \
 	Solver.cpp \
 	State.cpp \

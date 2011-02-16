@@ -26,7 +26,12 @@ Options::Options(int argc, char **argv) {
 		std::cerr << desc << std::endl;
 		exit(0);
 	}
+	if (vm.count("filename") == 0) {
+		std::cerr << "No filename given." << std::endl <<
+				desc << std::endl;
+		exit(1);
+	}
 	enableDump_ = vm.count("enable-dump") > 0;
-	filename_ = vm["filaname"].as<std::string>();
+	filename_ = vm["filename"].as<std::string>();
 }
 

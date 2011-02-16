@@ -130,6 +130,7 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 }
 
 bool InternalSolver::checkStone(const Status &status, int stone) {
+	assert(status.tablePtr() == table_);
 	std::set<int> volt;
 	bool result = stoneMovable(status, stone, volt) && checkCorridors(status, stone);
 	return result;
@@ -137,6 +138,7 @@ bool InternalSolver::checkStone(const Status &status, int stone) {
 
 bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int> &volt)
 {
+	assert(status.tablePtr() == table_);
 	Point p = status.state()[stone];
 	volt.insert(stone);
 	int count = 0;
@@ -151,6 +153,7 @@ bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int>
 bool InternalSolver::isMovable(const Status &status, const Point & p,
 		std::set<int> &volt, int &count)
 {
+	assert(status.tablePtr() == table_);
 	if (status.value(p) == ftFloor)
 	{
 		if (calculator_->calculateStone(status, p) >= 0)
@@ -165,6 +168,7 @@ bool InternalSolver::isMovable(const Status &status, const Point & p,
 }
 
 bool InternalSolver::checkCorridors(const Status &status, int stone) {
+	assert(status.tablePtr() == table_);
 	Point p0 = status.state()[stone];
 	bool kell[3][3];
 	for (int x = 0; x < 3; x++)
@@ -231,6 +235,7 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 
 bool InternalSolver::checkCorridorEnding(const Status &status,
 		const Point &p0, const Point &side) {
+	assert(status.tablePtr() == table_);
 	Point p1 = p0 + side;
 	Point pm1 = p0 - side;
 /*	cerr << boost::format("Corr (%d): (%d, %d): %d %d; (%d, %d): %d %d. "
@@ -284,6 +289,7 @@ void InternalSolver::addVisitedState(const VisitedState &state) {
 }
 
 bool InternalSolver::statusVisited(const Status &status) {
+	assert(status.tablePtr() == table_);
 	std::pair<std::multiset<VisitedState>::iterator,
 		std::multiset<VisitedState>::iterator> found =
 			visitedStates_.equal_range(status.state());
@@ -305,6 +311,8 @@ void InternalSolver::pushQueue(Node::Ptr node) {
 }
 
 Node::Ptr InternalSolver::popQueue() {
+	if (queue_.empty())
+		return Node::Ptr();
 	Node::Ptr result = queue_.top();
 	queue_.pop();
 	return result;

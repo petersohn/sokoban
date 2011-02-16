@@ -9,7 +9,7 @@ class Options {
 public:
 	Options(int argc, char **argv);
 
-	bool enableDump() { return enableDump; }
+	bool enableDump() { return enableDump_; }
 	const std::string &filename() { return filename_; }
 };
 

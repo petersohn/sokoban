@@ -3,23 +3,23 @@
 /* Define to 1 if you have the <algorithm> header file. */
 #undef HAVE_ALGORITHM
 
-/* Define to 1 if you have the <boost/foreach.hpp> header file. */
-#undef HAVE_BOOST_FOREACH_HPP
-
 /* Define to 1 if you have the <boost/format.hpp> header file. */
 #undef HAVE_BOOST_FORMAT_HPP
 
+/* Define to 1 if you have the <boost/scoped_ptr.hpp> header file. */
+#undef HAVE_BOOST_SCOPED_PTR_HPP
+
 /* Define to 1 if you have the <boost/shared_ptr.hpp> header file. */
 #undef HAVE_BOOST_SHARED_PTR_HPP
+
+/* Define to 1 if you have the <deque> header file. */
+#undef HAVE_DEQUE
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
 /* Define to 1 if you have the <iostream> header file. */
 #undef HAVE_IOSTREAM
-
-/* Define to 1 if you have the <list> header file. */
-#undef HAVE_LIST
 
 /* Define to 1 if you have the <memory> header file. */
 #undef HAVE_MEMORY
@@ -48,8 +48,8 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Enable logging. */
-#undef LOGGING
+/* Define to 1 if you have the <vector> header file. */
+#undef HAVE_VECTOR
 
 /* Name of package */
 #undef PACKAGE
