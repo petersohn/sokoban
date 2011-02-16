@@ -8,7 +8,7 @@
 
 class Solver {
 public:
-	std::deque<Node::Ptr> solve(const Status &status,
+	std::deque<Node> solve(const Status &status,
 			HeurCalculator::Ptr calculator,
 			bool enableLog_ = false, bool enableDump = false);
 

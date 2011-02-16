@@ -2,6 +2,7 @@
 #define ADVANCEDHEURCALCULATOR_H_
 
 #include "TableHeurCalculator.h"
+#include "Dumper.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -24,6 +25,8 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 	public:
 		void dumpHeur(Array<int> values);
 		void dumpPartition(const AdvancedHeurCalculator &calc, const Partition &part);
+		template<class T>
+		void dumpArray(const Array<T> arr);
 		void printText(const char *text);
 	};
 
@@ -41,5 +44,11 @@ public:
 		calculator_(calculator)
 	{}
 };
+
+
+template<class T>
+void AdvancedHeurCalculator::HeurDumper::dumpArray(const Array<T> arr) {
+	::dumpArray<std::string>(file_, arr);
+}
 
 #endif /* ADVANCEDHEURCALCULATOR_H_ */

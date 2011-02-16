@@ -2,10 +2,10 @@
 #include "Status.h"
 #include "Solver.h"
 #include "Node.h"
-#include "Dumper.h"
 #include <vector>
 #include <algorithm>
 #include <boost/format.hpp>
+#include <string>
 
 
 /* AdvancedHeurCalculator::HeurDumper */
@@ -30,26 +30,6 @@ void AdvancedHeurCalculator::HeurDumper::printText(const char *text) {
 	file_ << text << std::endl;
 }
 
-void AdvancedHeurCalculator::HeurDumper::dumpHeur(Array<int> values) {
-	Array<std::string> txts(values.width(), values.height());
-	Point p;
-	size_t maxlen = 0;
-	for (p.y = 0; p.y < values.height(); p.y++)
-		for (p.x = 0; p.x < values.width(); p.x++) {
-			txts[p] = (boost::format("%d") % values[p]).str();
-			maxlen = std::max(maxlen, txts[p].size());
-		}
-	++maxlen;
-	for (p.y = 0; p.y < values.height(); p.y++) {
-		for (p.x = 0; p.x < values.width(); p.x++) {
-			file_.width(maxlen);
-			file_ << txts[p];
-		}
-		file_ << std::endl;
-	}
-	file_ << std::endl;
-}
-
 
 /* AdvancedHeurCalculator */
 
@@ -58,6 +38,8 @@ AdvancedHeurCalculator::HeurDumper AdvancedHeurCalculator::dumper;
 void AdvancedHeurCalculator::init()
 {
 	Array<bool> kell(table().width(), table().height(), false);
+	Array<std::string> dump(table().width(), table().height());
+	std::vector<Partition> dumpPartitions;
 	partitions_.reset(table().width(), table().height());
 	Point p;
 	for (p.y = 0; p.y < table().height(); p.y++)
@@ -77,7 +59,20 @@ void AdvancedHeurCalculator::init()
 						kell[pp] = false;
 			while (kellNum > 0)
 				initPartition(p, kell, kellNum);
+			dump[p] =
+					partitions_[p].size() == 0 ? "*" :
+					partitions_[p].size() > 1 ? "?" :
+					(boost::format("%d") % partitions_[p][0].heur).str();
 		}
+	dumper.dumpArray(dump);
+	for (p.y = 0; p.y < table().height(); p.y++)
+		for (p.x = 0; p.x < table().width(); p.x++) {
+			if (partitions_[p].size() > 1)
+				for (std::vector<Partition>::iterator it = partitions_[p].begin();
+						it != partitions_[p].end(); ++it)
+					dumper.dumpPartition(*this, *it);
+		}
+
 }
 
 void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
@@ -100,9 +95,9 @@ ki:
 		part.heur = 0;
 	else {
 		Solver s;
-		std::deque<Node::Ptr> res = s.solve(status, calculator_);
+		std::deque<Node> res = s.solve(status, calculator_);
 		if (res.size() != 0)
-			part.heur = (*res.rbegin())->cost();
+			part.heur = res.rbegin()->cost();
 	}
 	partitions_[p].push_back(part);
 	for (pp.y = 0; pp.y < table().height(); pp.y++)
@@ -114,7 +109,6 @@ ki:
 				--kellNum;
 			}
 		}
-	dumper.dumpPartition(*this, part);
 	dumper.printText("---\n");
 }
 
