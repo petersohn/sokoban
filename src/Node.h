@@ -2,6 +2,7 @@
 #define NODE_H_
 
 #include <boost/shared_ptr.hpp>
+#include <deque>
 #include "State.h"
 #include "HeurCalculator.h"
 

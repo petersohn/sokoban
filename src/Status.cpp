@@ -1,10 +1,22 @@
 #include "Status.h"
+#include <fstream>
+
+
+Status::Status(FixedTable::Ptr table):
+	table_(table),
+	state_(),
+	fields_(table->get().width(), table->get().height()),
+	reachOK_(false)
+{
+	init();
+}
+
 
 Status::Status(FixedTable::Ptr table, const VisitedState &state):
 	table_(table),
 	state_(state),
-	fields_(table->width(), table->height()),
-	reachOK(false)
+	fields_(table->get().width(), table->get().height()),
+	reachOK_(false)
 {
 	init();
 }
@@ -12,8 +24,8 @@ Status::Status(FixedTable::Ptr table, const VisitedState &state):
 Status::Status(FixedTable::Ptr table, const Node &node):
 		table_(table),
 		state_(node),
-		fields_(table->width(), table->height()),
-		reachOK(false)
+		fields_(table->get().width(), table->get().height()),
+		reachOK_(false)
 {
 	init();
 }
@@ -32,7 +44,7 @@ void Status::init() {
 
 void Status::calculateReachable() const {
 	reachable_.reset(width(), height(), false);
-	floodFill(*this, state().currentPos(), reachable_, border_);
+	floodFill(*this, state().currentPos(), reachable_, &border_);
 	reachOK_ = true;
 }
 
@@ -40,7 +52,7 @@ bool Status::addStone(const Point &p) {
 	if (value(p) != ftFloor)
 		return false;
 	fields_[p] = ftStone;
-	fieldAt_[p] = state_.addStone(p);
+	stoneAt_[p] = state_.addStone(p);
 	reachOK_ = false;
 	return true;
 }
@@ -64,8 +76,8 @@ bool Status::moveStone(int stone, const Point & p) {
 	if (value(state()[stone]) != ftStone && value(p) != ftFloor)
 		return false;
 	fields_[state()[stone]] = ftFloor;
-	state().moveStone(stone, p);
-	if (p != problem().destination())
+	state_.moveStone(stone, p);
+	if (p != table().destination())
 	{
 		fields_[p] = ftStone;
 		stoneAt_[p] = stone;
@@ -73,3 +85,94 @@ bool Status::moveStone(int stone, const Point & p) {
 	return true;
 }
 
+
+Status Status::loadFromFile(const char *filename) {
+	using namespace std;
+	ifstream file(filename, ifstream::in);
+	size_t height, width;
+	file >> height >> width;
+	string line;
+	getline(file, line); // dummy
+	Table t(width, height);
+	VisitedState vs;
+	bool startPosOK = false, destinationOK = false;
+	int stoneNum = 0;
+	Point p;
+	while (file.good())
+	{
+		getline(file, line);
+		for (p.x = 0; p.x < line.length() && p.x < width; p.x++)
+		{
+			cerr.width(3);
+			cerr << left << line[p.x];
+			switch (line[p.x])
+			{
+			case 'X':
+			case 'x':
+				t.destination(p);
+				t.wall(p, false);
+				destinationOK = true;
+				break;
+			case 'Y':
+			case 'y':
+				vs.currentPos(p);
+				t.wall(p, false);
+				startPosOK = true;
+				break;
+			case '.':
+				t.wall(p, false);
+				break;
+			case 'o':
+			case 'O':
+				t.wall(p, false);
+				++stoneNum;
+				break;
+			default:
+				t.wall(p, true);
+			}
+		}
+		cerr << endl;
+		if (++p.y >= height)
+			break;
+	}
+	cerr << endl;
+	if (stoneNum == 0 || !startPosOK || !destinationOK)
+		throw SokobanException();
+	return Status(FixedTable::Ptr(new FixedTable(t)), vs);
+}
+
+
+
+static void floodFillIter(const Status &status, const Point & p, Array<bool> &result,
+		std::deque<int> *border, MinMax *minmax)
+{
+	if (status.value(p) != ftFloor || result[p])
+	{
+		if (border != NULL && status.value(p) == ftStone)
+			border->push_back(status.stoneAt(p));
+		return;
+	}
+	result[p] = true;
+	if (minmax != NULL) {
+		minmax->minX = std::min(minmax->minX, p.x);
+		minmax->maxX = std::max(minmax->maxX, p.x);
+		minmax->minY = std::min(minmax->minY, p.y);
+		minmax->maxY = std::max(minmax->maxY, p.y);
+	}
+	floodFillIter(status, p+Point::p10, result, border, minmax);
+	floodFillIter(status, p+Point::pm10, result, border, minmax);
+	floodFillIter(status, p+Point::p01, result, border, minmax);
+	floodFillIter(status, p+Point::p0m1, result, border, minmax);
+}
+
+void floodFill(const Status &table, const Point &p0, Array<bool> &result,
+			std::deque<int> *border, MinMax *minmax) {
+	result.fill(false);
+	if (minmax != NULL) {
+		minmax->minX = table.width();
+		minmax->maxX = 0;
+		minmax->minY = table.height();
+		minmax->maxY = 0;
+	}
+	floodFillIter(table, p0, result, border, minmax);
+}

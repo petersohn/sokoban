@@ -2,6 +2,7 @@
 #define ARRAY_H_
 
 #include "Point.h"
+#include <iostream>
 
 template<class T>
 class Array {
@@ -78,8 +79,8 @@ Array<T>::Array(size_t width, size_t height, const T& defValue):
 }
 
 template<class T>
-Array<T>::Array(const Array &other):
-	width_(other.width_), height_(other.height_), size(other.size_)
+Array<T>::Array(const Array<T> &other):
+	width_(other.width_), height_(other.height_), size_(other.size_)
 {
 	data = new T[size_];
 	for (int i = 0; i < size_; i++)

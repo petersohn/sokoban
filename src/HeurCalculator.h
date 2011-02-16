@@ -1,10 +1,7 @@
 #ifndef HEURCALCULATOR_H_
 #define HEURCALCULATOR_H_
 
-namespace boost {
-	template<class T>
-	class shared_ptr;
-}
+#include <boost/shared_ptr.hpp>
 
 class Point;
 class Status;
@@ -14,7 +11,7 @@ public:
 	typedef boost::shared_ptr<HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}
 	virtual int calculateStone(const Status &, const Point &) = 0;
-	virtual int calculateStatus(const Status &) const = 0;
+	virtual int calculateStatus(const Status &) = 0;
 	static Ptr create();
 };
 

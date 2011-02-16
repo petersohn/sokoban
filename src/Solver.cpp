@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Status.h"
 #include "Node.h"
+#include "Dumper.h"
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -10,6 +11,7 @@
 #include <deque>
 #include <queue>
 #include <algorithm>
+#include <set>
 #include <boost/format.hpp>
 
 class InternalSolver {
@@ -27,10 +29,10 @@ class InternalSolver {
 	void expandNodes(const VisitedState &state, Node::Ptr base);
 	void expandNode(const VisitedState &state, int stone,
 			const Point &d, Node::Ptr base);
-	void checkStone(const Status &status, int stone);
-	bool stoneMovable(const Status &status, int stone, set<int> &volt);
+	bool checkStone(const Status &status, int stone);
+	bool stoneMovable(const Status &status, int stone, std::set<int> &volt);
 	bool isMovable(const Status &status, const Point & p,
-			set<int> &volt, int &count);
+			std::set<int> &volt, int &count);
 	bool checkCorridorEnding(const Status &status,
 			const Point &p0, const Point &side);
 	bool checkCorridors(const Status &status, int stone);
@@ -42,26 +44,25 @@ class InternalSolver {
 public:
 	explicit InternalSolver(bool enableLog, bool enableDump);
 
-	std::vector<Node::Ptr> solve(const Status &status, HeurCalculator::Ptr calculator);
+	std::deque<Node> solve(const Status &status, HeurCalculator::Ptr calculator);
 };
 
-inline explicit InternalSolver::InternalSolver(bool enableLog, bool enableDump):
+InternalSolver::InternalSolver(bool enableLog, bool enableDump):
 		enableLog_(enableLog),
 		enableDump_(enableDump)
 {
 	if (enableDump_) {
 		static int counter = 0;
-		boost::format filename("dump%1%.dump",
-				std::ofstream::out | std::ofstream::trunc);
+		boost::format filename("dump%1%.dump");
 		if (++counter > 1)
 			filename % counter;
 		else
 			filename % "";
-		dumpFile_.open(filename.str());
+		dumpFile_.open(filename.str().c_str(), std::ofstream::out | std::ofstream::trunc);
 	}
 }
 
-inline std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
+std::deque<Node> InternalSolver::solve(const Status &status,
 		HeurCalculator::Ptr calculator)
 {
 	calculator_ = calculator;
@@ -77,8 +78,8 @@ inline std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 		expandNodes(vs, currentNode);
 		currentNode = popQueue();
 		if (currentNode.get() == NULL)
-			return std::vector<Node::Ptr>();
-		vs = VisitedState(currentNode);
+			return std::deque<Node>();
+		vs = VisitedState(*currentNode);
 	} while (currentNode->heur() > 0);
 	return currentNode->pathToRoot();
 }
@@ -89,12 +90,12 @@ void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 		return;*/
 	for (int i = 0; i < state.size(); ++i)
 	{
-		if (state[i] == destination)
+		if (state[i] == table_->get().destination())
 			continue;
-		expandNode(state, i, p10, base);
-		expandNode(state, i, pm10, base);
-		expandNode(state, i, p01, base);
-		expandNode(state, i, p0m1, base);
+		expandNode(state, i, Point::p10, base);
+		expandNode(state, i, Point::pm10, base);
+		expandNode(state, i, Point::p01, base);
+		expandNode(state, i, Point::p0m1, base);
 	}
 }
 
@@ -109,46 +110,46 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 			calculator_->calculateStone(status, pd) >= 0
 			)
 	{
-		if (status.moveStone(stone, pd) && !stateVisited(status) &&
-				(status.state()[stone] == table_.destination() ||
+		if (status.moveStone(stone, pd) && !statusVisited(status) &&
+				(status.state()[stone] == table_->get().destination() ||
 					checkStone(status, stone)))
 		{
 			Node::Ptr node(Node::create(status.state(), stone, d,
 					base, 1, calculator_->calculateStatus(status)));
 			pushQueue(node);
 			addVisitedState(status.state());
-			if (enableDump)
-				dumpNode(dumpFile_, table_, node, "Added");
+			if (enableDump_)
+				dumpNode(dumpFile_, table_, *node, "Added");
 			maxDepth_ = std::max(node->depth(), maxDepth_);
-			if (enableLog && ++expandedNodes_ % 10000 == 0)
-				cerr << boost::format("%d (%d, %d [%d])") %
-					expandedNodes_ % queue.size() %
-					node->depth() % maxDepth_ << endl;
+			if (enableLog_ && ++expandedNodes_ % 10000 == 0)
+				std::cerr << boost::format("%d (%d, %d [%d])") %
+					expandedNodes_ % queue_.size() %
+					node->depth() % maxDepth_ << std::endl;
 		}
 	}
 }
 
-void InternalSolver::checkStone(const Status &status, int stone) {
+bool InternalSolver::checkStone(const Status &status, int stone) {
 	std::set<int> volt;
 	bool result = stoneMovable(status, stone, volt) && checkCorridors(status, stone);
 	return result;
 }
 
-bool InternalSolver::stoneMovable(const Status &status, int stone, set<int> &volt)
+bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int> &volt)
 {
 	Point p = status.state()[stone];
 	volt.insert(stone);
 	int count = 0;
-	if (isMovable(status, p+p10, volt, count) &&
-			isMovable(status, p+pm10, volt, count) && count > 0)
+	if (isMovable(status, p+Point::p10, volt, count) &&
+			isMovable(status, p+Point::pm10, volt, count) && count > 0)
 		return true;
 	count = 0;
-	return (isMovable(status, p+p01, volt, count) &&
-			isMovable(status, p+p0m1, volt, count) && count > 0);
+	return (isMovable(status, p+Point::p01, volt, count) &&
+			isMovable(status, p+Point::p0m1, volt, count) && count > 0);
 }
 
 bool InternalSolver::isMovable(const Status &status, const Point & p,
-		set<int> &volt, int &count)
+		std::set<int> &volt, int &count)
 {
 	if (status.value(p) == ftFloor)
 	{
@@ -160,7 +161,7 @@ bool InternalSolver::isMovable(const Status &status, const Point & p,
 		return false;
 	if (volt.count(status.stoneAt(p)) != 0)
 		return false;
-	return stoneMovable(status, stoneAt[p], volt);
+	return stoneMovable(status, status.stoneAt(p), volt);
 }
 
 bool InternalSolver::checkCorridors(const Status &status, int stone) {
@@ -173,12 +174,12 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 	for (int x = 0; x < 3; x++)
 		for (int y = 0; y < 3; y++) {
 			Point p = p0 + Point(x - 1, y - 1);
-			if (!kell[x][y] || status.fieldAt(p) != ftFloor || status.reachable(p))
+			if (!kell[x][y] || status.value(p) != ftFloor || status.reachable(p))
 				continue;
-			Array<bool> reach(width, height, false);
+			Array<bool> reach(status.width(), status.height(), false);
 			MinMax minmax;
 			floodFill(status, p, reach, NULL, &minmax);
-			if (!reach[destination]) {
+			if (!reach[status.table().destination()]) {
 				if (minmax.minX == minmax.maxX && minmax.minY == minmax.maxY) {
 					if (!checkCorridorEnding(status,
 								Point(minmax.minX, minmax.minY - 1), Point::p10) &&
@@ -189,8 +190,8 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 						!checkCorridorEnding(status,
 								Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
 //						cerr << "Bing!" << endl;
-						if (enableDump) {
-							dumpStatus(dump, status, "1x1 corridor found", &reach);
+						if (enableDump_) {
+							dumpStatus(dumpFile_, status, "1x1 corridor found", &reach);
 						}
 						return false;
 					}
@@ -200,8 +201,8 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 								Point(minmax.minX, minmax.minY - 1), Point::p10) &&
 						!checkCorridorEnding(status,
 								Point(minmax.minX, minmax.maxY + 1), Point::p10)) {
-						if (enableDump) {
-							dumpStatus(dump, status, "Vertical corridor found", &reach);
+						if (enableDump_) {
+							dumpStatus(dumpFile_, status, "Vertical corridor found", &reach);
 						}
 						return false;
 					}
@@ -211,8 +212,8 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 								Point(minmax.minX - 1, minmax.minY), Point::p01) &&
 						!checkCorridorEnding(status,
 								Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
-						if (enableDump) {
-							dumpStatus(dump, status, "Horizontal corridor found", &reach);
+						if (enableDump_) {
+							dumpStatus(dumpFile_, status, "Horizontal corridor found", &reach);
 						}
 						return false;
 					}
@@ -240,7 +241,7 @@ bool InternalSolver::checkCorridorEnding(const Status &status,
 	return status.value(p0) != ftWall &&
 			status.value(p1) == ftFloor &&
 			status.value(pm1) == ftFloor &&
-			(calculator_.heurAt(status, p1) || calculator_.heurAt(status, pm1));
+			(calculator_->calculateStone(status, p1) || calculator_->calculateStone(status, pm1));
 }
 
 bool InternalSolver::pushStones(const Status &status)
@@ -285,10 +286,10 @@ void InternalSolver::addVisitedState(const VisitedState &state) {
 bool InternalSolver::statusVisited(const Status &status) {
 	std::pair<std::multiset<VisitedState>::iterator,
 		std::multiset<VisitedState>::iterator> found =
-			visitedStates.equal_range(stones);
+			visitedStates_.equal_range(status.state());
 	if (found.first != found.second)
 	{
-		Array<bool> reach(width, height, false);
+		Array<bool> reach(status.width(), status.height(), false);
 		floodFill(status, status.state().currentPos(), reach);
 		for (std::multiset<VisitedState>::iterator it = found.first;
 				it != found.second; ++it) {
@@ -315,7 +316,7 @@ Node::Ptr InternalSolver::popQueue() {
 std::deque<Node::Ptr> Solver::solve(const Status &status,
 		HeurCalculator::Ptr calculator, bool enableLog, bool enableDump)
 {
-	InternalSolver solver;
+	InternalSolver solver(enableLog, enableDump);
 	solver.solve(status, calculator);
 }
 
