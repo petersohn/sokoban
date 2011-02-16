@@ -53,6 +53,8 @@ void AdvancedHeurCalculator::HeurDumper::dumpHeur(Array<int> values) {
 
 /* AdvancedHeurCalculator */
 
+AdvancedHeurCalculator::HeurDumper AdvancedHeurCalculator::dumper;
+
 void AdvancedHeurCalculator::init()
 {
 	Array<bool> kell(table().width(), table().height(), false);

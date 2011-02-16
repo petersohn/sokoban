@@ -11,7 +11,7 @@ public:
 	typedef boost::shared_ptr<HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}
 	virtual int calculateStone(const Status &, const Point &) = 0;
-	virtual int calculateStatus(const Status &) const = 0;
+	virtual int calculateStatus(const Status &) = 0;
 	static Ptr create();
 };
 

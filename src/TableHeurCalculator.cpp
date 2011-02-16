@@ -19,8 +19,8 @@ int TableHeurCalculator::calculateStatus(const Status & status)
 
 int TableHeurCalculator::calculateStone(const Status &status, const Point &p)
 {
-	if (table_ != table) {
-		table_ = table;
+	if (table_ != status.tablePtr()) {
+		table_ = status.tablePtr();
 		init();
 	}
 	return doCalculateStone(status, p);

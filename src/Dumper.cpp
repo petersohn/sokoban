@@ -56,7 +56,7 @@ void dumpStatus(std::ostream &file, const Status &status,
 
 
 void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
-		std::string title = "", Array<bool> *highlight = NULL)
+		std::string title, const Array<bool> *highlight)
 {
 	if (title.length() > 0)
 		title += ": ";
