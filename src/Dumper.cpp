@@ -1,22 +1,6 @@
 #include "Dumper.h"
 #include <boost/format.hpp>
 
-static void basicDump(std::ostream &file, const Array<char> table,
-		const std::string &title, const std::string &prefix) {
-	if (title.length() > 0)
-		file << prefix << title << std::endl;
-	Point p;
-	for (p.y = 0; p.y < table.height(); p.y++) {
-		file << prefix;
-		for (p.x = 0; p.x < table.width(); p.x++) {
-			file.width(3);
-			file << std::right << table[p];
-		}
-		file << std::endl;
-	}
-	file << std::endl;
-}
-
 void dumpStatus(std::ostream &file, const Status &status,
 		std::string title , const Array<bool> *highlight)
 {
@@ -51,7 +35,7 @@ void dumpStatus(std::ostream &file, const Status &status,
 			}
 		}
 	}
-	basicDump(file, output, title, "");
+	dumpArray(file, output, title, "");
 }
 
 

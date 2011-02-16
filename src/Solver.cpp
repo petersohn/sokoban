@@ -313,10 +313,10 @@ Node::Ptr InternalSolver::popQueue() {
 
 
 
-std::deque<Node::Ptr> Solver::solve(const Status &status,
+std::deque<Node> Solver::solve(const Status &status,
 		HeurCalculator::Ptr calculator, bool enableLog, bool enableDump)
 {
 	InternalSolver solver(enableLog, enableDump);
-	solver.solve(status, calculator);
+	return solver.solve(status, calculator);
 }
 
