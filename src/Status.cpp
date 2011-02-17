@@ -40,8 +40,10 @@ void Status::init() {
 			fields_[p] = table().wall(p) ? ftWall : ftFloor;
 		}
 	for (int i = 0; i < state_.size(); ++i) {
-		fields_[state_[i]] = ftStone;
-		stoneAt_[state_[i]] = i;
+		if (state_[i] != table().destination()) {
+			fields_[state_[i]] = ftStone;
+			stoneAt_[state_[i]] = i;
+		}
 	}
 }
 
@@ -92,7 +94,7 @@ bool Status::moveStone(int stone, const Point & p) {
 		fields_[p] = ftStone;
 		stoneAt_[p] = stone;
 	} else {
-		state_.removeStone(stone);
+//		state_.removeStone(stone);
 	}
 	reachOK_ = false;
 	return true;

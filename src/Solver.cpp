@@ -41,11 +41,17 @@ class InternalSolver {
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
-	void _dump(const Node &node) {
+	bool _dump(const Node &node, bool really = true) {
+		if (!really)
+			return false;
 		dumpNode(std::cout, table_, node);
+		return true;
 	}
-	void _dump(const Status &status) {
+	bool _dump(const Status &status, bool really = true) {
+		if (!really)
+			return false;
 		dumpStatus(std::cout, status);
+		return true;
 	}
 public:
 	explicit InternalSolver(bool enableLog, bool enableDump);
@@ -71,6 +77,9 @@ InternalSolver::InternalSolver(bool enableLog, bool enableDump):
 std::deque<Node> InternalSolver::solve(const Status &status,
 		HeurCalculator::Ptr calculator)
 {
+	Node::Ptr nnn = Node::create();
+	_dump(status, false);
+	_dump(*nnn, false);
 	calculator_ = calculator;
 	table_ = status.tablePtr();
 	visitedStates_.clear();
