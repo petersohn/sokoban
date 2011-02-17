@@ -77,19 +77,24 @@ void Status::state(const VisitedState &value) {
 
 bool Status::currentPos(const Point & p) {
 	state_.currentPos(p);
+	reachOK_ = false;
 	return true;
 }
 
 bool Status::moveStone(int stone, const Point & p) {
 	if (value(state()[stone]) != ftStone && value(p) != ftFloor)
 		return false;
-	fields_[state()[stone]] = ftFloor;
+	fields_[state_[stone]] = ftFloor;
+	state_.currentPos(state_[stone]);
 	state_.moveStone(stone, p);
 	if (p != table().destination())
 	{
 		fields_[p] = ftStone;
 		stoneAt_[p] = stone;
+	} else {
+		state_.removeStone(stone);
 	}
+	reachOK_ = false;
 	return true;
 }
 

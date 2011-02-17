@@ -41,6 +41,12 @@ class InternalSolver {
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
+	void _dump(const Node &node) {
+		dumpNode(std::cout, table_, node);
+	}
+	void _dump(const Status &status) {
+		dumpStatus(std::cout, status);
+	}
 public:
 	explicit InternalSolver(bool enableLog, bool enableDump);
 
@@ -72,9 +78,9 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 	maxDepth_ = 0;
 	Node::Ptr currentNode;
 	VisitedState vs(status.state());
+	addVisitedState(vs);
 	do
 	{
-		addVisitedState(vs);
 		expandNodes(vs, currentNode);
 		currentNode = popQueue();
 		if (currentNode.get() == NULL)
@@ -88,6 +94,8 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 /*	if (pushStones(Status(state)))
 		return;*/
+	if (enableDump_ && base.get() != NULL)
+		dumpNode(dumpFile_, table_, *base, "Expanding");
 	for (int i = 0; i < state.size(); ++i)
 	{
 		if (state[i] == table_->get().destination())
@@ -97,6 +105,8 @@ void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 		expandNode(state, i, Point::p01, base);
 		expandNode(state, i, Point::p0m1, base);
 	}
+	if (enableDump_)
+		dumpFile_ << std::endl << "--------" << std::endl << std::endl;
 }
 
 void InternalSolver::expandNode(const VisitedState &state, int stone,
@@ -106,10 +116,11 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < status.width() &&
 			pmd.y >= 0 && pmd.y < status.height() &&
-			status.value(pd) == ftFloor && status.reachable(pmd) &&
-			calculator_->calculateStone(status, pd) >= 0
-			)
+			status.value(pd) == ftFloor && status.reachable(pmd))
 	{
+		status.currentPos(p);
+		if (calculator_->calculateStone(status, pd) < 0)
+			return;
 		if (status.moveStone(stone, pd) && !statusVisited(status) &&
 				(status.state()[stone] == table_->get().destination() ||
 					checkStone(status, stone)))
@@ -299,8 +310,11 @@ bool InternalSolver::statusVisited(const Status &status) {
 		floodFill(status, status.state().currentPos(), reach);
 		for (std::multiset<VisitedState>::iterator it = found.first;
 				it != found.second; ++it) {
-			if (reach[it->currentPos()] && *it == status.state())
+			if (reach[it->currentPos()] && *it == status.state()) {
+//				if (enableDump_)
+//					dumpStatus(dumpFile_, status, "Already visited");
 				return true;
+			}
 		}
 	}
 	return false;
