@@ -3,6 +3,7 @@
 
 #include "Point.h"
 #include <vector>
+#include <assert.h>
 
 class State {
 	std::vector<Point> stones_;
