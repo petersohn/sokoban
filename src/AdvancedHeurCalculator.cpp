@@ -18,10 +18,10 @@ void AdvancedHeurCalculator::HeurDumper::open() {
 void AdvancedHeurCalculator::HeurDumper::dumpPartition(const AdvancedHeurCalculator &calc,
 		const Partition & part) {
 	open();
-	file_ << "Partition (" << part.heur << ")" << std::endl;
 	Status s(calc.tablePtr());
 	s.addStone(part.pos);
-	dumpStatus(file_, s, "", &part.reachable);
+	s.currentPos(Point(-1, -1));
+	dumpStatus(file_, s, (boost::format("Partition (%d)") % part.heur).str(), &part.reachable);
 	file_ << std::endl;
 }
 
@@ -45,13 +45,15 @@ void AdvancedHeurCalculator::init()
 	for (p.y = 0; p.y < table().height(); p.y++)
 		for (p.x = 0; p.x < table().width(); p.x++)
 		{
-			if (table().wall(p))
+			if (table().wall(p)) {
+				dump[p] = "*";
 				continue;
+			}
 			int kellNum = 0;
 			Point pp;
 			for (pp.y = 0; pp.y < table().height(); pp.y++)
 				for (pp.x = 0; pp.x < table().width(); pp.x++)
-					if (!table().wall(p))
+					if (!table().wall(pp) && pp != p)
 					{
 						kell[pp] = true;
 						++kellNum;
@@ -60,11 +62,13 @@ void AdvancedHeurCalculator::init()
 			while (kellNum > 0)
 				initPartition(p, kell, kellNum);
 			dump[p] =
-					partitions_[p].size() == 0 ? "*" :
+					partitions_[p].size() == 0 ? "#" :
 					partitions_[p].size() > 1 ? "?" :
 					(boost::format("%d") % partitions_[p][0].heur).str();
 		}
+	dumper.printText("Heuristics table:");
 	dumper.dumpArray(dump);
+	dumper.printText("\nPartitions:");
 	for (p.y = 0; p.y < table().height(); p.y++)
 		for (p.x = 0; p.x < table().width(); p.x++) {
 			if (partitions_[p].size() > 1)
@@ -99,7 +103,6 @@ ki:
 		if (res.size() != 0)
 			part.heur = res.rbegin()->cost();
 	}
-	partitions_[p].push_back(part);
 	for (pp.y = 0; pp.y < table().height(); pp.y++)
 		for (pp.x = 0; pp.x < table().width(); pp.x++) {
 			part.reachable[pp] = status.reachable(pp);
@@ -109,12 +112,15 @@ ki:
 				--kellNum;
 			}
 		}
-	dumper.printText("---\n");
+	partitions_[p].push_back(part);
 }
 
 int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &p)
 {
 	std::vector<Partition>::const_iterator it;
+	// If the current position equals p, then partitions
+	// can't be used. Use the minimal non-negative
+	// partition's value instead
 	if (status.state().currentPos() == p) {
 		int min = -1;
 		for (it = partitions_[p].begin();
@@ -124,9 +130,10 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &
 				break;
 			}
 		}
-		while (++it != partitions_[p].end())
-			if (it->heur < min)
-				min = it->heur;
+		if (it != partitions_[p].end())
+			while (++it != partitions_[p].end())
+				if (it->heur >= 0 && it->heur < min)
+					min = it->heur;
 		return min;
 	} else {
 		for (it = partitions_[p].begin();

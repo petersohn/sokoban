@@ -4,12 +4,13 @@
 #include <string>
 
 class Options {
-	std::string fn;
+	bool enableDump_;
+	std::string filename_;
 public:
-	Options(int argc, char **argv):fn(argv[1]) {}
+	Options(int argc, char **argv);
 
-	const std::string &filename() { return fn; }
-	bool enableDump() { return false; }
+	bool enableDump() { return enableDump_; }
+	const std::string &filename() { return filename_; }
 };
 
 #endif /* OPTIONS_H_ */

@@ -19,6 +19,13 @@ if test -z $CXXFLAGS; then
 	fi
 fi
 
+if test x${debug} != xyes; then
+	AC_MSG_NOTICE(Debugging is NOT enabled.)
+	CPPFLAGS="$CPPFLAGS -DNDEBUG"
+else
+	AC_MSG_NOTICE(Debugging is enabled.)
+fi
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -36,6 +43,18 @@ AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/scoped_ptr.hpp boost/format.hpp boo
 # STL headers
 AC_CHECK_HEADERS([algorithm vector deque memory iostream], [],
 	[AC_MSG_ERROR(You need the STL libraries.)])
+
+# check boost_program_options library
+SAVED_LDFLAGS=$LDFLAGS
+LDFLAGS="$LDFLAGS -lboost_program_options"
+AC_LINK_IFELSE(
+  [AC_LANG_PROGRAM([#include <boost/program_options.hpp>],
+    [boost::program_options::options_description d;])],
+  [SAVED_LDFLAGS="$SAVED_LDFLAGS -lboost_program_options"
+  AC_MSG_NOTICE(boost_program_options library found.)],
+  [AC_MSG_ERROR([You need the boost::program_options library.])])
+LDFLAGS=$SAVED_LDFLAGS
+
 
 # Configuration parameters
 

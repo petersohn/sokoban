@@ -41,6 +41,18 @@ class InternalSolver {
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
+	bool _dump(const Node &node, bool really = true) {
+		if (!really)
+			return false;
+		dumpNode(std::cout, table_, node);
+		return true;
+	}
+	bool _dump(const Status &status, bool really = true) {
+		if (!really)
+			return false;
+		dumpStatus(std::cout, status);
+		return true;
+	}
 public:
 	explicit InternalSolver(bool enableLog, bool enableDump);
 
@@ -65,6 +77,9 @@ InternalSolver::InternalSolver(bool enableLog, bool enableDump):
 std::deque<Node> InternalSolver::solve(const Status &status,
 		HeurCalculator::Ptr calculator)
 {
+	Node::Ptr nnn = Node::create();
+	_dump(status, false);
+	_dump(*nnn, false);
 	calculator_ = calculator;
 	table_ = status.tablePtr();
 	visitedStates_.clear();
@@ -72,9 +87,9 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 	maxDepth_ = 0;
 	Node::Ptr currentNode;
 	VisitedState vs(status.state());
+	addVisitedState(vs);
 	do
 	{
-		addVisitedState(vs);
 		expandNodes(vs, currentNode);
 		currentNode = popQueue();
 		if (currentNode.get() == NULL)
@@ -88,6 +103,8 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 /*	if (pushStones(Status(state)))
 		return;*/
+	if (enableDump_ && base.get() != NULL)
+		dumpNode(dumpFile_, table_, *base, "Expanding");
 	for (int i = 0; i < state.size(); ++i)
 	{
 		if (state[i] == table_->get().destination())
@@ -97,6 +114,8 @@ void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 		expandNode(state, i, Point::p01, base);
 		expandNode(state, i, Point::p0m1, base);
 	}
+	if (enableDump_)
+		dumpFile_ << std::endl << "--------" << std::endl << std::endl;
 }
 
 void InternalSolver::expandNode(const VisitedState &state, int stone,
@@ -106,10 +125,11 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < status.width() &&
 			pmd.y >= 0 && pmd.y < status.height() &&
-			status.value(pd) == ftFloor && status.reachable(pmd) &&
-			calculator_->calculateStone(status, pd) >= 0
-			)
+			status.value(pd) == ftFloor && status.reachable(pmd))
 	{
+		status.currentPos(p);
+		if (calculator_->calculateStone(status, pd) < 0)
+			return;
 		if (status.moveStone(stone, pd) && !statusVisited(status) &&
 				(status.state()[stone] == table_->get().destination() ||
 					checkStone(status, stone)))
@@ -130,6 +150,7 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 }
 
 bool InternalSolver::checkStone(const Status &status, int stone) {
+	assert(status.tablePtr() == table_);
 	std::set<int> volt;
 	bool result = stoneMovable(status, stone, volt) && checkCorridors(status, stone);
 	return result;
@@ -137,6 +158,7 @@ bool InternalSolver::checkStone(const Status &status, int stone) {
 
 bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int> &volt)
 {
+	assert(status.tablePtr() == table_);
 	Point p = status.state()[stone];
 	volt.insert(stone);
 	int count = 0;
@@ -151,6 +173,7 @@ bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int>
 bool InternalSolver::isMovable(const Status &status, const Point & p,
 		std::set<int> &volt, int &count)
 {
+	assert(status.tablePtr() == table_);
 	if (status.value(p) == ftFloor)
 	{
 		if (calculator_->calculateStone(status, p) >= 0)
@@ -165,6 +188,7 @@ bool InternalSolver::isMovable(const Status &status, const Point & p,
 }
 
 bool InternalSolver::checkCorridors(const Status &status, int stone) {
+	assert(status.tablePtr() == table_);
 	Point p0 = status.state()[stone];
 	bool kell[3][3];
 	for (int x = 0; x < 3; x++)
@@ -231,6 +255,7 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 
 bool InternalSolver::checkCorridorEnding(const Status &status,
 		const Point &p0, const Point &side) {
+	assert(status.tablePtr() == table_);
 	Point p1 = p0 + side;
 	Point pm1 = p0 - side;
 /*	cerr << boost::format("Corr (%d): (%d, %d): %d %d; (%d, %d): %d %d. "
@@ -284,6 +309,7 @@ void InternalSolver::addVisitedState(const VisitedState &state) {
 }
 
 bool InternalSolver::statusVisited(const Status &status) {
+	assert(status.tablePtr() == table_);
 	std::pair<std::multiset<VisitedState>::iterator,
 		std::multiset<VisitedState>::iterator> found =
 			visitedStates_.equal_range(status.state());
@@ -293,8 +319,11 @@ bool InternalSolver::statusVisited(const Status &status) {
 		floodFill(status, status.state().currentPos(), reach);
 		for (std::multiset<VisitedState>::iterator it = found.first;
 				it != found.second; ++it) {
-			if (reach[it->currentPos()] && *it == status.state())
+			if (reach[it->currentPos()] && *it == status.state()) {
+//				if (enableDump_)
+//					dumpStatus(dumpFile_, status, "Already visited");
 				return true;
+			}
 		}
 	}
 	return false;
@@ -305,6 +334,8 @@ void InternalSolver::pushQueue(Node::Ptr node) {
 }
 
 Node::Ptr InternalSolver::popQueue() {
+	if (queue_.empty())
+		return Node::Ptr();
 	Node::Ptr result = queue_.top();
 	queue_.pop();
 	return result;

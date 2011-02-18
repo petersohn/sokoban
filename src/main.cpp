@@ -15,6 +15,7 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
+	assert(true);
 	Options opts(argc, argv);
 	
 	Status st(Status::loadFromFile(opts.filename().c_str()));
