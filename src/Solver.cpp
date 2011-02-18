@@ -4,6 +4,7 @@
 #include "Status.h"
 #include "Node.h"
 #include "Dumper.h"
+#include "StonePusher.h"
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -13,6 +14,7 @@
 #include <algorithm>
 #include <set>
 #include <boost/format.hpp>
+#include <boost/bind.hpp>
 
 class InternalSolver {
 	HeurCalculator::Ptr calculator_;
@@ -36,7 +38,7 @@ class InternalSolver {
 	bool checkCorridorEnding(const Status &status,
 			const Point &p0, const Point &side);
 	bool checkCorridors(const Status &status, int stone);
-	bool pushStones(const Status &status);
+	bool pushStones(const Status &status, Node::Ptr base);
 	void addVisitedState(const VisitedState &state);
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
@@ -105,8 +107,8 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 
 
 void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
-/*	if (pushStones(Status(state)))
-		return;*/
+	if (pushStones(Status(table_, state), base))
+		return;
 	if (enableDump_ && base.get() != NULL)
 		dumpNode(dumpFile_, table_, *base, "Expanding");
 	for (int i = 0; i < state.size(); ++i)
@@ -273,10 +275,16 @@ bool InternalSolver::checkCorridorEnding(const Status &status,
 			(calculator_->calculateStone(status, p1) || calculator_->calculateStone(status, pm1));
 }
 
-bool InternalSolver::pushStones(const Status &status)
+bool InternalSolver::pushStones(const Status &status, Node::Ptr base)
 {
-	StonePusher sp;
-	return sp.pushStones(status);
+	StonePusher sp(calculator_);
+	Node::Ptr node = sp.pushStones(status, base);
+	if (node.get() == NULL)
+		return false;
+	pushQueue(node);
+	std::for_each(sp.pushList().begin(), sp.pushList().end(),
+			boost::bind(&InternalSolver::addVisitedState, this, _1));
+	return true;
 }
 
 void InternalSolver::addVisitedState(const VisitedState &state) {

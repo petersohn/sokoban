@@ -49,8 +49,8 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	BasicHeurCalculator.$(OBJEXT) Common.$(OBJEXT) \
 	Dumper.$(OBJEXT) HeurCalculator.$(OBJEXT) Node.$(OBJEXT) \
 	Options.$(OBJEXT) Point.$(OBJEXT) Solver.$(OBJEXT) \
-	State.$(OBJEXT) Status.$(OBJEXT) Table.$(OBJEXT) \
-	TableHeurCalculator.$(OBJEXT)
+	State.$(OBJEXT) Status.$(OBJEXT) StonePusher.$(OBJEXT) \
+	Table.$(OBJEXT) TableHeurCalculator.$(OBJEXT)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -165,6 +165,7 @@ sokoban_SOURCES = main.cpp \
 	Solver.cpp \
 	State.cpp \
 	Status.cpp \
+	StonePusher.cpp \
 	Table.cpp \
 	TableHeurCalculator.cpp
 
@@ -260,6 +261,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Solver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/State.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Status.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StonePusher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Table.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TableHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@

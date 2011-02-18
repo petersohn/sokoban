@@ -10,6 +10,7 @@ sokoban_SOURCES = main.cpp \
 	Solver.cpp \
 	State.cpp \
 	Status.cpp \
+	StonePusher.cpp \
 	Table.cpp \
 	TableHeurCalculator.cpp
 

@@ -1,36 +1,75 @@
 #include "StonePusher.h"
+#include "Array.h"
+#include "Status.h"
+#include <iostream>
 
-bool StonePusher::pushStones(const Status &st) {
+Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
+	pushList_.clear();
+	node_ = base;
+	Status status(st);
 	Array<bool> destReachable(st.width(), st.height(), false);
 	bool touched;
 	bool touched2 = false;
-	Node::Ptr node;
 	do {
 		touched = false;
 		std::deque<int> destBorder;
-		floodFill(status, destination, destReachable, &destBorder);
+		floodFill(status, status.table().destination(), destReachable, &destBorder);
 		std::deque<int> border = intersect(status.border(), destBorder);
 		for (std::deque<int>::const_iterator it = border.begin();
 				it != border.end(); ++it) {
-			node = pushStone(status, *it);
-			if (tmp.get() != NULL) {
-				maxDepth_ = std::max(state->depth, maxDepth);
+			if (pushStone(status, *it)) {
 				touched = true;
 			}
 		}
 		if (touched)
 			touched2 = true;
-
 	} while (touched);
-	if (touched2 && !stateVisited())
-	{
-		visitedStates.insert(pushList.begin(), pushList.end());
-		queue.push(state);
-		return true;
-	}
-	else
-		return false;
+	return touched2 ? node_ : Node::Ptr();
 }
 
+bool StonePusher::pushStone(Status &status, int stone) {
+	if (status.state()[stone] == status.table().destination())
+		return true;
+//	Point currentTmp(status.currentPos());
+	if (pushStoneIter(status, stone, Point::p10))
+		return true;
+	if (pushStoneIter(status, stone, Point::pm10))
+		return true;
+	if (pushStoneIter(status, stone, Point::p01))
+		return true;
+	if (pushStoneIter(status, stone, Point::p0m1))
+		return true;
+	return false;
+}
 
+bool StonePusher::pushStoneIter(Status &status, int stone, const Point &d) {
+	Point p = status.state()[stone];
+	Point pd = p+d;
+	if (status.value(p-d) != ftFloor || status.value(pd) != ftFloor || !status.reachable(p-d))
+		return false;
+	if (status.currentPos() == pd)
+		shiftCurrentPos(status);
+	int heur1 = calculator_->calculateStone(status, p);
+	Point currentTmp(status.currentPos());
+	status.currentPos(p);
+	int heur2 = calculator_->calculateStone(status, pd);
+	if ((heur2 < 0 && (pd != status.table().destination())) || heur2 >= heur1)
+	{
+		status.currentPos(currentTmp);
+		return false;
+	}
+	if (!status.moveStone(stone, pd))
+	{
+		std::cerr << "Whoopsie doopsie!";
+		return false; // should never happen
+	}
+	pushList_.push_back(status.state());
+	if (pushStone(status, stone))
+		return true;
+	pushList_.pop_back();
+	bool couldStepBack = status.moveStone(stone, p);
+	assert(couldStepBack);
+	status.currentPos(currentTmp);
+	return false;
+}
 

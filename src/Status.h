@@ -62,5 +62,6 @@ public:
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			std::deque<int> *border = NULL, MinMax *minmax = NULL);
 
+void shiftCurrentPos(Status &status);
 
 #endif /* STATUS_H_ */

@@ -192,3 +192,25 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 	}
 	floodFillIter(table, p0, result, border, minmax);
 }
+
+
+inline bool shiftIter(Status &status, const Point &p) {
+	if (status.value(p) == ftFloor && status.reachable(p)) {
+		status.currentPos(p);
+		return true;
+	}
+	return false;
+}
+
+void shiftCurrentPos(Status &status) {
+	Point p = status.currentPos();
+	if (shiftIter(status, p+Point::p01))
+		return;
+	if (shiftIter(status, p+Point::p0m1))
+		return;
+	if (shiftIter(status, p+Point::p10))
+		return;
+	if (shiftIter(status, p+Point::pm10))
+		return;
+}
+
