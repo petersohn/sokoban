@@ -7,8 +7,15 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 
-AC_ARG_ENABLE([debug], [  --enable-debug   Compile with debugging enabled.],
-	[debug=${enableval}], [debug=no])
+AC_ARG_ENABLE([debug],
+	AS_HELP_STRING([--enable-debug],
+		[Compile with debugging enabled.]),
+	[debug=${enableval}],
+	[debug=no])
+AC_ARG_WITH([debug],
+	AS_HELP_STRING([--without-program_options],
+		[Do not use the boost::program_options library. Default options will always be used.]),
+	[use_program_options=no], [])
 
 # Set default compiler flags
 if test -z $CXXFLAGS; then
@@ -38,22 +45,35 @@ AC_LANG_PUSH([C])
 #
 AC_LANG_POP([C])
 # Boost headers
-AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/scoped_ptr.hpp boost/format.hpp boost/format.hpp], [],
+AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/scoped_ptr.hpp boost/format.hpp], [],
 	[AC_MSG_ERROR(You need the Boost libraries.)])
 # STL headers
 AC_CHECK_HEADERS([algorithm vector deque memory iostream], [],
 	[AC_MSG_ERROR(You need the STL libraries.)])
 
 # check boost_program_options library
-SAVED_LDFLAGS=$LDFLAGS
-LDFLAGS="$LDFLAGS -lboost_program_options"
-AC_LINK_IFELSE(
-  [AC_LANG_PROGRAM([#include <boost/program_options.hpp>],
-    [boost::program_options::options_description d;])],
-  [SAVED_LDFLAGS="$SAVED_LDFLAGS -lboost_program_options"
-  AC_MSG_NOTICE(boost_program_options library found.)],
-  [AC_MSG_ERROR([You need the boost::program_options library.])])
-LDFLAGS=$SAVED_LDFLAGS
+if test x${use_program_options} != xno; then
+	AC_CHECK_HEADERS([boost/program_options.hpp], [use_program_options=yes],
+		[AC_MSG_WARN(boost::program_options headers not found.)
+		use_program_options=no])
+fi
+if test x${use_program_options} != xno; then
+	SAVED_LDFLAGS=$LDFLAGS
+	LDFLAGS="$LDFLAGS -lboost_program_options"
+	AC_LINK_IFELSE(
+	  [AC_LANG_PROGRAM([#include <boost/program_options.hpp>],
+	    [boost::program_options::options_description d;])],
+	  [SAVED_LDFLAGS="$SAVED_LDFLAGS -lboost_program_options"
+	  AC_MSG_NOTICE(boost_program_options library found.)
+	  use_program_options=yes],
+	  [AC_MSG_WARN([boost::program_options library not found.])
+	    use_program_options=no])
+	LDFLAGS=$SAVED_LDFLAGS
+fi
+
+if test x${use_program_options} = xyes; then
+	AC_DEFINE([USE_PROGRAM_OPTIONS], [], [Use the boost::program_options library] )
+fi
 
 
 # Configuration parameters

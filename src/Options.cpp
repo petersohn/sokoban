@@ -1,10 +1,14 @@
+#include "config.h"
 #include "Options.h"
 
 #include <iostream>
-#include <boost/program_options.hpp>
+#ifdef USE_PROGRAM_OPTIONS
+# include <boost/program_options.hpp>
+#endif
 
 
 Options::Options(int argc, char **argv) {
+#ifdef USE_PROGRAM_OPTIONS
 	using namespace boost::program_options;
 	options_description desc;
 	desc.add_options()
@@ -33,5 +37,14 @@ Options::Options(int argc, char **argv) {
 	}
 	enableDump_ = vm.count("enable-dump") > 0;
 	filename_ = vm["filename"].as<std::string>();
+#else
+	enableDump_ = false;
+	if (argc > 1)
+		filename_ = argv[1];
+	else {
+		std::cerr << "No filename given." << std::endl;
+		exit(1);
+	}
+#endif
 }
 

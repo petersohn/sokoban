@@ -41,7 +41,7 @@ public:
 	bool reachable(const Point &p) const {
 		if (!reachOK_)
 			calculateReachable();
-		return reachable_[p];
+		return arrayAt<bool>(reachable_, p, false);
 	}
 	const BorderType& border() const {
 		if (!reachOK_)

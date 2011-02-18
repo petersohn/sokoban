@@ -41,18 +41,18 @@ class InternalSolver {
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
-	bool _dump(const Node &node, bool really = true) {
-		if (!really)
-			return false;
-		dumpNode(std::cout, table_, node);
-		return true;
-	}
-	bool _dump(const Status &status, bool really = true) {
-		if (!really)
-			return false;
-		dumpStatus(std::cout, status);
-		return true;
-	}
+//	bool _dump(const Node &node, bool really = true) {
+//		if (!really)
+//			return false;
+//		dumpNode(std::cout, table_, node);
+//		return true;
+//	}
+//	bool _dump(const Status &status, bool really = true) {
+//		if (!really)
+//			return false;
+//		dumpStatus(std::cout, status);
+//		return true;
+//	}
 public:
 	explicit InternalSolver(bool enableLog, bool enableDump);
 
@@ -78,8 +78,8 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 		HeurCalculator::Ptr calculator)
 {
 	Node::Ptr nnn = Node::create();
-	_dump(status, false);
-	_dump(*nnn, false);
+//	_dump(status, false);
+//	_dump(*nnn, false);
 	calculator_ = calculator;
 	table_ = status.tablePtr();
 	visitedStates_.clear();
@@ -93,10 +93,14 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 		expandNodes(vs, currentNode);
 		currentNode = popQueue();
 		if (currentNode.get() == NULL)
-			return std::deque<Node>();
+			break;
 		vs = VisitedState(*currentNode);
 	} while (currentNode->heur() > 0);
-	return currentNode->pathToRoot();
+	if (enableLog_)
+		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
+	return currentNode.get() == NULL ?
+			std::deque<Node>() :
+			currentNode->pathToRoot();
 }
 
 
@@ -246,7 +250,7 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 			for (int xx = 0; xx < 3; xx++)
 				for (int yy = 0; yy < 3; yy++) {
 					Point pp = p0 + Point(xx - 1, yy - 1);
-					if (reach[pp])
+					if (arrayAt<bool>(reach, pp, false))
 						kell[xx][yy] = false;
 				}
 		}

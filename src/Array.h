@@ -4,6 +4,17 @@
 #include "Point.h"
 #include <iostream>
 
+//#define NDEBUG
+//
+//#define assert assert_
+//
+//inline void assert_(bool expr) {
+//	if (!expr) {
+//		std::cerr << "bing" << std::endl;
+//		exit(1);
+//	}
+//}
+
 template<class T>
 class Array {
 	T *data;
@@ -29,11 +40,11 @@ public:
 		return data[pos];
 	}
 	T& operator[](const Point &p) {
-		assert(p.x >= 0 && p.y >= 0 && p.y < width_ && p.y < height_);
+		assert(p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_);
 		return data[p.y*width_ + p.x];
 	}
 	const T& operator[](const Point &p) const {
-		assert(p.x >= 0 && p.y >= 0 && p.y < width_ && p.y < height_);
+		assert(p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_);
 		return data[p.y*width_ + p.x];
 	}
 	size_t size() const { return size_; }
