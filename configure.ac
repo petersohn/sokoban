@@ -45,7 +45,7 @@ AC_LANG_PUSH([C])
 #
 AC_LANG_POP([C])
 # Boost headers
-AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/scoped_ptr.hpp boost/format.hpp], [],
+AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/scoped_ptr.hpp boost/format.hpp boost/bind.hpp], [],
 	[AC_MSG_ERROR(You need the Boost libraries.)])
 # STL headers
 AC_CHECK_HEADERS([algorithm vector deque memory iostream], [],

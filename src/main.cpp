@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
 	Solver s;
 	std::deque<Node> solution = s.solve(st, HeurCalculator::create(), true, opts.enableDump());
 	clock_t time = clock() - time0;
+	cerr << "Length of solution: " << solution.size() << endl;
 	cerr << "Time:" << (double)time/CLOCKS_PER_SEC << endl;
 	if (solution.size() == 0)
 		cerr << "No solution." << endl;
@@ -34,12 +35,16 @@ int main(int argc, char** argv) {
 				it != solution.end(); ++it)
 		{
 			dumpNode(dump, st.tablePtr(), *it);
-			Point from(it->state()[it->stone()] - it->d());
+			Point p = it->state()[it->stone()];
+			Point from(p - it->d());
 			std::string dir =
-					it->d().x > 0 ? "right" :
-					it->d().x < 0 ? "left" :
-					it->d().y > 0 ? "down" :
-					it->d().y < 0 ? "up" : "???";
+					! opts.oldStyleOutput() ? (
+						it->d().x > 0 ? "right" :
+						it->d().x < 0 ? "left" :
+						it->d().y > 0 ? "down" :
+						it->d().y < 0 ? "up" : "???") :
+						(boost::format("(%2d, %2d)") %
+						p.x % p.y).str();
 			cout << boost::format("(%2d, %2d) --> %s") %
 					from.x % from.y % dir << endl;
 		}

@@ -107,8 +107,8 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 
 
 void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
-	if (pushStones(Status(table_, state), base))
-		return;
+//	if (pushStones(Status(table_, state), base))
+//		return;
 	if (enableDump_ && base.get() != NULL)
 		dumpNode(dumpFile_, table_, *base, "Expanding");
 	for (int i = 0; i < state.size(); ++i)
@@ -242,9 +242,8 @@ bool InternalSolver::checkCorridors(const Status &status, int stone) {
 								Point(minmax.minX - 1, minmax.minY), Point::p01) &&
 						!checkCorridorEnding(status,
 								Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
-						if (enableDump_) {
+						if (enableDump_)
 							dumpStatus(dumpFile_, status, "Horizontal corridor found", &reach);
-						}
 						return false;
 					}
 				}
@@ -277,14 +276,14 @@ bool InternalSolver::checkCorridorEnding(const Status &status,
 
 bool InternalSolver::pushStones(const Status &status, Node::Ptr base)
 {
-	StonePusher sp(calculator_);
-	Node::Ptr node = sp.pushStones(status, base);
-	if (node.get() == NULL)
-		return false;
-	pushQueue(node);
-	std::for_each(sp.pushList().begin(), sp.pushList().end(),
-			boost::bind(&InternalSolver::addVisitedState, this, _1));
-	return true;
+//	StonePusher sp(calculator_);
+//	Node::Ptr node = sp.pushStones(status, base);
+//	if (node.get() == NULL)
+//		return false;
+//	pushQueue(node);
+//	std::for_each(sp.pushList().begin(), sp.pushList().end(),
+//			boost::bind(&InternalSolver::addVisitedState, this, _1));
+//	return true;
 }
 
 void InternalSolver::addVisitedState(const VisitedState &state) {
@@ -303,8 +302,8 @@ bool InternalSolver::statusVisited(const Status &status) {
 		for (std::multiset<VisitedState>::iterator it = found.first;
 				it != found.second; ++it) {
 			if (reach[it->currentPos()] && *it == status.state()) {
-//				if (enableDump_)
-//					dumpStatus(dumpFile_, status, "Already visited");
+				if (enableDump_)
+					dumpStatus(dumpFile_, status, "Already visited");
 				return true;
 			}
 		}

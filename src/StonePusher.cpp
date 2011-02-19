@@ -64,8 +64,10 @@ bool StonePusher::pushStoneIter(Status &status, int stone, const Point &d) {
 		return false; // should never happen
 	}
 	pushList_.push_back(status.state());
+	node_ = Node::create(status.state(), stone, d, node_, 1, calculator_->calculateStatus(status));
 	if (pushStone(status, stone))
 		return true;
+	node_ = node_->ansector();
 	pushList_.pop_back();
 	bool couldStepBack = status.moveStone(stone, p);
 	assert(couldStepBack);
