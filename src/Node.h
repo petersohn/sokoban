@@ -41,7 +41,6 @@ public:
 		copy(other);
 		return *this;
 	}
-	std::deque<Node> pathToRoot();
 	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
 	const Ptr& ansector() const { return ansector_; }
@@ -56,21 +55,28 @@ public:
 		return (costFgv() < other.costFgv() ? false : (costFgv() > other.costFgv() ? true :
 			(other.depth() - depth()) > 0));
 	}
-};
 
+};
+/*
 inline bool operator==(const Node::Ptr a, const Node::Ptr b)
 {
 	if (a.get() == NULL)
 		return b.get() == NULL;
 	return a.get() == b.get() || *a == *b;
 }
+*/
 
-inline bool operator<(const Node::Ptr a, const Node::Ptr b)
-{
-	if (a.get() == NULL || b.get() == NULL)
-		return false;
-	return *a < *b;
-}
+struct NodeCompare {
+	bool operator()(const Node::Ptr a, const Node::Ptr b)
+	{
+		if (a.get() == NULL || b.get() == NULL)
+			return false;
+		return *a < *b;
+	}
+};
+
+std::deque<Node::Ptr> pathToRoot(Node::Ptr node);
+
 
 
 #endif /* NODE_H_ */

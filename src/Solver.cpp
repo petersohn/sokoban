@@ -5,6 +5,7 @@
 #include "Node.h"
 #include "Dumper.h"
 #include "StonePusher.h"
+#include "XDumper.h"
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -13,6 +14,7 @@
 #include <queue>
 #include <algorithm>
 #include <set>
+#include <memory>
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
@@ -20,10 +22,12 @@ class InternalSolver {
 	HeurCalculator::Ptr calculator_;
 	FixedTable::Ptr table_;
 	std::multiset<VisitedState> visitedStates_;
-	std::priority_queue<Node::Ptr> queue_;
+	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, NodeCompare> queue_;
 
 	std::ofstream dumpFile_;
+	std::auto_ptr<XDumper> xdump_;
 	bool enableDump_;
+	bool enableXDump_;
 	bool enableLog_;
 	int expandedNodes_;
 	int maxDepth_;
@@ -43,27 +47,16 @@ class InternalSolver {
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
-//	bool _dump(const Node &node, bool really = true) {
-//		if (!really)
-//			return false;
-//		dumpNode(std::cout, table_, node);
-//		return true;
-//	}
-//	bool _dump(const Status &status, bool really = true) {
-//		if (!really)
-//			return false;
-//		dumpStatus(std::cout, status);
-//		return true;
-//	}
 public:
-	explicit InternalSolver(bool enableLog, bool enableDump);
+	explicit InternalSolver(bool enableLog, bool enableDump, bool enableXDump);
 
-	std::deque<Node> solve(const Status &status, HeurCalculator::Ptr calculator);
+	std::deque<Node::Ptr> solve(const Status &status, HeurCalculator::Ptr calculator);
 };
 
-InternalSolver::InternalSolver(bool enableLog, bool enableDump):
+InternalSolver::InternalSolver(bool enableLog, bool enableDump, bool enableXDump):
 		enableLog_(enableLog),
-		enableDump_(enableDump)
+		enableDump_(enableDump),
+		enableXDump_(enableXDump)
 {
 	if (enableDump_) {
 		static int counter = 0;
@@ -76,7 +69,7 @@ InternalSolver::InternalSolver(bool enableLog, bool enableDump):
 	}
 }
 
-std::deque<Node> InternalSolver::solve(const Status &status,
+std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 		HeurCalculator::Ptr calculator)
 {
 	Node::Ptr nnn = Node::create();
@@ -87,6 +80,8 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 	visitedStates_.clear();
 	expandedNodes_ = 0;
 	maxDepth_ = 0;
+	if (enableXDump_)
+		xdump_.reset(new XDumper(table_));
 	Node::Ptr currentNode;
 	VisitedState vs(status.state());
 	addVisitedState(vs);
@@ -100,9 +95,14 @@ std::deque<Node> InternalSolver::solve(const Status &status,
 	} while (currentNode->heur() > 0);
 	if (enableLog_)
 		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
-	return currentNode.get() == NULL ?
-			std::deque<Node>() :
-			currentNode->pathToRoot();
+	std::deque<Node::Ptr> result = pathToRoot(currentNode);
+	if (enableXDump_) {
+		for (std::deque<Node::Ptr>::iterator it = result.begin();
+				it != result.end(); ++it)
+			xdump_->addToSolution(*it);
+		xdump_->save("dump.xml");
+	}
+	return result;
 }
 
 
@@ -133,25 +133,46 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 			pmd.y >= 0 && pmd.y < status.height() &&
 			status.value(pd) == ftFloor && status.reachable(pmd))
 	{
+		Node::Ptr node;
 		status.currentPos(p);
-		if (calculator_->calculateStone(status, pd) < 0)
+		if (calculator_->calculateStone(status, pd) < 0 || !status.moveStone(stone, pd)) {
 			return;
-		if (status.moveStone(stone, pd) && !statusVisited(status) &&
-				(status.state()[stone] == table_->get().destination() ||
-					checkStone(status, stone)))
-		{
-			Node::Ptr node(Node::create(status.state(), stone, d,
-					base, 1, calculator_->calculateStatus(status)));
-			pushQueue(node);
-			addVisitedState(status.state());
-			if (enableDump_)
-				dumpNode(dumpFile_, table_, *node, "Added");
-			maxDepth_ = std::max(node->depth(), maxDepth_);
-			if (enableLog_ && ++expandedNodes_ % 10000 == 0)
-				std::cerr << boost::format("%d (%d, %d [%d])") %
-					expandedNodes_ % queue_.size() %
-					node->depth() % maxDepth_ << std::endl;
 		}
+		if (enableXDump_) {
+			node = Node::create(status.state(), stone, d,
+				base, 1, calculator_->calculateStatus(status));
+			xdump_->addNode(node);
+		}
+		if (statusVisited(status)) {
+			if (enableXDump_)
+				xdump_->reject(node, "already visited");
+			return;
+		}
+		if (status.state()[stone] != table_->get().destination()) {
+			std::set<int> volt;
+			if (!stoneMovable(status, stone, volt)) {
+				if (enableXDump_)
+					xdump_->reject(node, "not movable");
+				return;
+			}
+			if (!checkCorridors(status, stone)) {
+				if (enableXDump_)
+					xdump_->reject(node, "corridor found");
+				return;
+			}
+		}
+		if (!enableXDump_)
+			node = Node::create(status.state(), stone, d,
+				base, 1, calculator_->calculateStatus(status));
+		pushQueue(node);
+		addVisitedState(status.state());
+		if (enableDump_)
+			dumpNode(dumpFile_, table_, *node, "Added");
+		maxDepth_ = std::max(node->depth(), maxDepth_);
+		if (enableLog_ && ++expandedNodes_ % 10000 == 0)
+			std::cerr << boost::format("%d (%d, %d [%d])") %
+				expandedNodes_ % queue_.size() %
+				node->depth() % maxDepth_ << std::endl;
 	}
 }
 
@@ -326,10 +347,11 @@ Node::Ptr InternalSolver::popQueue() {
 
 
 
-std::deque<Node> Solver::solve(const Status &status,
-		HeurCalculator::Ptr calculator, bool enableLog, bool enableDump)
+std::deque<Node::Ptr> Solver::solve(const Status &status,
+		HeurCalculator::Ptr calculator, bool enableLog, bool enableDump,
+		bool enableXDump)
 {
-	InternalSolver solver(enableLog, enableDump);
+	InternalSolver solver(enableLog, enableDump, enableXDump);
 	return solver.solve(status, calculator);
 }
 

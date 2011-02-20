@@ -35,14 +35,14 @@ void Node::copy(const Node &other) {
 	// ansector is not copied
 }
 
-deque<Node> Node::pathToRoot()
+deque<Node::Ptr> pathToRoot(Node::Ptr node)
 {
-	deque<Node> result;
-	Node *current = this;
-	while (current != NULL)
+	deque<Node::Ptr> result;
+	while (node.get() != NULL)
 	{
-		result.push_front(*current);
-		current = current->ansector().get();
+		result.push_front(node);
+		node = node->ansector();
 	}
 	return result;
 }
+

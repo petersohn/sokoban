@@ -7,6 +7,7 @@
 #include <string>
 #include <deque>
 #include <queue>
+#include <boost/format.hpp>
 
 template<class T> class Array;
 class Point;
@@ -66,6 +67,13 @@ std::deque<T> intersect(std::deque<T> l1, std::deque<T> l2)
 	}
 	return result;
 }
+
+template<class T>
+inline std::string toStr(const T &t) {
+	return (boost::format("%1%") % t).str();
+}
+
+std::string direction(const Point &d);
 
 
 #endif /* COMMON_H_ */

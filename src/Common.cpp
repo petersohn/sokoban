@@ -9,4 +9,10 @@
 
 using namespace std;
 
-
+std::string direction(const Point &d) {
+	return
+			d.x > 0 ? "right" :
+			d.x < 0 ? "left" :
+			d.y > 0 ? "down" :
+			d.y < 0 ? "up" : "???";
+}

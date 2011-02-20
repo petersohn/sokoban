@@ -99,9 +99,9 @@ ki:
 		part.heur = 0;
 	else {
 		Solver s;
-		std::deque<Node> res = s.solve(status, calculator_);
+		std::deque<Node::Ptr> res = s.solve(status, calculator_);
 		if (res.size() != 0)
-			part.heur = res.rbegin()->cost();
+			part.heur = (*res.rbegin())->cost();
 	}
 	for (pp.y = 0; pp.y < table().height(); pp.y++)
 		for (pp.x = 0; pp.x < table().width(); pp.x++) {
