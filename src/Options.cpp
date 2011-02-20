@@ -13,11 +13,12 @@ Options::Options(int argc, char **argv) {
 	options_description desc;
 	desc.add_options()
 		("help", "produce help message")
-		("enable-dump,d", "enable dump file generation of the process")
-		("enable-xml-dump,x", "enable XML dump file generation of the process")
+		("enable-dump,d", "Generate dump file of the process. Slows down calculation.")
+		("enable-xml-dump,x", "Generate XML dump file of the expanded tree. Slows "
+				"down calculation and increases memory consumption.")
 		("old-style-output", "Produce output messages of (x1, y1) --> (x2, y2)"
 				" instead of (x1, y1) --> direction")
-		("filename", value<std::string>(), "input file name")
+		("filename,f", value<std::string>(), "input file name")
 		;
 
 	positional_options_description p;

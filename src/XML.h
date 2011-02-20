@@ -22,12 +22,12 @@ class XMLElement: public XMLNode {
 	std::map<std::string, std::string> attributes_;
 	std::vector<Ptr> children_;
 public:
-	std::map<std::string, std::string> attributes() { return attributes_; }
-	const std::map<std::string, std::string> attributes() const { return attributes_; }
-	std::vector<Ptr> children() { return children_; }
-	const std::vector<Ptr> children() const { return children_; }
-	const std::string &name() const { return name_; }
-	void name(const std::string name) { name_ = name; }
+	std::map<std::string, std::string>& attributes() { return attributes_; }
+	const std::map<std::string, std::string>& attributes() const { return attributes_; }
+	std::vector<Ptr>& children() { return children_; }
+	const std::vector<Ptr>& children() const { return children_; }
+	const std::string& name() const { return name_; }
+	void name(const std::string &name) { name_ = name; }
 
 	virtual std::string toString() const;
 };

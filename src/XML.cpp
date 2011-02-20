@@ -8,7 +8,12 @@ using namespace std;
 namespace xml {
 
 string XMLElement::toString() const {
-	string result = (boost::format("<%s>\n") % name_).str();
+	string attrString;
+	for (map<string, string>::const_iterator it = attributes_.begin();
+			it != attributes_.end(); ++it) {
+		attrString += (boost::format("%s=\"%s\" ") % it->first % it->second).str();
+	}
+	string result = (boost::format("<%s %s>\n") % name_ % attrString).str();
 	for (vector<Ptr>::const_iterator it = children_.begin();
 			it != children_.end(); ++it)
 		result += (*it)->toString();

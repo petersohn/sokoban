@@ -101,6 +101,7 @@ std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 				it != result.end(); ++it)
 			xdump_->addToSolution(*it);
 		xdump_->save("dump.xml");
+//		xdump_->dump();
 	}
 	return result;
 }
@@ -109,6 +110,9 @@ std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 //	if (pushStones(Status(table_, state), base))
 //		return;
+	if (enableXDump_ && base.get() != NULL) {
+		xdump_->expand(base);
+	}
 	if (enableDump_ && base.get() != NULL)
 		dumpNode(dumpFile_, table_, *base, "Expanding");
 	for (int i = 0; i < state.size(); ++i)
