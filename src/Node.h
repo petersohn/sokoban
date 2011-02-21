@@ -50,6 +50,7 @@ public:
 	int costFgv() const { return cost_ + heur_; }
 	int stone() const { return stone_; }
 	const Point& d() const { return d_; }
+	Point currentPos() const { return state_[stone_] - d_; }
 	bool operator<(const Node &other) const
 	{
 		return (costFgv() < other.costFgv() ? false : (costFgv() > other.costFgv() ? true :

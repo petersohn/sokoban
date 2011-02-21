@@ -13,7 +13,7 @@ Status::Status(FixedTable::Ptr table):
 }
 
 
-Status::Status(FixedTable::Ptr table, const VisitedState &state):
+Status::Status(FixedTable::Ptr table, const State &state):
 	table_(table),
 	state_(state),
 	stoneAt_(table->get().width(), table->get().height()),
@@ -25,7 +25,8 @@ Status::Status(FixedTable::Ptr table, const VisitedState &state):
 
 Status::Status(FixedTable::Ptr table, const Node &node):
 		table_(table),
-		state_(node),
+		state_(node.state()),
+		currentPos_(node.currentPos()),
 		stoneAt_(table->get().width(), table->get().height()),
 		fields_(table->get().width(), table->get().height()),
 		reachOK_(false)
@@ -45,6 +46,10 @@ void Status::init() {
 			stoneAt_[state_[i]] = i;
 		}
 	}
+}
+
+void initStones() {
+
 }
 
 void Status::calculateReachable() const {
@@ -71,14 +76,14 @@ bool Status::removeStone(const Point &p) {
 	return true;
 }
 
-void Status::state(const VisitedState &value) {
+void Status::state(const State &value) {
 	state_ = value;
 	reachOK_ = false;
 	init();
 }
 
 bool Status::currentPos(const Point & p) {
-	state_.currentPos(p);
+	currentPos_ = p;
 	reachOK_ = false;
 	return true;
 }
@@ -87,7 +92,7 @@ bool Status::moveStone(int stone, const Point & p) {
 	if (value(state()[stone]) != ftStone && value(p) != ftFloor)
 		return false;
 	fields_[state_[stone]] = ftFloor;
-	state_.currentPos(state_[stone]);
+	currentPos_ = state_[stone];
 	state_.moveStone(stone, p);
 	if (p != table().destination())
 	{
@@ -100,6 +105,13 @@ bool Status::moveStone(int stone, const Point & p) {
 	return true;
 }
 
+void Status::set(const Node &node) {
+	state_ = node.state();
+	currentPos_ = node.currentPos();
+	reachOK = false;
+	init();
+}
+
 
 Status Status::loadFromFile(const char *filename) {
 	using namespace std;
@@ -109,7 +121,8 @@ Status Status::loadFromFile(const char *filename) {
 	string line;
 	getline(file, line); // dummy
 	Table t(width, height);
-	VisitedState vs;
+	State st;
+	Point startPos;
 	bool startPosOK = false, destinationOK = false;
 	int stoneNum = 0;
 	Point p;
@@ -130,7 +143,7 @@ Status Status::loadFromFile(const char *filename) {
 				break;
 			case 'Y':
 			case 'y':
-				vs.currentPos(p);
+				startPos = p;
 				t.wall(p, false);
 				startPosOK = true;
 				break;
@@ -140,7 +153,7 @@ Status Status::loadFromFile(const char *filename) {
 			case 'o':
 			case 'O':
 				t.wall(p, false);
-				vs.addStone(p);
+				st.addStone(p);
 				++stoneNum;
 				break;
 			default:
@@ -154,7 +167,9 @@ Status Status::loadFromFile(const char *filename) {
 	cerr << endl;
 	if (stoneNum == 0 || !startPosOK || !destinationOK)
 		throw SokobanException();
-	return Status(FixedTable::Ptr(new FixedTable(t)), vs);
+	Status result(FixedTable::Ptr(new FixedTable(t)), st);
+	result.currentPos(startPos);
+	return result;
 }
 
 

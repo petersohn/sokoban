@@ -3,19 +3,6 @@
 
 using namespace std;
 
-void State::hash()
-{
-	hashCode_ = 0;
-	for (std::vector<Point>::iterator it = stones_.begin(); it != stones_.end(); ++it) {
-		hashCode_ += it->x * it->y;
-	}
-}
-
-void State::copyFrom(const State &other) {
-	stones_ = other.stones_;
-	hashCode_ = other.hashCode_;
-}
-
 bool State::operator==(const State &other) const
 {
 	if (other.stones_.size() != stones_.size())
@@ -46,28 +33,27 @@ bool State::operator<(const State &other) const
 int State::addStone(const Point & p)
 {
 	stones_.push_back(p);
-	hash();
 	return stones_.size() - 1;
 }
 
 void State::removeStone(int stone)
 {
 	stones_.erase(stones_.begin()+stone);
-	hash();
 }
 
 void State::moveStone(int stone, const Point &p)
 {
 	stones_[stone] = p;
-	hash();
 }
 
-VisitedState::VisitedState(const Node &other):
-		State(other.state()),
-		currentPos_(operator[](other.stone()) - other.d())
+int State::Hash::operator()(const State &state)
 {
+	int result = 0;
+	for (int i = 0; i < state.size(); ++i) {
+		result += 47 * state[i].x + 61 * state[i].y;
+	}
+	return result;
 }
-
 
 
 

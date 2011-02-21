@@ -5,7 +5,8 @@
 #include "Node.h"
 #include "Dumper.h"
 #include "StonePusher.h"
-#include "XDumper.h"
+#include "VisitedState.h"
+//#include "XDumper.h"
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -17,11 +18,23 @@
 #include <memory>
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
+#include <boost/unordered_map.hpp>
+
+class XDumper {
+public:
+	XDumper(FixedTable::Ptr t) {}
+	void addNode(Node::Ptr &n) {}
+	void expand(Node::Ptr &n) {}
+	void addToSolution(Node::Ptr &n) {}
+	void reject(Node::Ptr &n, const char *s) {}
+	void save(const char *s) {}
+};
 
 class InternalSolver {
 	HeurCalculator::Ptr calculator_;
 	FixedTable::Ptr table_;
-	std::multiset<VisitedState> visitedStates_;
+	typedef boost::unordered_multimap<State, VisitedStateInfo, State::Hash> VisitedStateSet;
+	VisitedStateSet visitedStates_;
 	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, NodeCompare> queue_;
 
 	std::ofstream dumpFile_;
@@ -32,8 +45,8 @@ class InternalSolver {
 	int expandedNodes_;
 	int maxDepth_;
 
-	void expandNodes(const VisitedState &state, Node::Ptr base);
-	void expandNode(const VisitedState &state, int stone,
+	void expandNodes(const Status &status, Node::Ptr base);
+	void expandNode(Status status, int stone,
 			const Point &d, Node::Ptr base);
 	bool checkStone(const Status &status, int stone);
 	bool stoneMovable(const Status &status, int stone, std::set<int> &volt);
@@ -43,14 +56,14 @@ class InternalSolver {
 			const Point &p0, const Point &side);
 	bool checkCorridors(const Status &status, int stone);
 	bool pushStones(const Status &status, Node::Ptr base);
-	void addVisitedState(const VisitedState &state);
+	void addVisitedState(const Status &st, int heur);
 	bool statusVisited(const Status &status);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
 public:
 	explicit InternalSolver(bool enableLog, bool enableDump, bool enableXDump);
 
-	std::deque<Node::Ptr> solve(const Status &status, HeurCalculator::Ptr calculator);
+	std::deque<Node::Ptr> solve(Status status, HeurCalculator::Ptr calculator);
 };
 
 InternalSolver::InternalSolver(bool enableLog, bool enableDump, bool enableXDump):
@@ -69,12 +82,10 @@ InternalSolver::InternalSolver(bool enableLog, bool enableDump, bool enableXDump
 	}
 }
 
-std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
+std::deque<Node::Ptr> InternalSolver::solve(Status status,
 		HeurCalculator::Ptr calculator)
 {
 	Node::Ptr nnn = Node::create();
-//	_dump(status, false);
-//	_dump(*nnn, false);
 	calculator_ = calculator;
 	table_ = status.tablePtr();
 	visitedStates_.clear();
@@ -83,15 +94,14 @@ std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 	if (enableXDump_)
 		xdump_.reset(new XDumper(table_));
 	Node::Ptr currentNode;
-	VisitedState vs(status.state());
-	addVisitedState(vs);
+//	addVisitedState(status); TODO
 	do
 	{
-		expandNodes(vs, currentNode);
+		expandNodes(status, currentNode);
 		currentNode = popQueue();
 		if (currentNode.get() == NULL)
 			break;
-		vs = VisitedState(*currentNode);
+		status.set(*currentNode);
 	} while (currentNode->heur() > 0);
 	if (enableLog_)
 		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
@@ -107,7 +117,7 @@ std::deque<Node::Ptr> InternalSolver::solve(const Status &status,
 }
 
 
-void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
+void InternalSolver::expandNodes(const Status &status, Node::Ptr base) {
 //	if (pushStones(Status(table_, state), base))
 //		return;
 	if (enableXDump_ && base.get() != NULL) {
@@ -115,23 +125,22 @@ void InternalSolver::expandNodes(const VisitedState &state, Node::Ptr base) {
 	}
 	if (enableDump_ && base.get() != NULL)
 		dumpNode(dumpFile_, table_, *base, "Expanding");
-	for (int i = 0; i < state.size(); ++i)
+	for (int i = 0; i < status.state().size(); ++i)
 	{
-		if (state[i] == table_->get().destination())
+		if (status.state()[i] == table_->get().destination())
 			continue;
-		expandNode(state, i, Point::p10, base);
-		expandNode(state, i, Point::pm10, base);
-		expandNode(state, i, Point::p01, base);
-		expandNode(state, i, Point::p0m1, base);
+		expandNode(status, i, Point::p10, base);
+		expandNode(status, i, Point::pm10, base);
+		expandNode(status, i, Point::p01, base);
+		expandNode(status, i, Point::p0m1, base);
 	}
 	if (enableDump_)
 		dumpFile_ << std::endl << "--------" << std::endl << std::endl;
 }
 
-void InternalSolver::expandNode(const VisitedState &state, int stone,
+void InternalSolver::expandNode(Status status, int stone,
 		const Point &d, Node::Ptr base) {
-	Status status(table_, state);
-	Point p = state[stone];
+	Point p = status.state()[stone];
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < status.width() &&
 			pmd.y >= 0 && pmd.y < status.height() &&
@@ -169,7 +178,7 @@ void InternalSolver::expandNode(const VisitedState &state, int stone,
 			node = Node::create(status.state(), stone, d,
 				base, 1, calculator_->calculateStatus(status));
 		pushQueue(node);
-		addVisitedState(status.state());
+		addVisitedState(status.state(), node->costFgv());
 		if (enableDump_)
 			dumpNode(dumpFile_, table_, *node, "Added");
 		maxDepth_ = std::max(node->depth(), maxDepth_);
@@ -311,22 +320,21 @@ bool InternalSolver::pushStones(const Status &status, Node::Ptr base)
 //	return true;
 }
 
-void InternalSolver::addVisitedState(const VisitedState &state) {
-	visitedStates_.insert(state);
+void InternalSolver::addVisitedState(const Status &st, int heur) {
+	assert(status.tablePtr() == table_);
+	visitedStates_.insert(VisitedStateInfo(st, heur));
 }
 
 bool InternalSolver::statusVisited(const Status &status) {
 	assert(status.tablePtr() == table_);
-	std::pair<std::multiset<VisitedState>::iterator,
-		std::multiset<VisitedState>::iterator> found =
+	std::pair<VisitedStateSet::iterator,
+		VisitedStateSet::iterator> found =
 			visitedStates_.equal_range(status.state());
 	if (found.first != found.second)
 	{
-		Array<bool> reach(status.width(), status.height(), false);
-		floodFill(status, status.state().currentPos(), reach);
-		for (std::multiset<VisitedState>::iterator it = found.first;
+		for (VisitedStateSet::iterator it = found.first;
 				it != found.second; ++it) {
-			if (reach[it->currentPos()] && *it == status.state()) {
+			if (reach[it->second.currentPos()]) {
 				if (enableDump_)
 					dumpStatus(dumpFile_, status, "Already visited");
 				return true;

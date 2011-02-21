@@ -88,10 +88,10 @@ void AdvancedHeurCalculator::initPartition(const Point & p, Array<bool> &kell,
 			if (kell[pp])
 				goto ki;
 ki:
-	VisitedState state;
+	State state;
 	state.addStone(p);
-	state.currentPos(pp);
 	Status status(tablePtr(), state);
+	status.currentPos(pp);
 	Partition part(table().width(), table().height());
 	part.pos = p;
 	part.heur = -1;
@@ -121,7 +121,7 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &
 	// If the current position equals p, then partitions
 	// can't be used. Use the minimal non-negative
 	// partition's value instead
-	if (status.state().currentPos() == p) {
+	if (status.currentPos() == p) {
 		int min = -1;
 		for (it = partitions_[p].begin();
 			it != partitions_[p].end(); ++it) {
@@ -139,7 +139,7 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &
 		for (it = partitions_[p].begin();
 			it != partitions_[p].end(); ++it)
 		{
-			if (it->reachable[status.state().currentPos()])
+			if (it->reachable[status.currentPos()])
 				break;
 		}
 		if (it != partitions_[p].end())

@@ -13,7 +13,6 @@ sokoban_SOURCES = main.cpp \
 	StonePusher.cpp \
 	Table.cpp \
 	TableHeurCalculator.cpp \
-	XDumper.cpp \
 	XML.cpp
 
 bin_PROGRAMS = sokoban

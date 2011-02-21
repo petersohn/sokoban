@@ -5,10 +5,14 @@
 #include "HeurCalculator.h"
 #include <deque>
 
-class VisitedState;
+class State;
+class VisitedStateInfo;
 
 class StonePusher {
-	std::deque<VisitedState> pushList_;
+public:
+	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
+private:
+	PushListType pushList_;
 	Node::Ptr node_;
 	HeurCalculator::Ptr calculator_;
 	bool pushStone(Status &status, int stone);
@@ -17,7 +21,7 @@ public:
 	StonePusher(HeurCalculator::Ptr calculator):
 		calculator_(calculator) {}
 	Node::Ptr pushStones(const Status &st, Node::Ptr base);
-	const std::deque<VisitedState>& pushList() { return pushList_; }
+	const PushListType& pushList() { return pushList_; }
 };
 
 #endif /* STONEPUSHER_H_ */

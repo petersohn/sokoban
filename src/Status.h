@@ -16,7 +16,8 @@ public:
 	typedef std::deque<int> BorderType;
 private:
 	FixedTable::Ptr table_;
-	VisitedState state_;
+	State state_;
+	Point currentPos_;
 	Array<uint> stoneAt_;
 	Array<FieldType> fields_;
 
@@ -30,14 +31,14 @@ public:
 	static Status loadFromFile(const char *filename);
 
 	explicit Status(FixedTable::Ptr table);
-	explicit Status(FixedTable::Ptr table, const VisitedState &state);
+	explicit Status(FixedTable::Ptr table, const State &state);
 	explicit Status(FixedTable::Ptr table, const Node &node);
 
 	const Table& table() const { return table_->get(); }
 	FixedTable::Ptr tablePtr() const { return table_; }
 	size_t width() const { return table().width(); }
 	size_t height() const { return table().height(); }
-	const VisitedState& state() const { return state_; }
+	const State& state() const { return state_; }
 	bool reachable(const Point &p) const {
 		if (!reachOK_)
 			calculateReachable();
@@ -50,13 +51,14 @@ public:
 	}
 	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
 	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
-	const Point &currentPos() const { return state_.currentPos(); }
+	const Point &currentPos() const { return currentPos_; }
 
 	bool currentPos(const Point &p);
-	void state(const VisitedState &value);
+	void state(const State &value);
 	bool addStone(const Point &p);
 	bool removeStone(const Point &p);
 	bool moveStone(int stone, const Point & p);
+	void set(const Node &node);
 };
 
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,

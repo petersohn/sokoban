@@ -1,6 +1,8 @@
 #include "StonePusher.h"
 #include "Array.h"
 #include "Status.h"
+#include "State.h"
+#include "VisitedState.h"
 #include <iostream>
 
 Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
@@ -63,8 +65,8 @@ bool StonePusher::pushStoneIter(Status &status, int stone, const Point &d) {
 		std::cerr << "Whoopsie doopsie!";
 		return false; // should never happen
 	}
-	pushList_.push_back(status.state());
 	node_ = Node::create(status.state(), stone, d, node_, 1, calculator_->calculateStatus(status));
+	pushList_.push_back(make_pair(status.state(), VisitedStateInfo(status.currentPos(), node_->costFgv())));
 	if (pushStone(status, stone))
 		return true;
 	node_ = node_->ansector();
