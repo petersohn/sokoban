@@ -6,7 +6,7 @@
 #include "Dumper.h"
 #include "StonePusher.h"
 #include "VisitedState.h"
-//#include "XDumper.h"
+#include "XDumper.h"
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -19,16 +19,6 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 #include <boost/unordered_map.hpp>
-
-class XDumper {
-public:
-	XDumper(FixedTable::Ptr t) {}
-	void addNode(Node::Ptr &n) {}
-	void expand(Node::Ptr &n) {}
-	void addToSolution(Node::Ptr &n) {}
-	void reject(Node::Ptr &n, const char *s) {}
-	void save(const char *s) {}
-};
 
 class InternalSolver {
 	HeurCalculator::Ptr calculator_;
