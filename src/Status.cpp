@@ -1,4 +1,5 @@
 #include "Status.h"
+#include "Node.h"
 #include <fstream>
 
 
@@ -54,7 +55,7 @@ void initStones() {
 
 void Status::calculateReachable() const {
 	reachable_.reset(width(), height(), false);
-	floodFill(*this, state().currentPos(), reachable_, &border_);
+	floodFill(*this, currentPos_, reachable_, &border_);
 	reachOK_ = true;
 }
 
@@ -108,7 +109,7 @@ bool Status::moveStone(int stone, const Point & p) {
 void Status::set(const Node &node) {
 	state_ = node.state();
 	currentPos_ = node.currentPos();
-	reachOK = false;
+	reachOK_ = false;
 	init();
 }
 

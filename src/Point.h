@@ -1,6 +1,8 @@
 #ifndef POINT_H_
 #define POINT_H_
 
+#include <boost/functional/hash.hpp>
+
 class Point
 {
 public:
@@ -38,6 +40,7 @@ public:
 	}
 
 	static const Point p10, pm10, p01, p0m1;
+
 };
 
 
@@ -64,5 +67,8 @@ inline Point operator*(const Point &p, int n) {
 inline Point operator-(const Point &p) {
 	return p * -1;
 }
+
+size_t hash_value(const Point &p);
+
 
 #endif /*POINT_H_*/

@@ -5,7 +5,7 @@
 #include "Node.h"
 #include "Dumper.h"
 #include "StonePusher.h"
-#include "VisitedState.h"
+#include "VisitedStateInfo.h"
 #include "XDumper.h"
 #include <iostream>
 #include <fstream>
@@ -23,7 +23,7 @@
 class InternalSolver {
 	HeurCalculator::Ptr calculator_;
 	FixedTable::Ptr table_;
-	typedef boost::unordered_multimap<State, VisitedStateInfo, State::Hash> VisitedStateSet;
+	typedef boost::unordered_multimap<State, VisitedStateInfo, boost::hash<State> > VisitedStateSet;
 	VisitedStateSet visitedStates_;
 	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, NodeCompare> queue_;
 
@@ -84,7 +84,7 @@ std::deque<Node::Ptr> InternalSolver::solve(Status status,
 	if (enableXDump_)
 		xdump_.reset(new XDumper(table_));
 	Node::Ptr currentNode;
-//	addVisitedState(status); TODO
+	addVisitedState(status, calculator_->calculateStatus(status));
 	do
 	{
 		expandNodes(status, currentNode);
@@ -168,7 +168,7 @@ void InternalSolver::expandNode(Status status, int stone,
 			node = Node::create(status.state(), stone, d,
 				base, 1, calculator_->calculateStatus(status));
 		pushQueue(node);
-		addVisitedState(status.state(), node->costFgv());
+		addVisitedState(status, node->costFgv());
 		if (enableDump_)
 			dumpNode(dumpFile_, table_, *node, "Added");
 		maxDepth_ = std::max(node->depth(), maxDepth_);
@@ -312,7 +312,7 @@ bool InternalSolver::pushStones(const Status &status, Node::Ptr base)
 
 void InternalSolver::addVisitedState(const Status &st, int heur) {
 	assert(status.tablePtr() == table_);
-	visitedStates_.insert(VisitedStateInfo(st, heur));
+	visitedStates_.insert(std::make_pair(st.state(), VisitedStateInfo(st.currentPos(), heur)));
 }
 
 bool InternalSolver::statusVisited(const Status &status) {
@@ -324,7 +324,7 @@ bool InternalSolver::statusVisited(const Status &status) {
 	{
 		for (VisitedStateSet::iterator it = found.first;
 				it != found.second; ++it) {
-			if (reach[it->second.currentPos()]) {
+			if (status.reachable(it->second.currentPos())) {
 				if (enableDump_)
 					dumpStatus(dumpFile_, status, "Already visited");
 				return true;

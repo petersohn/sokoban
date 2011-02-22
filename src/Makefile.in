@@ -50,7 +50,8 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	Dumper.$(OBJEXT) HeurCalculator.$(OBJEXT) Node.$(OBJEXT) \
 	Options.$(OBJEXT) Point.$(OBJEXT) Solver.$(OBJEXT) \
 	State.$(OBJEXT) Status.$(OBJEXT) StonePusher.$(OBJEXT) \
-	Table.$(OBJEXT) TableHeurCalculator.$(OBJEXT) XML.$(OBJEXT)
+	Table.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
+	VisitedStateInfo.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -168,6 +169,8 @@ sokoban_SOURCES = main.cpp \
 	StonePusher.cpp \
 	Table.cpp \
 	TableHeurCalculator.cpp \
+	VisitedStateInfo.cpp \
+	XDumper.cpp \
 	XML.cpp
 
 all: all-am
@@ -265,6 +268,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StonePusher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Table.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TableHeurCalculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VisitedStateInfo.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XDumper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XML.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 

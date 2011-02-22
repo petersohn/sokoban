@@ -1,5 +1,6 @@
 #include "State.h"
 #include "Node.h"
+#include <boost/functional/hash.hpp>
 
 using namespace std;
 
@@ -24,12 +25,6 @@ bool State::operator==(const State &other) const
 	return true;
 }
 
-bool State::operator<(const State &other) const
-{
-	int result = hashCode_ - other.hashCode_;
-	return result < 0;
-}
-
 int State::addStone(const Point & p)
 {
 	stones_.push_back(p);
@@ -46,13 +41,16 @@ void State::moveStone(int stone, const Point &p)
 	stones_[stone] = p;
 }
 
-int State::Hash::operator()(const State &state)
+
+
+size_t hash_value(const State &state)
 {
-	int result = 0;
+	size_t result = 0;
+	boost::hash<Point> h;
 	for (int i = 0; i < state.size(); ++i) {
-		result += 47 * state[i].x + 61 * state[i].y;
+		result += h(state[i]); // the order of elements doesn't count
 	}
-	return result;
+	return boost::hash<size_t>()(result);
 }
 
 

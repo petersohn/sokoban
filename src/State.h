@@ -26,10 +26,8 @@ public:
 		return stones_[stone];
 	}
 	size_t size() const { return stones_.size(); }
-
-	struct Hash {
-		int operator()(const State &state);
-	};
 };
+
+size_t hash_value(const State &state);
 
 #endif /* STATE_H_ */

@@ -1,4 +1,4 @@
-#include "VisitedState.h"
+#include "VisitedStateInfo.h"
 #include "Status.h"
 
 
