@@ -47,7 +47,7 @@ class InternalSolver {
 	bool checkCorridors(const Status &status, int stone);
 	bool pushStones(const Status &status, Node::Ptr base);
 	void addVisitedState(const Status &st, int heur);
-	bool statusVisited(const Status &status);
+	bool statusVisited(const Status &status, int heur);
 	void pushQueue(Node::Ptr node);
 	Node::Ptr popQueue();
 public:
@@ -141,12 +141,12 @@ void InternalSolver::expandNode(Status status, int stone,
 		if (calculator_->calculateStone(status, pd) < 0 || !status.moveStone(stone, pd)) {
 			return;
 		}
+		node = Node::create(status.state(), stone, d,
+			base, 1, calculator_->calculateStatus(status));
 		if (enableXDump_) {
-			node = Node::create(status.state(), stone, d,
-				base, 1, calculator_->calculateStatus(status));
 			xdump_->addNode(node);
 		}
-		if (statusVisited(status)) {
+		if (statusVisited(status, node->costFgv())) {
 			if (enableXDump_)
 				xdump_->reject(node, "already visited");
 			return;
@@ -164,9 +164,6 @@ void InternalSolver::expandNode(Status status, int stone,
 				return;
 			}
 		}
-		if (!enableXDump_)
-			node = Node::create(status.state(), stone, d,
-				base, 1, calculator_->calculateStatus(status));
 		pushQueue(node);
 		addVisitedState(status, node->costFgv());
 		if (enableDump_)
@@ -315,7 +312,7 @@ void InternalSolver::addVisitedState(const Status &st, int heur) {
 	visitedStates_.insert(std::make_pair(st.state(), VisitedStateInfo(st.currentPos(), heur)));
 }
 
-bool InternalSolver::statusVisited(const Status &status) {
+bool InternalSolver::statusVisited(const Status &status, int heur) {
 	assert(status.tablePtr() == table_);
 	std::pair<VisitedStateSet::iterator,
 		VisitedStateSet::iterator> found =
@@ -325,9 +322,16 @@ bool InternalSolver::statusVisited(const Status &status) {
 		for (VisitedStateSet::iterator it = found.first;
 				it != found.second; ++it) {
 			if (status.reachable(it->second.currentPos())) {
-				if (enableDump_)
-					dumpStatus(dumpFile_, status, "Already visited");
-				return true;
+				if (heur < it->second.heur()) {
+					if (enableDump_)
+						dumpStatus(dumpFile_, status,
+								(boost::format("Already visited, with worse heur (%d --> %d)") %
+								it->second.heur() % heur).str());
+				} else {
+					if (enableDump_)
+						dumpStatus(dumpFile_, status, "Already visited");
+					return true;
+				}
 			}
 		}
 	}

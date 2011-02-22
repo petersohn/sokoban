@@ -13,6 +13,9 @@ public:
 
 	const Point& currentPos() const { return currentPos_; }
 	int heur() const { return heur_; }
+
+	void currentPos(const Point &p) { currentPos_ = p; }
+	void heur(int h) { heur_ = h; }
 };
 
 
