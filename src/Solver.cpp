@@ -108,8 +108,8 @@ std::deque<Node::Ptr> InternalSolver::solve(Status status,
 
 
 void InternalSolver::expandNodes(const Status &status, Node::Ptr base) {
-//	if (pushStones(Status(table_, state), base))
-//		return;
+	if (pushStones(status, base))
+		return;
 	if (enableXDump_ && base.get() != NULL) {
 		xdump_->expand(base);
 	}
@@ -297,18 +297,31 @@ bool InternalSolver::checkCorridorEnding(const Status &status,
 
 bool InternalSolver::pushStones(const Status &status, Node::Ptr base)
 {
-//	StonePusher sp(calculator_);
-//	Node::Ptr node = sp.pushStones(status, base);
-//	if (node.get() == NULL)
-//		return false;
-//	pushQueue(node);
-//	std::for_each(sp.pushList().begin(), sp.pushList().end(),
-//			boost::bind(&InternalSolver::addVisitedState, this, _1));
-//	return true;
+	StonePusher sp(calculator_);
+//	dumpStatus(std::cerr, status, "push");
+	Node::Ptr node = sp.pushStones(status, base);
+	if (node.get() == NULL)
+		return false;
+	pushQueue(node);
+	Status st(table_);
+	std::deque<Node::Ptr> path = pathToBase(node, base);
+	for (std::deque<Node::Ptr>::iterator it = path.begin();
+			it != path.end(); ++it) {
+		st.set(**it);
+		addVisitedState(st, (*it)->costFgv());
+		if (enableXDump_) {
+			xdump_->addNode(*it);
+			if (*it != node)
+				xdump_->push(*it);
+		}
+	}
+	if (enableXDump_)
+		xdump_->push(base);
+	return true;
 }
 
 void InternalSolver::addVisitedState(const Status &st, int heur) {
-	assert(status.tablePtr() == table_);
+	assert(st.tablePtr() == table_);
 	visitedStates_.insert(std::make_pair(st.state(), VisitedStateInfo(st.currentPos(), heur)));
 }
 

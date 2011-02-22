@@ -19,6 +19,7 @@ public:
 	void addNode(Node::Ptr node);
 	void addToSolution(Node::Ptr node);
 	void expand(Node::Ptr node);
+	void push(Node::Ptr node);
 	void reject(Node::Ptr node, const std::string &text);
 	void clear();
 	void save(const char *filename) const;

@@ -12,7 +12,6 @@ class StonePusher {
 public:
 	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
 private:
-	PushListType pushList_;
 	Node::Ptr node_;
 	HeurCalculator::Ptr calculator_;
 	bool pushStone(Status &status, int stone);
@@ -21,7 +20,6 @@ public:
 	StonePusher(HeurCalculator::Ptr calculator):
 		calculator_(calculator) {}
 	Node::Ptr pushStones(const Status &st, Node::Ptr base);
-	const PushListType& pushList() { return pushList_; }
 };
 
 #endif /* STONEPUSHER_H_ */

@@ -6,7 +6,6 @@
 #include <iostream>
 
 Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
-	pushList_.clear();
 	node_ = base;
 	Status status(st);
 	Array<bool> destReachable(st.width(), st.height(), false);
@@ -66,12 +65,9 @@ bool StonePusher::pushStoneIter(Status &status, int stone, const Point &d) {
 		return false; // should never happen
 	}
 	node_ = Node::create(status.state(), stone, d, node_, 1, calculator_->calculateStatus(status));
-	pushList_.push_back(std::make_pair(status.state(),
-			VisitedStateInfo(status.currentPos(), node_->costFgv())));
 	if (pushStone(status, stone))
 		return true;
 	node_ = node_->ansector();
-	pushList_.pop_back();
 	bool couldStepBack = status.moveStone(stone, p);
 	assert(couldStepBack);
 	status.currentPos(currentTmp);

@@ -31,11 +31,15 @@ void XDumper::addNode(Node::Ptr node) {
 }
 
 void XDumper::addToSolution(Node::Ptr node) {
-	elements_[node]->attributes()["expanded"] = "part-of-solution";
+	elements_[node]->attributes()["part-of-solution"] = "yes";
 }
 
 void XDumper::expand(Node::Ptr node) {
-	elements_[node]->attributes()["expanded"] = "yes";
+	elements_[node]->attributes()["expanded"] = "normal";
+}
+
+void XDumper::push(Node::Ptr node) {
+	elements_[node]->attributes()["expanded"] = "pushed";
 }
 
 void XDumper::reject(Node::Ptr node, const std::string &text) {

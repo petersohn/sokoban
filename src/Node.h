@@ -76,7 +76,11 @@ struct NodeCompare {
 	}
 };
 
-std::deque<Node::Ptr> pathToRoot(Node::Ptr node);
+std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);
+
+inline std::deque<Node::Ptr> pathToRoot(Node::Ptr node) {
+	return pathToBase(node, Node::Ptr());
+}
 
 
 
