@@ -170,9 +170,13 @@ void InternalSolver::expandNode(Status status, int stone,
 			dumpNode(dumpFile_, table_, *node, "Added");
 		maxDepth_ = std::max(node->depth(), maxDepth_);
 		if (enableLog_ && ++expandedNodes_ % 10000 == 0)
-			std::cerr << boost::format("%d (%d, %d [%d])") %
+			std::cerr << boost::format(
+					"Expanded nodes: %d.\n"
+					"Nodes in queue: %d.\n"
+					"Maximum depth: %d.\n"
+					"Cost function: %d\n") %
 				expandedNodes_ % queue_.size() %
-				node->depth() % maxDepth_ << std::endl;
+				maxDepth_ % base->costFgv() << std::endl;
 	}
 }
 

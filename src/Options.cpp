@@ -20,16 +20,18 @@ Options::Options(int argc, char **argv) {
 				" instead of (x1, y1) --> direction")
 		("filename,f", value<std::string>(), "input file name")
 		;
-
 	positional_options_description p;
 	p.add("filename", 1);
-
-
 	variables_map vm;
-	store(command_line_parser(argc, argv).
-			options(desc).positional(p).run(), vm);
-	notify(vm);
-
+	try {
+		store(command_line_parser(argc, argv).
+				options(desc).positional(p).run(), vm);
+		notify(vm);
+	} catch (std::exception &e) {
+		std::cerr << "An error has happened while parsing the command line: " <<
+				e.what() << std::endl << desc << std::endl;
+		exit(1);
+	}
 	if (vm.count("help") > 0) {
 		std::cerr << desc << std::endl;
 		exit(0);
