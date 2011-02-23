@@ -6,7 +6,6 @@
 Status::Status(FixedTable::Ptr table):
 	table_(table),
 	state_(),
-	stoneAt_(table->get().width(), table->get().height()),
 	fields_(table->get().width(), table->get().height()),
 	reachOK_(false)
 {
@@ -17,7 +16,6 @@ Status::Status(FixedTable::Ptr table):
 Status::Status(FixedTable::Ptr table, const State &state):
 	table_(table),
 	state_(state),
-	stoneAt_(table->get().width(), table->get().height()),
 	fields_(table->get().width(), table->get().height()),
 	reachOK_(false)
 {
@@ -27,8 +25,7 @@ Status::Status(FixedTable::Ptr table, const State &state):
 Status::Status(FixedTable::Ptr table, const Node &node):
 		table_(table),
 		state_(node.state()),
-		currentPos_(node.currentPos()),
-		stoneAt_(table->get().width(), table->get().height()),
+		currentPos_(node.from()),
 		fields_(table->get().width(), table->get().height()),
 		reachOK_(false)
 {
@@ -39,18 +36,10 @@ void Status::init() {
 	Point p;
 	for (p.y = 0; p.y < table().height(); ++p.y)
 		for (p.x = 0; p.x < table().width(); ++p.x)  {
-			fields_[p] = table().wall(p) ? ftWall : ftFloor;
+			fields_[p] =
+					table().wall(p) ? ftWall :
+					state_[p] ? ftStone : ftFloor;
 		}
-	for (int i = 0; i < state_.size(); ++i) {
-		if (state_[i] != table().destination()) {
-			fields_[state_[i]] = ftStone;
-			stoneAt_[state_[i]] = i;
-		}
-	}
-}
-
-void initStones() {
-
 }
 
 void Status::calculateReachable() const {
@@ -63,7 +52,7 @@ bool Status::addStone(const Point &p) {
 	if (value(p) != ftFloor)
 		return false;
 	fields_[p] = ftStone;
-	stoneAt_[p] = state_.addStone(p);
+	state_.addStone(p);
 	reachOK_ = false;
 	return true;
 }
@@ -72,7 +61,7 @@ bool Status::removeStone(const Point &p) {
 	if (value(p) != ftStone)
 		return false;
 	fields_[p] = ftFloor;
-	state_.removeStone(stoneAt(p));
+	state_.removeStone(p);
 	reachOK_ = false;
 	return true;
 }
@@ -89,18 +78,16 @@ bool Status::currentPos(const Point & p) {
 	return true;
 }
 
-bool Status::moveStone(int stone, const Point & p) {
-	if (value(state()[stone]) != ftStone && value(p) != ftFloor)
+bool Status::moveStone(const Point &from, const Point &to) {
+	if (value(from) != ftStone && value(to) != ftFloor)
 		return false;
-	fields_[state_[stone]] = ftFloor;
-	currentPos_ = state_[stone];
-	state_.moveStone(stone, p);
-	if (p != table().destination())
+	fields_[from] = ftFloor;
+	currentPos_ = from;
+	state_.removeStone(from);
+	if (to != table().destination())
 	{
-		fields_[p] = ftStone;
-		stoneAt_[p] = stone;
-	} else {
-//		state_.removeStone(stone);
+		fields_[to] = ftStone;
+		state_.addStone(to);
 	}
 	reachOK_ = false;
 	return true;
@@ -108,7 +95,7 @@ bool Status::moveStone(int stone, const Point & p) {
 
 void Status::set(const Node &node) {
 	state_ = node.state();
-	currentPos_ = node.currentPos();
+	currentPos_ = node.from();
 	reachOK_ = false;
 	init();
 }
@@ -176,12 +163,12 @@ Status Status::loadFromFile(const char *filename) {
 
 
 static void floodFillIter(const Status &status, const Point & p, Array<bool> &result,
-		std::deque<int> *border, MinMax *minmax)
+		Status::BorderType *border, MinMax *minmax)
 {
 	if (status.value(p) != ftFloor || result[p])
 	{
 		if (border != NULL && status.value(p) == ftStone)
-			border->push_back(status.stoneAt(p));
+			border->push_back(p);
 		return;
 	}
 	result[p] = true;
@@ -198,7 +185,7 @@ static void floodFillIter(const Status &status, const Point & p, Array<bool> &re
 }
 
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,
-			std::deque<int> *border, MinMax *minmax) {
+			Status::BorderType *border, MinMax *minmax) {
 	result.fill(false);
 	if (minmax != NULL) {
 		minmax->minX = table.width();

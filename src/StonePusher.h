@@ -14,8 +14,8 @@ public:
 private:
 	Node::Ptr node_;
 	HeurCalculator::Ptr calculator_;
-	bool pushStone(Status &status, int stone);
-	bool pushStoneIter(Status &status, int stone, const Point &d);
+	bool pushStone(Status &status, const Point &p);
+	bool pushStoneIter(Status &status, const Point &p, const Point &d);
 public:
 	StonePusher(HeurCalculator::Ptr calculator):
 		calculator_(calculator) {}

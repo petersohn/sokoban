@@ -13,12 +13,11 @@
 class Status {
 public:
 	typedef boost::shared_ptr<Status> Ptr;
-	typedef std::deque<int> BorderType;
+	typedef std::deque<Point> BorderType;
 private:
 	FixedTable::Ptr table_;
 	State state_;
 	Point currentPos_;
-	Array<uint> stoneAt_;
 	Array<FieldType> fields_;
 
 	mutable Array<bool> reachable_;
@@ -49,7 +48,6 @@ public:
 			calculateReachable();
 		return border_;
 	}
-	uint stoneAt(const Point &p) const { return stoneAt_[p]; }
 	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
 	const Point &currentPos() const { return currentPos_; }
 
@@ -57,12 +55,12 @@ public:
 	void state(const State &value);
 	bool addStone(const Point &p);
 	bool removeStone(const Point &p);
-	bool moveStone(int stone, const Point & p);
+	bool moveStone(const Point &from, const Point &to);
 	void set(const Node &node);
 };
 
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,
-			std::deque<int> *border = NULL, MinMax *minmax = NULL);
+			Status::BorderType *border = NULL, MinMax *minmax = NULL);
 
 void shiftCurrentPos(Status &status);
 

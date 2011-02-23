@@ -5,9 +5,11 @@ void dumpStatus(std::ostream &file, const Status &status,
 		std::string title , const Array<bool> *highlight)
 {
 	title += "\n";
-	for (int i = 0; i < status.state().size(); i++)
+	for (State::const_iterator it = status.state().begin();
+			it != status.state().end(); ++it) {
 		title += (boost::format("%d,%d ") %
-				status.state()[i].x % status.state()[i].y).str();
+				it->x % it->y).str();
+	}
 	Point p;
 	Array<char> output(status.width(), status.height());
 	for (p.y = 0; p.y < status.height(); p.y++)
@@ -52,7 +54,7 @@ void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
 		highlight2 = *highlight;
 	else
 		highlight2.reset(status.width(), status.height(), false);
-	highlight2[node.state()[node.stone()]] = true;
+	highlight2[node.from() + node.d()] = true;
 	dumpStatus(file, status, title, &highlight2);
 
 }

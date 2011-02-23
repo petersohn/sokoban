@@ -19,6 +19,7 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 class InternalSolver {
 	HeurCalculator::Ptr calculator_;
@@ -36,15 +37,16 @@ class InternalSolver {
 	int maxDepth_;
 
 	void expandNodes(const Status &status, Node::Ptr base);
-	void expandNode(Status status, int stone,
+	void expandNode(Status status, const Point &p,
 			const Point &d, Node::Ptr base);
 	bool checkStone(const Status &status, int stone);
-	bool stoneMovable(const Status &status, int stone, std::set<int> &volt);
+	bool stoneMovable(const Status &status, const Point &p,
+			boost::unordered_set<Point> &volt);
 	bool isMovable(const Status &status, const Point & p,
-			std::set<int> &volt, int &count);
+			boost::unordered_set<Point> &volt, int &count);
 	bool checkCorridorEnding(const Status &status,
 			const Point &p0, const Point &side);
-	bool checkCorridors(const Status &status, int stone);
+	bool checkCorridors(const Status &status, const Point &p0);
 	bool pushStones(const Status &status, Node::Ptr base);
 	void addVisitedState(const Status &st, int heur);
 	bool statusVisited(const Status &status, int heur);
@@ -115,22 +117,22 @@ void InternalSolver::expandNodes(const Status &status, Node::Ptr base) {
 	}
 	if (enableDump_ && base.get() != NULL)
 		dumpNode(dumpFile_, table_, *base, "Expanding");
-	for (int i = 0; i < status.state().size(); ++i)
+	for (State::const_iterator it = status.state().begin();
+			it != status.state().end(); ++it)
 	{
-		if (status.state()[i] == table_->get().destination())
+		if (*it == table_->get().destination())
 			continue;
-		expandNode(status, i, Point::p10, base);
-		expandNode(status, i, Point::pm10, base);
-		expandNode(status, i, Point::p01, base);
-		expandNode(status, i, Point::p0m1, base);
+		expandNode(status, *it, Point::p10, base);
+		expandNode(status, *it, Point::pm10, base);
+		expandNode(status, *it, Point::p01, base);
+		expandNode(status, *it, Point::p0m1, base);
 	}
 	if (enableDump_)
 		dumpFile_ << std::endl << "--------" << std::endl << std::endl;
 }
 
-void InternalSolver::expandNode(Status status, int stone,
+void InternalSolver::expandNode(Status status, const Point &p,
 		const Point &d, Node::Ptr base) {
-	Point p = status.state()[stone];
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < status.width() &&
 			pmd.y >= 0 && pmd.y < status.height() &&
@@ -138,10 +140,10 @@ void InternalSolver::expandNode(Status status, int stone,
 	{
 		Node::Ptr node;
 		status.currentPos(p);
-		if (calculator_->calculateStone(status, pd) < 0 || !status.moveStone(stone, pd)) {
+		if (calculator_->calculateStone(status, pd) < 0 || !status.moveStone(p, pd)) {
 			return;
 		}
-		node = Node::create(status.state(), stone, d,
+		node = Node::create(status.state(), p, d,
 			base, 1, calculator_->calculateStatus(status));
 		if (enableXDump_) {
 			xdump_->addNode(node);
@@ -151,14 +153,14 @@ void InternalSolver::expandNode(Status status, int stone,
 				xdump_->reject(node, "already visited");
 			return;
 		}
-		if (status.state()[stone] != table_->get().destination()) {
-			std::set<int> volt;
-			if (!stoneMovable(status, stone, volt)) {
+		if (pd != table_->get().destination()) {
+			boost::unordered_set<Point> volt;
+			if (!stoneMovable(status, pd, volt)) {
 				if (enableXDump_)
 					xdump_->reject(node, "not movable");
 				return;
 			}
-			if (!checkCorridors(status, stone)) {
+			if (!checkCorridors(status, pd)) {
 				if (enableXDump_)
 					xdump_->reject(node, "corridor found");
 				return;
@@ -181,17 +183,18 @@ void InternalSolver::expandNode(Status status, int stone,
 }
 
 bool InternalSolver::checkStone(const Status &status, int stone) {
-	assert(status.tablePtr() == table_);
-	std::set<int> volt;
-	bool result = stoneMovable(status, stone, volt) && checkCorridors(status, stone);
-	return result;
+	assert(false);
+//	assert(status.tablePtr() == table_);
+//	std::set<int> volt;
+//	bool result = stoneMovable(status, stone, volt) && checkCorridors(status, stone);
+//	return result;
 }
 
-bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int> &volt)
+bool InternalSolver::stoneMovable(const Status &status, const Point &p,
+		boost::unordered_set<Point> &volt)
 {
 	assert(status.tablePtr() == table_);
-	Point p = status.state()[stone];
-	volt.insert(stone);
+	volt.insert(p);
 	int count = 0;
 	if (isMovable(status, p+Point::p10, volt, count) &&
 			isMovable(status, p+Point::pm10, volt, count) && count > 0)
@@ -202,7 +205,7 @@ bool InternalSolver::stoneMovable(const Status &status, int stone, std::set<int>
 }
 
 bool InternalSolver::isMovable(const Status &status, const Point & p,
-		std::set<int> &volt, int &count)
+		boost::unordered_set<Point> &volt, int &count)
 {
 	assert(status.tablePtr() == table_);
 	if (status.value(p) == ftFloor)
@@ -213,14 +216,13 @@ bool InternalSolver::isMovable(const Status &status, const Point & p,
 	}
 	if (status.value(p) == ftWall)
 		return false;
-	if (volt.count(status.stoneAt(p)) != 0)
+	if (volt.count(p) != 0)
 		return false;
-	return stoneMovable(status, status.stoneAt(p), volt);
+	return stoneMovable(status, p, volt);
 }
 
-bool InternalSolver::checkCorridors(const Status &status, int stone) {
+bool InternalSolver::checkCorridors(const Status &status, const Point &p0) {
 	assert(status.tablePtr() == table_);
-	Point p0 = status.state()[stone];
 	bool kell[3][3];
 	for (int x = 0; x < 3; x++)
 		for (int y = 0; y < 3; y++)

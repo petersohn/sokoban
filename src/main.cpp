@@ -35,8 +35,8 @@ int main(int argc, char** argv) {
 				it != solution.end(); ++it)
 		{
 			dumpNode(dump, st.tablePtr(), **it);
-			Point p = (*it)->state()[(*it)->stone()];
-			Point from(p - (*it)->d());
+			Point from = (*it)->from();
+			Point p(from - (*it)->d());
 			std::string dir =
 					! opts.oldStyleOutput() ? direction((*it)->d()) :
 						(boost::format("(%2d, %2d)") %

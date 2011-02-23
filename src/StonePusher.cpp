@@ -13,10 +13,10 @@ Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
 	bool touched2 = false;
 	do {
 		touched = false;
-		std::deque<int> destBorder;
+		Status::BorderType destBorder;
 		floodFill(status, status.table().destination(), destReachable, &destBorder);
-		std::deque<int> border = intersect(status.border(), destBorder);
-		for (std::deque<int>::const_iterator it = border.begin();
+		Status::BorderType border = intersect(status.border(), destBorder);
+		for (Status::BorderType::const_iterator it = border.begin();
 				it != border.end(); ++it) {
 			if (pushStone(status, *it)) {
 				touched = true;
@@ -28,25 +28,25 @@ Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
 	return touched2 ? node_ : Node::Ptr();
 }
 
-bool StonePusher::pushStone(Status &status, int stone) {
-	if (status.state()[stone] == status.table().destination())
+bool StonePusher::pushStone(Status &status, const Point &p) {
+	if (p == status.table().destination())
 		return true;
 //	Point currentTmp(status.currentPos());
-	if (pushStoneIter(status, stone, Point::p10))
+	if (pushStoneIter(status, p, Point::p10))
 		return true;
-	if (pushStoneIter(status, stone, Point::pm10))
+	if (pushStoneIter(status, p, Point::pm10))
 		return true;
-	if (pushStoneIter(status, stone, Point::p01))
+	if (pushStoneIter(status, p, Point::p01))
 		return true;
-	if (pushStoneIter(status, stone, Point::p0m1))
+	if (pushStoneIter(status, p, Point::p0m1))
 		return true;
 	return false;
 }
 
-bool StonePusher::pushStoneIter(Status &status, int stone, const Point &d) {
-	Point p = status.state()[stone];
+bool StonePusher::pushStoneIter(Status &status, const Point &p, const Point &d) {
 	Point pd = p+d;
-	if (status.value(p-d) != ftFloor || status.value(pd) != ftFloor || !status.reachable(p-d))
+	Point pmd = p-d;
+	if (status.value(pmd) != ftFloor || status.value(pd) != ftFloor || !status.reachable(pmd))
 		return false;
 	if (status.currentPos() == pd)
 		shiftCurrentPos(status);
@@ -59,16 +59,16 @@ bool StonePusher::pushStoneIter(Status &status, int stone, const Point &d) {
 		status.currentPos(currentTmp);
 		return false;
 	}
-	if (!status.moveStone(stone, pd))
+	if (!status.moveStone(p, pd))
 	{
 		std::cerr << "Whoopsie doopsie!";
 		return false; // should never happen
 	}
-	node_ = Node::create(status.state(), stone, d, node_, 1, calculator_->calculateStatus(status));
-	if (pushStone(status, stone))
+	node_ = Node::create(status.state(), p, d, node_, 1, calculator_->calculateStatus(status));
+	if (pushStone(status, pd))
 		return true;
 	node_ = node_->ansector();
-	bool couldStepBack = status.moveStone(stone, p);
+	bool couldStepBack = status.moveStone(pd, p);
 	assert(couldStepBack);
 	status.currentPos(currentTmp);
 	return false;

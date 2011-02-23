@@ -13,13 +13,13 @@ private:
 	Ptr ansector_;
 	State state_;
 	int heur_;
-	int stone_;
+	Point from_;
 	Point d_;
 	int depth_;
 	int cost_;
 
 	Node();
-	Node(const State &stones, int stone, const Point &d, Ptr ans,
+	Node(const State &stones, const Point &from, const Point &d, Ptr ans,
 			int c, int heur);
 	void copy(const Node &other);
 	static Ptr createNew(Node *np) {
@@ -30,9 +30,9 @@ public:
 	static Ptr create() {
 		return createNew(new Node());
 	}
-	static Ptr create(const State &stones, int stone, const Point &d,
+	static Ptr create(const State &stones, const Point &from, const Point &d,
 			Ptr ans, int c, int heur) {
-		return createNew(new Node(stones, stone, d, ans, c, heur));
+		return createNew(new Node(stones, from, d, ans, c, heur));
 	}
 	Node(const Node &other) {
 		copy(other);
@@ -48,9 +48,8 @@ public:
 	int depth() const { return depth_; }
 	int cost() const { return cost_; }
 	int costFgv() const { return cost_ + heur_; }
-	int stone() const { return stone_; }
+	const Point &from() const { return from_; }
 	const Point& d() const { return d_; }
-	Point currentPos() const { return state_[stone_] - d_; }
 	bool operator<(const Node &other) const
 	{
 		return (costFgv() < other.costFgv() ? false : (costFgv() > other.costFgv() ? true :
