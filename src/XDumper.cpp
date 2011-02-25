@@ -21,7 +21,7 @@ void XDumper::addNode(Node::Ptr node) {
 	boost::shared_ptr<xml::XMLElement> elem(new xml::XMLElement());
 	elem->name("node");
 	elem->children().push_back(dumpElem);
-	elem->attributes().insert(make_pair("stone", toStr(node->stone())));
+	elem->attributes().insert(make_pair("stone", pointStr(node->from())));
 	elem->attributes().insert(make_pair("d", direction(node->d())));
 	elem->attributes().insert(make_pair("cost", toStr(node->cost())));
 	elem->attributes().insert(make_pair("heur", toStr(node->heur())));

@@ -16,3 +16,7 @@ std::string direction(const Point &d) {
 			d.y > 0 ? "down" :
 			d.y < 0 ? "up" : "???";
 }
+
+std::string pointStr(const Point &p) {
+	return (boost::format("(%d, %d)") % p.x % p.y).str();
+}

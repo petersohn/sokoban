@@ -74,6 +74,7 @@ inline std::string toStr(const T &t) {
 }
 
 std::string direction(const Point &d);
+std::string pointStr(const Point &p);
 
 
 #endif /* COMMON_H_ */

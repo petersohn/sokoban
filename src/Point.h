@@ -68,6 +68,10 @@ inline Point operator-(const Point &p) {
 	return p * -1;
 }
 
+inline bool operator<(const Point &p1, const Point &p2) {
+	return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
+}
+
 size_t hash_value(const Point &p);
 
 

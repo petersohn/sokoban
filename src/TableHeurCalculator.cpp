@@ -8,8 +8,9 @@ int TableHeurCalculator::calculateStatus(const Status & status)
 		init();
 	}
 	int result = 0;
-	for (int i = 0; i < status.state().size(); ++i) {
-		int val = doCalculateStone(status, status.state()[i]);
+	for (State::const_iterator it = status.state().begin();
+			it != status.state().end(); ++it) {
+		int val = doCalculateStone(status, *it);
 		if (val < 0)
 			return -1;
 		result += val;
