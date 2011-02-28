@@ -11,7 +11,7 @@ class State {
 	typedef boost::shared_ptr<ContainerType> ContainerPtr;
 	ContainerPtr stones_;
 	void modify() {
-		if (stones_.use_count() > 1)
+		if (!stones_.unique())
 			stones_.reset(new ContainerType(*stones_));
 	}
 public:
