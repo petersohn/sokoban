@@ -37,7 +37,7 @@ class InternalSolver {
 	int maxDepth_;
 
 	void expandNodes(const Status &status, Node::Ptr base);
-	void expandNode(Status status, const Point &p,
+	void expandNode(const Status &status, const Point &p,
 			const Point &d, Node::Ptr base);
 	bool checkStone(const Status &status, int stone);
 	bool stoneMovable(const Status &status, const Point &p,
@@ -131,13 +131,14 @@ void InternalSolver::expandNodes(const Status &status, Node::Ptr base) {
 		dumpFile_ << std::endl << "--------" << std::endl << std::endl;
 }
 
-void InternalSolver::expandNode(Status status, const Point &p,
+void InternalSolver::expandNode(const Status &st, const Point &p,
 		const Point &d, Node::Ptr base) {
 	Point pd = p+d, pmd = p-d;
-	if (pmd.x >= 0 && pmd.x < status.width() &&
-			pmd.y >= 0 && pmd.y < status.height() &&
-			status.value(pd) == ftFloor && status.reachable(pmd))
+	if (pmd.x >= 0 && pmd.x < st.width() &&
+			pmd.y >= 0 && pmd.y < st.height() &&
+			st.value(pd) == ftFloor && st.reachable(pmd))
 	{
+		Status status(st);
 		Node::Ptr node;
 		status.currentPos(p);
 		if (calculator_->calculateStone(status, pd) < 0 || !status.moveStone(p, pd)) {
