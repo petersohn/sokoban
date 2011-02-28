@@ -27,11 +27,34 @@ private:
 	void calculateReachable() const;
 	void init();
 public:
+	static int copyCount;
 	static Status loadFromFile(const char *filename);
 
 	explicit Status(FixedTable::Ptr table);
 	explicit Status(FixedTable::Ptr table, const State &state);
 	explicit Status(FixedTable::Ptr table, const Node &node);
+	Status(const Status &other):
+		table_(other.table_),
+		state_(other.state_),
+		currentPos_(other.currentPos_),
+		fields_(other.fields_),
+//		reachable_(other.reachable_),
+//		border_(other.border_),
+		reachOK_(false)
+	{
+		++copyCount;
+	}
+
+	Status& operator=(const Status &other) {
+		table_=other.table_;
+		state_=other.state_;
+		currentPos_=other.currentPos_;
+		fields_=other.fields_;
+//		reachable_=other.reachable_;
+//		border_=other.border_;
+		reachOK_=false;
+		++copyCount;
+	}
 
 	const Table& table() const { return table_->get(); }
 	FixedTable::Ptr tablePtr() const { return table_; }

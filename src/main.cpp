@@ -45,4 +45,5 @@ int main(int argc, char** argv) {
 					from.x % from.y % dir << endl;
 		}
 	}
+	cerr << "Status copied " << Status::copyCount << " times." << endl;
 }

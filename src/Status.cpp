@@ -2,6 +2,7 @@
 #include "Node.h"
 #include <fstream>
 
+int Status::copyCount(0);
 
 Status::Status(FixedTable::Ptr table):
 	table_(table),
