@@ -1,0 +1,30 @@
+#ifndef QUEUE_INTERFACES_H_
+#define QUEUE_INTERFACES_H_
+
+#include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
+
+template <class T>
+class Pusher {
+public:
+	typedef boost::shared_ptr<Pusher> Ptr;
+	virtual ~Pusher() {}
+	virtual void push(const T&) = 0;
+};
+
+template <class T>
+class Queue: public Pusher<T> {
+public:
+	typedef boost::shared_ptr<Queue> Ptr;
+	virtual ~Queue() {}
+	virtual T pop() = 0;
+};
+
+template <class T>
+class Holder: public Pusher<T> {
+	typedef boost::shared_ptr<Holder> Ptr;
+	virtual ~Holder() {}
+	virtual bool hasElem(const T&);
+};
+
+#endif /* INTERFACES_H_ */

@@ -57,23 +57,7 @@ public:
 	}
 
 };
-/*
-inline bool operator==(const Node::Ptr a, const Node::Ptr b)
-{
-	if (a.get() == NULL)
-		return b.get() == NULL;
-	return a.get() == b.get() || *a == *b;
-}
-*/
 
-struct NodeCompare {
-	bool operator()(const Node::Ptr a, const Node::Ptr b)
-	{
-		if (a.get() == NULL || b.get() == NULL)
-			return false;
-		return *a < *b;
-	}
-};
 
 std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);
 
