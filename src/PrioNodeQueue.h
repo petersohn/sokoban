@@ -3,18 +3,14 @@
 
 #include "QueueInterfaces.h"
 #include "Node.h"
-#include "CompareQueue.h"
 #include <boost/function.hpp>
 #include <vector>
 #include <queue>
-
-typedef Queue<Node::Ptr> NodeQueue;
 
 class PrioNodeQueue: public NodeQueue {
 public:
 	typedef boost::function<int(const Node&, const Node&)> NodeComparer;
 private:
-	typedef CompareQueue<Node> NodeComparQueue;
 	class Compare {
 		std::vector<NodeComparer> comp_;
 	public:

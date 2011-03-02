@@ -66,5 +66,4 @@ inline std::deque<Node::Ptr> pathToRoot(Node::Ptr node) {
 }
 
 
-
 #endif /* NODE_H_ */

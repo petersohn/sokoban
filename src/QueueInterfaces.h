@@ -27,4 +27,15 @@ class Holder: public Pusher<T> {
 	virtual bool hasElem(const T&);
 };
 
+class Node;
+class Status;
+
+typedef Pusher<boost::shared_ptr<Node> > NodePusher;
+typedef Queue<boost::shared_ptr<Node> > NodeQueue;
+
+typedef std::pair<const Status&, int> VisitedStateInput;
+typedef Pusher<VisitedStateInput> VisitedStatePusher;
+typedef Holder<VisitedStateInput> VisitedStateHolder;
+
+
 #endif /* INTERFACES_H_ */
