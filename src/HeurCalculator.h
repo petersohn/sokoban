@@ -12,7 +12,6 @@ public:
 	virtual ~HeurCalculator() {}
 	virtual int calculateStone(const Status &, const Point &) = 0;
 	virtual int calculateStatus(const Status &) = 0;
-	static Ptr create();
 };
 
 #endif /* HEURCALCULATOR_H_ */

@@ -16,6 +16,7 @@ class NormalExpander: public Expander {
 public:
 	NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
 			Checker::Ptr ch, bool enableLog = false);
+	~NormalExpander();
 	virtual bool expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue);
 	int expandedNodes() const { return expandedNodes_; }
 };

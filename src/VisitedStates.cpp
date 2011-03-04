@@ -25,3 +25,7 @@ bool VisitedStates::hasElem(const VisitedStateInput &elem) const {
 	}
 	return false;
 }
+
+size_t VisitedStates::size() {
+	return visitedStates_.size();
+}

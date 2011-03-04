@@ -22,8 +22,9 @@ private:
 public:
 	PrioNodeQueue(const std::vector<NodeComparer> &compare):
 		queue_(Compare(compare_)) {}
-	void push(const Node::Ptr &node);
-	Node::Ptr pop();
+	virtual void push(const Node::Ptr &node);
+	virtual Node::Ptr pop();
+	virtual size_t size();
 };
 
 #endif /* PRIONODEQUEUE_H_ */

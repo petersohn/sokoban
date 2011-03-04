@@ -12,8 +12,9 @@ class VisitedStates: public VisitedStateHolder {
 	typedef boost::unordered_multimap<State, VisitedStateInfo, boost::hash<State> > VisitedStateSet;
 	VisitedStateSet visitedStates_;
 public:
-	void push(const VisitedStateInput &elem);
-	bool hasElem(const VisitedStateInput &elem) const;
+	virtual void push(const VisitedStateInput &elem);
+	virtual bool hasElem(const VisitedStateInput &elem) const;
+	virtual size_t size();
 };
 
 #endif /* VISITEDSTATES_H_ */

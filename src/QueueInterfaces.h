@@ -10,6 +10,7 @@ public:
 	typedef boost::shared_ptr<Pusher> Ptr;
 	virtual ~Pusher() {}
 	virtual void push(const T&) = 0;
+	virtual size_t size() = 0;
 };
 
 template <class T>

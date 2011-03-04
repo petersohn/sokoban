@@ -13,6 +13,7 @@ public:
 	typedef boost::shared_ptr<Solver> Ptr;
 
 	std::deque<Node::Ptr> solve(Status status);
+	virtual ~Solver() {}
 private:
 	// factory methods
 	virtual NodeQueue::Ptr createQueue() = 0;

@@ -22,3 +22,7 @@ Node::Ptr PrioNodeQueue::pop() {
 	queue_.pop();
 	return result;
 }
+
+size_t PrioNodeQueue::size() {
+	return queue_.size();
+}

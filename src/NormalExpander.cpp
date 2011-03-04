@@ -1,6 +1,7 @@
 #include "NormalExpander.h"
 #include "Status.h"
 #include "Node.h"
+#include <iostream>
 
 void NormalExpander::expandNode(const Status & st, boost::shared_ptr<Node> base, NodePusher & queue)
 {
@@ -36,7 +37,7 @@ void NormalExpander::expandNode(const Status & st, boost::shared_ptr<Node> base,
 					"Nodes in queue: %d.\n"
 					"Maximum depth: %d.\n"
 					"Cost function: %d\n") %
-				expandedNodes_ % queue_.size() %
+				expandedNodes_ % queue->size() %
 				maxDepth_ % base->costFgv() << std::endl;
 	}
 }
@@ -44,6 +45,9 @@ void NormalExpander::expandNode(const Status & st, boost::shared_ptr<Node> base,
 bool NormalExpander::expand(const Status & status, boost::shared_ptr<Node> base, NodePusher & queue)
 {
 	assert(queue.get() != NULL);
+	if (visitedStates_->size() == 0) {
+		visitedStates_->push(std::make_pair(status, calculator_->calculateStatus(status)));
+	}
 	for (State::const_iterator it = status.state().begin();
 			it != status.state().end(); ++it)
 	{
@@ -67,5 +71,11 @@ NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr c
 		expandedNodes(0)
 {
 	assert(calculator != NULL);
+}
+
+NormalExpander::~NormalExpander()
+{
+	if (enableLog_)
+		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
 }
 
