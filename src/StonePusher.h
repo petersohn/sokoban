@@ -3,23 +3,21 @@
 
 #include "Node.h"
 #include "HeurCalculator.h"
+#include "Expander.h"
 #include <deque>
 
 class State;
 class VisitedStateInfo;
 
-class StonePusher {
-public:
-	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
-private:
-	Node::Ptr node_;
+
+class StonePusher: public Expander {
+	VisitedStateHolder::Ptr visitedStates_;
 	HeurCalculator::Ptr calculator_;
-	bool pushStone(Status &status, const Point &p);
-	bool pushStoneIter(Status &status, const Point &p, const Point &d);
 public:
-	StonePusher(HeurCalculator::Ptr calculator):
-		calculator_(calculator) {}
-	Node::Ptr pushStones(const Status &st, Node::Ptr base);
+	StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::Ptr calculator);
+	virtual bool expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue);
 };
+
+
 
 #endif /* STONEPUSHER_H_ */

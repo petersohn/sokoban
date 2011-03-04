@@ -47,11 +47,12 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	BasicHeurCalculator.$(OBJEXT) Common.$(OBJEXT) \
-	Dumper.$(OBJEXT) HeurCalculator.$(OBJEXT) Node.$(OBJEXT) \
-	Options.$(OBJEXT) Point.$(OBJEXT) Solver.$(OBJEXT) \
-	State.$(OBJEXT) Status.$(OBJEXT) StonePusher.$(OBJEXT) \
-	Table.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
-	VisitedStateInfo.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
+	ComplexExpander.$(OBJEXT) Dumper.$(OBJEXT) \
+	HeurCalculator.$(OBJEXT) Node.$(OBJEXT) Options.$(OBJEXT) \
+	Point.$(OBJEXT) Solver.$(OBJEXT) State.$(OBJEXT) \
+	Status.$(OBJEXT) StonePusher.$(OBJEXT) Table.$(OBJEXT) \
+	TableHeurCalculator.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
+	XDumper.$(OBJEXT) XML.$(OBJEXT)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -158,6 +159,7 @@ sokoban_SOURCES = main.cpp \
 	AdvancedHeurCalculator.cpp \
 	BasicHeurCalculator.cpp \
 	Common.cpp \
+	ComplexExpander.cpp \
 	Dumper.cpp \
 	HeurCalculator.cpp \
 	Node.cpp \
@@ -257,6 +259,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AdvancedHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BasicHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Dumper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@

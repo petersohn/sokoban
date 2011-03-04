@@ -5,7 +5,21 @@
 #include "VisitedStateInfo.h"
 #include <iostream>
 
-Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
+class InternalPusher {
+public:
+	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
+private:
+	Node::Ptr node_;
+	HeurCalculator::Ptr calculator_;
+	bool pushStone(Status &status, const Point &p);
+	bool pushStoneIter(Status &status, const Point &p, const Point &d);
+public:
+	InternalPusher(HeurCalculator::Ptr calculator):
+		calculator_(calculator) {}
+	Node::Ptr pushStones(const Status &st, Node::Ptr base);
+};
+
+Node::Ptr InternalPusher::pushStones(const Status &st, Node::Ptr base) {
 	node_ = base;
 	Status status(st);
 	Array<bool> destReachable(st.width(), st.height(), false);
@@ -28,7 +42,7 @@ Node::Ptr StonePusher::pushStones(const Status &st, Node::Ptr base) {
 	return touched2 ? node_ : Node::Ptr();
 }
 
-bool StonePusher::pushStone(Status &status, const Point &p) {
+bool InternalPusher::pushStone(Status &status, const Point &p) {
 	if (p == status.table().destination())
 		return true;
 //	Point currentTmp(status.currentPos());
@@ -43,7 +57,7 @@ bool StonePusher::pushStone(Status &status, const Point &p) {
 	return false;
 }
 
-bool StonePusher::pushStoneIter(Status &status, const Point &p, const Point &d) {
+bool InternalPusher::pushStoneIter(Status &status, const Point &p, const Point &d) {
 	Point pd = p+d;
 	Point pmd = p-d;
 	if (status.value(pmd) != ftFloor || status.value(pd) != ftFloor || !status.reachable(pmd))
@@ -73,4 +87,32 @@ bool StonePusher::pushStoneIter(Status &status, const Point &p, const Point &d) 
 	status.currentPos(currentTmp);
 	return false;
 }
+
+
+StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::Ptr calculator):
+		visitedStates_(visitedStates),
+		calculator_(calculator)
+{
+	assert(calculator != NULL);
+}
+
+bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue)
+{
+	assert(queue.get() != NULL);
+	InternalPusher sp(calculator_);
+	Node::Ptr node = sp.pushStones(status, base);
+	if (node.get() == NULL)
+		return false;
+	queue->push(node);
+	Status st(table_);
+	std::deque<Node::Ptr> path = pathToBase(node, base);
+	for (std::deque<Node::Ptr>::iterator it = path.begin();
+			it != path.end(); ++it) {
+		st.set(**it);
+		if (visitedStates_)
+			visitedStates_->push(std::make_pair(st, (*it)->costFgv()));
+	}
+	return true;
+}
+
 
