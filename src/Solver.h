@@ -4,6 +4,8 @@
 #include "QueueInterfaces.h"
 #include "Expander.h"
 #include <deque>
+#include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
 
 class Status;
 class Node;
@@ -11,13 +13,19 @@ class Node;
 class Solver {
 public:
 	typedef boost::shared_ptr<Solver> Ptr;
-
-	std::deque<Node::Ptr> solve(Status status);
+	typedef boost::function<NodeQueue::Ptr()> QueueFactory;
+	typedef boost::function<Expander::Ptr()> ExpanderFactory;
+private:
+	QueueFactory queueFactory_;
+	ExpanderFactory expanderFactory_;
+public:
+	Solver(QueueFactory qf, ExpanderFactory ef):
+		queueFactory_(qf),
+		expanderFactory_(ef)
+	{}
+	std::deque<boost::shared_ptr<Node> > solve(Status status);
 	virtual ~Solver() {}
 private:
-	// factory methods
-	virtual NodeQueue::Ptr createQueue() = 0;
-	virtual Expander::Ptr createExpander() = 0;
 };
 
 #endif /* SOLVER_H_ */

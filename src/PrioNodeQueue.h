@@ -3,28 +3,38 @@
 
 #include "QueueInterfaces.h"
 #include "Node.h"
-#include <boost/function.hpp>
-#include <vector>
 #include <queue>
 
+template <class Compare>
 class PrioNodeQueue: public NodeQueue {
-public:
-	typedef boost::function<int(const Node&, const Node&)> NodeComparer;
-private:
-	class Compare {
-		std::vector<NodeComparer> comp_;
-	public:
-		Compare(const std::vector<NodeComparer> &comp):
-			comp_(comp) {}
-		bool operator()(Node::Ptr n1, Node::Ptr n2);
-	};
 	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, Compare> queue_;
 public:
-	PrioNodeQueue(const std::vector<NodeComparer> &compare):
-		queue_(Compare(compare_)) {}
+	PrioNodeQueue(Compare compare):
+		queue_(compare)
+	{}
 	virtual void push(const Node::Ptr &node);
 	virtual Node::Ptr pop();
 	virtual size_t size();
 };
+
+template <class Compare>
+void PrioNodeQueue::push(const Node::Ptr &node) {
+	queue_.push(node);
+}
+
+template <class Compare>
+Node::Ptr PrioNodeQueue::pop() {
+	if (queue_.empty())
+		return Node::Ptr();
+	Node::Ptr result = queue_.top();
+	queue_.pop();
+	return result;
+}
+
+template <class Compare>
+size_t PrioNodeQueue::size() {
+	return queue_.size();
+}
+
 
 #endif /* PRIONODEQUEUE_H_ */

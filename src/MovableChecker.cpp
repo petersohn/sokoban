@@ -3,7 +3,7 @@
 
 class InternalChecker {
 	HeurCalculator::Ptr calculator_;
-	boost::unordered_set<Point> &volt_;
+	boost::unordered_set<Point> volt_;
 	bool isMovable(const Status &status, const Point & p,
 		int &count);
 public:
@@ -13,8 +13,9 @@ public:
 	bool stoneMovable(const Status &status, const Point &p);
 };
 
-virtual bool MovableChecker::check(const Status &status, const Point &p) {
+bool MovableChecker::check(const Status &status, const Point &p) {
 	InternalChecker ch(calculator_);
+	return ch.stoneMovable(status, p);
 }
 
 bool InternalChecker::stoneMovable(const Status &status, const Point &p) {

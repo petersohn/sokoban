@@ -2,6 +2,6 @@
 
 bool ComplexExpander::expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue) {
 	ExpandParams p(status, base, queue);
-	funcs_.execute(p, false);
+	funcs_(p);
 }
 

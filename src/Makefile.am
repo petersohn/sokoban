@@ -12,8 +12,8 @@ sokoban_SOURCES = main.cpp \
 	NormalExpander.cpp \
 	Options.cpp \
 	Point.cpp \
-	PrioNodeQueue.cpp \
 	Solver.cpp \
+	SolverFactories.cpp \
 	State.cpp \
 	Status.cpp \
 	StonePusher.cpp \

@@ -3,6 +3,7 @@
 
 #include "Checker.h"
 #include "ComplexStrategy.h"
+#include "boost/lambda/lambda.hpp"
 
 class ComplexChecker {
 	struct CheckParams {
@@ -13,7 +14,7 @@ class ComplexChecker {
 			p(p) {}
 	};
 
-	ComplexStrategy<CheckParams&, bool> funcs_;
+	ComplexStrategy<CheckParams&, bool, true> funcs_;
 public:
 	template<class Iterator>
 	ComplexChecker(Iterator first, Iterator last):

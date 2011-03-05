@@ -1,5 +1,6 @@
 #include "CorridorChecker.h"
-
+#include "Array.h"
+#include "Status.h"
 
 bool CorridorChecker::check(const Status & status, const Point & p0)
 {
@@ -27,9 +28,6 @@ bool CorridorChecker::check(const Status & status, const Point & p0)
 						!checkCorridorEnding(status,
 								Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
 //						cerr << "Bing!" << endl;
-						if (enableDump_) {
-							dumpStatus(dumpFile_, status, "1x1 corridor found", &reach);
-						}
 						return false;
 					}
 				} else
@@ -38,9 +36,6 @@ bool CorridorChecker::check(const Status & status, const Point & p0)
 								Point(minmax.minX, minmax.minY - 1), Point::p10) &&
 						!checkCorridorEnding(status,
 								Point(minmax.minX, minmax.maxY + 1), Point::p10)) {
-						if (enableDump_) {
-							dumpStatus(dumpFile_, status, "Vertical corridor found", &reach);
-						}
 						return false;
 					}
 				} else
@@ -49,8 +44,6 @@ bool CorridorChecker::check(const Status & status, const Point & p0)
 								Point(minmax.minX - 1, minmax.minY), Point::p01) &&
 						!checkCorridorEnding(status,
 								Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
-						if (enableDump_)
-							dumpStatus(dumpFile_, status, "Horizontal corridor found", &reach);
 						return false;
 					}
 				}

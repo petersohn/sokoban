@@ -12,7 +12,8 @@ class NormalExpander: public Expander {
 	int maxDepth_;
 	bool enableLog_;
 	int expandedNodes_;
-	void expandNode(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue);
+	void expandNode(const Status &st, const Point &p, const Point &d,
+			boost::shared_ptr<Node> base, NodePusher& queue);
 public:
 	NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
 			Checker::Ptr ch, bool enableLog = false);

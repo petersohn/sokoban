@@ -51,7 +51,7 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	CorridorChecker.$(OBJEXT) Dumper.$(OBJEXT) \
 	HeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
-	Point.$(OBJEXT) PrioNodeQueue.$(OBJEXT) Solver.$(OBJEXT) \
+	Point.$(OBJEXT) Solver.$(OBJEXT) SolverFactories.$(OBJEXT) \
 	State.$(OBJEXT) Status.$(OBJEXT) StonePusher.$(OBJEXT) \
 	Table.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
 	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT) \
@@ -172,8 +172,8 @@ sokoban_SOURCES = main.cpp \
 	NormalExpander.cpp \
 	Options.cpp \
 	Point.cpp \
-	PrioNodeQueue.cpp \
 	Solver.cpp \
+	SolverFactories.cpp \
 	State.cpp \
 	Status.cpp \
 	StonePusher.cpp \
@@ -278,8 +278,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NormalExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Point.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PrioNodeQueue.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Solver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolverFactories.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/State.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Status.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StonePusher.Po@am__quote@

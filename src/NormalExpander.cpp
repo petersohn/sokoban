@@ -3,7 +3,8 @@
 #include "Node.h"
 #include <iostream>
 
-void NormalExpander::expandNode(const Status & st, boost::shared_ptr<Node> base, NodePusher & queue)
+void NormalExpander::expandNode(const Status &st, const Point &p, const Point &d,
+			boost::shared_ptr<Node> base, NodePusher& queue)
 {
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < st.width() &&
@@ -18,18 +19,17 @@ void NormalExpander::expandNode(const Status & st, boost::shared_ptr<Node> base,
 		}
 		node = Node::create(status.state(), p, d,
 			base, 1, calculator_->calculateStatus(status));
-		if (visitedStates_ && visitedStates_->hasElem(status, node->costFgv())) {
+		VisitedStateInput vsi(std::make_pair(status, node->costFgv()));
+		if (visitedStates_ && visitedStates_->hasElem(vsi)) {
 			return;
 		}
-		if (pd != table_->get().destination()) {
-			if (checker_ && !checker_->check(status))
+		if (pd != status.table().destination()) {
+			if (checker_ && !checker_->check(status, pd))
 				return;
 		}
 		queue.push(node);
 		if (visitedStates_)
-			visitedStates_->push(status, node->costFgv());
-		if (enableDump_)
-			dumpNode(dumpFile_, table_, *node, "Added");
+			visitedStates_->push(vsi);
 		maxDepth_ = std::max(node->depth(), maxDepth_);
 		if (enableLog_ && ++expandedNodes_ % 10000 == 0)
 			std::cerr << boost::format(
@@ -37,14 +37,13 @@ void NormalExpander::expandNode(const Status & st, boost::shared_ptr<Node> base,
 					"Nodes in queue: %d.\n"
 					"Maximum depth: %d.\n"
 					"Cost function: %d\n") %
-				expandedNodes_ % queue->size() %
+				expandedNodes_ % queue.size() %
 				maxDepth_ % base->costFgv() << std::endl;
 	}
 }
 
 bool NormalExpander::expand(const Status & status, boost::shared_ptr<Node> base, NodePusher & queue)
 {
-	assert(queue.get() != NULL);
 	if (visitedStates_->size() == 0) {
 		visitedStates_->push(std::make_pair(status, calculator_->calculateStatus(status)));
 	}
@@ -53,10 +52,10 @@ bool NormalExpander::expand(const Status & status, boost::shared_ptr<Node> base,
 	{
 		if (*it == status.table().destination())
 			continue;
-		expandNode(status, *it, Point::p10, base);
-		expandNode(status, *it, Point::pm10, base);
-		expandNode(status, *it, Point::p01, base);
-		expandNode(status, *it, Point::p0m1, base);
+		expandNode(status, *it, Point::p10, base, queue);
+		expandNode(status, *it, Point::pm10, base, queue);
+		expandNode(status, *it, Point::p01, base, queue);
+		expandNode(status, *it, Point::p0m1, base, queue);
 	}
 	return true;
 }
@@ -66,11 +65,12 @@ NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr c
 		visitedStates_(vs),
 		calculator_(calculator),
 		checker_(ch),
-		maxDepth(0),
+		maxDepth_(0),
 		enableLog_(enableLog),
-		expandedNodes(0)
+		expandedNodes_(0)
 {
-	assert(calculator != NULL);
+	assert(calculator_ != NULL);
+	assert(checker_ != NULL);
 }
 
 NormalExpander::~NormalExpander()

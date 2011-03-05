@@ -2,7 +2,8 @@
 #include "Status.h"
 #include "Options.h"
 #include "Node.h"
-#include "BasicSolver.h"
+#include "Solver.h"
+#include "SolverFactories.h"
 #include "Dumper.h"
 #include "State.h"
 #include <time.h>
@@ -20,7 +21,7 @@ int main(int argc, char** argv) {
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
 	clock_t time0 = clock();
-	BasicSolver s;
+	Solver s(createPrioQueue, createExpander);
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t time = clock() - time0;
 	cerr << "Length of solution: " << solution.size() << endl;

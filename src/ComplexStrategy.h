@@ -4,7 +4,7 @@
 #include <vector>
 #include <boost/function.hpp>
 
-template<class Param, class Return>
+template<class Param, class Return, Return _init>
 class ComplexStrategy {
 public:
 	typedef boost::function<Return(Param)> FuncType;
@@ -22,12 +22,12 @@ public:
 			funcs_(first, last),
 			aggregate_(aggregate),
 			stopCondition_(stopCondition) {}
-	Return execute(Param param, const Return &init);
+	Return operator()(Param param);
 };
 
-template<class Param, class Return>
-Return ComplexStrategy<Param, Return>::execute(Param param, const Return &init) {
-	Return result = init;
+template<class Param, class Return, Return _init>
+Return ComplexStrategy<Param, Return, _init>::operator()(Param param) {
+	Return result = _init;
 	FuncType *p;
 	for (typename std::vector<FuncType >::iterator it = funcs_.begin();
 			it != funcs_.end(); ++it) {

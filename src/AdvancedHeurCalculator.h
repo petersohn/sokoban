@@ -3,6 +3,7 @@
 
 #include "TableHeurCalculator.h"
 #include "Dumper.h"
+#include "Solver.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -33,16 +34,18 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 	static HeurDumper dumper;
 
 	Array<std::vector<Partition> > partitions_;
-	HeurCalculator::Ptr calculator_;
+	Solver::Ptr solver_;
 	virtual int doCalculateStone(const Status &status, const Point &p);
 	virtual void init();
 
 	void initPartition(const Point &p, Array<bool> &kell,
 			int &kellNum);
 public:
-	AdvancedHeurCalculator(HeurCalculator::Ptr calculator):
-		calculator_(calculator)
-	{}
+	AdvancedHeurCalculator(Solver::Ptr solver):
+		solver_(solver)
+	{
+		assert(solver_.get() != NULL);
+	}
 };
 
 

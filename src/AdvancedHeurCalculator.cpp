@@ -1,6 +1,5 @@
 #include "AdvancedHeurCalculator.h"
 #include "Status.h"
-#include "BasicSolver.h"
 #include "Node.h"
 #include <vector>
 #include <algorithm>
@@ -98,8 +97,7 @@ ki:
 	if (p == table().destination())
 		part.heur = 0;
 	else {
-		BasicSolver s;
-		std::deque<Node::Ptr> res = s.solve(status);
+		std::deque<Node::Ptr> res = solver_->solve(status);
 		if (res.size() != 0)
 			part.heur = (*res.rbegin())->cost();
 	}

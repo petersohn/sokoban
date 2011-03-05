@@ -17,7 +17,7 @@ class ComplexExpander: public Expander {
 			queue(queue) {}
 	};
 
-	ComplexStrategy<ExpandParams&, bool> funcs_;
+	ComplexStrategy<ExpandParams&, bool, false> funcs_;
 public:
 	template<class Iterator>
 	ComplexExpander(Iterator first, Iterator last):

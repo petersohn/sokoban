@@ -4,17 +4,16 @@
 
 std::deque<Node::Ptr> Solver::solve(Status status)
 {
-	NodeQueue::Ptr queue = createQueue();
+	NodeQueue::Ptr queue = queueFactory_();
 	assert(queue.get() != NULL);
-	Expander::Ptr expander = createExpander();
+	Expander::Ptr expander = expanderFactory_();
 	assert(expander.get() != NULL);
 	Node::Ptr nnn = Node::create();
 	Node::Ptr currentNode;
-	addVisitedState(status, calculator_->calculateStatus(status));
 	do
 	{
 		expander->expand(status, currentNode, *queue);
-		currentNode = queue.pop();
+		currentNode = queue->pop();
 		if (currentNode.get() == NULL)
 			break;
 		status.set(*currentNode);
