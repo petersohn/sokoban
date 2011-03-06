@@ -1,3 +1,4 @@
+#include "SolverFactories.h"
 #include "Solver.h"
 #include "PrioNodeQueue.h"
 #include "ComplexExpander.h"
@@ -9,27 +10,26 @@
 #include "CorridorChecker.h"
 #include "BasicHeurCalculator.h"
 #include "AdvancedHeurCalculator.h"
+#include "VisitedStates.h"
+#include "CompareQueue.h"
 #include <vector>
 #include <boost/bind.hpp>
-#include <boost/lambda/lambda.hpp>
 
 NodeQueue::Ptr createPrioQueue()
 {
-//	using namespace boost::lambda;
-	typedef ComplexStrategy<std::pair<const Node&, const Node&>, int, 0> StrategyType;
-	std::vector<StrategyType::FuncType> funcs;
-	funcs.push_back(boost::lambda::_1.costFgv() - boost::lambda::_2.costFgv());
-	funcs.push_back(_2.depth() - _1.depth());
-	StrategyType comp(funcs.begin(), funcs.end(), _2, _1 != 0);
-	return NodeQueue::Ptr(new PrioNodeQueue(comp(std::make_pair(_1, _2)) > 0));
+	std::vector<CompareQueue<Node>::FuncType> funcs;
+	funcs.push_back(CompareByMethod<Node>(&Node::costFgv, false));
+	funcs.push_back(CompareByMethod<Node>(&Node::depth, true));
+	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node> >(CompareQueue<Node>(
+			funcs.begin(), funcs.end())));
 }
 
 Expander::Ptr createExpander() {
-	return createExpanderWithCalculator(HeurCalculator::Ptr(
-			new AdvancedHeurCalculator(Solver::Ptr(new Solver(
-					createPrioQueue,
-					boost::bind(createExpanderWithCalculator,
-							HeurCalculator::Ptr(new BasicHeirCalculator)))))));
+	HeurCalculator::Ptr bhc(new BasicHeurCalculator);
+	Solver::Ptr s(new Solver(createPrioQueue,
+					boost::bind(createExpanderWithCalculator, bhc)));
+	HeurCalculator::Ptr ahc(new AdvancedHeurCalculator(s));
+	return createExpanderWithCalculator(ahc);
 }
 
 Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc)

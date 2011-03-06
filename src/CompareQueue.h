@@ -1,28 +1,49 @@
 #ifndef COMPAREQUEUE_H_
 #define COMPAREQUEUE_H_
 
-// Value must be compatible with int
-template <class Object, class Value=int>
+#include "ComplexStrategy.h"
+#include <utility>
+#include <boost/lambda/lambda.hpp>
+
+template<class T>
 class CompareQueue {
 public:
-	typedef Object object_type;
-	typedef Value value_type;
+	typedef std::pair<const T&, const T&> InputType;
+private:
+	typedef ComplexStrategy<InputType, int, 0> StrategyType;
+	StrategyType strategy_;
+public:
+	typedef typename StrategyType::FuncType FuncType;
 
-	// Iterator must point to function objects that accept two
-	// Object arguments, and return a type of Value.
-	template <class Iterator>
-	static Value compareItems(Iterator first, Iterator last, const Object& o1, const Object& o2);
+	template<class Iterator>
+	CompareQueue(Iterator first, Iterator last):
+			strategy_(first, last,
+					boost::lambda::_2,
+					boost::lambda::_1 != 0)
+	{
+	}
+
+	bool operator()(const T& first, const T& second) {
+		return strategy_(std::make_pair(first, second)) > 0;
+	}
 };
 
-template <class Object, class Value, class Iterator>
-Value CompareQueue::compare(Iterator first, Iterator last, const Object& o1, const Object& o2) {
-	while (first != last) {
-		Value val = (*first)(o1, o2);
-		if (value != 0)
-			return value;
-		++first;
+template<class T>
+class CompareByMethod {
+	typedef boost::function<int(T)> Fun;
+
+	Fun method_; // ha-ha
+	bool backwards_;
+public:
+	CompareByMethod(Fun method, bool backwards = false):
+		method_(method),
+		backwards_(backwards)
+	{}
+	int operator()(typename CompareQueue<T>::InputType input) {
+		return backwards_ ?
+				method_(input.first) - method_(input.second) :
+				method_(input.second) - method_(input.first);
 	}
-	return value;
-}
+};
 
 #endif /* COMPAREQUEUE_H_ */
