@@ -9,8 +9,7 @@ config.h*
 *.orig
 *.out
 *.out.*
-dump.*
-*.dump
+*dump*
 Makefile
 stamp-h1
 *.m4
