@@ -5,7 +5,7 @@ sokoban_SOURCES = main.cpp \
 	ComplexChecker.cpp \
 	ComplexExpander.cpp \
 	CorridorChecker.cpp \
-	Dumper.cpp \
+	DumperFunctions.cpp \
 	HeurCalculator.cpp \
 	MovableChecker.cpp \
 	Node.cpp \

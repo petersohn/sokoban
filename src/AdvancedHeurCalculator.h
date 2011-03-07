@@ -2,7 +2,7 @@
 #define ADVANCEDHEURCALCULATOR_H_
 
 #include "TableHeurCalculator.h"
-#include "Dumper.h"
+#include "DumperFunctions.h"
 #include "Solver.h"
 #include <vector>
 #include <iostream>

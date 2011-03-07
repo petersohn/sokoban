@@ -4,7 +4,7 @@
 #include "Node.h"
 #include "Solver.h"
 #include "SolverFactories.h"
-#include "Dumper.h"
+#include "DumperFunctions.h"
 #include "State.h"
 #include <time.h>
 #include <iostream>

@@ -48,7 +48,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	BasicHeurCalculator.$(OBJEXT) Common.$(OBJEXT) \
 	ComplexChecker.$(OBJEXT) ComplexExpander.$(OBJEXT) \
-	CorridorChecker.$(OBJEXT) Dumper.$(OBJEXT) \
+	CorridorChecker.$(OBJEXT) DumperFunctions.$(OBJEXT) \
 	HeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	Point.$(OBJEXT) Solver.$(OBJEXT) SolverFactories.$(OBJEXT) \
@@ -165,7 +165,7 @@ sokoban_SOURCES = main.cpp \
 	ComplexChecker.cpp \
 	ComplexExpander.cpp \
 	CorridorChecker.cpp \
-	Dumper.cpp \
+	DumperFunctions.cpp \
 	HeurCalculator.cpp \
 	MovableChecker.cpp \
 	Node.cpp \
@@ -271,7 +271,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CorridorChecker.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Dumper.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DumperFunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MovableChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@
