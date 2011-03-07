@@ -98,13 +98,12 @@ StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::
 
 bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue)
 {
-	assert(queue.get() != NULL);
 	InternalPusher sp(calculator_);
 	Node::Ptr node = sp.pushStones(status, base);
 	if (node.get() == NULL)
 		return false;
-	queue->push(node);
-	Status st(table_);
+	queue.push(node);
+	Status st(status.tablePtr());
 	std::deque<Node::Ptr> path = pathToBase(node, base);
 	for (std::deque<Node::Ptr>::iterator it = path.begin();
 			it != path.end(); ++it) {

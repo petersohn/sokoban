@@ -18,12 +18,12 @@ public:
 };
 
 template <class Compare>
-void PrioNodeQueue::push(const Node::Ptr &node) {
+void PrioNodeQueue<Compare>::push(const Node::Ptr &node) {
 	queue_.push(node);
 }
 
 template <class Compare>
-Node::Ptr PrioNodeQueue::pop() {
+Node::Ptr PrioNodeQueue<Compare>::pop() {
 	if (queue_.empty())
 		return Node::Ptr();
 	Node::Ptr result = queue_.top();
@@ -32,7 +32,7 @@ Node::Ptr PrioNodeQueue::pop() {
 }
 
 template <class Compare>
-size_t PrioNodeQueue::size() {
+size_t PrioNodeQueue<Compare>::size() {
 	return queue_.size();
 }
 

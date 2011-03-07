@@ -26,7 +26,7 @@ class Holder: public Pusher<T> {
 public:
 	typedef boost::shared_ptr<Holder<T> > Ptr;
 	virtual ~Holder() {}
-	virtual bool hasElem(const T&) const;
+	virtual bool hasElem(const T&) const = 0;
 };
 
 class Node;

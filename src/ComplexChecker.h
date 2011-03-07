@@ -2,25 +2,15 @@
 #define COMPLEXCHECKER_H_
 
 #include "Checker.h"
-#include "ComplexStrategy.h"
-#include "boost/lambda/lambda.hpp"
+#include <vector>
 
-class ComplexChecker {
-	struct CheckParams {
-		const Status &status;
-		const Point &p;
-		CheckParams(const Status &status, const Point &p):
-			status(status),
-			p(p) {}
-	};
-
-	ComplexStrategy<CheckParams&, bool, true> funcs_;
+class ComplexChecker: public Checker {
+	typedef std::vector<Checker::Ptr> ContainerType;
+	ContainerType funcs_;
 public:
 	template<class Iterator>
 	ComplexChecker(Iterator first, Iterator last):
-		funcs_(first, last,
-				boost::lambda::_1 && boost::lambda::_2,
-				! boost::lambda::_1)
+		funcs_(first, last)
 	{}
 	virtual bool check(const Status &status, const Point &p0);
 };

@@ -17,10 +17,10 @@
 
 NodeQueue::Ptr createPrioQueue()
 {
-	std::vector<CompareQueue<Node>::FuncType> funcs;
-	funcs.push_back(CompareByMethod<Node>(&Node::costFgv, false));
-	funcs.push_back(CompareByMethod<Node>(&Node::depth, true));
-	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node> >(CompareQueue<Node>(
+	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
+	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
+	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::depth, true));
+	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(
 			funcs.begin(), funcs.end())));
 }
 

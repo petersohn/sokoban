@@ -13,7 +13,7 @@ bool VisitedStates::hasElem(const VisitedStateInput &elem) const {
 			visitedStates_.equal_range(status.state());
 	if (found.first != found.second)
 	{
-		for (VisitedStateSet::iterator it = found.first;
+		for (VisitedStateSet::const_iterator it = found.first;
 				it != found.second; ++it) {
 			if (status.reachable(it->second.currentPos())) {
 				if (heur < it->second.heur()) {

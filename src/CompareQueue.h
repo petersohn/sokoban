@@ -8,9 +8,8 @@
 template<class T>
 class CompareQueue {
 public:
-	typedef std::pair<const T&, const T&> InputType;
 private:
-	typedef ComplexStrategy<InputType, int, 0> StrategyType;
+	typedef ComplexStrategy<boost::function<int(const T&, const T&)> > StrategyType;
 	StrategyType strategy_;
 public:
 	typedef typename StrategyType::FuncType FuncType;
@@ -19,18 +18,19 @@ public:
 	CompareQueue(Iterator first, Iterator last):
 			strategy_(first, last,
 					boost::lambda::_2,
-					boost::lambda::_1 != 0)
+					boost::lambda::_1 != 0,
+					0)
 	{
 	}
 
 	bool operator()(const T& first, const T& second) {
-		return strategy_(std::make_pair(first, second)) > 0;
+		return strategy_.execute(first, second) > 0;
 	}
 };
 
 template<class T>
 class CompareByMethod {
-	typedef boost::function<int(T)> Fun;
+	typedef boost::function<int(const T&)> Fun;
 
 	Fun method_; // ha-ha
 	bool backwards_;
@@ -39,10 +39,28 @@ public:
 		method_(method),
 		backwards_(backwards)
 	{}
-	int operator()(typename CompareQueue<T>::InputType input) {
+	int operator()(const T &a, const T &b) {
 		return backwards_ ?
-				method_(input.first) - method_(input.second) :
-				method_(input.second) - method_(input.first);
+				method_(b) - method_(a) :
+				method_(a) - method_(b);
+	}
+};
+
+template<class Ptr>
+class CompareByMethodPtr {
+	typedef boost::function<int(const typename Ptr::element_type&)> Fun;
+
+	Fun method_; // ha-ha
+	bool backwards_;
+public:
+	CompareByMethodPtr(Fun method, bool backwards = false):
+		method_(method),
+		backwards_(backwards)
+	{}
+	int operator()(Ptr a, Ptr b) {
+		return backwards_ ?
+				method_(*b) - method_(*a) :
+				method_(*a) - method_(*b);
 	}
 };
 
