@@ -19,7 +19,7 @@ void NormalExpander::expandNode(const Status &st, const Point &p, const Point &d
 		}
 		node = Node::create(status.state(), p, d,
 			base, 1, calculator_->calculateStatus(status));
-		VisitedStateInput vsi(std::make_pair(status, node->costFgv()));
+		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
 		if (visitedStates_ && visitedStates_->hasElem(vsi)) {
 			return;
 		}

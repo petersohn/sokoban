@@ -11,6 +11,7 @@
 #include <fstream>
 #include <deque>
 #include <boost/format.hpp>
+#include <boost/bind.hpp>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ int main(int argc, char** argv) {
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
 	clock_t time0 = clock();
-	Solver s(createPrioQueue, createExpander);
+	Solver s(createPrioQueue, boost::bind(createExpander, true));
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t time = clock() - time0;
 	cerr << "Length of solution: " << solution.size() << endl;

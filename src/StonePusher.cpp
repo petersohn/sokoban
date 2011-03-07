@@ -109,7 +109,7 @@ bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base, Nod
 			it != path.end(); ++it) {
 		st.set(**it);
 		if (visitedStates_)
-			visitedStates_->push(std::make_pair(st, (*it)->costFgv()));
+			visitedStates_->push(std::make_pair<const Status&, int>(st, (*it)->costFgv()));
 	}
 	return true;
 }

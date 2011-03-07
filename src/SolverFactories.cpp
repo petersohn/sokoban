@@ -24,15 +24,15 @@ NodeQueue::Ptr createPrioQueue()
 			funcs.begin(), funcs.end())));
 }
 
-Expander::Ptr createExpander() {
+Expander::Ptr createExpander(bool log) {
 	HeurCalculator::Ptr bhc(new BasicHeurCalculator);
 	Solver::Ptr s(new Solver(createPrioQueue,
-					boost::bind(createExpanderWithCalculator, bhc)));
+					boost::bind(createExpanderWithCalculator, bhc, false)));
 	HeurCalculator::Ptr ahc(new AdvancedHeurCalculator(s));
-	return createExpanderWithCalculator(ahc);
+	return createExpanderWithCalculator(ahc, log);
 }
 
-Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc)
+Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log)
 {
 	std::vector<Checker::Ptr> chs;
 	chs.push_back(Checker::Ptr(new MovableChecker(calc)));
@@ -40,8 +40,8 @@ Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc)
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
 	VisitedStateHolder::Ptr vs(new VisitedStates());
 	std::vector<Expander::Ptr> exs;
-//	exs.push_back(Expander::Ptr(new StonePusher(vs, calc)));
-	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch)));
+	exs.push_back(Expander::Ptr(new StonePusher(vs, calc)));
+	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch, log)));
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 

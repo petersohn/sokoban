@@ -6,8 +6,8 @@
 #include "HeurCalculator.h"
 
 NodeQueue::Ptr createPrioQueue();
-Expander::Ptr createExpander();
-Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc);
+Expander::Ptr createExpander(bool log = false);
+Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log = false);
 
 
 #endif /* SOLVERFACTORIES_H_ */
