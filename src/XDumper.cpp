@@ -5,22 +5,32 @@
 #include <sstream>
 
 
-XDumper::XDumper(FixedTable::Ptr table):table_(table) {
+XDumper::XDumper() {
 	clear();
+}
+
+XDumper::ElementPtr XDumper::createDumpElement(const std::string &s) {
+	boost::shared_ptr<xml::XMLText> dump(new xml::XMLText());
+	dump->data(s);
+	ElementPtr dumpElem(new xml::XMLElement());
+	dumpElem->name("dump");
+	dumpElem->children().push_back(dump);
+	return dumpElem;
+}
+
+void XDumper::initialStatus(const Status &status) {
+	std::stringstream ss;
+	dumpStatus(ss, status);
+	elements_[Node::Ptr()]->children().push_back(createDumpElement(ss.str()));
 }
 
 void XDumper::addNode(Node::Ptr node) {
 	assert(node.get() != NULL);
+	ElementPtr elem(new xml::XMLElement());
+	elem->name("node");
 	std::stringstream ss;
 	dumpNode(ss, table_, *node);
-	boost::shared_ptr<xml::XMLText> dump(new xml::XMLText());
-	dump->data(ss.str());
-	boost::shared_ptr<xml::XMLElement> dumpElem(new xml::XMLElement());
-	dumpElem->name("dump");
-	dumpElem->children().push_back(dump);
-	boost::shared_ptr<xml::XMLElement> elem(new xml::XMLElement());
-	elem->name("node");
-	elem->children().push_back(dumpElem);
+	elem->children().push_back(createDumpElement(ss.str()));
 	elem->attributes().insert(make_pair("stone", pointStr(node->from())));
 	elem->attributes().insert(make_pair("d", direction(node->d())));
 	elem->attributes().insert(make_pair("cost", toStr(node->cost())));
@@ -42,7 +52,7 @@ void XDumper::push(Node::Ptr node) {
 	elements_[node]->attributes()["expanded"] = "pushed";
 }
 
-void XDumper::reject(Node::Ptr node, const std::string &text) {
+void XDumper::reject(Node::Ptr node, const char *text) {
 	elements_[node]->attributes()["rejected"] = text;
 }
 

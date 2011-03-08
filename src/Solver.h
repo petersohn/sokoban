@@ -3,6 +3,7 @@
 
 #include "QueueInterfaces.h"
 #include "Expander.h"
+#include "Dumper.h"
 #include <deque>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -18,10 +19,12 @@ public:
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
+	Dumper::Ptr dumper_;
 public:
-	Solver(QueueFactory qf, ExpanderFactory ef):
+	Solver(QueueFactory qf, ExpanderFactory ef, Dumper::Ptr dumper):
 		queueFactory_(qf),
-		expanderFactory_(ef)
+		expanderFactory_(ef),
+		dumper_(dumper)
 	{}
 	std::deque<boost::shared_ptr<Node> > solve(Status status);
 	virtual ~Solver() {}

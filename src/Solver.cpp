@@ -12,6 +12,8 @@ std::deque<Node::Ptr> Solver::solve(Status status)
 	Node::Ptr currentNode;
 	do
 	{
+		if (dumper_ && currentNode)
+			dumper_->expand(currentNode);
 		expander->expand(status, currentNode, *queue);
 		currentNode = queue->pop();
 		if (currentNode.get() == NULL)

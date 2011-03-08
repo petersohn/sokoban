@@ -2,15 +2,21 @@
 #define DUMPER_H_
 
 #include "Table.h"
+#include <boost/shared_ptr.hpp>
 
 class Status;
 class Node;
 
 class Dumper {
-
 public:
-	virtual void dumpStatus(const Status& status, const char *title) = 0;
-	virtual void dumpNode(FixedTable::Ptr table, const Node &node, const char *title) = 0;
+	typedef boost::shared_ptr<Dumper> Ptr;
+
+	virtual void initialStatus(const Status &status) = 0;
+	virtual void addNode(Node::Ptr node) = 0;
+	virtual void addToSolution(Node::Ptr node) = 0;
+	virtual void expand(Node::Ptr node) = 0;
+	virtual void push(Node::Ptr node) = 0;
+	virtual void reject(Node::Ptr node, const char *text) = 0;
 	virtual ~Dumper() {}
 };
 
