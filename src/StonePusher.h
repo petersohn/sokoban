@@ -15,7 +15,8 @@ class StonePusher: public Expander {
 	HeurCalculator::Ptr calculator_;
 public:
 	StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::Ptr calculator);
-	virtual bool expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue);
+	virtual bool expand(const Status &status, boost::shared_ptr<Node> base,
+			NodePusher& queue, Dumper::Ptr dumper);
 };
 
 

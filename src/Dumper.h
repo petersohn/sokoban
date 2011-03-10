@@ -3,9 +3,9 @@
 
 #include "Table.h"
 #include <boost/shared_ptr.hpp>
+#include "Node.h"
 
 class Status;
-class Node;
 
 class Dumper {
 public:
@@ -17,6 +17,7 @@ public:
 	virtual void expand(Node::Ptr node) = 0;
 	virtual void push(Node::Ptr node) = 0;
 	virtual void reject(Node::Ptr node, const char *text) = 0;
+	virtual void save() = 0;
 	virtual ~Dumper() {}
 };
 

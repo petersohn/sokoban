@@ -7,20 +7,19 @@
 #include "Dumper.h"
 
 class NormalExpander: public Expander {
+	friend class InternalExpander;
+
 	VisitedStateHolder::Ptr visitedStates_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
-	Dumper::Ptr dumper_;
 	int maxDepth_;
 	bool enableLog_;
 	int expandedNodes_;
-	void expandNode(const Status &st, const Point &p, const Point &d,
-			boost::shared_ptr<Node> base, NodePusher& queue);
 public:
 	NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
-			Checker::Ptr ch, Dumper::Ptr dumper, bool enableLog = false);
+			Checker::Ptr ch, bool enableLog = false);
 	~NormalExpander();
-	virtual bool expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue);
+	virtual bool expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue, Dumper::Ptr dumper);
 	int expandedNodes() const { return expandedNodes_; }
 };
 

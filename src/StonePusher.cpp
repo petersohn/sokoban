@@ -96,7 +96,8 @@ StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::
 	assert(calculator != NULL);
 }
 
-bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue)
+bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base,
+		NodePusher& queue, Dumper::Ptr dumper)
 {
 	InternalPusher sp(calculator_);
 	Node::Ptr node = sp.pushStones(status, base);
@@ -110,6 +111,9 @@ bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base, Nod
 		st.set(**it);
 		if (visitedStates_)
 			visitedStates_->push(std::make_pair<const Status&, int>(st, (*it)->costFgv()));
+		if (dumper) {
+			dumper->push(*it);
+		}
 	}
 	return true;
 }

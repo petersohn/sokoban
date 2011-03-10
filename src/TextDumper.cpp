@@ -28,3 +28,7 @@ void TextDumper::push(Node::Ptr node) {
 void TextDumper::reject(Node::Ptr node, const char *text) {
 	dumpNode(file_, table_, node, "Rejected: " + std::string(text));
 }
+
+void TextDumper::save() {
+	file_.flush();
+}

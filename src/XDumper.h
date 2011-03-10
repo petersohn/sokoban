@@ -28,7 +28,7 @@ public:
 	virtual void push(Node::Ptr node);
 	virtual void reject(Node::Ptr node, const char *text);
 	void clear();
-	void save(const char *filename) const;
+	virtual void save(const char *filename) const;
 	void dump() const;
 };
 

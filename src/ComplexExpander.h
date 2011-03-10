@@ -13,7 +13,8 @@ public:
 	ComplexExpander(Iterator first, Iterator last):
 		funcs_(first, last)
 	{}
-	virtual bool expand(const Status &status, boost::shared_ptr<Node> base, NodePusher& queue);
+	virtual bool expand(const Status &status, boost::shared_ptr<Node> base,
+			NodePusher& queue, Dumper::Ptr dumper);
 };
 
 #endif /* COMPLEXEXPANDER_H_ */

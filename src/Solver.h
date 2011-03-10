@@ -11,20 +11,26 @@
 class Status;
 class Node;
 
+class NullDumperFactory {
+public:
+	Dumper::Ptr operator()() { return Dumper::Ptr(); }
+};
+
 class Solver {
 public:
 	typedef boost::shared_ptr<Solver> Ptr;
 	typedef boost::function<NodeQueue::Ptr()> QueueFactory;
 	typedef boost::function<Expander::Ptr()> ExpanderFactory;
+	typedef boost::function<Dumper::Ptr()> DumperFactory;
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
-	Dumper::Ptr dumper_;
+	DumperFactory dumperFactory_;
 public:
-	Solver(QueueFactory qf, ExpanderFactory ef, Dumper::Ptr dumper):
+	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory()):
 		queueFactory_(qf),
 		expanderFactory_(ef),
-		dumper_(dumper)
+		dumperFactory_(df)
 	{}
 	std::deque<boost::shared_ptr<Node> > solve(Status status);
 	virtual ~Solver() {}

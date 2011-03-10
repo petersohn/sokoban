@@ -3,6 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "QueueInterfaces.h"
+#include "Dumper.h"
 
 class Status;
 class Node;
@@ -11,7 +12,7 @@ class Expander {
 public:
 	typedef boost::shared_ptr<Expander> Ptr;
 	// returns true if no more expansions should be made
-	virtual bool expand(const Status &, boost::shared_ptr<Node>, NodePusher &) = 0;
+	virtual bool expand(const Status &, boost::shared_ptr<Node>, NodePusher &, Dumper::Ptr) = 0;
 	virtual ~Expander() {}
 };
 

@@ -13,11 +13,6 @@ public:
 	bool stoneMovable(const Status &status, const Point &p);
 };
 
-bool MovableChecker::check(const Status &status, const Point &p) {
-	InternalChecker ch(calculator_);
-	return ch.stoneMovable(status, p);
-}
-
 bool InternalChecker::stoneMovable(const Status &status, const Point &p) {
 	volt_.insert(p);
 	int count = 0;
@@ -42,5 +37,16 @@ bool InternalChecker::isMovable(const Status &status, const Point & p,
 	if (volt_.count(p) != 0)
 		return false;
 	return stoneMovable(status, p);
+}
+
+
+
+bool MovableChecker::check(const Status &status, const Point &p) {
+	InternalChecker ch(calculator_);
+	return ch.stoneMovable(status, p);
+}
+
+const char* MovableChecker::errorMessage() {
+	return "not movable";
 }
 

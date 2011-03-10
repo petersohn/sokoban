@@ -13,6 +13,7 @@ public:
 		calculator_(calculator)
 	{}
 	virtual bool check(const Status &status, const Point &p);
+	virtual const char* errorMessage();
 };
 
 #endif /* MOVABLECHECKER_H_ */

@@ -13,6 +13,7 @@ public:
 		calculator_(calculator)
 	{}
 	virtual bool check(const Status &status, const Point &p0);
+	virtual const char* errorMessage();
 };
 
 #endif /* CORRIDORCHECKER_H_ */

@@ -19,6 +19,7 @@ public:
 	virtual void expand(Node::Ptr node);
 	virtual void push(Node::Ptr node);
 	virtual void reject(Node::Ptr node, const char *text);
+	virtual void save();
 };
 
 #endif /* TEXTDUMPER_H_ */

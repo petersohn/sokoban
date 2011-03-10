@@ -69,3 +69,7 @@ bool CorridorChecker::checkCorridorEnding(const Status & status,
 			(calculator_->calculateStone(status, p1) || calculator_->calculateStone(status, pm1));
 }
 
+const char* CorridorChecker::errorMessage() {
+	return "corridor found";
+}
+
