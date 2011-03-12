@@ -18,7 +18,11 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	Options opts(argc, argv);
-
+	cout << "Dump style: " << opts.dumpStyle() << endl;
+	cout << "Use stone pusher: " << opts.useStonePusher() << endl;
+	cout << "Use movable checker: " << opts.useMovableChecker() << endl;
+	cout << "Use corridor checker: " << opts.useCorridorChecker() << endl;
+/*
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
 	clock_t time0 = clock();
@@ -45,6 +49,6 @@ int main(int argc, char** argv) {
 			cout << boost::format("(%2d, %2d) --> %s") %
 					from.x % from.y % dir << endl;
 		}
-	}
+	}*/
 	cerr << "Status copied " << Status::copyCount << " times." << endl;
 }

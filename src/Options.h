@@ -3,6 +3,8 @@
 
 #include <string>
 #include <exception>
+#include <vector>
+#include <boost/unordered_map.hpp>
 
 class BadOptions: public std::exception {
 	std::string message_;
@@ -15,18 +17,27 @@ public:
 };
 
 class Options {
-	bool enableDump_;
-	bool enableXDump_;
+public:
+	enum DumpStyle {dsNone, dsText, dsXML};
+private:
+	DumpStyle dumpStyle_;
 	bool oldStyleOutput_;
 	bool useStonePusher_;
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	std::string filename_;
-public:
-	Options(int argc, char **argv, const char *configFileName);
 
-	bool enableDump() const { return enableDump_; }
-	bool enableXDump() const { return enableXDump_; }
+	typedef boost::unordered_map<std::string, int> ArgumentList;
+
+	static const char *dumpStyles_[];
+	static ArgumentList dumpStyles;
+
+	static ArgumentList createArgumentList(const char *list[]);
+	static int getValueFromList(const std::string &value, ArgumentList list);
+public:
+	Options(int argc, char **argv, const char *configFileName = "");
+
+	DumpStyle dumpStyle() const { return dumpStyle_; }
 	bool oldStyleOutput() const { return oldStyleOutput_; }
 	bool useStonePusher() const { return useStonePusher_; }
 	bool useMovableChecker() const { return useMovableChecker_; }
