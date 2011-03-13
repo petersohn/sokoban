@@ -17,7 +17,8 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-	Options opts(argc, argv);
+	Options opts(argc, argv, "sokoban.cfg");
+	cout << "Filename: " << opts.filename() << endl;
 	cout << "Dump style: " << opts.dumpStyle() << endl;
 	cout << "Use stone pusher: " << opts.useStonePusher() << endl;
 	cout << "Use movable checker: " << opts.useMovableChecker() << endl;
