@@ -74,7 +74,7 @@ void InternalExpander::expand()
 		owner_.visitedStates_->push(std::make_pair<const Status&, int>(status_,
 				owner_.calculator_->calculateStatus(status_)));
 	}
-	if (dumper_)
+	if (dumper_ && base_)
 		dumper_->expand(base_);
 	for (State::const_iterator it = status_.state().begin();
 			it != status_.state().end(); ++it)

@@ -51,11 +51,13 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	CorridorChecker.$(OBJEXT) DumperFunctions.$(OBJEXT) \
 	HeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
-	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) Solver.$(OBJEXT) \
+	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
+	PrioNodeQueue.$(OBJEXT) Solver.$(OBJEXT) \
 	SolverFactories.$(OBJEXT) State.$(OBJEXT) Status.$(OBJEXT) \
 	StonePusher.$(OBJEXT) Table.$(OBJEXT) \
-	TableHeurCalculator.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
-	VisitedStates.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
+	TableHeurCalculator.$(OBJEXT) TextDumper.$(OBJEXT) \
+	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT) \
+	XDumper.$(OBJEXT) XML.$(OBJEXT)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -159,31 +161,33 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 sokoban_SOURCES = main.cpp \
-	AdvancedHeurCalculator.cpp \
-	BasicHeurCalculator.cpp \
-	Common.cpp \
-	ComplexChecker.cpp \
-	ComplexExpander.cpp \
-	CorridorChecker.cpp \
-	DumperFunctions.cpp \
-	HeurCalculator.cpp \
-	MovableChecker.cpp \
-	Node.cpp \
-	NormalExpander.cpp \
-	Options.cpp \
-	OptionsHelper.cpp \
-	Point.cpp \
-	Solver.cpp \
-	SolverFactories.cpp \
-	State.cpp \
-	Status.cpp \
-	StonePusher.cpp \
-	Table.cpp \
-	TableHeurCalculator.cpp \
-	VisitedStateInfo.cpp \
-	VisitedStates.cpp \
-	XDumper.cpp \
-	XML.cpp
+		AdvancedHeurCalculator.cpp \
+		BasicHeurCalculator.cpp \
+		Common.cpp \
+		ComplexChecker.cpp \
+		ComplexExpander.cpp \
+		CorridorChecker.cpp \
+		DumperFunctions.cpp \
+		HeurCalculator.cpp \
+		MovableChecker.cpp \
+		Node.cpp \
+		NormalExpander.cpp \
+		Options.cpp \
+		OptionsHelper.cpp \
+		Point.cpp \
+		PrioNodeQueue.cpp \
+		Solver.cpp \
+		SolverFactories.cpp \
+		State.cpp \
+		Status.cpp \
+		StonePusher.cpp \
+		Table.cpp \
+		TableHeurCalculator.cpp \
+		TextDumper.cpp \
+		VisitedStateInfo.cpp \
+		VisitedStates.cpp \
+		XDumper.cpp \
+		XML.cpp 
 
 all: all-am
 
@@ -280,6 +284,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Options.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OptionsHelper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Point.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PrioNodeQueue.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Solver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolverFactories.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/State.Po@am__quote@
@@ -287,6 +292,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StonePusher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Table.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TableHeurCalculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TextDumper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VisitedStateInfo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VisitedStates.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XDumper.Po@am__quote@

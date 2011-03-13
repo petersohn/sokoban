@@ -11,6 +11,8 @@ std::deque<Node::Ptr> Solver::solve(Status status)
 	Dumper::Ptr dumper = dumperFactory_();
 	Node::Ptr nnn = Node::create();
 	Node::Ptr currentNode;
+	if (dumper)
+		dumper->initialStatus(status);
 	do
 	{
 		expander->expand(status, currentNode, *queue, dumper);

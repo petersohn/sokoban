@@ -64,8 +64,9 @@ void OptionsHelper::parseCommandLine(int argc, char **argv)
 	using namespace boost::program_options;
 	variables_map vm;
 	options_description desc(commandLineDescription_);
+	desc.add(positionalParametersDescription_);
 	store(command_line_parser(argc, argv).
-				options(desc.add(positionalParametersDescription_)).
+				options(desc).
 				positional(positionalParameters_).
 				run(), vm);
 	notify(vm);

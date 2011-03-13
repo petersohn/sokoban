@@ -11,7 +11,7 @@ class TextDumper: public Dumper {
 	FixedTable::Ptr table_;
 public:
 	TextDumper(const char *filename):
-		file(filename, std::ios::out | std::ios::trunc)
+		file_(filename, std::ios::out | std::ios::trunc)
 	{}
 	virtual void initialStatus(const Status &status);
 	virtual void addNode(Node::Ptr node);

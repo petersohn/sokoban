@@ -41,8 +41,12 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Enable/disable checking for corridors.\n");
 
 	try {
+		try {
 		if (configFileName != NULL)
 			oh.parseConfigFile(configFileName);
+		} catch (boost::program_options::reading_file &e) {
+			// DON'T CARE
+		}
 		oh.parseCommandLine(argc, argv);
 		if (help) {
 			oh.print();

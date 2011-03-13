@@ -18,16 +18,18 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
-	cout << "Filename: " << opts.filename() << endl;
-	cout << "Dump style: " << opts.dumpStyle() << endl;
-	cout << "Use stone pusher: " << opts.useStonePusher() << endl;
-	cout << "Use movable checker: " << opts.useMovableChecker() << endl;
-	cout << "Use corridor checker: " << opts.useCorridorChecker() << endl;
-/*
+//	cout << "Filename: " << opts.filename() << endl;
+//	cout << "Dump style: " << opts.dumpStyle() << endl;
+//	cout << "Use stone pusher: " << opts.useStonePusher() << endl;
+//	cout << "Use movable checker: " << opts.useMovableChecker() << endl;
+//	cout << "Use corridor checker: " << opts.useCorridorChecker() << endl;
+
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
 	clock_t time0 = clock();
-	Solver s(createPrioQueue, boost::bind(createExpander, true));
+	Solver s(createPrioQueue,
+			boost::bind(createExpanderFromOptions, opts, true),
+			boost::bind(createDumperFromOptions, opts));
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t time = clock() - time0;
 	cerr << "Length of solution: " << solution.size() << endl;
@@ -50,6 +52,6 @@ int main(int argc, char** argv) {
 			cout << boost::format("(%2d, %2d) --> %s") %
 					from.x % from.y % dir << endl;
 		}
-	}*/
+	}
 	cerr << "Status copied " << Status::copyCount << " times." << endl;
 }
