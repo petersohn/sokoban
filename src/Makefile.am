@@ -11,6 +11,7 @@ sokoban_SOURCES = main.cpp \
 	Node.cpp \
 	NormalExpander.cpp \
 	Options.cpp \
+	OptionsHelper.cpp \
 	Point.cpp \
 	Solver.cpp \
 	SolverFactories.cpp \

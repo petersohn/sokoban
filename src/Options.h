@@ -5,16 +5,7 @@
 #include <exception>
 #include <vector>
 #include <boost/unordered_map.hpp>
-
-class BadOptions: public std::exception {
-	std::string message_;
-public:
-	BadOptions(const std::string &msg) throw():message_(msg) {}
-	~BadOptions() throw() {}
-	virtual const char* what() const throw() {
-		return message_.c_str();
-	}
-};
+#include <iostream>
 
 class Options {
 public:
@@ -26,16 +17,8 @@ private:
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	std::string filename_;
-
-	typedef boost::unordered_map<std::string, int> ArgumentList;
-
-	static const char *dumpStyles_[];
-	static ArgumentList dumpStyles;
-
-	static ArgumentList createArgumentList(const char *list[]);
-	static int getValueFromList(const std::string &value, ArgumentList list);
 public:
-	Options(int argc, char **argv, const char *configFileName = "");
+	Options(int argc, char **argv, const char *configFileName = NULL);
 
 	DumpStyle dumpStyle() const { return dumpStyle_; }
 	bool oldStyleOutput() const { return oldStyleOutput_; }

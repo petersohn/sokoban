@@ -51,11 +51,11 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	CorridorChecker.$(OBJEXT) DumperFunctions.$(OBJEXT) \
 	HeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
-	Point.$(OBJEXT) Solver.$(OBJEXT) SolverFactories.$(OBJEXT) \
-	State.$(OBJEXT) Status.$(OBJEXT) StonePusher.$(OBJEXT) \
-	Table.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
-	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT) \
-	XDumper.$(OBJEXT) XML.$(OBJEXT)
+	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) Solver.$(OBJEXT) \
+	SolverFactories.$(OBJEXT) State.$(OBJEXT) Status.$(OBJEXT) \
+	StonePusher.$(OBJEXT) Table.$(OBJEXT) \
+	TableHeurCalculator.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
+	VisitedStates.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -171,6 +171,7 @@ sokoban_SOURCES = main.cpp \
 	Node.cpp \
 	NormalExpander.cpp \
 	Options.cpp \
+	OptionsHelper.cpp \
 	Point.cpp \
 	Solver.cpp \
 	SolverFactories.cpp \
@@ -277,6 +278,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NormalExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Options.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OptionsHelper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Point.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Solver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolverFactories.Po@am__quote@
