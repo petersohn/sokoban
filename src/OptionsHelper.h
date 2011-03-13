@@ -54,7 +54,7 @@ public:
 
 	void parseCommandLine(int argc, char **argv);
 	void parseConfigFile(const char *configFile);
-	void print() const;
+	void print(const char *programName) const;
 };
 
 
