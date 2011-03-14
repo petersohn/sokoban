@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
 	clock_t time0 = clock();
-	Solver s(createPrioQueue,
+	Solver s(boost::bind(createPrioQueueFromOptions, opts),
 			boost::bind(createExpanderFromOptions, opts, true),
 			boost::bind(createDumperFromOptions, opts));
 	std::deque<Node::Ptr> solution = s.solve(st);

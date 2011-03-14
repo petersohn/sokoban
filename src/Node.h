@@ -17,7 +17,6 @@ private:
 	Point d_;
 	int depth_;
 	int cost_;
-	int time_;
 
 	Node();
 	Node(const State &stones, const Point &from, const Point &d, Ptr ans,
@@ -65,6 +64,5 @@ std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);
 inline std::deque<Node::Ptr> pathToRoot(Node::Ptr node) {
 	return pathToBase(node, Node::Ptr());
 }
-
 
 #endif /* NODE_H_ */
