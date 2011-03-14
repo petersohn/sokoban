@@ -41,7 +41,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
 		if (owner_.visitedStates_ && owner_.visitedStates_->hasElem(vsi)) {
 			if (dumper_)
-				dumper_->reject(node, "not movable");
+				dumper_->reject(node, "already visited");
 			return;
 		}
 		if (pd != status.table().destination()) {
