@@ -691,7 +691,6 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_debug
-with_debug
 enable_dependency_tracking
 with_boost
 with_boost_libdir
@@ -1332,9 +1331,6 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --without-program_options
-                          Do not use the boost::program_options library.
-                          Default options will always be used.
   --with-boost[=ARG]      use Boost library from a standard location
                           (ARG=yes), from the specified location (ARG=<path>),
                           or disable it (ARG=no) [ARG=yes]
@@ -2624,6 +2620,7 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 
+
 # ===========================================================================
 #       http://www.gnu.org/software/autoconf-archive/ax_boost_base.html
 # ===========================================================================
@@ -2711,13 +2708,6 @@ else
   debug=no
 fi
 
-
-# Check whether --with-debug was given.
-if test "${with_debug+set}" = set; then :
-  withval=$with_debug; use_program_options=no
-fi
-
-
 # Set default compiler flags
 if test -z $CXXFLAGS; then
 	if test x${debug} = xyes; then
@@ -2726,7 +2716,6 @@ if test -z $CXXFLAGS; then
 		CXXFLAGS='-O2'
 	fi
 fi
-
 if test x${debug} != xyes; then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Debugging is NOT enabled." >&5
 $as_echo "$as_me: Debugging is NOT enabled." >&6;}
@@ -2735,7 +2724,6 @@ else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Debugging is enabled." >&5
 $as_echo "$as_me: Debugging is enabled." >&6;}
 fi
-
 # Checks for programs.
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3458,7 +3446,7 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-
+LDFLAGS="$LDFLAGS -lboost_program_options"
 
 # Boost headers
 
@@ -4619,6 +4607,7 @@ fi
 	LDFLAGS="$LDFLAGS_SAVED"
 	fi
 
+
 # STL headers
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5057,8 +5046,9 @@ fi
 
 
 # Configuration parameters
-
 ac_config_files="$ac_config_files Makefile src/Makefile"
+
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

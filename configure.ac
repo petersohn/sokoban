@@ -5,6 +5,7 @@ AC_PREREQ([2.65])
 AC_INIT([Sokoban], [0.2], [kangirigungi@gmail.com])
 AM_INIT_AUTOMAKE
 
+
 m4_include([ax_boost_base.m4])
 m4_include([ax_boost_program_options.m4])
 
@@ -17,11 +18,6 @@ AC_ARG_ENABLE([debug],
 		[Compile with debugging enabled.]),
 	[debug=${enableval}],
 	[debug=no])
-AC_ARG_WITH([debug],
-	AS_HELP_STRING([--without-program_options],
-		[Do not use the boost::program_options library. Default options will always be used.]),
-	[use_program_options=no], [])
-
 # Set default compiler flags
 if test -z $CXXFLAGS; then
 	if test x${debug} = xyes; then
@@ -30,14 +26,12 @@ if test -z $CXXFLAGS; then
 		CXXFLAGS='-O2'
 	fi
 fi
-
 if test x${debug} != xyes; then
 	AC_MSG_NOTICE(Debugging is NOT enabled.)
 	CPPFLAGS="$CPPFLAGS -DNDEBUG"
 else
 	AC_MSG_NOTICE(Debugging is enabled.)
 fi
-
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -50,12 +44,13 @@ AC_LANG_PUSH([C])
 #
 AC_LANG_POP([C])
 
-
+LDFLAGS="$LDFLAGS -lboost_program_options"
 
 # Boost headers
 AX_BOOST_BASE([1.42], [],
 	[AC_MSG_ERROR(You need the Boost libraries.)])
 AX_BOOST_PROGRAM_OPTIONS([1.42])
+
 # STL headers
 AC_CHECK_HEADERS([algorithm vector deque memory iostream], [],
 	[AC_MSG_ERROR(You need the STL libraries.)])
@@ -86,7 +81,8 @@ fi
 
 
 # Configuration parameters
-
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
+
+
 AC_OUTPUT
