@@ -48,8 +48,9 @@ public:
 
 template<class Ptr>
 class CompareByMethodPtr {
+public:
 	typedef boost::function<int(const typename Ptr::element_type&)> Fun;
-
+private:
 	Fun method_; // ha-ha
 	bool backwards_;
 public:

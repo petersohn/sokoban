@@ -10,12 +10,23 @@
 class Options {
 public:
 	enum DumpStyle {dsNone, dsText, dsXML};
+	enum CompareMethod {ctTime = 1, ctHeur, ctDepth};
+
+	struct Compare {
+		CompareMethod type;
+		bool reverse;
+		Compare(CompareMethod type, bool reverse):
+			type(type), reverse(reverse)
+		{}
+	};
+	typedef std::vector<Compare> CompareList;
 private:
 	DumpStyle dumpStyle_;
 	bool oldStyleOutput_;
 	bool useStonePusher_;
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
+	CompareList compare_;
 	std::string filename_;
 public:
 	Options(int argc, char **argv, const char *configFileName = NULL);
@@ -26,6 +37,7 @@ public:
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	const std::string &filename() const { return filename_; }
+	const CompareList& compare() const { return compare_; }
 };
 
 #endif /* OPTIONS_H_ */

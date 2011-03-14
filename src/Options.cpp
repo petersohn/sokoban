@@ -6,6 +6,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <vector>
+#include <cstdlib>
 
 
 Options::Options(int argc, char **argv, const char *configFileName):
@@ -40,7 +41,14 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Enable/disable checking if a stone is not stuck.\n");
 	oh.addBoolOption("corridor-checker", &useCorridorChecker_,
 			"Enable/disable checking for corridors.\n");
-
+	IndexedArgument cl;
+	cl.addElement("time", ctTime);
+	cl.addElement("heur", ctHeur);
+	cl.addElement("depth", ctDepth);
+	cl.allowMinus(true);
+	std::vector<int> compare;
+	oh.addIndexedListOption("compare,c", &compare, cl,
+			"The compare algorithm to use when choosing equal elements.");
 	try {
 		try {
 		if (configFileName != NULL)
@@ -61,6 +69,11 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		oh.parseConfigFile(filename_.c_str());
 		oh.parseCommandLine(argc, argv);
 		dumpStyle_ = static_cast<DumpStyle>(dumpStyle);
+		for (std::vector<int>::iterator it = compare.begin();
+				it != compare.end(); ++it) {
+			compare_.push_back(Compare(
+					static_cast<CompareMethod>(std::abs(*it)), *it < 0));
+		}
 	} catch (BadOptions &e) {
 		std::cerr << "Invalid command line argument. " <<
 				e.what() << std::endl;

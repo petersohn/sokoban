@@ -17,6 +17,7 @@ private:
 	Point d_;
 	int depth_;
 	int cost_;
+	int time_;
 
 	Node();
 	Node(const State &stones, const Point &from, const Point &d, Ptr ans,

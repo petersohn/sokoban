@@ -8,6 +8,7 @@
 #include "Options.h"
 
 NodeQueue::Ptr createPrioQueue();
+NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts);
 Expander::Ptr createExpander(bool log = false);
 Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log = false);
 Expander::Ptr createExpanderFromOptions(const Options &opts, bool log = true);

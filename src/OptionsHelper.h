@@ -22,14 +22,19 @@ class IndexedArgument {
 	typedef std::vector<EntryType> MapType;
 
 	MapType map_;
+	bool allowMinus_;
 public:
-	void addElement(const std::string name, int index);
-	int getElement(const std::string value) const;
+	IndexedArgument():allowMinus_(false) {}
+	void addElement(const std::string &name, int index);
+	int getElement(std::string value) const;
+	bool allowMinus() const { return allowMinus_; }
+	void allowMinus(bool value) { allowMinus_ = value; }
 };
 
 class OptionsHelper {
 	typedef std::pair<std::string, bool*> FlagType;
 	typedef boost::tuple<std::string, IndexedArgument, int*> IndexedType;
+	typedef boost::tuple<std::string, IndexedArgument, std::vector<int>* > IndexedListType;
 
 	boost::program_options::options_description commandLineDescription_;
 	boost::program_options::options_description configFileDescription_;
@@ -38,6 +43,7 @@ class OptionsHelper {
 	std::vector<FlagType> commandLineFlags_;
 	std::vector<FlagType> boolOptions_;
 	std::vector<IndexedType> indexedOptions_;
+	std::vector<IndexedListType> indexedListOptions_;
 
 	void doParse(const boost::program_options::variables_map &vm);
 	static std::string stripComma(const std::string &s);
@@ -46,6 +52,8 @@ public:
 	void addBoolOption(const std::string &name, bool *target, const char *description);
 	void addIndexedOption(const std::string &name, int *target, const IndexedArgument &arg,
 			const char *description);
+	void addIndexedListOption(const std::string &name, std::vector<int> *target,
+			const IndexedArgument &arg, const char *description);
 
 	template <class T>
 	void addArgumentOption(const std::string &name, T *target, const char *description);

@@ -26,6 +26,25 @@ NodeQueue::Ptr createPrioQueue()
 			funcs.begin(), funcs.end())));
 }
 
+NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
+{
+	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
+	// always use costFgv as first choice
+	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
+	for (Options::CompareList::const_iterator it = opts.compare().begin();
+			it != opts.compare().end(); ++it) {
+		CompareByMethodPtr<Node::Ptr>::Fun fun;
+		switch (it->type) {
+		case Options::ctHeur: fun = &Node::heur; break;
+		case Options::ctDepth: fun = &Node::depth; break;
+		}
+		if (!fun.empty())
+			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun, it->reverse));
+	}
+	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(
+			funcs.begin(), funcs.end())));
+}
+
 static HeurCalculator::Ptr createAdvancedHeurCalcularor()
 {
 	HeurCalculator::Ptr bhc(new BasicHeurCalculator);

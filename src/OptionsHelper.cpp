@@ -4,13 +4,22 @@
 #include <boost/format.hpp>
 
 
-void IndexedArgument::addElement(const std::string name, int index)
+void IndexedArgument::addElement(const std::string &name, int index)
 {
 	map_.push_back(EntryType(name, index));
 }
 
-int IndexedArgument::getElement(const std::string value) const
+int IndexedArgument::getElement(std::string value) const
 {
+	int mul = 1;
+	if (allowMinus_) {
+		char ch = value[0];
+		if (ch == '+' || ch == '-') {
+			if (ch == '-')
+				mul = -1;
+			value.erase(value.begin());
+		}
+	}
 	MapType map(map_);
 	MapType::iterator it = map.begin();
 	while (it != map.end())
@@ -22,7 +31,7 @@ int IndexedArgument::getElement(const std::string value) const
 		throw BadOptions("Ambiguous argument value: " + value);
 	if (map.size() == 0)
 		throw BadOptions("Unknown argument value: " + value);
-	return map.begin()->second;
+	return map.begin()->second * mul;
 }
 
 
@@ -57,6 +66,15 @@ void OptionsHelper::addIndexedOption(const std::string &name, int *target,
 	commandLineDescription_.add_options()(name.c_str(), value<std::string>(), description);
 	configFileDescription_.add_options()(name.c_str(), value<std::string>(), description);
 	indexedOptions_.push_back(IndexedType(stripComma(name), arg, target));
+}
+
+void OptionsHelper::addIndexedListOption(const std::string & name, std::vector<int> *target,
+		const IndexedArgument & arg, const char *description)
+{
+	using namespace boost::program_options;
+	commandLineDescription_.add_options()(name.c_str(), value<std::string>(), description);
+	configFileDescription_.add_options()(name.c_str(), value<std::string>(), description);
+	indexedListOptions_.push_back(IndexedListType(stripComma(name), arg, target));
 }
 
 void OptionsHelper::parseCommandLine(int argc, char **argv)
@@ -118,6 +136,20 @@ void OptionsHelper::doParse(const boost::program_options::variables_map &vm)
 		if (vm.count(it->get<0>()) == 0)
 			continue;
 		*(it->get<2>()) = it->get<1>().getElement(vm[it->get<0>()].as<std::string>());
+	}
+	for (std::vector<IndexedListType>::iterator it = indexedListOptions_.begin();
+			it != indexedListOptions_.end(); ++it) {
+		if (vm.count(it->get<0>()) == 0)
+			continue;
+		std::vector<std::string> sv;
+		boost::split(sv, vm[it->get<0>()].as<std::string>(),
+				boost::is_any_of(", "), boost::token_compress_on);
+		std::vector<int> *res = it->get<2>();
+		assert(res != NULL);
+		res->clear();
+		for (std::vector<std::string>::iterator its = sv.begin();
+				its != sv.end(); ++its)
+			res->push_back(it->get<1>().getElement(*its));
 	}
 }
 
