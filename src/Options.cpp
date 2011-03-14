@@ -53,12 +53,14 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			oh.print(argv[0]);
 			exit(0);
 		}
-		dumpStyle_ = static_cast<DumpStyle>(dumpStyle);
 		if (filename_.size() == 0) {
 			std::cerr << "No filename given." << std::endl;
 			oh.print(argv[0]);
 			exit(1);
 		}
+		oh.parseConfigFile(filename_.c_str());
+		oh.parseCommandLine(argc, argv);
+		dumpStyle_ = static_cast<DumpStyle>(dumpStyle);
 	} catch (BadOptions &e) {
 		std::cerr << "Invalid command line argument. " <<
 				e.what() << std::endl;

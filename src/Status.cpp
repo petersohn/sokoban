@@ -1,6 +1,7 @@
 #include "Status.h"
 #include "Node.h"
 #include <fstream>
+#include <sstream>
 
 int Status::copyCount(0);
 
@@ -105,19 +106,31 @@ void Status::set(const Node &node) {
 Status Status::loadFromFile(const char *filename) {
 	using namespace std;
 	ifstream file(filename, ifstream::in);
+	stringstream ss;
+	while (file.good()) {
+		string s;
+		getline(file, s);
+		if (s.size() == 0)
+			continue;
+		if (s[0] == '#') {
+			s.erase(s.begin());
+			ss << s << endl;
+		}
+	}
+	ss.seekg(0);
 	size_t height, width;
-	file >> height >> width;
+	ss >> height >> width;
 	string line;
-	getline(file, line); // dummy
+	getline(ss, line); // dummy
 	Table t(width, height);
 	State st;
 	Point startPos;
 	bool startPosOK = false, destinationOK = false;
 	int stoneNum = 0;
 	Point p;
-	while (file.good())
+	while (ss.good())
 	{
-		getline(file, line);
+		getline(ss, line);
 		for (p.x = 0; p.x < line.length() && p.x < width; p.x++)
 		{
 			cerr.width(3);
