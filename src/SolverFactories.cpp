@@ -65,7 +65,7 @@ Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log)
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
 	VisitedStateHolder::Ptr vs(new VisitedStates());
 	std::vector<Expander::Ptr> exs;
-	exs.push_back(Expander::Ptr(new StonePusher(vs, calc)));
+//	exs.push_back(Expander::Ptr(new StonePusher(vs, calc)));
 	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch, log)));
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
