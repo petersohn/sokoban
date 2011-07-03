@@ -199,7 +199,8 @@ static void floodFillIter(const Status &status, const Point & p, Array<bool> &re
 }
 
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,
-			Status::BorderType *border, MinMax *minmax) {
+			Status::BorderType *border, MinMax *minmax)
+{
 	result.fill(false);
 	if (minmax != NULL) {
 		minmax->minX = table.width();
@@ -211,7 +212,8 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 }
 
 
-inline bool shiftIter(Status &status, const Point &p) {
+inline bool shiftIter(Status &status, const Point &p)
+{
 	if (status.value(p) == ftFloor && status.reachable(p)) {
 		status.currentPos(p);
 		return true;
@@ -219,7 +221,8 @@ inline bool shiftIter(Status &status, const Point &p) {
 	return false;
 }
 
-void shiftCurrentPos(Status &status) {
+void shiftCurrentPos(Status &status)
+{
 	Point p = status.currentPos();
 	if (shiftIter(status, p+Point::p01))
 		return;
@@ -231,3 +234,37 @@ void shiftCurrentPos(Status &status) {
 		return;
 }
 
+std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state)
+{
+	Array<bool> kell(table->get().width(), table->get().height(), false);
+	int kellNum = 0;
+	Point pp;
+	for (pp.y = 0; pp.y < table->get().height(); pp.y++)
+		for (pp.x = 0; pp.x < table->get().width(); pp.x++)
+			if (!table->get().wall(pp) && !state[pp])
+			{
+				kell[pp] = true;
+				++kellNum;
+			} else
+				kell[pp] = false;
+	std::vector<Status::Ptr> result;
+	while (kellNum > 0) {
+		for (pp.y = 0; pp.y < table->get().height(); pp.y++)
+			for (pp.x = 0; pp.x < table->get().width(); pp.x++)
+				if (kell[pp])
+					goto ki;
+ki:
+		Status::Ptr status(new Status(table, state));
+		status->currentPos(pp);
+		for (pp.y = 0; pp.y < table->get().height(); pp.y++)
+			for (pp.x = 0; pp.x < table->get().width(); pp.x++) {
+				if (status->reachable(pp) && kell[pp])
+				{
+					kell[pp] = false;
+					--kellNum;
+				}
+			}
+		result.push_back(status);
+	}
+	return result;
+}

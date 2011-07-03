@@ -38,8 +38,7 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 	virtual int doCalculateStone(const Status &status, const Point &p);
 	virtual void init();
 
-	void initPartition(const Point &p, Array<bool> &kell,
-			int &kellNum);
+	void initPartitions(const Point &p);
 public:
 	AdvancedHeurCalculator(Solver::Ptr solver):
 		solver_(solver)

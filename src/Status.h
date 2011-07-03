@@ -67,6 +67,11 @@ public:
 			calculateReachable();
 		return arrayAt<bool>(reachable_, p, false);
 	}
+	const Array<bool>& reachableArray() {
+		if (!reachOK_)
+			calculateReachable();
+		return reachable_;
+	}
 	const BorderType& border() const {
 		if (!reachOK_)
 			calculateReachable();
@@ -87,5 +92,7 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			Status::BorderType *border = NULL, MinMax *minmax = NULL);
 
 void shiftCurrentPos(Status &status);
+
+std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state);
 
 #endif /* STATUS_H_ */
