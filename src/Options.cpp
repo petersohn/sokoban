@@ -29,10 +29,10 @@ Options::Options(int argc, char **argv, const char *configFileName):
 	ds.addElement("xml", dsXML);
 	int dumpStyle = 0;
 	oh.addIndexedOption("dump-style,d", &dumpStyle, ds,
-			"Generate dump file of the process. Dump generation slows down calculation."
+			"Generate dump file of the process. Dump generation slows down calculation.\n"
 			"Values can be:\n"
 			"    (n)one   \tDisable dumping.\n"
-			"    (t)ext   \tText dump format. Slows down dump generation moderately\n"
+			"    (t)ext   \tText dump format. Slows down dump generation moderately.\n"
 			"    (x)ml    \tXML dump format. Highly increases memory consumption"
 			" and calculation time.");
 	oh.addBoolOption("stone-pusher", &useStonePusher_,
@@ -51,8 +51,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"The compare algorithm to use when choosing equal elements.");
 	try {
 		try {
-		if (configFileName != NULL)
-			oh.parseConfigFile(configFileName);
+			if (configFileName != NULL)
+				oh.parseConfigFile(configFileName);
 		} catch (boost::program_options::reading_file &e) {
 			// DON'T CARE
 		}

@@ -13,6 +13,7 @@
 class Status {
 public:
 	typedef boost::shared_ptr<Status> Ptr;
+	typedef boost::shared_ptr<const Status> ConstPtr;
 	typedef std::deque<Point> BorderType;
 private:
 	FixedTable::Ptr table_;
