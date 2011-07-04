@@ -1,12 +1,14 @@
 sokoban_SOURCES = main.cpp \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
+		BlockListChecker.cpp \
 		Common.cpp \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
 		DumperFunctions.cpp \
 		HeurCalculator.cpp \
+		IndexedStatusList.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \

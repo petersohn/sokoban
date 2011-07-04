@@ -23,6 +23,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Produce output messages of (x1, y1) --> (x2, y2)"
 			" instead of (x1, y1) --> direction");
 	oh.addPositionalParameter("filename", &filename_, "Input file name");
+	oh.addArgumentOption<int>("blocklist", &blockListStones_, "The number of stones the blocklist contains. "
+			"The calculation time of the blocklist is exponential in this number.");
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);
 	ds.addElement("text", dsText);

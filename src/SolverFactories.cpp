@@ -8,6 +8,7 @@
 #include "ComplexChecker.h"
 #include "MovableChecker.h"
 #include "CorridorChecker.h"
+#include "BlockListChecker.h"
 #include "BasicHeurCalculator.h"
 #include "AdvancedHeurCalculator.h"
 #include "VisitedStates.h"
@@ -70,7 +71,7 @@ Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log)
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 
-Expander::Ptr createExpanderFromOptions(const Options &opts, bool log)
+static Expander::Ptr createExpanderFromOptions0(const Options &opts, bool log, bool blocklist)
 {
 	HeurCalculator::Ptr calc = createAdvancedHeurCalcularor();
 	std::vector<Checker::Ptr> chs;
@@ -78,6 +79,14 @@ Expander::Ptr createExpanderFromOptions(const Options &opts, bool log)
 		chs.push_back(Checker::Ptr(new MovableChecker(calc)));
 	if (opts.useCorridorChecker())
 		chs.push_back(Checker::Ptr(new CorridorChecker(calc)));
+	if (blocklist && opts.blockListStones() > 1) {
+		Solver::Ptr solver(new Solver(
+				boost::bind(&createPrioQueueFromOptions, opts),
+				boost::bind(createExpanderFromOptions0, opts, false, false)));
+		Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
+		Checker::Ptr bl(new BlockListChecker(solver, calc, ch, opts.blockListStones()));
+		chs.push_back(bl);
+	}
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
 	VisitedStateHolder::Ptr vs(new VisitedStates());
 	std::vector<Expander::Ptr> exs;
@@ -87,13 +96,18 @@ Expander::Ptr createExpanderFromOptions(const Options &opts, bool log)
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 
+Expander::Ptr createExpanderFromOptions(const Options &opts, bool log)
+{
+	return createExpanderFromOptions0(opts, log, true);
+}
+
 Dumper::Ptr createDumperFromOptions(const Options & opts)
 {
 	switch (opts.dumpStyle()) {
 	case Options::dsText:
 		return Dumper::Ptr(new TextDumper("dump.dump"));
 	case Options::dsXML:
-		return Dumper::Ptr(new TextDumper("dump.xml"));
+		return Dumper::Ptr(new XDumper("dump.xml"));
 	}
 	return Dumper::Ptr();
 }

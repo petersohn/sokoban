@@ -67,7 +67,7 @@ public:
 			calculateReachable();
 		return arrayAt<bool>(reachable_, p, false);
 	}
-	const Array<bool>& reachableArray() {
+	const Array<bool>& reachableArray() const {
 		if (!reachOK_)
 			calculateReachable();
 		return reachable_;

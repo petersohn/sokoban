@@ -15,12 +15,15 @@ class XDumper: public Dumper {
 	FixedTable::Ptr table_;
 	typedef std::map<Node::Ptr, boost::shared_ptr<xml::XMLElement> > MapType;
 	MapType elements_;
+	std::string filename_;
 
 	typedef boost::shared_ptr<xml::XMLElement> ElementPtr;
 
 	ElementPtr createDumpElement(const std::string &s);
+	ElementPtr getElement(Node::Ptr node);
+	ElementPtr doAddNode(Node::Ptr node);
 public:
-	XDumper();
+	XDumper(const char *filename);
 	virtual void initialStatus(const Status &status);
 	virtual void addNode(Node::Ptr node);
 	virtual void addToSolution(Node::Ptr node);
@@ -28,7 +31,7 @@ public:
 	virtual void push(Node::Ptr node);
 	virtual void reject(Node::Ptr node, const char *text);
 	void clear();
-	virtual void save(const char *filename) const;
+	virtual void save();
 	void dump() const;
 };
 

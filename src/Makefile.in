@@ -48,10 +48,11 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
-	BasicHeurCalculator.$(OBJEXT) Common.$(OBJEXT) \
-	ComplexChecker.$(OBJEXT) ComplexExpander.$(OBJEXT) \
-	CorridorChecker.$(OBJEXT) DumperFunctions.$(OBJEXT) \
-	HeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
+	BasicHeurCalculator.$(OBJEXT) BlockListChecker.$(OBJEXT) \
+	Common.$(OBJEXT) ComplexChecker.$(OBJEXT) \
+	ComplexExpander.$(OBJEXT) CorridorChecker.$(OBJEXT) \
+	DumperFunctions.$(OBJEXT) HeurCalculator.$(OBJEXT) \
+	IndexedStatusList.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
 	PrioNodeQueue.$(OBJEXT) Solver.$(OBJEXT) \
@@ -172,12 +173,14 @@ top_srcdir = @top_srcdir@
 sokoban_SOURCES = main.cpp \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
+		BlockListChecker.cpp \
 		Common.cpp \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
 		DumperFunctions.cpp \
 		HeurCalculator.cpp \
+		IndexedStatusList.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \
@@ -281,12 +284,14 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AdvancedHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BasicHeurCalculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BlockListChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CorridorChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DumperFunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HeurCalculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IndexedStatusList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MovableChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NormalExpander.Po@am__quote@

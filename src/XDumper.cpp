@@ -5,7 +5,9 @@
 #include <sstream>
 
 
-XDumper::XDumper() {
+XDumper::XDumper(const char *filename):
+		filename_(filename)
+{
 	clear();
 }
 
@@ -22,9 +24,16 @@ void XDumper::initialStatus(const Status &status) {
 	std::stringstream ss;
 	dumpStatus(ss, status);
 	elements_[Node::Ptr()]->children().push_back(createDumpElement(ss.str()));
+	table_ = status.tablePtr();
 }
 
-void XDumper::addNode(Node::Ptr node) {
+void  XDumper::addNode(Node::Ptr node)
+{
+	doAddNode(node);
+}
+
+XDumper::ElementPtr XDumper::doAddNode(Node::Ptr node)
+{
 	assert(node.get() != NULL);
 	ElementPtr elem(new xml::XMLElement());
 	elem->name("node");
@@ -38,22 +47,31 @@ void XDumper::addNode(Node::Ptr node) {
 	elem->attributes().insert(make_pair("costFgv", toStr(node->costFgv())));
 	elements_[node] = elem;
 	elements_[node->ansector()]->children().push_back(elem);
+	return elem;
+}
+
+XDumper::ElementPtr XDumper::getElement(Node::Ptr node)
+{
+	MapType::iterator it = elements_.find(node);
+	if (it == elements_.end())
+		return doAddNode(node);
+	return it->second;
 }
 
 void XDumper::addToSolution(Node::Ptr node) {
-	elements_[node]->attributes()["part-of-solution"] = "yes";
+	getElement(node)->attributes()["part-of-solution"] = "yes";
 }
 
 void XDumper::expand(Node::Ptr node) {
-	elements_[node]->attributes()["expanded"] = "normal";
+	getElement(node)->attributes()["expanded"] = "normal";
 }
 
 void XDumper::push(Node::Ptr node) {
-	elements_[node]->attributes()["expanded"] = "pushed";
+	getElement(node)->attributes()["expanded"] = "pushed";
 }
 
 void XDumper::reject(Node::Ptr node, const char *text) {
-	elements_[node]->attributes()["rejected"] = text;
+	getElement(node)->attributes()["rejected"] = text;
 }
 
 void XDumper::clear() {
@@ -63,11 +81,11 @@ void XDumper::clear() {
 	elements_.insert(std::make_pair(Node::Ptr(), root));
 }
 
-void XDumper::save(const char *filename) const {
+void XDumper::save() {
 	std::cerr << elements_.size() << std::endl;
 	MapType::const_iterator it = elements_.find(Node::Ptr());
 	assert(it != elements_.end());
-	saveXMLFile(it->second, filename, "dump.dtd");
+	saveXMLFile(it->second, filename_.c_str(), "dump.dtd");
 }
 
 void XDumper::dump() const {

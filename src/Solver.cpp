@@ -26,6 +26,7 @@ std::deque<Node::Ptr> Solver::solve(Status status)
 		for (std::deque<Node::Ptr>::iterator it = result.begin();
 				it != result.end(); ++it)
 			dumper->addToSolution(*it);
+		dumper->save();
 	}
 	return result;
 }
