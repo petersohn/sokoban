@@ -13,9 +13,11 @@ config.h*
 Makefile
 stamp-h1
 alocal.m4
+aclocal.m4
 config.log
 config.status
 .kdbgrc.*
 .deps
 *.cache
 sokoban
+out

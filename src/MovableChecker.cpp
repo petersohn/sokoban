@@ -26,14 +26,12 @@ bool InternalChecker::stoneMovable(const Status &status, const Point &p) {
 
 bool InternalChecker::isMovable(const Status &status, const Point & p,
 		int &count) {
-	if (status.value(p) == ftFloor)
-	{
-		if (calculator_->calculateStone(status, p) >= 0)
-			++count;
-		return true;
-	}
 	if (status.value(p) == ftWall)
 		return false;
+	if (calculator_->calculateStone(status, p) >= 0)
+			++count;
+	if (status.value(p) == ftFloor)
+		return true;
 	if (volt_.count(p) != 0)
 		return false;
 	return stoneMovable(status, p);
