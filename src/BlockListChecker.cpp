@@ -8,8 +8,6 @@ BlockListChecker::BlockListChecker(Solver::Ptr solver,
 		solver_(solver),
 		calculator_(calculator),
 		checker_(checker),
-		mc_(calculator),
-		cc_(calculator),
 		numStones_(numStones),
 		dump_("blocklist.dump")
 {
@@ -31,32 +29,18 @@ void BlockListChecker::initIter(Point p, int stones, const State &state)
 			}
 			bool ok2 = true;
 			BOOST_FOREACH(const Point &pp, state) {
-//				if (!checker_->check(*status, pp)) {
+				if (!checker_->check(*status, pp)) {
 //					dumpStatus(*status, pp, "Dropped: check failed");
-//					ok2 = false;
-//					break;
-//				}
-				if (!mc_.check(*status, pp)) {
-					dumpStatus(*status, pp, "Dropped: movable check failed");
-					ok2 = false;
-					break;
-				}
-				if (!cc_.check(*status, pp)) {
-					dumpStatus(*status, pp, "Dropped: corridor check failed");
 					ok2 = false;
 					break;
 				}
 				if (blockList_.hasSubStatus(*status, pp)) {
-					dumpStatus(*status, p, "Dropped: already on blocklist");
+//					dumpStatus(*status, p, "Dropped: already on blocklist");
 					ok2 = false;
 					break;
 				}
 			}
 			if (!ok2) {
-				continue;
-			}
-			if (blockList_.hasSubStatus(*status, p)) {
-//				dumpStatus(*status, p, "Dropped: already on blocklist");
 				continue;
 			}
 			if (stones == 0) {

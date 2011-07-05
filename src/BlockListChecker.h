@@ -2,8 +2,6 @@
 #define BLOCKLISTCHECKER_H
 
 #include "Checker.h"
-#include "MovableChecker.h"
-#include "CorridorChecker.h"
 #include "Solver.h"
 #include "HeurCalculator.h"
 #include "IndexedStatusList.h"
@@ -14,8 +12,6 @@ class BlockListChecker: public Checker {
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
-	MovableChecker mc_;
-	CorridorChecker cc_;
 	IndexedStatusList blockList_;
 	FixedTable::Ptr table_;
 	int numStones_;
