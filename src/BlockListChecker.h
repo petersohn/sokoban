@@ -15,6 +15,7 @@ class BlockListChecker: public Checker {
 	IndexedStatusList blockList_;
 	FixedTable::Ptr table_;
 	int numStones_;
+	int maxDistance_;
 	int solved_;
 	int iters_;
 	std::ofstream dump_;
@@ -43,7 +44,7 @@ class BlockListChecker: public Checker {
 	}
 public:
 	BlockListChecker(Solver::Ptr solver,
-			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones);
+			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance);
 	virtual bool check(const Status& status, const Point& p);
 	virtual const char* errorMessage();
 };

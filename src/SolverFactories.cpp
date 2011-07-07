@@ -84,7 +84,7 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, bool log, b
 				boost::bind(&createPrioQueueFromOptions, opts),
 				boost::bind(createExpanderFromOptions0, opts, false, false)));
 		Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
-		Checker::Ptr bl(new BlockListChecker(solver, calc, ch, opts.blockListStones()));
+		Checker::Ptr bl(new BlockListChecker(solver, calc, ch, opts.blockListStones(), opts.blockListDistance()));
 		chs.push_back(bl);
 	}
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));

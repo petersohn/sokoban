@@ -27,6 +27,7 @@ private:
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	int blockListStones_;
+	int blockListDistance_;
 	CompareList compare_;
 	std::string filename_;
 public:
@@ -38,6 +39,7 @@ public:
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	int blockListStones() const { return blockListStones_; }
+	int blockListDistance() const { return blockListDistance_; }
 	const std::string &filename() const { return filename_; }
 	const CompareList& compare() const { return compare_; }
 };

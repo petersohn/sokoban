@@ -2,23 +2,33 @@
 #include <algorithm>
 #include <boost/foreach.hpp>
 #include <iostream>
+#include <cstdlib>
 
-BlockListChecker::BlockListChecker(Solver::Ptr solver,
-		HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones):
+BlockListChecker::BlockListChecker(Solver::Ptr solver, HeurCalculator::Ptr calculator,
+		Checker::Ptr checker, int numStones, int maxDistance):
 		solver_(solver),
 		calculator_(calculator),
 		checker_(checker),
 		numStones_(numStones),
+		maxDistance_(maxDistance),
 		dump_("blocklist.dump")
 {
 }
 
 void BlockListChecker::initIter(Point p, int stones, const State &state)
 {
-	if (++iters_ % 500 == 0) {
+	if (++iters_ % 1000 == 0) {
 		std::cerr << iters_ << std::endl;
 	}
 	if (state.size() > 0) {
+		if (maxDistance_ > 0) {
+			BOOST_FOREACH(const Point &pp, state) {
+				if (std::abs(p.x - pp.x) > maxDistance_ ||
+						std::abs(p.y - pp.y) > maxDistance_) {
+					return;
+				}
+			}
+		}
 		std::vector<Status::Ptr> parts = getPartitions(table_, state);
 		bool ok = false;
 		BOOST_FOREACH(Status::Ptr status, parts) {

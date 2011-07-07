@@ -14,7 +14,9 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		oldStyleOutput_(false),
 		useStonePusher_(true),
 		useMovableChecker_(true),
-		useCorridorChecker_(true)
+		useCorridorChecker_(true),
+		blockListStones_(0),
+		blockListDistance_(0)
 {
 	OptionsHelper oh;
 	bool help = false;
@@ -23,8 +25,10 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Produce output messages of (x1, y1) --> (x2, y2)"
 			" instead of (x1, y1) --> direction");
 	oh.addPositionalParameter("filename", &filename_, "Input file name");
-	oh.addArgumentOption<int>("blocklist", &blockListStones_, "The number of stones the blocklist contains. "
+	oh.addArgumentOption<int>("blocklist-number", &blockListStones_, "The number of stones the blocklist contains. "
 			"The calculation time of the blocklist is exponential in this number.");
+	oh.addArgumentOption<int>("blocklist-distance", &blockListDistance_, "The maximum distance between stones in the "
+			"blocklist. 0 means no limit.");
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);
 	ds.addElement("text", dsText);
