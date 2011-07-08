@@ -13,11 +13,14 @@ private:
 	Node::Ptr node_;
 	std::auto_ptr<Status> status_;
 	HeurCalculator::Ptr calculator_;
+	NodeFactory::Ptr nodeFactory_;
 	bool pushStone(const Point &p);
 	bool pushStoneIter(const Point &p, const Point &d);
 public:
-	InternalPusher(HeurCalculator::Ptr calculator):
-		calculator_(calculator) {}
+	InternalPusher(HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
+		calculator_(calculator),
+		nodeFactory_(nodeFactory)
+	{}
 	Node::Ptr pushStones(const Status &st, Node::Ptr base);
 };
 
@@ -80,7 +83,7 @@ bool InternalPusher::pushStoneIter(const Point &p, const Point &d) {
 		std::cerr << "Whoopsie doopsie!";
 		return false; // should never happen
 	}
-	node_ = Node::create(status_->state(), p, d, node_, 1, calculator_->calculateStatus(*status_));
+	node_ = nodeFactory_->createNode(*status_, p, d, node_);
 	if (pushStone(pd))
 		return true;
 	node_ = node_->ansector();
@@ -91,9 +94,12 @@ bool InternalPusher::pushStoneIter(const Point &p, const Point &d) {
 }
 
 
-StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::Ptr calculator):
+StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates,
+		HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
 		visitedStates_(visitedStates),
-		calculator_(calculator)
+		calculator_(calculator),
+		nodeFactory_(nodeFactory)
+
 {
 	assert(calculator != NULL);
 }
@@ -101,7 +107,7 @@ StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::
 bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper)
 {
-	InternalPusher sp(calculator_);
+	InternalPusher sp(calculator_, nodeFactory_);
 	Node::Ptr node = sp.pushStones(status, base);
 	if (node.get() == NULL)
 		return false;

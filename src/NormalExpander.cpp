@@ -36,8 +36,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 		if (owner_.calculator_->calculateStone(status, pd) < 0 || !status.moveStone(p, pd)) {
 			return;
 		}
-		node = Node::create(status.state(), p, d,
-			base_, 1, owner_.calculator_->calculateStatus(status));
+		node = owner_.nodeFactory_->createNode(status, p, d, base_);
 		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
 		if (owner_.visitedStates_ && owner_.visitedStates_->hasElem(vsi)) {
 			if (dumper_)
@@ -91,10 +90,11 @@ void InternalExpander::expand()
 
 
 NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
-		Checker::Ptr ch, bool enableLog):
+		Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog):
 		visitedStates_(vs),
 		calculator_(calculator),
 		checker_(ch),
+		nodeFactory_(nodeFactory),
 		maxDepth_(0),
 		enableLog_(enableLog),
 		expandedNodes_(0)

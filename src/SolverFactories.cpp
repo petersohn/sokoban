@@ -15,6 +15,7 @@
 #include "CompareQueue.h"
 #include "TextDumper.h"
 #include "XDumper.h"
+#include "NodeFactory.h"
 #include <vector>
 #include <boost/bind.hpp>
 
@@ -38,6 +39,7 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 		switch (it->type) {
 		case Options::ctHeur: fun = &Node::heur; break;
 		case Options::ctDepth: fun = &Node::depth; break;
+		case Options::ctTime: fun = &Node::time; break;
 		}
 		if (!fun.empty())
 			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun, it->reverse));
@@ -65,9 +67,10 @@ Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log)
 	chs.push_back(Checker::Ptr(new CorridorChecker(calc)));
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
 	VisitedStateHolder::Ptr vs(new VisitedStates());
+	NodeFactory::Ptr nf(new NodeFactory(calc));
 	std::vector<Expander::Ptr> exs;
 //	exs.push_back(Expander::Ptr(new StonePusher(vs, calc)));
-	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch, log)));
+	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch, nf, log)));
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 
@@ -89,10 +92,11 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, bool log, b
 	}
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
 	VisitedStateHolder::Ptr vs(new VisitedStates());
+	NodeFactory::Ptr nf(new NodeFactory(calc));
 	std::vector<Expander::Ptr> exs;
 	if (opts.useStonePusher())
-		exs.push_back(Expander::Ptr(new StonePusher(vs, calc)));
-	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch, log)));
+		exs.push_back(Expander::Ptr(new StonePusher(vs, calc, nf)));
+	exs.push_back(Expander::Ptr(new NormalExpander(vs, calc, ch, nf, log)));
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 

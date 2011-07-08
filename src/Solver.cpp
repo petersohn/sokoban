@@ -9,7 +9,7 @@ std::deque<Node::Ptr> Solver::solve(Status status)
 	Expander::Ptr expander = expanderFactory_();
 	assert(expander.get() != NULL);
 	Dumper::Ptr dumper = dumperFactory_();
-	Node::Ptr nnn = Node::create();
+	Node::Ptr nnn = Node::Ptr(new Node);
 	Node::Ptr currentNode;
 	if (dumper)
 		dumper->initialStatus(status);

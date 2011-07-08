@@ -10,5 +10,4 @@
 #.....o...**
 #..oo*oo..y*
 #....*....**
-blocklist-number=2
-blocklist-distance=2
+compare=+time
