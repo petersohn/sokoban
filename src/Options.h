@@ -28,6 +28,8 @@ private:
 	bool useCorridorChecker_;
 	int blockListStones_;
 	int blockListDistance_;
+	int numThreads_;
+	int progressInterval_;
 	CompareList compare_;
 	std::string filename_;
 public:
@@ -40,6 +42,8 @@ public:
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	int blockListStones() const { return blockListStones_; }
 	int blockListDistance() const { return blockListDistance_; }
+	int numThreads() const { return numThreads_; }
+	int progressInterval() const { return progressInterval_; }
 	const std::string &filename() const { return filename_; }
 	const CompareList& compare() const { return compare_; }
 };

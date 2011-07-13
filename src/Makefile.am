@@ -24,6 +24,7 @@ sokoban_SOURCES = main.cpp \
 		Table.cpp \
 		TableHeurCalculator.cpp \
 		TextDumper.cpp \
+		ThreadPool.cpp \
 		VisitedStateInfo.cpp \
 		VisitedStates.cpp \
 		XDumper.cpp \

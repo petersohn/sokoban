@@ -16,7 +16,9 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		useMovableChecker_(true),
 		useCorridorChecker_(true),
 		blockListStones_(0),
-		blockListDistance_(0)
+		blockListDistance_(0),
+		numThreads_(1),
+		progressInterval_(1)
 {
 	OptionsHelper oh;
 	bool help = false;
@@ -29,6 +31,9 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"The calculation time of the blocklist is exponential in this number.");
 	oh.addArgumentOption<int>("blocklist-distance", &blockListDistance_, "The maximum distance between stones in the "
 			"blocklist. 0 means no limit.");
+	oh.addArgumentOption<int>("thread-num,t", &numThreads_, "The maximum number of threads to use.");
+	oh.addArgumentOption<int>("progress-interval", &progressInterval_, "The time between progress bar display when"
+			" counting the block list.");
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);
 	ds.addElement("text", dsText);

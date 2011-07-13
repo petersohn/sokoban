@@ -6,6 +6,7 @@
 #include "SolverFactories.h"
 #include "DumperFunctions.h"
 #include "State.h"
+#include "ThreadPool.h"
 #include <time.h>
 #include <iostream>
 #include <fstream>
@@ -26,6 +27,8 @@ int main(int argc, char** argv) {
 
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
+	ThreadPool::instance()->numThreads(opts.numThreads());
+	ThreadPool::instance()->start();
 	clock_t time0 = clock();
 	Solver s(boost::bind(createPrioQueueFromOptions, opts),
 			boost::bind(createExpanderFromOptions, opts, true),
@@ -34,6 +37,7 @@ int main(int argc, char** argv) {
 	clock_t time = clock() - time0;
 	cerr << "Length of solution: " << solution.size() << endl;
 	cerr << "Time:" << (double)time/CLOCKS_PER_SEC << endl;
+	ThreadPool::instance()->wait();
 	if (solution.size() == 0)
 		cerr << "No solution." << endl;
 	else

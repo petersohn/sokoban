@@ -9,6 +9,7 @@
 #include <queue>
 #include <boost/format.hpp>
 
+
 template<class T> class Array;
 class Point;
 class Status;

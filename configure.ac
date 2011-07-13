@@ -8,6 +8,9 @@ AM_INIT_AUTOMAKE
 
 m4_include([ax_boost_base.m4])
 m4_include([ax_boost_program_options.m4])
+m4_include([ax_boost_thread.m4])
+m4_include([ax_boost_system.m4])
+m4_include([ax_boost_date_time.m4])
 
 
 AC_CONFIG_SRCDIR([src/main.cpp])
@@ -44,12 +47,16 @@ AC_LANG_PUSH([C])
 #
 AC_LANG_POP([C])
 
-LDFLAGS="$LDFLAGS -lboost_program_options"
+LDFLAGS="$LDFLAGS -lboost_program_options -lboost_system -lboost_thread -lboost_date_time"
 
 # Boost headers
 AX_BOOST_BASE([1.42], [],
 	[AC_MSG_ERROR(You need the Boost libraries.)])
 AX_BOOST_PROGRAM_OPTIONS([1.42])
+AX_BOOST_SYSTEM([1.42])
+AX_BOOST_THREAD([1.42])
+AX_BOOST_DATE_TIME([1.42])
+
 
 # STL headers
 AC_CHECK_HEADERS([algorithm vector deque memory iostream], [],
