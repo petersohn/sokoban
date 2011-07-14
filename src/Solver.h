@@ -32,8 +32,8 @@ public:
 		expanderFactory_(ef),
 		dumperFactory_(df)
 	{}
-	std::deque<boost::shared_ptr<Node> > solve(Status status);
-	virtual ~Solver() {}
+	std::deque<boost::shared_ptr<Node> > solve(const Status &status);
+	~Solver() {}
 private:
 };
 
