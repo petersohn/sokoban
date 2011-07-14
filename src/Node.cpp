@@ -26,16 +26,6 @@ Node::Node(const State &stones, const Point &from, const Point &d, Ptr ans,
 	}
 }
 
-void Node::copy(const Node &other) {
-	state_ = other.state();
-	depth_ = other.depth();
-	cost_ = other.cost();
-	heur_ = other.heur();
-	from_ = other.from();
-	d_ = other.d();
-	// ansector is not copied
-}
-
 deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base)
 {
 	deque<Node::Ptr> result;

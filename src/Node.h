@@ -2,11 +2,12 @@
 #define NODE_H_
 
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 #include <deque>
 #include "State.h"
 #include "HeurCalculator.h"
 
-class Node {
+class Node: public boost::noncopyable {
 public:
 	typedef boost::shared_ptr<Node> Ptr;
 private:
@@ -18,23 +19,10 @@ private:
 	int depth_;
 	int cost_;
 	int time_;
-
-	void copy(const Node &other);
-	static Ptr createNew(Node *np) {
-		Ptr n(np);
-		return n;
-	}
 public:
 	Node();
 	Node(const State &stones, const Point &from, const Point &d, Ptr ans,
 			int c, int heur, int time);
-	Node(const Node &other) {
-		copy(other);
-	}
-	Node &operator=(const Node &other) {
-		copy(other);
-		return *this;
-	}
 	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
 	const Ptr& ansector() const { return ansector_; }
