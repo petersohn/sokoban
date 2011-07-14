@@ -5,16 +5,18 @@
 #include "State.h"
 #include "VisitedStateInfo.h"
 #include "Status.h"
+#include "Common.h"
 #include <boost/unordered_map.hpp>
-
 
 class VisitedStates: public VisitedStateHolder {
 	typedef boost::unordered_multimap<State, VisitedStateInfo, boost::hash<State> > VisitedStateSet;
 	VisitedStateSet visitedStates_;
+	mutable MutexType mtx_;
+	void push(const VisitedStateInput &elem);
+	bool hasElem(const VisitedStateInput &elem) const;
 public:
-	virtual void push(const VisitedStateInput &elem);
-	virtual bool hasElem(const VisitedStateInput &elem) const;
-	virtual size_t size();
+	virtual bool checkAndPush(const VisitedStateInput &elem);
+	virtual size_t size() const;
 };
 
 #endif /* VISITEDSTATES_H_ */

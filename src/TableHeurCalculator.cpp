@@ -1,12 +1,8 @@
 #include "TableHeurCalculator.h"
-#include "Status.h"
 
 int TableHeurCalculator::calculateStatus(const Status & status)
 {
-	if (table_ != status.tablePtr()) {
-		table_ = status.tablePtr();
-		init();
-	}
+	checkTable(status);
 	int result = 0;
 	for (State::const_iterator it = status.state().begin();
 			it != status.state().end(); ++it) {
@@ -20,10 +16,7 @@ int TableHeurCalculator::calculateStatus(const Status & status)
 
 int TableHeurCalculator::calculateStone(const Status &status, const Point &p)
 {
-	if (table_ != status.tablePtr()) {
-		table_ = status.tablePtr();
-		init();
-	}
+	checkTable(status);
 	return doCalculateStone(status, p);
 }
 

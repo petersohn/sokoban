@@ -8,7 +8,11 @@
 #include <deque>
 #include <queue>
 #include <boost/format.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
+typedef boost::mutex MutexType;
+typedef boost::shared_mutex SharedMutexType;
 
 template<class T> class Array;
 class Point;

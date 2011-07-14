@@ -2,6 +2,7 @@
 #include "Status.h"
 #include "Node.h"
 #include <iostream>
+#include <boost/thread/locks.hpp>
 
 class InternalExpander {
 	const Status &status_;
@@ -37,12 +38,6 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 			return;
 		}
 		node = owner_.nodeFactory_->createNode(status, p, d, base_);
-		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
-		if (owner_.visitedStates_ && owner_.visitedStates_->hasElem(vsi)) {
-			if (dumper_)
-				dumper_->reject(node, "already visited");
-			return;
-		}
 		if (pd != status.table().destination()) {
 			if (owner_.checker_ && !owner_.checker_->check(status, pd)) {
 				if (dumper_)
@@ -50,27 +45,34 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 				return;
 			}
 		}
+		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
+		if (owner_.visitedStates_ && !owner_.visitedStates_->checkAndPush(vsi)) {
+			if (dumper_)
+				dumper_->reject(node, "already visited");
+			return;
+		}
 		queue_.push(node);
 		if (dumper_)
 			dumper_->addNode(node);
-		if (owner_.visitedStates_)
-			owner_.visitedStates_->push(vsi);
-		owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
-		if (owner_.enableLog_ && ++owner_.expandedNodes_ % 10000 == 0)
-			std::cerr << boost::format(
-					"Expanded nodes: %d.\n"
-					"Nodes in queue: %d.\n"
-					"Maximum depth: %d.\n"
-					"Cost function: %d\n") %
-				owner_.expandedNodes_ % queue_.size() %
-				owner_.maxDepth_ % base_->costFgv() << std::endl;
+		{
+			boost::lock_guard<MutexType> lck(owner_.StatusMutex_);
+			owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
+			if (owner_.enableLog_ && ++owner_.expandedNodes_ % 10000 == 0)
+				std::cerr << boost::format(
+						"Expanded nodes: %d.\n"
+						"Nodes in queue: %d.\n"
+						"Maximum depth: %d.\n"
+						"Cost function: %d\n") %
+					owner_.expandedNodes_ % queue_.size() %
+					owner_.maxDepth_ % base_->costFgv() << std::endl;
+		}
 	}
 }
 
 void InternalExpander::expand()
 {
 	if (owner_.visitedStates_->size() == 0) {
-		owner_.visitedStates_->push(std::make_pair<const Status&, int>(status_,
+		owner_.visitedStates_->checkAndPush(std::make_pair<const Status&, int>(status_,
 				owner_.calculator_->calculateStatus(status_)));
 	}
 	if (dumper_ && base_)

@@ -10,7 +10,7 @@ public:
 	typedef boost::shared_ptr<Pusher> Ptr;
 	virtual ~Pusher() {}
 	virtual void push(const T&) = 0;
-	virtual size_t size() = 0;
+	virtual size_t size() const = 0;
 };
 
 template <class T>
@@ -19,14 +19,16 @@ public:
 	typedef boost::shared_ptr<Queue> Ptr;
 	virtual ~Queue() {}
 	virtual T pop() = 0;
+	virtual T peek() = 0;
 };
 
 template <class T>
-class Holder: public Pusher<T> {
+class Holder {
 public:
 	typedef boost::shared_ptr<Holder<T> > Ptr;
 	virtual ~Holder() {}
-	virtual bool hasElem(const T&) const = 0;
+	virtual bool checkAndPush(const T&) = 0;
+	virtual size_t size() const = 0;
 };
 
 class Node;
