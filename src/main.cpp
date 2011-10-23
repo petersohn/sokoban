@@ -19,11 +19,6 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
-//	cout << "Filename: " << opts.filename() << endl;
-//	cout << "Dump style: " << opts.dumpStyle() << endl;
-//	cout << "Use stone pusher: " << opts.useStonePusher() << endl;
-//	cout << "Use movable checker: " << opts.useMovableChecker() << endl;
-//	cout << "Use corridor checker: " << opts.useCorridorChecker() << endl;
 
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
@@ -32,7 +27,8 @@ int main(int argc, char** argv) {
 	clock_t time0 = clock();
 	Solver s(boost::bind(createPrioQueueFromOptions, opts),
 			boost::bind(createExpanderFromOptions, opts, true),
-			boost::bind(createDumperFromOptions, opts));
+			boost::bind(createDumperFromOptions, opts),
+			opts.numThreads() > 1);
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t time = clock() - time0;
 	cerr << "Length of solution: " << solution.size() << endl;

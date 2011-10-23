@@ -26,11 +26,14 @@ private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
 	DumperFactory dumperFactory_;
+	bool multithread_;
 public:
-	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory()):
+	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory(),
+			bool multithread = false):
 		queueFactory_(qf),
 		expanderFactory_(ef),
-		dumperFactory_(df)
+		dumperFactory_(df),
+		multithread_(multithread)
 	{}
 	std::deque<boost::shared_ptr<Node> > solve(const Status &status);
 	~Solver() {}
