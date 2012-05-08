@@ -2,9 +2,9 @@
 
 using namespace std;
 
-Node::Node():heur_(-1), depth_(0), cost_(0), time_(0)
-{
-}
+//Node::Node():heur_(-1), depth_(0), cost_(0), time_(0)
+//{
+//}
 
 Node::Node(const State &stones, const Point &from, const Point &d, Ptr ans,
 		int c, int heur, int time):

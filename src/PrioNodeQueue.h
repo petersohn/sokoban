@@ -17,7 +17,7 @@ public:
 	{}
 	virtual void push(const Node::Ptr &node);
 	virtual Node::Ptr pop();
-	virtual Node::Ptr peek();
+	virtual Node::Ptr peek() const;
 	virtual size_t size() const;
 };
 
@@ -38,7 +38,7 @@ Node::Ptr PrioNodeQueue<Compare>::pop() {
 }
 
 template <class Compare>
-Node::Ptr PrioNodeQueue<Compare>::peek() {
+Node::Ptr PrioNodeQueue<Compare>::peek() const {
 	boost::shared_lock<SharedMutexType> lck(mtx_);
 	if (queue_.empty())
 		return Node::Ptr();

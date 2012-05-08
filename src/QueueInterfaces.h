@@ -19,7 +19,7 @@ public:
 	typedef boost::shared_ptr<Queue> Ptr;
 	virtual ~Queue() {}
 	virtual T pop() = 0;
-	virtual T peek() = 0;
+	virtual T peek() const = 0;
 };
 
 template <class T>

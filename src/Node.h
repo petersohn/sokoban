@@ -20,7 +20,7 @@ private:
 	int cost_;
 	int time_;
 public:
-	Node();
+//	Node();
 	Node(const State &stones, const Point &from, const Point &d, Ptr ans,
 			int c, int heur, int time);
 	int heur() const { return heur_; }
