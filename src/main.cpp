@@ -14,9 +14,10 @@
 #include <deque>
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
-
+namespace pt = boost::posix_time;
 
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
@@ -25,15 +26,18 @@ int main(int argc, char** argv) {
 
 	ThreadPool::instance()->numThreads(opts.numThreads());
 	ThreadPool::instance()->start();
-	clock_t time0 = clock();
+	clock_t processorTime0 = clock();
+	pt::ptime realTime0 = pt::microsec_clock::local_time();
 	Solver s(boost::bind(createPrioQueueFromOptions, opts),
 			boost::bind(createExpanderFromOptions, opts, true),
 			boost::bind(createDumperFromOptions, opts),
 			opts.numThreads() > 1);
 	std::deque<Node::Ptr> solution = s.solve(st);
-	clock_t time = clock() - time0;
+	clock_t processorTime = clock() - processorTime0;
+	pt::time_duration realTime =  pt::microsec_clock::local_time() - realTime0;
 	cerr << "Length of solution: " << solution.size() << endl;
-	cerr << "Time:" << (double)time/CLOCKS_PER_SEC << endl;
+	cerr << "Processor Time:" << (double)processorTime/CLOCKS_PER_SEC << endl;
+	cerr << "Real Time:" << pt::to_simple_string(realTime) << endl;
 	ThreadPool::instance()->wait();
 	if (solution.size() == 0)
 		cerr << "No solution." << endl;

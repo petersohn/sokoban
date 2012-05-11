@@ -57,7 +57,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 		{
 			boost::lock_guard<MutexType> lck(owner_.StatusMutex_);
 			owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
-			if (owner_.enableLog_ && ++owner_.expandedNodes_ % 1 == 0)
+			if (owner_.enableLog_ && ++owner_.expandedNodes_ % 10000 == 0)
 				std::cerr << boost::format(
 						"Expanded nodes: %d.\n"
 						"Nodes in queue: %d.\n"

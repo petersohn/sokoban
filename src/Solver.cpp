@@ -30,12 +30,12 @@ public:
 		assert(expander.get() != NULL);
 	}
 
-	void expand(const Status &status, Node::Ptr node) {
+	void expand(Status status, Node::Ptr node) {
 		expander_->expand(status, node, *queue_, dumper_);
 		if (multithread_) {
 			boost::lock_guard<MutexType> lck(jobMutex_);
 			--jobs_;
-			std::cerr << "==== -JOB- ====" << std::endl;
+//			std::cerr << "==== -JOB- ====" << std::endl;
 			jobReady_.notify_one();
 		}
 	}
@@ -51,25 +51,25 @@ public:
 				{
 					boost::lock_guard<MutexType> lck(jobMutex_);
 					++jobs_;
-					std::cerr << "==== +JOB+ ====" << std::endl;
+//					std::cerr << "==== +JOB+ ====" << std::endl;
 				}
-				if (currentNode)
-					dumpNode(std::cerr, status.tablePtr(), *currentNode, "Expanding");
+//				if (currentNode)
+//					dumpNode(std::cerr, status.tablePtr(), *currentNode, "Expanding");
 				io_.post(boost::bind(&InternalSolver::expand, this,
-						boost::ref(status), currentNode));
+						status, currentNode));
 				currentNode = queue_->peek();
-				if (currentNode)
-					dumpNode(std::cerr, status.tablePtr(), *currentNode, "Considering");
+//				if (currentNode)
+//					dumpNode(std::cerr, status.tablePtr(), *currentNode, "Considering");
 				{
 					boost::unique_lock<MutexType> lck(jobMutex_);
 					while (jobs_ > 0 && (!currentNode ||
-							costFgv >= 0 && currentNode->costFgv() > costFgv)) {
-						std::cerr << "Waiting. J: " << jobs_ << "  C: " << costFgv << "  NC: " <<
-								(currentNode ? boost::lexical_cast<std::string>(currentNode->costFgv()) : "-") << std::endl;
+							(costFgv >= 0 && currentNode->costFgv() > costFgv))) {
+//						std::cerr << "Waiting. J: " << jobs_ << "  C: " << costFgv << "  NC: " <<
+//								(currentNode ? boost::lexical_cast<std::string>(currentNode->costFgv()) : "-") << std::endl;
 						jobReady_.wait(lck);
 						currentNode = queue_->peek();
 					}
-					std::cerr << "J: " << jobs_ << "  N: " << queue_->size() << std::endl;
+//					std::cerr << "J: " << jobs_ << "  N: " << queue_->size() << std::endl;
 					if (jobs_ == 0 && !currentNode) {
 						break;
 					}
@@ -88,6 +88,12 @@ public:
 				status.set(*currentNode);
 			}
 		} while (currentNode->heur() > 0);
+		{
+			boost::unique_lock<MutexType> lck(jobMutex_);
+			while (jobs_ > 0) {
+				jobReady_.wait(lck);
+			}
+		}
 		std::deque<Node::Ptr> result = pathToRoot(currentNode);
 		if (dumper_) {
 			BOOST_FOREACH(Node::Ptr node, result) {
