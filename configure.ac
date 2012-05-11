@@ -47,7 +47,7 @@ AC_LANG_PUSH([C])
 #
 AC_LANG_POP([C])
 
-LDFLAGS="$LDFLAGS -lboost_program_options -lboost_system -lboost_thread -lboost_date_time"
+LIBS="$LIBS -lboost_program_options -lboost_system -lboost_thread -lboost_date_time"
 
 # Boost headers
 AX_BOOST_BASE([1.42], [],
