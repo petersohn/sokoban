@@ -7,6 +7,7 @@
 #include "DumperFunctions.h"
 #include "State.h"
 #include "ThreadPool.h"
+#include "SolutionChecker.h"
 #include <time.h>
 #include <iostream>
 #include <fstream>
@@ -42,6 +43,11 @@ int main(int argc, char** argv) {
 		cerr << "No solution." << endl;
 	else
 	{
+		if (checkResult(st, solution)) {
+			cerr << "Solution OK." << endl;
+		} else {
+			cerr << "Solution bad." << endl;
+		}
 		std::ofstream dump("solution.dump", std::ios::out | std::ios::trunc);
 		for (std::deque<Node::Ptr>::iterator it = solution.begin();
 				it != solution.end(); ++it)
