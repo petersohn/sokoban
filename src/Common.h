@@ -42,11 +42,11 @@ public:
 enum FieldType { ftFloor, ftWall, ftStone };
 
 template<class T>
-std::deque<T> intersect(std::deque<T> l1, std::deque<T> l2)
+std::vector<T> intersect(const std::vector<T>& l1, const std::vector<T>& l2)
 {
 	std::priority_queue<T> q1(l1.begin(), l1.end());
 	std::priority_queue<T> q2(l2.begin(), l2.end());
-	std::deque<T> result;
+	std::vector<T> result;
 	T last;
 	bool start = true;
 	while (q1.size() > 0 && q2.size() > 0)
@@ -55,7 +55,7 @@ std::deque<T> intersect(std::deque<T> l1, std::deque<T> l2)
 		{
 			if (start || last != q1.top())
 			{
-				result.push_front(q1.top());
+				result.push_back(q1.top());
 				last = q1.top();
 				start = false;
 			}
