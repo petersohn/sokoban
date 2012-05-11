@@ -24,6 +24,7 @@ public:
 
 	State& operator=(const State &other) {
 		stones_ = other.stones_;
+		return *this;
 	}
 
 	bool operator==(const State &other) const {

@@ -113,8 +113,9 @@ Dumper::Ptr createDumperFromOptions(const Options & opts)
 		return Dumper::Ptr(new TextDumper("dump.dump"));
 	case Options::dsXML:
 		return Dumper::Ptr(new XDumper("dump.xml"));
+	default:
+		return Dumper::Ptr();
 	}
-	return Dumper::Ptr();
 }
 
 

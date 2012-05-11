@@ -14,7 +14,7 @@ class Status {
 public:
 	typedef boost::shared_ptr<Status> Ptr;
 	typedef boost::shared_ptr<const Status> ConstPtr;
-	typedef std::deque<Point> BorderType;
+	typedef std::vector<Point> BorderType;
 private:
 	FixedTable::Ptr table_;
 	State state_;
@@ -55,6 +55,7 @@ public:
 //		border_=other.border_;
 		reachOK_=false;
 		++copyCount;
+		return *this;
 	}
 
 	const Table& table() const { return table_->get(); }

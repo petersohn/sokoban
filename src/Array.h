@@ -18,8 +18,8 @@
 
 template<class T>
 class Array {
-	T *data;
 	size_t width_, height_, size_;
+	T *data;
 public:
 	typedef T valueType;
 

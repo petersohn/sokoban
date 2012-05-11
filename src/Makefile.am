@@ -16,6 +16,7 @@ sokoban_SOURCES = main.cpp \
 		OptionsHelper.cpp \
 		Point.cpp \
 		PrioNodeQueue.cpp \
+		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
 		State.cpp \
