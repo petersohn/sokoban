@@ -55,6 +55,7 @@ public:
 //		border_=other.border_;
 		reachOK_=false;
 		++copyCount;
+		return *this;
 	}
 
 	const Table& table() const { return table_->get(); }
