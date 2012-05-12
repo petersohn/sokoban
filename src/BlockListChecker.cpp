@@ -101,9 +101,10 @@ void BlockListChecker::doWork(Status::Ptr status)
 //	std::cerr << "Stopping thread: " << boost::this_thread::get_id() << std::endl;
 //}
 
-void BlockListChecker::init()
+void BlockListChecker::init(FixedTable::Ptr table)
 {
 	std::cerr << "Calculating block list..." << std::endl;
+	table_ = table;
 	blockList_.clear();
 	solved_ = 0;
 	iters_ = 0;
@@ -165,8 +166,7 @@ void BlockListChecker::progress()
 bool BlockListChecker::check(const Status& status, const Point& p)
 {
 	if (table_ != status.tablePtr()) {
-		table_ = status.tablePtr();
-		init();
+		init(status.tablePtr());
 	}
 	return !blockList_.hasSubStatus(status, p);
 }

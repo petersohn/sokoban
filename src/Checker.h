@@ -4,6 +4,7 @@
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include "Dumper.h"
+#include "Table.h"
 
 class Status;
 class Point;

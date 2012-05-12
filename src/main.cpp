@@ -24,14 +24,15 @@ int main(int argc, char** argv) {
 
 	Status st(Status::loadFromFile(opts.filename().c_str()));
 
+	cerr << "Number of threads: " << opts.numThreads() << endl;
 	ThreadPool::instance()->numThreads(opts.numThreads());
 	ThreadPool::instance()->start();
 	clock_t processorTime0 = clock();
 	pt::ptime realTime0 = pt::microsec_clock::local_time();
 	Solver s(boost::bind(createPrioQueueFromOptions, opts),
-			boost::bind(createExpanderFromOptions, opts, true),
+			boost::bind(createExpanderFromOptions, opts, st.tablePtr(), true),
 			boost::bind(createDumperFromOptions, opts),
-			opts.numThreads() > 1);
+			opts.numThreads() > 1 && opts.parallelOuterExpand());
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t processorTime = clock() - processorTime0;
 	pt::time_duration realTime =  pt::microsec_clock::local_time() - realTime0;

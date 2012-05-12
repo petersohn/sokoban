@@ -15,6 +15,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		useStonePusher_(true),
 		useMovableChecker_(true),
 		useCorridorChecker_(true),
+		parallelOuterExpand_(false),
 		blockListStones_(0),
 		blockListDistance_(0),
 		numThreads_(1),
@@ -32,6 +33,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 	oh.addArgumentOption<int>("blocklist-distance", &blockListDistance_, "The maximum distance between stones in the "
 			"blocklist. 0 means no limit.");
 	oh.addArgumentOption<int>("thread-num,t", &numThreads_, "The maximum number of threads to use.");
+	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_, "Expand several nodes in parallel. Only if --thread-num > 1.");
 	oh.addArgumentOption<int>("progress-interval", &progressInterval_, "The time between progress bar display when"
 			" counting the block list.");
 	IndexedArgument ds;

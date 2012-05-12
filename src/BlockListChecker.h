@@ -30,7 +30,6 @@ class BlockListChecker: public Checker {
 	boost::condition_variable done_;
 	boost::posix_time::time_duration progressInterval_;
 
-	void init();
 	void initIter(Point p, int stones, const State &state);
 	void doWork(Status::Ptr status);
 	void progress();
@@ -60,6 +59,7 @@ public:
 	BlockListChecker(Solver::Ptr solver,
 			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance,
 			int progressInterval);
+	void init(FixedTable::Ptr table);
 	virtual bool check(const Status& status, const Point& p);
 	virtual const char* errorMessage();
 };

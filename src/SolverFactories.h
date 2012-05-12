@@ -11,7 +11,7 @@ NodeQueue::Ptr createPrioQueue();
 NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts);
 Expander::Ptr createExpander(bool log = false);
 Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log = false);
-Expander::Ptr createExpanderFromOptions(const Options &opts, bool log = true);
+Expander::Ptr createExpanderFromOptions(const Options &opts, FixedTable::Ptr table, bool log = true);
 Dumper::Ptr createDumperFromOptions(const Options &opts);
 
 

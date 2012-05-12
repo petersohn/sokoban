@@ -11,18 +11,18 @@ class InternalSolver {
 	NodeQueue::Ptr queue_;
 	Expander::Ptr expander_;
 	Dumper::Ptr dumper_;
-	bool multithread_;
+	bool parallelOuterExpand_;
 	MutexType jobMutex_;
 	boost::condition_variable jobReady_;
 	int jobs_;
 	boost::asio::io_service &io_;
 public:
 	InternalSolver(NodeQueue::Ptr queue, Expander::Ptr expander, Dumper::Ptr dumper,
-			bool multithread):
+			bool parallelOuterExpand):
 		queue_(queue),
 		expander_(expander),
 		dumper_(dumper),
-		multithread_(multithread),
+		parallelOuterExpand_(parallelOuterExpand),
 		jobs_(0),
 		io_(ThreadPool::instance()->ioService())
 	{
@@ -32,10 +32,9 @@ public:
 
 	void expand(Status status, Node::Ptr node) {
 		expander_->expand(status, node, *queue_, dumper_);
-		if (multithread_) {
+		if (parallelOuterExpand_) {
 			boost::lock_guard<MutexType> lck(jobMutex_);
 			--jobs_;
-//			std::cerr << "==== -JOB- ====" << std::endl;
 			jobReady_.notify_one();
 		}
 	}
@@ -47,29 +46,21 @@ public:
 			dumper_->initialStatus(status);
 		do
 		{
-			if (multithread_) {
+			if (parallelOuterExpand_) {
 				{
 					boost::lock_guard<MutexType> lck(jobMutex_);
 					++jobs_;
-//					std::cerr << "==== +JOB+ ====" << std::endl;
 				}
-//				if (currentNode)
-//					dumpNode(std::cerr, status.tablePtr(), *currentNode, "Expanding");
 				io_.post(boost::bind(&InternalSolver::expand, this,
 						status, currentNode));
 				currentNode = queue_->peek();
-//				if (currentNode)
-//					dumpNode(std::cerr, status.tablePtr(), *currentNode, "Considering");
 				{
 					boost::unique_lock<MutexType> lck(jobMutex_);
 					while (jobs_ > 0 && (!currentNode ||
 							(costFgv >= 0 && currentNode->costFgv() > costFgv))) {
-//						std::cerr << "Waiting. J: " << jobs_ << "  C: " << costFgv << "  NC: " <<
-//								(currentNode ? boost::lexical_cast<std::string>(currentNode->costFgv()) : "-") << std::endl;
 						jobReady_.wait(lck);
 						currentNode = queue_->peek();
 					}
-//					std::cerr << "J: " << jobs_ << "  N: " << queue_->size() << std::endl;
 					if (jobs_ == 0 && !currentNode) {
 						break;
 					}

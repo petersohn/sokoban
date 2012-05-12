@@ -74,7 +74,7 @@ Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log)
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 
-static Expander::Ptr createExpanderFromOptions0(const Options &opts, bool log, bool blocklist)
+static Expander::Ptr createExpanderFromOptions0(const Options &opts, FixedTable::Ptr table, bool log, bool blocklist)
 {
 	HeurCalculator::Ptr calc = createAdvancedHeurCalcularor();
 	std::vector<Checker::Ptr> chs;
@@ -85,10 +85,11 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, bool log, b
 	if (blocklist && opts.blockListStones() > 1) {
 		Solver::Ptr solver(new Solver(
 				boost::bind(&createPrioQueueFromOptions, opts),
-				boost::bind(createExpanderFromOptions0, opts, false, false)));
+				boost::bind(createExpanderFromOptions0, opts, table, false, false)));
 		Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
-		Checker::Ptr bl(new BlockListChecker(solver, calc, ch, opts.blockListStones(), opts.blockListDistance(),
+		boost::shared_ptr<BlockListChecker> bl(new BlockListChecker(solver, calc, ch, opts.blockListStones(), opts.blockListDistance(),
 				opts.progressInterval()));
+		bl->init(table);
 		chs.push_back(bl);
 	}
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
@@ -101,9 +102,9 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, bool log, b
 	return Expander::Ptr(new ComplexExpander(exs.begin(), exs.end()));
 }
 
-Expander::Ptr createExpanderFromOptions(const Options &opts, bool log)
+Expander::Ptr createExpanderFromOptions(const Options &opts, FixedTable::Ptr table, bool log)
 {
-	return createExpanderFromOptions0(opts, log, true);
+	return createExpanderFromOptions0(opts, table, log, true);
 }
 
 Dumper::Ptr createDumperFromOptions(const Options & opts)
