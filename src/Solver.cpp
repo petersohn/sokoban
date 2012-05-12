@@ -3,6 +3,7 @@
 #include "Node.h"
 #include "ThreadPool.h"
 #include "DumperFunctions.h"
+#include "JobManager.h"
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>
@@ -12,12 +13,9 @@ class InternalSolver {
 	Expander::Ptr expander_;
 	Dumper::Ptr dumper_;
 	bool parallelOuterExpand_;
-	MutexType jobMutex_;
-	boost::condition_variable jobReady_;
-	int jobs_;
+	JobManager jobManager_;
 	int costFgv_;
-	Node::Ptr currentNode;
-	boost::asio::io_service &io_;
+	Node::Ptr currentNode_;
 public:
 	InternalSolver(NodeQueue::Ptr queue, Expander::Ptr expander, Dumper::Ptr dumper,
 			bool parallelOuterExpand):
@@ -25,66 +23,53 @@ public:
 		expander_(expander),
 		dumper_(dumper),
 		parallelOuterExpand_(parallelOuterExpand),
-		jobs_(0),
-		costFgv_(-1),
-		io_(ThreadPool::instance()->ioService())
+		jobManager_(ThreadPool::instance()->ioService()),
+		costFgv_(-1)
 	{
 		assert(queue.get() != NULL);
 		assert(expander.get() != NULL);
 	}
 
-	// status is deliberately copied because of thread safety
-	void doExpand(Status status, Node::Ptr node) {
-		expander_->expand(status, node, *queue_, dumper_);
-		if (parallelOuterExpand_) {
-			boost::lock_guard<MutexType> lck(jobMutex_);
-			--jobs_;
-			jobReady_.notify_one();
-		}
-	}
-
 	bool expandSerial(Status& status)
 	{
-		doExpand(status, currentNode);
-		currentNode = queue_->pop();
-		if (!currentNode) {
+		expander_->expand(status, currentNode_, *queue_, dumper_);
+		currentNode_ = queue_->pop();
+		if (!currentNode_) {
 			return false;
 		}
-		status.set(*currentNode);
+		status.set(*currentNode_);
 		return true;
+	}
+
+	void expandWithCopiedStatus(Status status)
+	{
+		expander_->expand(status, currentNode_, *queue_, dumper_);
+	}
+
+	bool needToWait()
+	{
+		Node::Ptr node = queue_->peek();
+		return !node || (costFgv_ >= 0 && node->costFgv() > costFgv_);
 	}
 
 	bool expandParallel(Status& status)
 	{
-		{
-			boost::lock_guard<MutexType> lck(jobMutex_);
-			++jobs_;
+		jobManager_.addJob(boost::bind(&InternalSolver::expandWithCopiedStatus, this, status));
+		int jobsRemaining = jobManager_.wait(boost::bind(&InternalSolver::needToWait, this));
+		if (jobsRemaining == 0 && !queue_->peek()) {
+			return false;
 		}
-		io_.post(boost::bind(&InternalSolver::doExpand, this,
-				status, currentNode));
-		currentNode = queue_->peek();
-		{
-			boost::unique_lock<MutexType> lck(jobMutex_);
-			while (jobs_ > 0 && (!currentNode ||
-					(costFgv_ >= 0 && currentNode->costFgv() > costFgv_))) {
-				jobReady_.wait(lck);
-				currentNode = queue_->peek();
-			}
-			if (jobs_ == 0 && !currentNode) {
-				return false;
-			}
-		}
-		currentNode = queue_->pop();
-		if (currentNode) {
-			status.set(*currentNode);
-			costFgv_ = currentNode->costFgv();
+		currentNode_ = queue_->pop();
+		if (currentNode_) {
+			status.set(*currentNode_);
+			costFgv_ = currentNode_->costFgv();
 		}
 		return true;
 	}
 
 	std::deque<Node::Ptr> solve(Status status) {
 		costFgv_ = -1;
-		currentNode.reset();
+		currentNode_.reset();
 		if (dumper_)
 			dumper_->initialStatus(status);
 		do
@@ -98,14 +83,11 @@ public:
 			if (!ok) {
 				break;
 			}
-		} while (currentNode->heur() > 0);
+		} while (currentNode_->heur() > 0);
 		if (parallelOuterExpand_) {
-			boost::unique_lock<MutexType> lck(jobMutex_);
-			while (jobs_ > 0) {
-				jobReady_.wait(lck);
-			}
+			jobManager_.waitAllJobs();
 		}
-		std::deque<Node::Ptr> result = pathToRoot(currentNode);
+		std::deque<Node::Ptr> result = pathToRoot(currentNode_);
 		if (dumper_) {
 			BOOST_FOREACH(Node::Ptr node, result) {
 				dumper_->addToSolution(node);
