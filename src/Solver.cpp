@@ -15,6 +15,8 @@ class InternalSolver {
 	MutexType jobMutex_;
 	boost::condition_variable jobReady_;
 	int jobs_;
+	int costFgv_;
+	Node::Ptr currentNode;
 	boost::asio::io_service &io_;
 public:
 	InternalSolver(NodeQueue::Ptr queue, Expander::Ptr expander, Dumper::Ptr dumper,
@@ -24,13 +26,15 @@ public:
 		dumper_(dumper),
 		parallelOuterExpand_(parallelOuterExpand),
 		jobs_(0),
+		costFgv_(-1),
 		io_(ThreadPool::instance()->ioService())
 	{
 		assert(queue.get() != NULL);
 		assert(expander.get() != NULL);
 	}
 
-	void expand(Status status, Node::Ptr node) {
+	// status is deliberately copied because of thread safety
+	void doExpand(Status status, Node::Ptr node) {
 		expander_->expand(status, node, *queue_, dumper_);
 		if (parallelOuterExpand_) {
 			boost::lock_guard<MutexType> lck(jobMutex_);
@@ -39,47 +43,63 @@ public:
 		}
 	}
 
+	bool expandSerial(Status& status)
+	{
+		doExpand(status, currentNode);
+		currentNode = queue_->pop();
+		if (!currentNode) {
+			return false;
+		}
+		status.set(*currentNode);
+		return true;
+	}
+
+	bool expandParallel(Status& status)
+	{
+		{
+			boost::lock_guard<MutexType> lck(jobMutex_);
+			++jobs_;
+		}
+		io_.post(boost::bind(&InternalSolver::doExpand, this,
+				status, currentNode));
+		currentNode = queue_->peek();
+		{
+			boost::unique_lock<MutexType> lck(jobMutex_);
+			while (jobs_ > 0 && (!currentNode ||
+					(costFgv_ >= 0 && currentNode->costFgv() > costFgv_))) {
+				jobReady_.wait(lck);
+				currentNode = queue_->peek();
+			}
+			if (jobs_ == 0 && !currentNode) {
+				return false;
+			}
+		}
+		currentNode = queue_->pop();
+		if (currentNode) {
+			status.set(*currentNode);
+			costFgv_ = currentNode->costFgv();
+		}
+		return true;
+	}
+
 	std::deque<Node::Ptr> solve(Status status) {
-		Node::Ptr currentNode;
-		int costFgv = -1;
+		costFgv_ = -1;
+		currentNode.reset();
 		if (dumper_)
 			dumper_->initialStatus(status);
 		do
 		{
+			bool ok;
 			if (parallelOuterExpand_) {
-				{
-					boost::lock_guard<MutexType> lck(jobMutex_);
-					++jobs_;
-				}
-				io_.post(boost::bind(&InternalSolver::expand, this,
-						status, currentNode));
-				currentNode = queue_->peek();
-				{
-					boost::unique_lock<MutexType> lck(jobMutex_);
-					while (jobs_ > 0 && (!currentNode ||
-							(costFgv >= 0 && currentNode->costFgv() > costFgv))) {
-						jobReady_.wait(lck);
-						currentNode = queue_->peek();
-					}
-					if (jobs_ == 0 && !currentNode) {
-						break;
-					}
-				}
-				currentNode = queue_->pop();
-				if (currentNode) {
-					status.set(*currentNode);
-					costFgv = currentNode->costFgv();
-				}
+				ok = expandParallel(status);
 			} else {
-				expand(status, currentNode);
-				currentNode = queue_->pop();
-				if (!currentNode) {
-					break;
-				}
-				status.set(*currentNode);
+				ok = expandSerial(status);
+			}
+			if (!ok) {
+				break;
 			}
 		} while (currentNode->heur() > 0);
-		{
+		if (parallelOuterExpand_) {
 			boost::unique_lock<MutexType> lck(jobMutex_);
 			while (jobs_ > 0) {
 				jobReady_.wait(lck);
