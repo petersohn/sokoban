@@ -16,25 +16,11 @@ m4_include([ax_boost_date_time.m4])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 
-AC_ARG_ENABLE([debug],
-	AS_HELP_STRING([--enable-debug],
-		[Compile with debugging enabled.]),
-	[debug=${enableval}],
-	[debug=no])
 # Set default compiler flags
 if test -z $CXXFLAGS; then
-	if test x${debug} = xyes; then
-		CXXFLAGS='-O0 -g'
-	else
-		CXXFLAGS='-O2'
-	fi
+	CXXFLAGS='-O2'
 fi
-if test x${debug} != xyes; then
-	AC_MSG_NOTICE(Debugging is NOT enabled.)
-	CPPFLAGS="$CPPFLAGS -DNDEBUG"
-else
-	AC_MSG_NOTICE(Debugging is enabled.)
-fi
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_INSTALL
