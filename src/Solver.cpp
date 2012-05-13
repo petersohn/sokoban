@@ -41,9 +41,9 @@ public:
 		return true;
 	}
 
-	void expandWithCopiedStatus(Status status)
+	void expandWithCopiedStatus(Status status, Node::Ptr currentNode)
 	{
-		expander_->expand(status, currentNode_, *queue_, dumper_);
+		expander_->expand(status, currentNode, *queue_, dumper_);
 	}
 
 	bool needToWait()
@@ -54,7 +54,7 @@ public:
 
 	bool expandParallel(Status& status)
 	{
-		jobManager_.addJob(boost::bind(&InternalSolver::expandWithCopiedStatus, this, status));
+		jobManager_.addJob(boost::bind(&InternalSolver::expandWithCopiedStatus, this, status, currentNode_));
 		int jobsRemaining = jobManager_.wait(boost::bind(&InternalSolver::needToWait, this));
 		if (jobsRemaining == 0 && !queue_->peek()) {
 			return false;
