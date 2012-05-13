@@ -705,7 +705,6 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_debug
 enable_dependency_tracking
 with_boost
 with_boost_libdir
@@ -1345,7 +1344,6 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug          Compile with debugging enabled.
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
 
@@ -2844,29 +2842,11 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 ac_config_headers="$ac_config_headers config.h"
 
 
-# Check whether --enable-debug was given.
-if test "${enable_debug+set}" = set; then :
-  enableval=$enable_debug; debug=${enableval}
-else
-  debug=no
-fi
-
 # Set default compiler flags
 if test -z $CXXFLAGS; then
-	if test x${debug} = xyes; then
-		CXXFLAGS='-O0 -g'
-	else
-		CXXFLAGS='-O2'
-	fi
+	CXXFLAGS='-O2'
 fi
-if test x${debug} != xyes; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Debugging is NOT enabled." >&5
-$as_echo "$as_me: Debugging is NOT enabled." >&6;}
-	CPPFLAGS="$CPPFLAGS -DNDEBUG"
-else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Debugging is enabled." >&5
-$as_echo "$as_me: Debugging is enabled." >&6;}
-fi
+
 # Checks for programs.
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
