@@ -99,7 +99,8 @@ NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr c
 		nodeFactory_(nodeFactory),
 		maxDepth_(0),
 		enableLog_(enableLog),
-		expandedNodes_(0)
+		expandedNodes_(0),
+		MUTEX_DECL(StatusMutex_)
 {
 	assert(calculator_.get() != NULL);
 	assert(checker_.get() != NULL);

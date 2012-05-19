@@ -1,6 +1,7 @@
 #ifndef JOBMANAGER_H_
 #define JOBMANAGER_H_
 
+#include "Mutexes.hpp"
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/asio/io_service.hpp>
@@ -9,7 +10,7 @@ class JobManager {
 	uint numJobs_;
 	boost::asio::io_service &io_;
 	MutexType jobMutex_;
-	boost::condition_variable jobReady_;
+	ConditionVariableType jobReady_;
 
 	friend class DoJob;
 	template<typename Func>
@@ -30,7 +31,8 @@ class JobManager {
 public:
 	JobManager(boost::asio::io_service &io):
 		numJobs_(0),
-		io_(io)
+		io_(io),
+		MUTEX_DECL(jobMutex_)
 	{
 	}
 

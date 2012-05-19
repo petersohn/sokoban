@@ -4,16 +4,18 @@
 #include "QueueInterfaces.h"
 #include "Node.h"
 #include "Common.h"
+#include "Mutexes.hpp"
 #include <queue>
 #include <boost/thread/locks.hpp>
 
 template <class Compare>
 class PrioNodeQueue: public NodeQueue {
 	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, Compare> queue_;
-	mutable SharedMutexType mtx_;
+	mutable SharedMutexType queueMutex_;
 public:
 	PrioNodeQueue(Compare compare):
-		queue_(compare)
+		queue_(compare),
+		MUTEX_DECL(queueMutex_)
 	{}
 	virtual void push(const Node::Ptr &node);
 	virtual Node::Ptr pop();
@@ -23,13 +25,13 @@ public:
 
 template <class Compare>
 void PrioNodeQueue<Compare>::push(const Node::Ptr &node) {
-	boost::lock_guard<SharedMutexType> lck(mtx_);
+	boost::lock_guard<SharedMutexType> lck(queueMutex_);
 	queue_.push(node);
 }
 
 template <class Compare>
 Node::Ptr PrioNodeQueue<Compare>::pop() {
-	boost::lock_guard<SharedMutexType> lck(mtx_);
+	boost::lock_guard<SharedMutexType> lck(queueMutex_);
 	if (queue_.empty())
 		return Node::Ptr();
 	Node::Ptr result = queue_.top();
@@ -39,7 +41,7 @@ Node::Ptr PrioNodeQueue<Compare>::pop() {
 
 template <class Compare>
 Node::Ptr PrioNodeQueue<Compare>::peek() const {
-	boost::shared_lock<SharedMutexType> lck(mtx_);
+	boost::shared_lock<SharedMutexType> lck(queueMutex_);
 	if (queue_.empty())
 		return Node::Ptr();
 	Node::Ptr result = queue_.top();
@@ -48,7 +50,7 @@ Node::Ptr PrioNodeQueue<Compare>::peek() const {
 
 template <class Compare>
 size_t PrioNodeQueue<Compare>::size() const {
-	boost::shared_lock<SharedMutexType> lck(mtx_);
+	boost::shared_lock<SharedMutexType> lck(queueMutex_);
 	return queue_.size();
 }
 

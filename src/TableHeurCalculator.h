@@ -5,23 +5,26 @@
 #include "Array.h"
 #include "Status.h"
 #include "Table.h"
+#include "Mutexes.hpp"
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread/locks.hpp>
 
 class TableHeurCalculator: public HeurCalculator {
 	FixedTable::Ptr table_;
-	MutexType mtx_;
+	MutexType heurMutex_;
 	virtual void init() = 0;
 	virtual int doCalculateStone(const Status &status, const Point &p) = 0;
 	void checkTable(const Status &status) {
-		boost::lock_guard<MutexType> lck(mtx_);
+		boost::lock_guard<MutexType> lck(heurMutex_);
 		if (table_ != status.tablePtr()) {
 			table_ = status.tablePtr();
 			init();
 		}
 	}
 public:
-	TableHeurCalculator() {}
+	TableHeurCalculator():
+		MUTEX_DECL(heurMutex_)
+	{}
 	virtual int calculateStatus(const Status &status);
 	virtual int calculateStone(const Status &status, const Point &p);
 

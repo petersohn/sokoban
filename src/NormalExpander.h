@@ -6,6 +6,7 @@
 #include "HeurCalculator.h"
 #include "Dumper.h"
 #include "NodeFactory.h"
+#include "Mutexes.hpp"
 
 class NormalExpander: public Expander {
 	friend class InternalExpander;

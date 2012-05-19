@@ -30,7 +30,7 @@ bool VisitedStates::hasElem(const VisitedStateInput &elem) const
 
 bool VisitedStates::checkAndPush(const VisitedStateInput &elem)
 {
-	boost::lock_guard<MutexType> lck(mtx_);
+	boost::lock_guard<MutexType> lck(visitedStatesMutex_);
 	if (hasElem(elem))
 		return false;
 	push(elem);
@@ -38,6 +38,6 @@ bool VisitedStates::checkAndPush(const VisitedStateInput &elem)
 }
 
 size_t VisitedStates::size() const {
-	boost::lock_guard<MutexType> lck(mtx_);
+	boost::lock_guard<MutexType> lck(visitedStatesMutex_);
 	return visitedStates_.size();
 }

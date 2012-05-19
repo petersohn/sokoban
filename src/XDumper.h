@@ -5,6 +5,7 @@
 #include "Node.h"
 #include "Table.h"
 #include "Dumper.h"
+#include "Mutexes.hpp"
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <memory>
@@ -16,7 +17,7 @@ class XDumper: public Dumper {
 	typedef std::map<Node::Ptr, boost::shared_ptr<xml::XMLElement> > MapType;
 	MapType elements_;
 	std::string filename_;
-	mutable MutexType mtx_;
+	mutable MutexType xdumperMutex_;
 
 	typedef boost::shared_ptr<xml::XMLElement> ElementPtr;
 
