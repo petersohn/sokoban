@@ -46,6 +46,7 @@ void Status::init() {
 
 void Status::calculateReachable() const {
 	reachable_.reset(width(), height(), false);
+	border_.clear();
 	floodFill(*this, currentPos_, reachable_, &border_);
 	reachOK_ = true;
 }
