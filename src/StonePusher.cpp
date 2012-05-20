@@ -11,33 +11,33 @@ public:
 	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
 private:
 	Node::Ptr node_;
-	std::auto_ptr<Status> status_;
 	HeurCalculator::Ptr calculator_;
 	NodeFactory::Ptr nodeFactory_;
-	bool pushStone(const Point &p);
-	bool pushStoneIter(const Point &p, const Point &d);
+	bool pushStone(const Status& status, const Point &p);
+	bool pushStoneIter(const Status& status, const Point &p, const Point &d);
 public:
 	InternalPusher(HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
 		calculator_(calculator),
 		nodeFactory_(nodeFactory)
 	{}
-	Node::Ptr pushStones(const Status &st, Node::Ptr base);
+	Node::Ptr pushStones(Status status, Node::Ptr base);
 };
 
-Node::Ptr InternalPusher::pushStones(const Status &st, Node::Ptr base) {
+Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
 	node_ = base;
-	status_.reset(new Status(st));
-	Array<bool> destReachable(st.width(), st.height(), false);
+	Array<bool> destReachable(status.width(), status.height(), false);
 	bool touched;
 	bool touched2 = false;
+
 	do {
 		touched = false;
 		Status::BorderType destBorder;
-		floodFill(*status_, status_->table().destination(), destReachable, &destBorder);
-		Status::BorderType border = intersect(status_->border(), destBorder);
+		floodFill(status, status.table().destination(), destReachable, &destBorder);
+		Status::BorderType border = intersect(status.border(), destBorder);
 		for (Status::BorderType::const_iterator it = border.begin();
 				it != border.end(); ++it) {
-			if (pushStone(*it)) {
+			if (pushStone(status, *it)) {
+				status.set(*node_);
 				touched = true;
 			}
 		}
@@ -47,49 +47,45 @@ Node::Ptr InternalPusher::pushStones(const Status &st, Node::Ptr base) {
 	return touched2 ? node_ : Node::Ptr();
 }
 
-bool InternalPusher::pushStone(const Point &p) {
-	if (p == status_->table().destination())
+bool InternalPusher::pushStone(const Status& status, const Point &p) {
+	if (p == status.table().destination())
 		return true;
 //	Point currentTmp(status.currentPos());
-	if (pushStoneIter(p, Point::p10))
+	if (pushStoneIter(status, p, Point::p10))
 		return true;
-	if (pushStoneIter(p, Point::pm10))
+	if (pushStoneIter(status, p, Point::pm10))
 		return true;
-	if (pushStoneIter(p, Point::p01))
+	if (pushStoneIter(status, p, Point::p01))
 		return true;
-	if (pushStoneIter(p, Point::p0m1))
+	if (pushStoneIter(status, p, Point::p0m1))
 		return true;
 	return false;
 }
 
-bool InternalPusher::pushStoneIter(const Point &p, const Point &d) {
+bool InternalPusher::pushStoneIter(const Status& status, const Point &p, const Point &d) {
 	Point pd = p+d;
 	Point pmd = p-d;
-	if (status_->value(pmd) != ftFloor || status_->value(pd) != ftFloor || !status_->reachable(pmd))
+	if (status.value(pmd) != ftFloor || status.value(pd) != ftFloor || !status.reachable(pmd))
 		return false;
-	if (status_->currentPos() == pd)
-		status_->shiftCurrentPos();
-	int heur1 = calculator_->calculateStone(*status_, p);
-	Point currentTmp(status_->currentPos());
-	status_->currentPos(p);
-	int heur2 = calculator_->calculateStone(*status_, pd);
-	if ((heur2 < 0 && (pd != status_->table().destination())) || heur2 >= heur1)
+	Status newStatus(status);
+	if (newStatus.currentPos() == pd)
+		newStatus.shiftCurrentPos();
+	int heur1 = calculator_->calculateStone(newStatus, p);
+	newStatus.currentPos(p);
+	int heur2 = calculator_->calculateStone(newStatus, pd);
+	if ((heur2 < 0 && (pd != newStatus.table().destination())) || heur2 >= heur1)
 	{
-		status_->currentPos(currentTmp);
 		return false;
 	}
-	if (!status_->moveStone(p, pd))
+	if (!newStatus.moveStone(p, pd))
 	{
 		std::cerr << "Whoopsie doopsie!";
 		return false; // should never happen
 	}
-	node_ = nodeFactory_->createNode(*status_, p, d, node_);
-	if (pushStone(pd))
+	node_ = nodeFactory_->createNode(newStatus, p, d, node_);
+	if (pushStone(newStatus, pd))
 		return true;
 	node_ = node_->ansector();
-	bool couldStepBack = status_->moveStone(pd, p);
-	assert(couldStepBack);
-	status_->currentPos(currentTmp);
 	return false;
 }
 
