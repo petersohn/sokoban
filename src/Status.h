@@ -27,6 +27,8 @@ private:
 
 	void calculateReachable() const;
 	void init();
+	bool shiftIter(const Point &p);
+
 public:
 	static int copyCount;
 	static Status loadFromFile(const char *filename);
@@ -87,12 +89,11 @@ public:
 	bool removeStone(const Point &p);
 	bool moveStone(const Point &from, const Point &to);
 	void set(const Node &node);
+	void shiftCurrentPos();
 };
 
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			Status::BorderType *border = NULL, MinMax *minmax = NULL);
-
-void shiftCurrentPos(Status &status);
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state);
 

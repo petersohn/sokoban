@@ -68,7 +68,7 @@ bool InternalPusher::pushStoneIter(const Point &p, const Point &d) {
 	if (status_->value(pmd) != ftFloor || status_->value(pd) != ftFloor || !status_->reachable(pmd))
 		return false;
 	if (status_->currentPos() == pd)
-		shiftCurrentPos(*status_);
+		status_->shiftCurrentPos();
 	int heur1 = calculator_->calculateStone(*status_, p);
 	Point currentTmp(status_->currentPos());
 	status_->currentPos(p);

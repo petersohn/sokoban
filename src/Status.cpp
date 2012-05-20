@@ -174,6 +174,27 @@ Status Status::loadFromFile(const char *filename) {
 	return result;
 }
 
+bool Status::shiftIter(const Point &p)
+{
+	if (value(p) == ftFloor && reachable(p)) {
+		currentPos_ = p;
+		return true;
+	}
+	return false;
+}
+
+void Status::shiftCurrentPos()
+{
+	Point p = currentPos();
+	if (shiftIter(p+Point::p01))
+		return;
+	if (shiftIter(p+Point::p0m1))
+		return;
+	if (shiftIter(p+Point::p10))
+		return;
+	if (shiftIter(p+Point::pm10))
+		return;
+}
 
 
 static void floodFillIter(const Status &status, const Point & p, Array<bool> &result,
@@ -209,29 +230,6 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 		minmax->maxY = 0;
 	}
 	floodFillIter(table, p0, result, border, minmax);
-}
-
-
-inline bool shiftIter(Status &status, const Point &p)
-{
-	if (status.value(p) == ftFloor && status.reachable(p)) {
-		status.currentPos(p);
-		return true;
-	}
-	return false;
-}
-
-void shiftCurrentPos(Status &status)
-{
-	Point p = status.currentPos();
-	if (shiftIter(status, p+Point::p01))
-		return;
-	if (shiftIter(status, p+Point::p0m1))
-		return;
-	if (shiftIter(status, p+Point::p10))
-		return;
-	if (shiftIter(status, p+Point::pm10))
-		return;
 }
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state)
