@@ -197,9 +197,25 @@ void Status::shiftCurrentPos()
 		return;
 }
 
+namespace {
 
-static void floodFillIter(const Status &status, const Point & p, Array<bool> &result,
-		Status::BorderType *border, MinMax *minmax)
+class FloodFillIter {
+	const Status& status;
+	Array<bool>& result;
+	Status::BorderType* border;
+	MinMax* minmax;
+public:
+	FloodFillIter(const Status &status, Array<bool> &result,
+		Status::BorderType *border, MinMax *minmax):
+			status(status),
+			result(result),
+			border(border),
+			minmax(minmax)
+	{}
+	void iter(const Point& p);
+};
+
+void FloodFillIter::iter(const Point & p)
 {
 	if (status.value(p) != ftFloor || result[p])
 	{
@@ -214,10 +230,12 @@ static void floodFillIter(const Status &status, const Point & p, Array<bool> &re
 		minmax->minY = std::min(minmax->minY, p.y);
 		minmax->maxY = std::max(minmax->maxY, p.y);
 	}
-	floodFillIter(status, p+Point::p10, result, border, minmax);
-	floodFillIter(status, p+Point::pm10, result, border, minmax);
-	floodFillIter(status, p+Point::p01, result, border, minmax);
-	floodFillIter(status, p+Point::p0m1, result, border, minmax);
+	iter(p+Point::p10);
+	iter(p+Point::pm10);
+	iter(p+Point::p01);
+	iter(p+Point::p0m1);
+}
+
 }
 
 void floodFill(const Status &table, const Point &p0, Array<bool> &result,
@@ -230,7 +248,7 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 		minmax->minY = table.height();
 		minmax->maxY = 0;
 	}
-	floodFillIter(table, p0, result, border, minmax);
+	FloodFillIter(table, result, border, minmax).iter(p0);
 }
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state)
