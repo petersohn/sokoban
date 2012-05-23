@@ -2,6 +2,7 @@
 #include "Node.h"
 #include <fstream>
 #include <sstream>
+#include <boost/foreach.hpp>
 
 int Status::copyCount(0);
 
@@ -36,12 +37,15 @@ Status::Status(FixedTable::Ptr table, const Node &node):
 
 void Status::init() {
 	Point p;
-	for (p.y = 0; p.y < table().height(); ++p.y)
+	for (p.y = 0; p.y < table().height(); ++p.y) {
 		for (p.x = 0; p.x < table().width(); ++p.x)  {
 			fields_[p] =
-					table().wall(p) ? ftWall :
-					state_[p] ? ftStone : ftFloor;
+					table().wall(p) ? ftWall : ftFloor;
 		}
+	}
+	for (State::const_iterator it = state_.begin(); it != state_.end(); ++it) {
+		fields_[*it] = ftStone;
+	}
 }
 
 void Status::calculateReachable() const {
