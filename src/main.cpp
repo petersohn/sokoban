@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 	Solver s(boost::bind(createPrioQueueFromOptions, opts),
 			boost::bind(createExpanderFromOptions, opts, st.tablePtr(), true),
 			boost::bind(createDumperFromOptions, opts),
-			opts.numThreads() > 1 && opts.parallelOuterExpand());
+			opts.parallelOuterExpand());
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t processorTime = clock() - processorTime0;
 	pt::time_duration realTime =  pt::microsec_clock::local_time() - realTime0;
