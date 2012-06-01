@@ -26,6 +26,7 @@ private:
 	bool useStonePusher_;
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
+	bool useAdvancedHeurCalculator_;
 	bool parallelOuterExpand_;
 	int blockListStones_;
 	int blockListDistance_;
@@ -41,6 +42,7 @@ public:
 	bool useStonePusher() const { return useStonePusher_; }
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
+	bool useAdvancedHeurCalculator() const { return useAdvancedHeurCalculator_; }
 	bool parallelOuterExpand() const { return parallelOuterExpand_; }
 	int blockListStones() const { return blockListStones_; }
 	int blockListDistance() const { return blockListDistance_; }

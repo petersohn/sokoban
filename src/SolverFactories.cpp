@@ -18,6 +18,7 @@
 #include "NodeFactory.h"
 #include <vector>
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 NodeQueue::Ptr createPrioQueue()
 {
@@ -76,7 +77,10 @@ Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log)
 
 static Expander::Ptr createExpanderFromOptions0(const Options &opts, FixedTable::Ptr table, bool log, bool blocklist)
 {
-	HeurCalculator::Ptr calc = createAdvancedHeurCalcularor();
+	HeurCalculator::Ptr calc =
+			opts.useAdvancedHeurCalculator() ?
+			createAdvancedHeurCalcularor() :
+			boost::make_shared<BasicHeurCalculator>();
 	std::vector<Checker::Ptr> chs;
 	if (opts.useMovableChecker())
 		chs.push_back(Checker::Ptr(new MovableChecker(calc)));
@@ -87,10 +91,11 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, FixedTable:
 				boost::bind(&createPrioQueueFromOptions, opts),
 				boost::bind(createExpanderFromOptions0, opts, table, false, false)));
 		Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
-		boost::shared_ptr<BlockListChecker> bl(new BlockListChecker(solver, calc, ch, opts.blockListStones(), opts.blockListDistance(),
+		boost::shared_ptr<BlockListChecker> blocklistChecker(
+				new BlockListChecker(solver, calc, ch, opts.blockListStones(), opts.blockListDistance(),
 				opts.progressInterval()));
-		bl->init(table);
-		chs.push_back(bl);
+		blocklistChecker->init(table);
+		chs.push_back(blocklistChecker);
 	}
 	Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
 	VisitedStateHolder::Ptr vs(new VisitedStates());

@@ -54,6 +54,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Enable/disable checking if a stone is not stuck.\n");
 	oh.addBoolOption("corridor-checker", &useCorridorChecker_,
 			"Enable/disable checking for corridors.\n");
+	oh.addBoolOption("advanced-heur-calculator", &useAdvancedHeurCalculator_,
+			"Enable/disable advanced heur calculator.\n");
 	IndexedArgument cl;
 	cl.addElement("time", ctTime);
 	cl.addElement("heur", ctHeur);
