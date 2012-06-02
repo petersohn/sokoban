@@ -1,4 +1,5 @@
 #include "Point.h"
+#include <boost/functional/hash.hpp>
 
 const Point Point::p10(1, 0);
 const Point Point::p01(0, 1);

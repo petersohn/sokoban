@@ -10,11 +10,9 @@
 #include <boost/unordered_map.hpp>
 
 class VisitedStates: public VisitedStateHolder {
-	typedef boost::unordered_multimap<State, VisitedStateInfo, boost::hash<State> > VisitedStateSet;
+	typedef boost::unordered_map<VisitedStateInfo, int, boost::hash<VisitedStateInfo> > VisitedStateSet;
 	VisitedStateSet visitedStates_;
 	mutable MutexType visitedStatesMutex_;
-	void push(const VisitedStateInput &elem);
-	bool hasElem(const VisitedStateInput &elem) const;
 public:
 	VisitedStates():
 		MUTEX_DECL(visitedStatesMutex_)

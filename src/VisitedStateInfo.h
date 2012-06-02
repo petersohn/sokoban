@@ -2,21 +2,28 @@
 #define VISITEDSTATE_H_
 
 #include "Point.h"
+#include "State.h"
 
 class Status;
 
 class VisitedStateInfo {
-	Point currentPos_;
-	int heur_;
+	State state_;
+	Point firstReachable_;
 public:
-	VisitedStateInfo(const Point &currentPos, int heur);
+	VisitedStateInfo(const Status& status);
 
-	const Point& currentPos() const { return currentPos_; }
-	int heur() const { return heur_; }
-
-	void currentPos(const Point &p) { currentPos_ = p; }
-	void heur(int h) { heur_ = h; }
+	const State& state() const { return state_; }
+	const Point& firstReachable() const { return firstReachable_; }
 };
+
+bool operator==(const VisitedStateInfo& left, const VisitedStateInfo& right);
+
+inline
+bool operator!=(const VisitedStateInfo& left, const VisitedStateInfo& right) {
+	return !(left == right);
+}
+
+size_t hash_value(const VisitedStateInfo& state);
 
 
 #endif /* VISITEDSTATE_H_ */
