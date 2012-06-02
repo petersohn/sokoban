@@ -1,4 +1,5 @@
 #include "VisitedStates.h"
+#include <boost/foreach.hpp>
 
 void VisitedStates::push(const VisitedStateInput &elem)
 {
@@ -10,19 +11,10 @@ bool VisitedStates::hasElem(const VisitedStateInput &elem) const
 {
 	const Status &status = elem.first;
 	int heur = elem.second;
-	std::pair<VisitedStateSet::const_iterator,
-		VisitedStateSet::const_iterator> found =
-			visitedStates_.equal_range(status.state());
-	if (found.first != found.second)
-	{
-		for (VisitedStateSet::const_iterator it = found.first;
-				it != found.second; ++it) {
-			if (status.reachable(it->second.currentPos())) {
-				if (heur < it->second.heur()) {
-				} else {
-					return true;
-				}
-			}
+	BOOST_FOREACH(const VisitedStateSet::value_type& value,
+			visitedStates_.equal_range(status.state())) {
+		if (status.reachable(value.second.currentPos()) && heur >= value.second.heur()) {
+			return true;
 		}
 	}
 	return false;
