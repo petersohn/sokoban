@@ -10,5 +10,5 @@
 #y.o..o....o..o.
 #*****.oo.o.****
 #*****......****
-blocklist-number=3
+blocklist-number=2
 blocklist-distance=3
