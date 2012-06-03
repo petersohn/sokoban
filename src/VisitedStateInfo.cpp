@@ -28,6 +28,7 @@ size_t hash_value(const VisitedStateInfo& state)
 	size_t seed = 0;
 	boost::hash_combine(seed, state.state());
 	boost::hash_combine(seed, state.firstReachable());
+	return seed;
 }
 
 
