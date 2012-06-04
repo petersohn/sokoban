@@ -3,7 +3,6 @@
 #include "OptionsHelper.h"
 #include <iostream>
 #include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <vector>
 #include <cstdlib>

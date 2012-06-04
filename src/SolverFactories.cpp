@@ -41,7 +41,7 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 		case Options::ctDepth: fun = &Node::depth; break;
 		case Options::ctTime: fun = &Node::time; break;
 		}
-		if (!fun.empty())
+		if (fun)
 			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun, it->reverse));
 	}
 	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(

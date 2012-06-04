@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <boost/range/iterator_range.hpp>
 #include "Status.h"
 #include "State.h"
 
@@ -17,7 +18,7 @@ private:
 
 	static bool statusEqual(const Status &st1, Status::ConstPtr st2);
 public:
-	typedef std::pair<IndexType::const_iterator, IndexType::const_iterator> RangeType;
+	typedef boost::iterator_range<IndexType::const_iterator> RangeType;
 
 	IndexedStatusList():size_(0) {}
 	IndexedStatusList(const IndexedStatusList &other)

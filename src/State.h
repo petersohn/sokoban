@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <memory>
 #include <assert.h>
+#include <functional>
 
 class State {
 	typedef std::unordered_set<Point> ContainerType;
@@ -49,6 +50,24 @@ public:
 	const_iterator end() const { return stones_->end(); }
 };
 
-size_t hash_value(const State &state);
+
+namespace std {
+
+template<>
+struct hash<State> {
+	size_t operator()(const State &state) const
+	{
+		size_t result = 0;
+		std::hash<Point> h;
+		for (State::const_iterator it = state.begin();
+				it != state.end(); ++it) {
+			result += h(*it); // the order of elements doesn't count
+		}
+		return std::hash<size_t>()(result);
+	}
+};
+
+}
+
 
 #endif /* STATE_H_ */

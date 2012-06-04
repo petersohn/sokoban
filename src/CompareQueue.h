@@ -9,7 +9,7 @@ template<class T>
 class CompareQueue {
 public:
 private:
-	typedef ComplexStrategy<boost::function<int(const T&, const T&)> > StrategyType;
+	typedef ComplexStrategy<std::function<int(const T&, const T&)> > StrategyType;
 	StrategyType strategy_;
 public:
 	typedef typename StrategyType::FuncType FuncType;
@@ -30,7 +30,7 @@ public:
 
 template<class T>
 class CompareByMethod {
-	typedef boost::function<int(const T&)> Fun;
+	typedef std::function<int(const T&)> Fun;
 
 	Fun method_; // ha-ha
 	bool backwards_;
@@ -49,7 +49,7 @@ public:
 template<class Ptr>
 class CompareByMethodPtr {
 public:
-	typedef boost::function<int(const typename Ptr::element_type&)> Fun;
+	typedef std::function<int(const typename Ptr::element_type&)> Fun;
 private:
 	Fun method_; // ha-ha
 	bool backwards_;

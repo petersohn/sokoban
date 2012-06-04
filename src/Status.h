@@ -6,7 +6,7 @@
 #include "Table.h"
 #include "State.h"
 #include <memory>
-#include <boost/function.hpp>
+#include <functional>
 #include <vector>
 #include <deque>
 
@@ -96,5 +96,8 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			Status::BorderType *border = NULL, MinMax *minmax = NULL);
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state);
+
+bool checkStatus(const Status& status);
+
 
 #endif /* STATUS_H_ */

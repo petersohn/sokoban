@@ -114,7 +114,7 @@ bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 			it != path.end(); ++it) {
 		st.set(**it);
 		if (visitedStates_) {
-			visitedStates_->checkAndPush(std::make_pair<const Status&, int>(st, (*it)->costFgv()));
+			visitedStates_->checkAndPush(std::pair<const Status&, int>(st, (*it)->costFgv()));
 		}
 		if (dumper) {
 			dumper->push(*it);

@@ -4,7 +4,6 @@
 #include <vector>
 #include <algorithm>
 #include <boost/format.hpp>
-#include <boost/foreach.hpp>
 #include <string>
 
 
@@ -72,7 +71,7 @@ void AdvancedHeurCalculator::initPartitions(const Point & p)
 	State state;
 	state.addStone(p);
 	std::vector<Status::Ptr> parts = getPartitions(tablePtr(), state);
-	BOOST_FOREACH(Status::Ptr status, parts) {
+	for (Status::Ptr status: parts) {
 		Partition part(table().width(), table().height());
 		part.pos = p;
 		part.heur = -1;

@@ -2,7 +2,7 @@
 #define OPTIONSHELPER_H_
 
 #include <boost/program_options.hpp>
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 #include <vector>
 #include <string>
 
@@ -33,8 +33,8 @@ public:
 
 class OptionsHelper {
 	typedef std::pair<std::string, bool*> FlagType;
-	typedef boost::tuple<std::string, IndexedArgument, int*> IndexedType;
-	typedef boost::tuple<std::string, IndexedArgument, std::vector<int>* > IndexedListType;
+	typedef std::tuple<std::string, IndexedArgument, int*> IndexedType;
+	typedef std::tuple<std::string, IndexedArgument, std::vector<int>* > IndexedListType;
 
 	boost::program_options::options_description commandLineDescription_;
 	boost::program_options::options_description configFileDescription_;

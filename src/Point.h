@@ -2,6 +2,7 @@
 #define POINT_H_
 
 #include <stddef.h>
+#include "Hash.h"
 
 class Point
 {
@@ -72,7 +73,21 @@ inline bool operator<(const Point &p1, const Point &p2) {
 	return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
 }
 
-size_t hash_value(const Point &p);
+namespace std {
+
+template<>
+struct hash<Point> {
+	size_t operator()(const Point &p) const
+	{
+		size_t seed = 0;
+		hash_combine(seed, p.x);
+		hash_combine(seed, p.y);
+		return seed;
+	}
+};
+
+
+}
 
 
 #endif /*POINT_H_*/

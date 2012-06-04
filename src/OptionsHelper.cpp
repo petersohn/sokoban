@@ -131,25 +131,23 @@ void OptionsHelper::parseConfigFile(const char *configFile)
 
 void OptionsHelper::doParse(const boost::program_options::variables_map &vm)
 {
-	for (std::vector<IndexedType>::iterator it = indexedOptions_.begin();
-			it != indexedOptions_.end(); ++it) {
-		if (vm.count(it->get<0>()) == 0)
+	for (IndexedType& value: indexedOptions_) {
+		if (vm.count(std::get<0>(value)) == 0)
 			continue;
-		*(it->get<2>()) = it->get<1>().getElement(vm[it->get<0>()].as<std::string>());
+		*(std::get<2>(value)) = std::get<1>(value).getElement(vm[std::get<0>(value)].as<std::string>());
 	}
-	for (std::vector<IndexedListType>::iterator it = indexedListOptions_.begin();
-			it != indexedListOptions_.end(); ++it) {
-		if (vm.count(it->get<0>()) == 0)
+	for (IndexedListType& value: indexedListOptions_) {
+		if (vm.count(std::get<0>(value)) == 0)
 			continue;
 		std::vector<std::string> sv;
-		boost::split(sv, vm[it->get<0>()].as<std::string>(),
+		boost::split(sv, vm[std::get<0>(value)].as<std::string>(),
 				boost::is_any_of(", "), boost::token_compress_on);
-		std::vector<int> *res = it->get<2>();
+		std::vector<int> *res = std::get<2>(value);
 		assert(res != NULL);
 		res->clear();
-		for (std::vector<std::string>::iterator its = sv.begin();
-				its != sv.end(); ++its)
-			res->push_back(it->get<1>().getElement(*its));
+		for (const std::string& str: sv) {
+			res->push_back(std::get<1>(value).getElement(str));
+		}
 	}
 }
 

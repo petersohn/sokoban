@@ -1,6 +1,5 @@
 #include "BlockListChecker.h"
 #include <algorithm>
-#include <boost/foreach.hpp>
 #include <functional>
 #include <iostream>
 #include <cstdlib>
@@ -22,7 +21,7 @@ void BlockListChecker::initIter(Point p, int stones, const State &state)
 {
 	if (state.size() > 0) {
 		if (maxDistance_ > 0) {
-			BOOST_FOREACH(const Point &pp, state) {
+			for (const Point &pp: state) {
 				if (std::abs(p.x - pp.x) > maxDistance_ ||
 						std::abs(p.y - pp.y) > maxDistance_) {
 					return;
@@ -31,14 +30,14 @@ void BlockListChecker::initIter(Point p, int stones, const State &state)
 		}
 		std::vector<Status::Ptr> parts = getPartitions(table_, state);
 		bool ok = false;
-		BOOST_FOREACH(Status::Ptr status, parts) {
+		for (Status::Ptr status: parts) {
 			int heur = calculator_->calculateStatus(*status);
 			if (heur < 0) {
 //				dumpStatus(*status, p, "Dropped: bad stone");
 				continue;
 			}
 			bool ok2 = true;
-			BOOST_FOREACH(const Point &pp, state) {
+			for (const Point &pp: state) {
 				if (!checker_->check(*status, pp)) {
 //					dumpStatus(*status, pp, "Dropped: check failed");
 					ok2 = false;

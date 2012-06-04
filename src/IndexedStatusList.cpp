@@ -1,6 +1,5 @@
 #include "IndexedStatusList.h"
 #include <algorithm>
-#include <boost/foreach.hpp>
 #include <functional>
 
 bool IndexedStatusList::statusEqual(const Status &st1, Status::ConstPtr st2)
@@ -11,7 +10,7 @@ bool IndexedStatusList::statusEqual(const Status &st1, Status::ConstPtr st2)
 void IndexedStatusList::copyFrom(const IndexedStatusList &other)
 {
 	index_.clear();
-	BOOST_FOREACH(IndexType::value_type elem, other.index_) {
+	for (IndexType::value_type elem: other.index_) {
 		Status::ConstPtr copied(new Status(*(elem.second)));
 		index_.insert(std::make_pair(elem.first, copied));
 	}
@@ -20,7 +19,7 @@ void IndexedStatusList::copyFrom(const IndexedStatusList &other)
 void IndexedStatusList::add(const Status &status)
 {
 	Status::ConstPtr val(new Status(status));
-	BOOST_FOREACH(const Point p, status.state()) {
+	for (const Point p: status.state()) {
 		index_.insert(std::make_pair(p, val));
 	}
 	++size_;
@@ -41,13 +40,13 @@ void IndexedStatusList::add(const Status &status)
 bool IndexedStatusList::hasSubStatus(const Status &status, const Point &p)  const
 {
 	RangeType range = index_.equal_range(p);
-	BOOST_FOREACH(IndexType::value_type val, range) {
+	for (const IndexType::value_type& val: range) {
 		Status::ConstPtr sub = val.second;
 		if (!sub->reachable(status.currentPos())) {
 			continue;
 		}
 		bool ok = true;
-		BOOST_FOREACH(const Point &pp, sub->state()) {
+		for (const Point &pp: sub->state()) {
 			if (!status.state()[pp]) {
 				ok = false;
 				break;

@@ -5,7 +5,7 @@
 #include "Expander.h"
 #include "Dumper.h"
 #include <deque>
-#include <boost/function.hpp>
+#include <functional>
 #include <memory>
 
 class Status;
@@ -19,9 +19,9 @@ public:
 class Solver {
 public:
 	typedef std::shared_ptr<Solver> Ptr;
-	typedef boost::function<NodeQueue::Ptr()> QueueFactory;
-	typedef boost::function<Expander::Ptr()> ExpanderFactory;
-	typedef boost::function<Dumper::Ptr()> DumperFactory;
+	typedef std::function<NodeQueue::Ptr()> QueueFactory;
+	typedef std::function<Expander::Ptr()> ExpanderFactory;
+	typedef std::function<Dumper::Ptr()> DumperFactory;
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;

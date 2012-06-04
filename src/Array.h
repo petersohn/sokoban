@@ -3,8 +3,8 @@
 
 #include "Point.h"
 #include <iostream>
-#include <functional>
-#include <boost/functional/hash.hpp>
+#include "Hash.h"
+#include <assert.h>
 
 //#define NDEBUG
 //
@@ -131,12 +131,12 @@ inline const T& arrayAt(const Array<T> &arr, const Point &p, const T& def) {
 
 namespace std {
 template<class T>
-struct Hash<Array<T> > {
-	size_t operator()(const Array<T>& arr)
+struct hash<Array<T>> {
+	size_t operator()(const Array<T>& arr) const
 	{
 		size_t seed = 0;
 		for (size_t i = 0; i < arr.size(); ++i) {
-			boost::hash_combine(seed, arr[i]);
+			hash_combine(seed, arr[i]);
 		}
 		return seed;
 	}

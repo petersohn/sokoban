@@ -1,7 +1,7 @@
 #include "VisitedStateInfo.h"
 #include "Status.h"
-#include <functional>
-#include <boost/functional/hash.hpp>
+#include <DumperFunctions.h>
+
 
 VisitedStateInfo::VisitedStateInfo(const Status& status):
 	state_(status.state())
@@ -15,6 +15,7 @@ VisitedStateInfo::VisitedStateInfo(const Status& status):
 			}
 		}
 	}
+	dumpStatus(std::cerr, status);
 	assert(false && "Impossible status");
 }
 
@@ -24,13 +25,7 @@ bool operator==(const VisitedStateInfo& left, const VisitedStateInfo& right)
 	return left.firstReachable() == right.firstReachable() && left.state() == right.state();
 }
 
-size_t hash_value(const VisitedStateInfo& state)
-{
-	size_t seed = 0;
-	boost::hash_combine(seed, state.state());
-	boost::hash_combine(seed, state.firstReachable());
-	return seed;
-}
+
 
 
 

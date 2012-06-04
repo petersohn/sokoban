@@ -45,7 +45,9 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 				return;
 			}
 		}
-		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
+		VisitedStateInput vsi(status, node->costFgv());
+//		assert(checkStatus(status));
+//		assert(checkStatus(vsi.first));
 		if (owner_.visitedStates_ && !owner_.visitedStates_->checkAndPush(vsi)) {
 			if (dumper_)
 				dumper_->reject(node, "already visited");
@@ -72,7 +74,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 void InternalExpander::expand()
 {
 	if (owner_.visitedStates_->size() == 0) {
-		owner_.visitedStates_->checkAndPush(std::make_pair<const Status&, int>(status_,
+		owner_.visitedStates_->checkAndPush(std::pair<const Status&, int>(status_,
 				owner_.calculator_->calculateStatus(status_)));
 	}
 	if (dumper_ && base_)

@@ -2,15 +2,15 @@
 #define COMPLEXSTRATEGY_H_
 
 #include <vector>
-#include <boost/function.hpp>
+#include <functional>
 
 template<class Fun>
 class ComplexStrategy {
 public:
 	typedef Fun FuncType;
 	typedef typename Fun::result_type result_type;
-	typedef boost::function<bool(const result_type&)> StopConditionType;
-	typedef boost::function<result_type(const result_type&, const result_type&)> AggregateType;
+	typedef std::function<bool(const result_type&)> StopConditionType;
+	typedef std::function<result_type(const result_type&, const result_type&)> AggregateType;
 private:
 	typedef std::vector<FuncType> FuncListType;
 	FuncListType funcs_;

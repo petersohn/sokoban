@@ -3,7 +3,7 @@
 
 #include "Common.h"
 #include "Array.h"
-#include "boost/shared_ptr.hpp"
+#include <memory>
 
 class Table {
 public:
