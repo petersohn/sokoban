@@ -51,12 +51,12 @@ void printError(const Node::Ptr& oldNode, const Node::Ptr& newNode, const Status
 
 }
 
-bool checkResult(const Status& initialStatus, const std::deque<boost::shared_ptr<Node> >& solution)
+bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<Node> >& solution)
 {
 	Status status(initialStatus);
 	bool result = true;
 	Node::Ptr oldNode;
-	BOOST_FOREACH(boost::shared_ptr<Node> node, solution) {
+	BOOST_FOREACH(std::shared_ptr<Node> node, solution) {
 		Point to(node->from() + node->d());
 		if (to != status.table().destination() && !node->state()[to]) {
 			result = false;

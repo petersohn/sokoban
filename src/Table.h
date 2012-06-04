@@ -7,7 +7,7 @@
 
 class Table {
 public:
-	typedef boost::shared_ptr<Table> Ptr;
+	typedef std::shared_ptr<Table> Ptr;
 private:
 	Array<bool> walls_;
 	Point destination_;

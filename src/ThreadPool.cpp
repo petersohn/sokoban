@@ -1,5 +1,5 @@
 #include "ThreadPool.h"
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/foreach.hpp>
 #include <boost/exception/all.hpp>
 #include <iostream>
@@ -43,7 +43,7 @@ void ThreadPool::start()
 		work_.reset(new boost::asio::io_service::work(ioService_));
 		threads_.reserve(numThreads_);
 		while (threads_.size() < numThreads_) {
-			ThreadPtr t(new boost::thread(boost::bind(&ThreadPool::runInThread, this)));
+			ThreadPtr t(new boost::thread(std::bind(&ThreadPool::runInThread, this)));
 			threads_.push_back(t);
 		}
 		isRunning_ = true;

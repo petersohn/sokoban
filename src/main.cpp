@@ -13,7 +13,7 @@
 #include <fstream>
 #include <deque>
 #include <boost/format.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
@@ -29,9 +29,9 @@ int main(int argc, char** argv) {
 	ThreadPool::instance()->start();
 	clock_t processorTime0 = clock();
 	pt::ptime realTime0 = pt::microsec_clock::local_time();
-	Solver s(boost::bind(createPrioQueueFromOptions, opts),
-			boost::bind(createExpanderFromOptions, opts, st.tablePtr(), true),
-			boost::bind(createDumperFromOptions, opts),
+	Solver s(std::bind(createPrioQueueFromOptions, opts),
+			std::bind(createExpanderFromOptions, opts, st.tablePtr(), true),
+			std::bind(createDumperFromOptions, opts),
 			opts.parallelOuterExpand());
 	std::deque<Node::Ptr> solution = s.solve(st);
 	clock_t processorTime = clock() - processorTime0;

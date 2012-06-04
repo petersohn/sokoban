@@ -6,7 +6,7 @@
 #include "Dumper.h"
 #include <deque>
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class Status;
 class Node;
@@ -18,7 +18,7 @@ public:
 
 class Solver {
 public:
-	typedef boost::shared_ptr<Solver> Ptr;
+	typedef std::shared_ptr<Solver> Ptr;
 	typedef boost::function<NodeQueue::Ptr()> QueueFactory;
 	typedef boost::function<Expander::Ptr()> ExpanderFactory;
 	typedef boost::function<Dumper::Ptr()> DumperFactory;
@@ -35,7 +35,7 @@ public:
 		dumperFactory_(df),
 		multithread_(multithread)
 	{}
-	std::deque<boost::shared_ptr<Node> > solve(const Status &status);
+	std::deque<std::shared_ptr<Node> > solve(const Status &status);
 	~Solver() {}
 private:
 };

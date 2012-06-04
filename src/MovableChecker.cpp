@@ -1,9 +1,9 @@
 #include "MovableChecker.h"
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 class InternalChecker {
 	HeurCalculator::Ptr calculator_;
-	boost::unordered_set<Point> volt_;
+	std::unordered_set<Point> volt_;
 	bool isMovable(const Status &status, const Point & p,
 		int &count);
 public:

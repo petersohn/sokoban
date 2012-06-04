@@ -5,15 +5,15 @@
 #include "Array.h"
 #include "Table.h"
 #include "State.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/function.hpp>
 #include <vector>
 #include <deque>
 
 class Status {
 public:
-	typedef boost::shared_ptr<Status> Ptr;
-	typedef boost::shared_ptr<const Status> ConstPtr;
+	typedef std::shared_ptr<Status> Ptr;
+	typedef std::shared_ptr<const Status> ConstPtr;
 	typedef std::vector<Point> BorderType;
 private:
 	FixedTable::Ptr table_;

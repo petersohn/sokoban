@@ -2,13 +2,13 @@
 #define STATE_H_
 
 #include "Point.h"
-#include <boost/unordered_set.hpp>
-#include <boost/shared_ptr.hpp>
+#include <unordered_set>
+#include <memory>
 #include <assert.h>
 
 class State {
-	typedef boost::unordered_set<Point> ContainerType;
-	typedef boost::shared_ptr<ContainerType> ContainerPtr;
+	typedef std::unordered_set<Point> ContainerType;
+	typedef std::shared_ptr<ContainerType> ContainerPtr;
 	ContainerPtr stones_;
 	void modify() {
 		if (!stones_.unique())

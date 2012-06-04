@@ -2,7 +2,7 @@
 #define COMMON_H_
 
 #include <exception>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <iostream>
 #include <string>
 #include <deque>
@@ -33,7 +33,7 @@ template<class T>
 class FixedObject {
 	T value_;
 public:
-	typedef boost::shared_ptr<const FixedObject<T> > Ptr;
+	typedef std::shared_ptr<const FixedObject<T> > Ptr;
 	typedef T value_type;
 
 	FixedObject(const T &val): value_(val) {}

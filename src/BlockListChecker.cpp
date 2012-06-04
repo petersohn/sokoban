@@ -1,7 +1,7 @@
 #include "BlockListChecker.h"
 #include <algorithm>
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <iostream>
 #include <cstdlib>
 
@@ -57,7 +57,7 @@ void BlockListChecker::initIter(Point p, int stones, const State &state)
 				if (++iters_ % 100 == 0) {
 					std::cerr << ".";
 				}
-				ioService_.post(boost::bind(&BlockListChecker::doWork, this, status));
+				ioService_.post(std::bind(&BlockListChecker::doWork, this, status));
 			} else {
 				ok = true;
 			}
@@ -115,7 +115,7 @@ void BlockListChecker::init(FixedTable::Ptr table)
 		solved_ = iters_ = 0;
 		initIter(p, n, tmp);
 		std::cerr << std::endl;
-		boost::thread t(boost::bind(&BlockListChecker::progress, this));
+		boost::thread t(std::bind(&BlockListChecker::progress, this));
 		{
 			boost::unique_lock<MutexType> lck(iterMutex_);
 			while (solved_ < iters_) {

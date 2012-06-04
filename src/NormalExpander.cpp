@@ -11,7 +11,7 @@ class InternalExpander {
 	Dumper::Ptr dumper_;
 	NormalExpander &owner_;
 public:
-	InternalExpander(const Status & status, boost::shared_ptr<Node> base,
+	InternalExpander(const Status & status, std::shared_ptr<Node> base,
 			NodePusher & queue, Dumper::Ptr dumper, NormalExpander &owner):
 				status_(status),
 				base_(base),
@@ -112,7 +112,7 @@ NormalExpander::~NormalExpander()
 		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
 }
 
-bool NormalExpander::expand(const Status &status, boost::shared_ptr<Node> base,
+bool NormalExpander::expand(const Status &status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper) {
 	InternalExpander exp(status, base, queue, dumper, *this);
 	exp.expand();

@@ -54,8 +54,8 @@ public:
 
 	bool expandParallel(Status& status)
 	{
-		jobManager_.addJob(boost::bind(&InternalSolver::expandWithCopiedStatus, this, status, currentNode_));
-		int jobsRemaining = jobManager_.wait(boost::bind(&InternalSolver::needToWait, this));
+		jobManager_.addJob(std::bind(&InternalSolver::expandWithCopiedStatus, this, status, currentNode_));
+		int jobsRemaining = jobManager_.wait(std::bind(&InternalSolver::needToWait, this));
 		if (jobsRemaining == 0 && !queue_->peek()) {
 			return false;
 		}

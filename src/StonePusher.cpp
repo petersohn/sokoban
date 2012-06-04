@@ -100,7 +100,7 @@ StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates,
 	assert(calculator != NULL);
 }
 
-bool StonePusher::expand(const Status &status, boost::shared_ptr<Node> base,
+bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper)
 {
 	InternalPusher sp(calculator_, nodeFactory_);

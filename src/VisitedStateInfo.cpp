@@ -1,5 +1,6 @@
 #include "VisitedStateInfo.h"
 #include "Status.h"
+#include <functional>
 #include <boost/functional/hash.hpp>
 
 VisitedStateInfo::VisitedStateInfo(const Status& status):

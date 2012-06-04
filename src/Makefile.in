@@ -213,6 +213,7 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
+AM_CXXFLAGS = -std=c++0x
 all: all-am
 
 .SUFFIXES:

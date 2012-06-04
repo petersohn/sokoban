@@ -1,7 +1,7 @@
 #include "IndexedStatusList.h"
 #include <algorithm>
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 bool IndexedStatusList::statusEqual(const Status &st1, Status::ConstPtr st2)
 {
@@ -31,7 +31,7 @@ void IndexedStatusList::add(const Status &status)
 //	size_t n = index_.size();
 //	BOOST_FOREACH(const Point &p, status.state()) {
 //		RangeType range = index_.equal_range(p);
-//		std::remove_if(range.first, range.second, boost::bind(&IndexedStatusList::statusEqual, boost::ref(status), _1));
+//		std::remove_if(range.first, range.second, std::bind(&IndexedStatusList::statusEqual, boost::ref(status), _1));
 //	}
 //	if (index_.size() < n) {
 //		--size_;

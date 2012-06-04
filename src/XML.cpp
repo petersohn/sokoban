@@ -25,7 +25,7 @@ string XMLText::toString() const {
 	return data_;
 }
 
-void saveXMLFile(boost::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename) {
+void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename) {
 	assert(filename != NULL);
 	assert(rootElement.get() != NULL);
 	ofstream file(filename, ios::out | ios::trunc);
