@@ -129,7 +129,7 @@ inline const T& arrayAt(const Array<T> &arr, const Point &p, const T& def) {
 }
 
 template<class T>
-size_t hash_value(const Array<T> arr)
+size_t hash_value(const Array<T>& arr)
 {
 	size_t seed = 0;
 	for (size_t i = 0; i < arr.size(); ++i) {
