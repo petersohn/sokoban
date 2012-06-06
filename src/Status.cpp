@@ -2,7 +2,6 @@
 #include "Node.h"
 #include <fstream>
 #include <sstream>
-#include <boost/foreach.hpp>
 
 int Status::copyCount(0);
 
@@ -292,4 +291,25 @@ ki:
 		result.push_back(status);
 	}
 	return result;
+}
+
+bool checkStatus(const Status& status)
+{
+	Point p;
+	for (p.x = 0; p.x < status.width(); ++p.x) {
+		for (p.y = 0; p.y < status.height(); ++p.y) {
+			FieldType fieldNeeded;
+			if (status.table().wall(p)) {
+				fieldNeeded = ftWall;
+			} else if (status.state()[p]) {
+				fieldNeeded = ftStone;
+			} else {
+				fieldNeeded = ftFloor;
+			}
+			if (status.value(p) != fieldNeeded) {
+				return false;
+			}
+		}
+	}
+	return true;
 }

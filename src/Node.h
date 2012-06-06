@@ -1,7 +1,7 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <deque>
 #include "State.h"
@@ -9,7 +9,7 @@
 
 class Node: public boost::noncopyable {
 public:
-	typedef boost::shared_ptr<Node> Ptr;
+	typedef std::shared_ptr<Node> Ptr;
 private:
 	Ptr ansector_;
 	State state_;

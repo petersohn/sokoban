@@ -3,6 +3,7 @@
 
 #include "Point.h"
 #include "State.h"
+#include "Hash.h"
 
 class Status;
 
@@ -23,7 +24,19 @@ bool operator!=(const VisitedStateInfo& left, const VisitedStateInfo& right) {
 	return !(left == right);
 }
 
-size_t hash_value(const VisitedStateInfo& state);
+namespace std {
 
+template<>
+struct hash<VisitedStateInfo> {
+	size_t operator()(const VisitedStateInfo& state) const
+	{
+		size_t seed = 0;
+		hash_combine(seed, state.state());
+		hash_combine(seed, state.firstReachable());
+		return seed;
+	}
+};
+
+}
 
 #endif /* VISITEDSTATE_H_ */

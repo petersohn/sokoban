@@ -1,14 +1,15 @@
 #ifndef INDEXEDTUPLES_H_
 #define INDEXEDTUPLES_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <memory>
+#include <unordered_map>
+#include <boost/range/iterator_range.hpp>
 #include "Status.h"
 #include "State.h"
 
 class IndexedStatusList {
 private:
-	typedef boost::unordered_multimap<Point, Status::ConstPtr> IndexType;
+	typedef std::unordered_multimap<Point, Status::ConstPtr> IndexType;
 
 	IndexType index_;
 	size_t size_;
@@ -17,7 +18,7 @@ private:
 
 	static bool statusEqual(const Status &st1, Status::ConstPtr st2);
 public:
-	typedef std::pair<IndexType::const_iterator, IndexType::const_iterator> RangeType;
+	typedef boost::iterator_range<IndexType::const_iterator> RangeType;
 
 	IndexedStatusList():size_(0) {}
 	IndexedStatusList(const IndexedStatusList &other)

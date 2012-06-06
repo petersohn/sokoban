@@ -3,11 +3,11 @@
 
 #include "Common.h"
 #include "Array.h"
-#include "boost/shared_ptr.hpp"
+#include <memory>
 
 class Table {
 public:
-	typedef boost::shared_ptr<Table> Ptr;
+	typedef std::shared_ptr<Table> Ptr;
 private:
 	Array<bool> walls_;
 	Point destination_;

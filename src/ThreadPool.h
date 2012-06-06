@@ -3,15 +3,15 @@
 
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <vector>
 
 class ThreadPool: public boost::noncopyable {
 public:
-	typedef boost::shared_ptr<ThreadPool> Ptr;
+	typedef std::shared_ptr<ThreadPool> Ptr;
 private:
-	typedef boost::shared_ptr<boost::thread> ThreadPtr;
+	typedef std::shared_ptr<boost::thread> ThreadPtr;
 
 	boost::asio::io_service ioService_;
 	std::auto_ptr<boost::asio::io_service::work> work_;

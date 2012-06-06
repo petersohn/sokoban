@@ -19,7 +19,6 @@ sokoban_SOURCES = main.cpp \
 		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
-		State.cpp \
 		Status.cpp \
 		StonePusher.cpp \
 		Table.cpp \
@@ -33,3 +32,4 @@ sokoban_SOURCES = main.cpp \
 
 bin_PROGRAMS = sokoban
 
+AM_CXXFLAGS=-std=c++0x

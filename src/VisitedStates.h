@@ -7,10 +7,10 @@
 #include "Status.h"
 #include "Common.h"
 #include "Mutexes.hpp"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class VisitedStates: public VisitedStateHolder {
-	typedef boost::unordered_map<VisitedStateInfo, int, boost::hash<VisitedStateInfo> > VisitedStateSet;
+	typedef std::unordered_map<VisitedStateInfo, int, std::hash<VisitedStateInfo> > VisitedStateSet;
 	VisitedStateSet visitedStates_;
 	mutable MutexType visitedStatesMutex_;
 public:

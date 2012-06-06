@@ -13,7 +13,7 @@ XDumper::XDumper(const char *filename):
 }
 
 XDumper::ElementPtr XDumper::createDumpElement(const std::string &s) {
-	boost::shared_ptr<xml::XMLText> dump(new xml::XMLText());
+	std::shared_ptr<xml::XMLText> dump(new xml::XMLText());
 	dump->data(s);
 	ElementPtr dumpElem(new xml::XMLElement());
 	dumpElem->name("dump");
@@ -84,7 +84,7 @@ void XDumper::reject(Node::Ptr node, const char *text) {
 void XDumper::clear() {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	elements_.clear();
-	boost::shared_ptr<xml::XMLElement> root(new xml::XMLElement());
+	std::shared_ptr<xml::XMLElement> root(new xml::XMLElement());
 	root->name("root-node");
 	elements_.insert(std::make_pair(Node::Ptr(), root));
 }

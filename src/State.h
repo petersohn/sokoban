@@ -2,13 +2,14 @@
 #define STATE_H_
 
 #include "Point.h"
-#include <boost/unordered_set.hpp>
-#include <boost/shared_ptr.hpp>
+#include <unordered_set>
+#include <memory>
 #include <assert.h>
+#include <functional>
 
 class State {
-	typedef boost::unordered_set<Point> ContainerType;
-	typedef boost::shared_ptr<ContainerType> ContainerPtr;
+	typedef std::unordered_set<Point> ContainerType;
+	typedef std::shared_ptr<ContainerType> ContainerPtr;
 	ContainerPtr stones_;
 	void modify() {
 		if (!stones_.unique())
@@ -49,6 +50,24 @@ public:
 	const_iterator end() const { return stones_->end(); }
 };
 
-size_t hash_value(const State &state);
+
+namespace std {
+
+template<>
+struct hash<State> {
+	size_t operator()(const State &state) const
+	{
+		size_t result = 0;
+		std::hash<Point> h;
+		for (State::const_iterator it = state.begin();
+				it != state.end(); ++it) {
+			result += h(*it); // the order of elements doesn't count
+		}
+		return std::hash<size_t>()(result);
+	}
+};
+
+}
+
 
 #endif /* STATE_H_ */

@@ -11,7 +11,7 @@ class InternalExpander {
 	Dumper::Ptr dumper_;
 	NormalExpander &owner_;
 public:
-	InternalExpander(const Status & status, boost::shared_ptr<Node> base,
+	InternalExpander(const Status & status, std::shared_ptr<Node> base,
 			NodePusher & queue, Dumper::Ptr dumper, NormalExpander &owner):
 				status_(status),
 				base_(base),
@@ -45,7 +45,9 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 				return;
 			}
 		}
-		VisitedStateInput vsi(std::make_pair<const Status&, int>(status, node->costFgv()));
+		VisitedStateInput vsi(status, node->costFgv());
+//		assert(checkStatus(status));
+//		assert(checkStatus(vsi.first));
 		if (owner_.visitedStates_ && !owner_.visitedStates_->checkAndPush(vsi)) {
 			if (dumper_)
 				dumper_->reject(node, "already visited");
@@ -72,7 +74,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 void InternalExpander::expand()
 {
 	if (owner_.visitedStates_->size() == 0) {
-		owner_.visitedStates_->checkAndPush(std::make_pair<const Status&, int>(status_,
+		owner_.visitedStates_->checkAndPush(std::pair<const Status&, int>(status_,
 				owner_.calculator_->calculateStatus(status_)));
 	}
 	if (dumper_ && base_)
@@ -112,7 +114,7 @@ NormalExpander::~NormalExpander()
 		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
 }
 
-bool NormalExpander::expand(const Status &status, boost::shared_ptr<Node> base,
+bool NormalExpander::expand(const Status &status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper) {
 	InternalExpander exp(status, base, queue, dumper, *this);
 	exp.expand();

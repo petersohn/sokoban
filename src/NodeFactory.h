@@ -4,13 +4,13 @@
 #include "Node.h"
 #include "HeurCalculator.h"
 #include "Status.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class NodeFactory {
 	int numNodes_;
 	HeurCalculator::Ptr calculator_;
 public:
-	typedef boost::shared_ptr<NodeFactory> Ptr;
+	typedef std::shared_ptr<NodeFactory> Ptr;
 
 	NodeFactory(HeurCalculator::Ptr calculator):
 		numNodes_(0),

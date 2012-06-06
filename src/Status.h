@@ -5,15 +5,15 @@
 #include "Array.h"
 #include "Table.h"
 #include "State.h"
-#include <boost/shared_ptr.hpp>
-#include <boost/function.hpp>
+#include <memory>
+#include <functional>
 #include <vector>
 #include <deque>
 
 class Status {
 public:
-	typedef boost::shared_ptr<Status> Ptr;
-	typedef boost::shared_ptr<const Status> ConstPtr;
+	typedef std::shared_ptr<Status> Ptr;
+	typedef std::shared_ptr<const Status> ConstPtr;
 	typedef std::vector<Point> BorderType;
 private:
 	FixedTable::Ptr table_;
@@ -96,5 +96,8 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 			Status::BorderType *border = NULL, MinMax *minmax = NULL);
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state);
+
+bool checkStatus(const Status& status);
+
 
 #endif /* STATUS_H_ */

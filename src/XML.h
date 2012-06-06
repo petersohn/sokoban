@@ -4,15 +4,15 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace xml {
 
 class XMLNode {
 public:
-	typedef boost::shared_ptr<XMLNode> Ptr;
-//	typedef boost::shared_ptr<const XMLNode> ConstPtr;
+	typedef std::shared_ptr<XMLNode> Ptr;
+//	typedef std::shared_ptr<const XMLNode> ConstPtr;
 	virtual std::string toString() const = 0;
 	virtual ~XMLNode() {}
 };
@@ -41,7 +41,7 @@ public:
 };
 
 
-void saveXMLFile(boost::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename = NULL);
+void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename = NULL);
 
 } // namespace xml
 

@@ -4,8 +4,8 @@
 #include <vector>
 #include <algorithm>
 #include <boost/format.hpp>
-#include <boost/foreach.hpp>
 #include <string>
+#include <algorithm>
 
 
 /* AdvancedHeurCalculator::HeurDumper */
@@ -57,14 +57,15 @@ void AdvancedHeurCalculator::init()
 	dumper.printText("Heuristics table:");
 	dumper.dumpArray(dump);
 	dumper.printText("\nPartitions:");
-	for (p.y = 0; p.y < table().height(); p.y++)
+	for (p.y = 0; p.y < table().height(); p.y++) {
 		for (p.x = 0; p.x < table().width(); p.x++) {
-			if (partitions_[p].size() > 1)
-				for (std::vector<Partition>::iterator it = partitions_[p].begin();
-						it != partitions_[p].end(); ++it)
-					dumper.dumpPartition(*this, *it);
+			if (partitions_[p].size() > 1) {
+				for (const Partition& partition: partitions_[p]) {
+					dumper.dumpPartition(*this, partition);
+				}
+			}
 		}
-
+	}
 }
 
 void AdvancedHeurCalculator::initPartitions(const Point & p)
@@ -72,7 +73,7 @@ void AdvancedHeurCalculator::initPartitions(const Point & p)
 	State state;
 	state.addStone(p);
 	std::vector<Status::Ptr> parts = getPartitions(tablePtr(), state);
-	BOOST_FOREACH(Status::Ptr status, parts) {
+	for (Status::Ptr status: parts) {
 		Partition part(table().width(), table().height());
 		part.pos = p;
 		part.heur = -1;
@@ -82,7 +83,7 @@ void AdvancedHeurCalculator::initPartitions(const Point & p)
 		else {
 			std::deque<Node::Ptr> res = solver_->solve(*status);
 			if (res.size() != 0)
-				part.heur = (*res.rbegin())->cost();
+				part.heur = res.back()->cost();
 		}
 		partitions_[p].push_back(part);
 	}
@@ -95,30 +96,18 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &
 	// can't be used. Use the minimal non-negative
 	// partition's value instead
 	if (status.currentPos() == p) {
-		int min = -1;
-		for (it = partitions_[p].begin();
-			it != partitions_[p].end(); ++it) {
-			if (it->heur >= 0) {
-				min = it->heur;
-				break;
-			}
-		}
-		if (it != partitions_[p].end())
-			while (++it != partitions_[p].end())
-				if (it->heur >= 0 && it->heur < min)
-					min = it->heur;
-		return min;
+		auto firstOk = std::find_if(partitions_[p].begin(), partitions_[p].end(),
+				[](const Partition& partition) { return partition.heur >= 0; });
+		auto minElement = std::min_element(firstOk, partitions_[p].end(),
+				[](const Partition& left, const Partition& right)
+				{ return left.heur < right.heur; });
+		return (minElement == partitions_[p].end()) ? -1 : minElement->heur;
 	} else {
-		for (it = partitions_[p].begin();
-			it != partitions_[p].end(); ++it)
-		{
-			if (it->reachable[status.currentPos()])
-				break;
-		}
-		if (it != partitions_[p].end())
-			return it->heur;
+		auto it = std::find_if(partitions_[p].begin(), partitions_[p].end(),
+				[&status](const Partition& partition)
+				{ return partition.reachable[status.currentPos()]; });
+		return (it == partitions_[p].end()) ? -1 : it->heur;
 	}
-	return -1;
 }
 
 

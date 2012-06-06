@@ -3,7 +3,8 @@
 
 #include "Point.h"
 #include <iostream>
-#include <boost/functional/hash.hpp>
+#include "Hash.h"
+#include <assert.h>
 
 //#define NDEBUG
 //
@@ -26,12 +27,14 @@ public:
 	Array();
 	Array(size_t width, size_t height);
 	Array(size_t width, size_t height, const T& defValue);
-	Array(const Array &other);
+	Array(const Array& other);
+	Array(Array&& other);
 	~Array() {
 		if (data != NULL)
 			delete[] data;
 	}
-	Array& operator=(const Array &other);
+	Array& operator=(const Array& other);
+	Array& operator=(Array&& other);
 
 	T& operator[](size_t pos) {
 		return data[pos];
@@ -91,7 +94,7 @@ Array<T>::Array(size_t width, size_t height, const T& defValue):
 }
 
 template<class T>
-Array<T>::Array(const Array<T> &other):
+Array<T>::Array(const Array<T>& other):
 	width_(other.width_), height_(other.height_), size_(other.size_)
 {
 	data = new T[size_];
@@ -100,8 +103,25 @@ Array<T>::Array(const Array<T> &other):
 }
 
 template<class T>
+Array<T>::Array(Array<T>&& other):
+	width_(other.width_), height_(other.height_), size_(other.size_), data(other.data)
+{
+	if (other.data) {
+		delete[] other.data;
+		other.data = 0;
+		other.width_ = 0;
+		other.height_ = 0;
+		other.size_ = 0;
+	}
+}
+
+
+template<class T>
 Array<T>& Array<T>::operator=(const Array &other) {
-	delete[] data;
+	if (data) {
+		delete[] data;
+		data = 0;
+	}
 	width_ = other.width_;
 	height_ = other.height_;
 	size_ = width_ * height_;
@@ -110,6 +130,27 @@ Array<T>& Array<T>::operator=(const Array &other) {
 		data[i] = other[i];
 	return *this;
 }
+
+template<class T>
+Array<T>& Array<T>::operator=(Array&& other) {
+	if (data) {
+		delete[] data;
+		data = 0;
+	}
+	width_ = other.width_;
+	height_ = other.height_;
+	size_ = other.size_;
+	data = other.data;
+	if (other.data) {
+		delete[] other.data;
+		other.data = 0;
+		other.width_ = 0;
+		other.height_ = 0;
+		other.size_ = 0;
+	}
+	return *this;
+}
+
 
 template<class T>
 void Array<T>::reset(size_t newWidth, size_t newHeight) {
@@ -128,14 +169,19 @@ inline const T& arrayAt(const Array<T> &arr, const Point &p, const T& def) {
 		return def;
 }
 
+namespace std {
 template<class T>
-size_t hash_value(const Array<T>& arr)
-{
-	size_t seed = 0;
-	for (size_t i = 0; i < arr.size(); ++i) {
-		boost::hash_combine(seed, arr[i]);
+struct hash<Array<T>> {
+	size_t operator()(const Array<T>& arr) const
+	{
+		size_t seed = 0;
+		for (size_t i = 0; i < arr.size(); ++i) {
+			hash_combine(seed, arr[i]);
+		}
+		return seed;
 	}
-	return seed;
+};
+
 }
 
 #endif /* ARRAY_H_ */

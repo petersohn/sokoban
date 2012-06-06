@@ -17,8 +17,7 @@
 #include "XDumper.h"
 #include "NodeFactory.h"
 #include <vector>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
+#include <functional>
 
 NodeQueue::Ptr createPrioQueue()
 {
@@ -42,7 +41,7 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 		case Options::ctDepth: fun = &Node::depth; break;
 		case Options::ctTime: fun = &Node::time; break;
 		}
-		if (!fun.empty())
+		if (fun)
 			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun, it->reverse));
 	}
 	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(
@@ -53,7 +52,7 @@ static HeurCalculator::Ptr createAdvancedHeurCalcularor()
 {
 	HeurCalculator::Ptr bhc(new BasicHeurCalculator);
 	Solver::Ptr s(new Solver(createPrioQueue,
-					boost::bind(createExpanderWithCalculator, bhc, false)));
+					std::bind(createExpanderWithCalculator, bhc, false)));
 	return HeurCalculator::Ptr(new AdvancedHeurCalculator(s));
 }
 
@@ -80,7 +79,7 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, FixedTable:
 	HeurCalculator::Ptr calc =
 			opts.useAdvancedHeurCalculator() ?
 			createAdvancedHeurCalcularor() :
-			boost::make_shared<BasicHeurCalculator>();
+			std::make_shared<BasicHeurCalculator>();
 	std::vector<Checker::Ptr> chs;
 	if (opts.useMovableChecker())
 		chs.push_back(Checker::Ptr(new MovableChecker(calc)));
@@ -88,10 +87,10 @@ static Expander::Ptr createExpanderFromOptions0(const Options &opts, FixedTable:
 		chs.push_back(Checker::Ptr(new CorridorChecker(calc)));
 	if (blocklist && opts.blockListStones() > 1) {
 		Solver::Ptr solver(new Solver(
-				boost::bind(&createPrioQueueFromOptions, opts),
-				boost::bind(createExpanderFromOptions0, opts, table, false, false)));
+				std::bind(&createPrioQueueFromOptions, opts),
+				std::bind(createExpanderFromOptions0, opts, table, false, false)));
 		Checker::Ptr ch(new ComplexChecker(chs.begin(), chs.end()));
-		boost::shared_ptr<BlockListChecker> blocklistChecker(
+		std::shared_ptr<BlockListChecker> blocklistChecker(
 				new BlockListChecker(solver, calc, ch, opts.blockListStones(), opts.blockListDistance(),
 				opts.progressInterval()));
 		blocklistChecker->init(table);

@@ -1,7 +1,7 @@
 #ifndef CHECKER_H_
 #define CHECKER_H_
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 #include "Dumper.h"
 #include "Table.h"
@@ -11,7 +11,7 @@ class Point;
 
 class Checker {
 public:
-	typedef boost::shared_ptr<Checker> Ptr;
+	typedef std::shared_ptr<Checker> Ptr;
 	virtual bool check(const Status&, const Point&) = 0;
 	virtual ~Checker() {}
 	// for efficiency reasons, it is assumed that it will

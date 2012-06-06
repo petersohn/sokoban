@@ -2,7 +2,7 @@
 #define JOBMANAGER_H_
 
 #include "Mutexes.hpp"
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/thread.hpp>
 #include <boost/asio/io_service.hpp>
 

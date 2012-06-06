@@ -59,8 +59,8 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
 	PrioNodeQueue.$(OBJEXT) SolutionChecker.$(OBJEXT) \
-	Solver.$(OBJEXT) SolverFactories.$(OBJEXT) State.$(OBJEXT) \
-	Status.$(OBJEXT) StonePusher.$(OBJEXT) Table.$(OBJEXT) \
+	Solver.$(OBJEXT) SolverFactories.$(OBJEXT) Status.$(OBJEXT) \
+	StonePusher.$(OBJEXT) Table.$(OBJEXT) \
 	TableHeurCalculator.$(OBJEXT) TextDumper.$(OBJEXT) \
 	ThreadPool.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
 	VisitedStates.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
@@ -201,7 +201,6 @@ sokoban_SOURCES = main.cpp \
 		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
-		State.cpp \
 		Status.cpp \
 		StonePusher.cpp \
 		Table.cpp \
@@ -213,6 +212,7 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
+AM_CXXFLAGS = -std=c++0x
 all: all-am
 
 .SUFFIXES:
@@ -314,7 +314,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolutionChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Solver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolverFactories.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/State.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Status.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StonePusher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Table.Po@am__quote@
