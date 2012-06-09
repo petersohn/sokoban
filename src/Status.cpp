@@ -290,7 +290,7 @@ ki:
 			}
 		result.push_back(status);
 	}
-	return result;
+	return std::move(result);
 }
 
 bool checkStatus(const Status& status)
