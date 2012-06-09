@@ -4,6 +4,7 @@
 #include <memory>
 #include <unordered_map>
 #include <boost/range/iterator_range.hpp>
+#include "Mutexes.hpp"
 #include "Status.h"
 #include "State.h"
 
@@ -13,6 +14,7 @@ private:
 
 	IndexType index_;
 	size_t size_;
+	mutable SharedMutexType mutex_;
 
 	void copyFrom(const IndexedStatusList &other);
 

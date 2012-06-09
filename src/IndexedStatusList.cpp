@@ -1,6 +1,7 @@
 #include "IndexedStatusList.h"
 #include <algorithm>
 #include <functional>
+#include <boost/thread/locks.hpp>
 
 bool IndexedStatusList::statusEqual(const Status &st1, Status::ConstPtr st2)
 {
@@ -18,6 +19,7 @@ void IndexedStatusList::copyFrom(const IndexedStatusList &other)
 
 void IndexedStatusList::add(const Status &status)
 {
+	boost::unique_lock<SharedMutexType> lock(mutex_);
 	Status::ConstPtr val(new Status(status));
 	for (const Point p: status.state()) {
 		index_.insert(std::make_pair(p, val));
@@ -39,6 +41,7 @@ void IndexedStatusList::add(const Status &status)
 
 bool IndexedStatusList::hasSubStatus(const Status &status, const Point &p)  const
 {
+	boost::shared_lock<SharedMutexType> lock(mutex_);
 	RangeType range = index_.equal_range(p);
 	for (const IndexType::value_type& val: range) {
 		Status::ConstPtr sub = val.second;
