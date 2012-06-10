@@ -11,5 +11,5 @@
 #****..********
 #***...********
 #***..x********
-blocklist-number=3
-blocklist-distance=3
+blocklist-number=4
+blocklist-distance=4

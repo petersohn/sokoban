@@ -53,9 +53,7 @@ void BlockListChecker::initIter(Point p, int stones, const State &state)
 				continue;
 			}
 			if (stones == 0) {
-				if (++iters_ % 100 == 0) {
-					std::cerr << ".";
-				}
+				++iters_;
 				ioService_.post(std::bind(&BlockListChecker::doWork, this, status));
 			} else {
 				ok = true;

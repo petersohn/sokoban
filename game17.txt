@@ -12,4 +12,4 @@
 #***.**.*******
 #***....*******
 blocklist-number=2
-blocklist-distance=3
+blocklist-distance=5
