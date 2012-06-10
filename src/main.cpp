@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 	clock_t processorTime0 = clock();
 	pt::ptime realTime0 = pt::microsec_clock::local_time();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
-			std::bind(createExpanderFromOptions, opts, st.tablePtr(), true),
+			CreateExpanderFromOptions(opts, st.tablePtr(), true),
 			std::bind(createDumperFromOptions, opts),
 			opts.parallelOuterExpand());
 	std::deque<Node::Ptr> solution = s.solve(st);

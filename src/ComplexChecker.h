@@ -9,9 +9,9 @@ class ComplexChecker: public Checker {
 	ContainerType funcs_;
 	const char *lastError_;
 public:
-	template<class Iterator>
-	ComplexChecker(Iterator first, Iterator last):
-		funcs_(first, last)
+	template<class Range>
+	ComplexChecker(const Range& range):
+		funcs_(range.begin(), range.end())
 	{}
 	virtual bool check(const Status &status, const Point &p0);
 	virtual const char* errorMessage();

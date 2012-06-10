@@ -17,6 +17,7 @@ class TableHeurCalculator: public HeurCalculator {
 	void checkTable(const Status &status) {
 		boost::lock_guard<MutexType> lck(heurMutex_);
 		if (table_ != status.tablePtr()) {
+			std::cerr << table_ << " --> " << status.tablePtr() << std::endl;
 			table_ = status.tablePtr();
 			init();
 		}

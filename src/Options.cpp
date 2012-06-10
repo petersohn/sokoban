@@ -14,6 +14,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		useStonePusher_(true),
 		useMovableChecker_(true),
 		useCorridorChecker_(true),
+		useAdvancedHeurCalculator_(true),
 		parallelOuterExpand_(false),
 		blockListStones_(0),
 		blockListDistance_(0),

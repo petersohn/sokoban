@@ -18,7 +18,8 @@ public:
 				queue_(queue),
 				dumper_(dumper),
 				owner_(owner)
-	{}
+	{
+	}
 
 	void expand();
 	void expandNode(const Point &p, const Point &d);

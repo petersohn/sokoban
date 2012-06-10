@@ -2,11 +2,12 @@
 #define HEURCALCULATOR_H_
 
 #include <memory>
+#include <boost/noncopyable.hpp>
 
 class Point;
 class Status;
 
-class HeurCalculator {
+class HeurCalculator: public boost::noncopyable {
 public:
 	typedef std::shared_ptr<HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}

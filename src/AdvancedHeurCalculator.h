@@ -21,7 +21,6 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 	};
 	class HeurDumper {
 		std::ofstream file_;
-		AdvancedHeurCalculator *owner_;
 		void open();
 	public:
 		void dumpHeur(Array<int> values);
@@ -35,13 +34,15 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 
 	Array<std::vector<Partition> > partitions_;
 	Solver::Ptr solver_;
+	bool useDumper_;
 	virtual int doCalculateStone(const Status &status, const Point &p);
 	virtual void init();
 
 	void initPartitions(const Point &p);
 public:
-	AdvancedHeurCalculator(Solver::Ptr solver):
-		solver_(solver)
+	AdvancedHeurCalculator(Solver::Ptr solver, bool useDumper = true):
+		solver_(solver),
+		useDumper_(useDumper)
 	{
 		assert(solver_.get() != NULL);
 	}

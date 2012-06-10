@@ -54,14 +54,16 @@ void AdvancedHeurCalculator::init()
 					partitions_[p].size() > 1 ? "?" :
 					(boost::format("%d") % partitions_[p][0].heur).str();
 		}
-	dumper.printText("Heuristics table:");
-	dumper.dumpArray(dump);
-	dumper.printText("\nPartitions:");
-	for (p.y = 0; p.y < table().height(); p.y++) {
-		for (p.x = 0; p.x < table().width(); p.x++) {
-			if (partitions_[p].size() > 1) {
-				for (const Partition& partition: partitions_[p]) {
-					dumper.dumpPartition(*this, partition);
+	if (useDumper_) {
+		dumper.printText("Heuristics table:");
+		dumper.dumpArray(dump);
+		dumper.printText("\nPartitions:");
+		for (p.y = 0; p.y < table().height(); p.y++) {
+			for (p.x = 0; p.x < table().width(); p.x++) {
+				if (partitions_[p].size() > 1) {
+					for (const Partition& partition: partitions_[p]) {
+						dumper.dumpPartition(*this, partition);
+					}
 				}
 			}
 		}

@@ -6,13 +6,28 @@
 #include "HeurCalculator.h"
 #include "Dumper.h"
 #include "Options.h"
+#include "Checker.h"
 
-NodeQueue::Ptr createPrioQueue();
 NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts);
-Expander::Ptr createExpander(bool log = false);
-Expander::Ptr createExpanderWithCalculator(HeurCalculator::Ptr calc, bool log = false);
-Expander::Ptr createExpanderFromOptions(const Options &opts, FixedTable::Ptr table, bool log = true);
 Dumper::Ptr createDumperFromOptions(const Options &opts);
+
+class CreateExpanderFromOptions {
+	const Options &options_;
+	FixedTable::Ptr table_;
+	bool log_;
+	HeurCalculator::Ptr createAdvancedHeurCalcularor();
+	Expander::Ptr createExpander(HeurCalculator::Ptr calculator, Checker::Ptr checker, bool log);
+	std::vector<Checker::Ptr> createBasicCheckers(const HeurCalculator::Ptr& calculator);
+public:
+	CreateExpanderFromOptions(const Options &opts, FixedTable::Ptr table, bool log = true):
+		options_(opts),
+		table_(table),
+		log_(log)
+	{
+	}
+
+	Expander::Ptr operator()();
+};
 
 
 #endif /* SOLVERFACTORIES_H_ */
