@@ -11,3 +11,5 @@
 #*.o.o..*
 #***.**.*
 #***....*
+blocklist-number=3
+blocklist-distance=4
