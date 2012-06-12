@@ -59,16 +59,16 @@ void TableIterator::doWork(Status::Ptr status)
 
 void TableIterator::progress()
 {
-	while (true) {
-		int iters, solved;
-		{
-			boost::lock_guard<MutexType> lck(iterMutex_);
-			iters = iters_;
-			solved = solved_;
-		}
-		if (solved < iters) {
-			float div = iters / 100.0f;
-			int n1 = (int)(solved / div);
+	int iters, solved;
+	{
+		boost::lock_guard<MutexType> lck(iterMutex_);
+		iters = iters_;
+		solved = solved_;
+	}
+	if (solved <= iters) {
+		float div = iters / 100.0f;
+		int n1 = (int)(solved / div);
+		if (n1 != lastTicks_) {
 			int n2 = 100 - n1;
 			std::cerr << "[";
 			for (int i = 0; i < n1; ++i)
@@ -77,11 +77,7 @@ void TableIterator::progress()
 				std::cerr << "-";
 			std::cerr << "]\r";
 			std::cerr.flush();
-			try {
-				boost::this_thread::sleep(progressInterval_);
-			} catch(boost::thread_interrupted &e) {
-				return;
-			}
+			lastTicks_ = n1;
 		}
 	}
 }
@@ -89,21 +85,16 @@ void TableIterator::progress()
 void TableIterator::iterate(int numStones)
 {
 	solved_ = iters_ = 0;
+	lastTicks_ = -1;
 	initIter(Point(0, 0), numStones, State());
-	std::unique_ptr<boost::thread> progressThread;
-	if (!progressInterval_.is_not_a_date_time()) {
-		std::cerr << std::endl;
-		progressThread.reset(new boost::thread(std::bind(&TableIterator::progress, this)));
-	}
 	{
 		boost::unique_lock<MutexType> lck(iterMutex_);
 		while (solved_ < iters_) {
 			done_.wait(lck);
+			lck.unlock();
+			progress();
+			lck.lock();
 		}
 	}
-	if (progressThread) {
-		progressThread->interrupt();
-		progressThread->join();
-		std::cerr << std::endl;
-	}
+	std::cerr << std::endl;
 }

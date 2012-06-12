@@ -23,7 +23,6 @@ class BlockListChecker: public Checker, public std::enable_shared_from_this<Bloc
 	int maxDistance_;
 	std::ofstream dump_;
 	MutexType dumpMutex_;
-	boost::posix_time::time_duration progressInterval_;
 
 	void doWork(const Status& status);
 	void dumpStatus(const Status &status, const Point *p, const std::string &title) {
@@ -37,8 +36,7 @@ class BlockListChecker: public Checker, public std::enable_shared_from_this<Bloc
 	}
 public:
 	BlockListChecker(Solver::Ptr solver,
-			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance,
-			int progressInterval);
+			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance);
 	void init(FixedTable::Ptr table);
 	virtual bool check(const Status& status, const Point& p);
 	virtual const char* errorMessage();

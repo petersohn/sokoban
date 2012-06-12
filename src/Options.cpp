@@ -18,8 +18,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		parallelOuterExpand_(false),
 		blockListStones_(0),
 		blockListDistance_(0),
-		numThreads_(1),
-		progressInterval_(1)
+		numThreads_(1)
 {
 	OptionsHelper oh;
 	bool help = false;
@@ -34,8 +33,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"blocklist. 0 means no limit.");
 	oh.addArgumentOption<int>("thread-num,t", &numThreads_, "The maximum number of threads to use.");
 	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_, "Expand several nodes in parallel. Only if --thread-num > 1.");
-	oh.addArgumentOption<int>("progress-interval", &progressInterval_, "The time between progress bar display when"
-			" counting the block list.");
+
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);
 	ds.addElement("text", dsText);

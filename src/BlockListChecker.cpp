@@ -7,14 +7,13 @@
 #include <cstdlib>
 
 BlockListChecker::BlockListChecker(Solver::Ptr solver, HeurCalculator::Ptr calculator,
-		Checker::Ptr checker, int numStones, int maxDistance, int progressInterval):
+		Checker::Ptr checker, int numStones, int maxDistance):
 		solver_(solver),
 		calculator_(calculator),
 		checker_(checker),
 		numStones_(numStones),
 		maxDistance_(maxDistance),
-		dump_("blocklist.dump"),
-		progressInterval_(boost::posix_time::seconds(progressInterval))
+		dump_("blocklist.dump")
 {
 }
 
@@ -34,7 +33,7 @@ void BlockListChecker::init(FixedTable::Ptr table)
 	Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
 	TableIterator tableIterator(table, calculator_, checker,
 			std::bind(&BlockListChecker::doWork, this, std::placeholders::_1),
-			maxDistance_, progressInterval_);
+			maxDistance_);
 	table_ = table;
 	blockList_.clear();
 	for (int n = 2; n <= numStones_; ++n) {

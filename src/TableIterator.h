@@ -20,10 +20,10 @@ private:
 	Action action_;
 	int maxDistance_;
 	int iters_, solved_;
+	int lastTicks_;
 	MutexType iterMutex_;
 	boost::asio::io_service &ioService_;
 	boost::condition_variable done_;
-	boost::posix_time::time_duration progressInterval_;
 
 	void initIter(Point p, int stones, const State &state);
 	void doWork(Status::Ptr status);
@@ -47,8 +47,7 @@ public:
 			const HeurCalculator::Ptr& heurCalculator,
 			const Checker::Ptr& checker,
 			const Action& action,
-			int maxDistance,
-			const boost::posix_time::time_duration& progressInterval = boost::posix_time::not_a_date_time):
+			int maxDistance):
 		table_(table),
 		heurCalculator_(heurCalculator),
 		checker_(checker),
@@ -56,8 +55,8 @@ public:
 		maxDistance_(maxDistance),
 		iters_(0),
 		solved_(0),
-		ioService_(ThreadPool::instance()->ioService()),
-		progressInterval_(progressInterval)
+		lastTicks_(-1),
+		ioService_(ThreadPool::instance()->ioService())
 	{
 	}
 	void iterate(int numStones);
