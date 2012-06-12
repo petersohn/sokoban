@@ -60,7 +60,7 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
 	PrioNodeQueue.$(OBJEXT) SolutionChecker.$(OBJEXT) \
 	Solver.$(OBJEXT) SolverFactories.$(OBJEXT) Status.$(OBJEXT) \
-	StonePusher.$(OBJEXT) Table.$(OBJEXT) \
+	StonePusher.$(OBJEXT) Table.$(OBJEXT) TableIterator.$(OBJEXT) \
 	TableHeurCalculator.$(OBJEXT) TextDumper.$(OBJEXT) \
 	ThreadPool.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
 	VisitedStates.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
@@ -204,6 +204,7 @@ sokoban_SOURCES = main.cpp \
 		Status.cpp \
 		StonePusher.cpp \
 		Table.cpp \
+		TableIterator.cpp \
 		TableHeurCalculator.cpp \
 		TextDumper.cpp \
 		ThreadPool.cpp \
@@ -318,6 +319,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StonePusher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Table.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TableHeurCalculator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TableIterator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TextDumper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ThreadPool.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VisitedStateInfo.Po@am__quote@

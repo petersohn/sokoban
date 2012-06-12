@@ -22,6 +22,7 @@ sokoban_SOURCES = main.cpp \
 		Status.cpp \
 		StonePusher.cpp \
 		Table.cpp \
+		TableIterator.cpp \
 		TableHeurCalculator.cpp \
 		TextDumper.cpp \
 		ThreadPool.cpp \

@@ -13,9 +13,7 @@
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
 
-class BlockListChecker: public Checker {
-	typedef boost::mutex MutexType;
-
+class BlockListChecker: public Checker, public std::enable_shared_from_this<BlockListChecker> {
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
@@ -23,29 +21,11 @@ class BlockListChecker: public Checker {
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;
-	int iters_, solved_;
 	std::ofstream dump_;
-	MutexType iterMutex_, listMutex_, dumpMutex_;
-	boost::asio::io_service &ioService_;
-	boost::condition_variable done_;
+	MutexType dumpMutex_;
 	boost::posix_time::time_duration progressInterval_;
 
-	void initIter(Point p, int stones, const State &state);
-	void doWork(Status::Ptr status);
-	void progress();
-	bool advancePoint(Point &p) {
-		if (p.x == table_->get().width() - 1) {
-			if (p.y < table_->get().height() - 1) {
-				++p.y;
-				p.x = 0;
-			} else {
-				return false;
-			}
-		} else {
-			++p.x;
-		}
-		return true;
-	}
+	void doWork(const Status& status);
 	void dumpStatus(const Status &status, const Point *p, const std::string &title) {
 		boost::lock_guard<MutexType> lck(dumpMutex_);
 		if (!dump_.good())
