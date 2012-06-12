@@ -34,6 +34,6 @@ deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base)
 		result.push_front(node);
 		node = node->ansector();
 	}
-	return result;
+	return std::move(result);
 }
 
