@@ -17,7 +17,7 @@ class BlockListChecker: public Checker, public std::enable_shared_from_this<Bloc
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
-	IndexedStatusList blockList_;
+	IndexedStatusList<int> blockList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;

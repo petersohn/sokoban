@@ -21,7 +21,7 @@ void BlockListChecker::doWork(const Status& status)
 {
 	std::deque<Node::Ptr> res = solver_->solve(status);
 	if (res.size() == 0) {
-		blockList_.add(status);
+		blockList_.add(status, 0);
 		dumpStatus(status, NULL, "Added");
 	}
 }
