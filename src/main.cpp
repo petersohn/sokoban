@@ -8,7 +8,7 @@
 #include "State.h"
 #include "ThreadPool.h"
 #include "SolutionChecker.h"
-#include <time.h>
+#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <deque>

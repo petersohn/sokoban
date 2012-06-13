@@ -21,6 +21,7 @@ private:
 	int maxDistance_;
 	int iters_, solved_;
 	int lastTicks_;
+
 	MutexType iterMutex_;
 	boost::asio::io_service &ioService_;
 	boost::condition_variable done_;

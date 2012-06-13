@@ -19,8 +19,7 @@ public:
 	Node::Ptr createNode(const Status & status, const Point &p,
 			const Point &d, Node::Ptr ans)
 	{
-		Node::Ptr result(new Node(status.state(), p, d, ans, 1, calculator_->calculateStatus(status), ++numNodes_));
-		return result;
+		return std::make_shared<Node>(status.state(), p, d, ans, 1, calculator_->calculateStatus(status), ++numNodes_);
 	}
 };
 

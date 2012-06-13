@@ -1,4 +1,5 @@
 #include "TableIterator.h"
+#include <ctime>
 
 void TableIterator::initIter(Point p, int stones, const State &state)
 {
@@ -84,6 +85,7 @@ void TableIterator::progress()
 
 void TableIterator::iterate(int numStones)
 {
+	std::clock_t iterationStart = std::clock();
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
 	initIter(Point(0, 0), numStones, State());
@@ -96,5 +98,7 @@ void TableIterator::iterate(int numStones)
 			lck.lock();
 		}
 	}
-	std::cerr << std::endl;
+	clock_t processorTime = clock() - iterationStart;
+	std::cerr << "\nIteration processor time: " <<
+			(double)processorTime/CLOCKS_PER_SEC << std::endl;
 }

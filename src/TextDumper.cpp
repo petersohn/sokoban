@@ -4,6 +4,7 @@
 #include "DumperFunctions.h"
 #include <string>
 
+
 void TextDumper::initialStatus(const Status &status) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
 	std::cerr << "Initial status" << std::endl;
