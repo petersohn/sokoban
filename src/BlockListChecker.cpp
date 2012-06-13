@@ -39,8 +39,8 @@ void BlockListChecker::init(FixedTable::Ptr table)
 	for (int n = 2; n <= numStones_; ++n) {
 		std::cerr << "Stones = " << n << std::endl;
 		tableIterator.iterate(n);
+		std::cerr << "Block list size = " << blockList_.size() << std::endl;
 	}
-	std::cerr << "Block list calculated. Size = " << blockList_.size() << std::endl;
 	dump_.flush();
 }
 
