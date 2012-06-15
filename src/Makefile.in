@@ -54,8 +54,7 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	BasicHeurCalculator.$(OBJEXT) BlockListChecker.$(OBJEXT) \
 	Common.$(OBJEXT) ComplexChecker.$(OBJEXT) \
 	ComplexExpander.$(OBJEXT) CorridorChecker.$(OBJEXT) \
-	DumperFunctions.$(OBJEXT) HeurCalculator.$(OBJEXT) \
-	IndexedStatusList.$(OBJEXT) MovableChecker.$(OBJEXT) \
+	DumperFunctions.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
 	PrioNodeQueue.$(OBJEXT) SolutionChecker.$(OBJEXT) \
@@ -189,8 +188,6 @@ sokoban_SOURCES = main.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
 		DumperFunctions.cpp \
-		HeurCalculator.cpp \
-		IndexedStatusList.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \
@@ -303,8 +300,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CorridorChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DumperFunctions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HeurCalculator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IndexedStatusList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MovableChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NormalExpander.Po@am__quote@
