@@ -90,24 +90,25 @@ Expander::Ptr CreateExpanderFromOptions::createExpander(HeurCalculator::Ptr calc
 
 Expander::Ptr CreateExpanderFromOptions::operator()()
 {
-	HeurCalculator::Ptr calc =
+	HeurCalculator::Ptr calculator =
 		options_.useAdvancedHeurCalculator() ?
 		createAdvancedHeurCalcularor() :
 		std::make_shared<BasicHeurCalculator>();
-	std::vector<Checker::Ptr> checkers = createBasicCheckers(calc);
+	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
 	if (options_.blockListStones() > 1) {
 		Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
 		Solver::Ptr solver(new Solver(
 				std::bind(&createPrioQueueFromOptions, options_),
-				[this, calc, checker]() {
-					return createExpander(calc, checker, false);
+				[this, calculator, checker]() {
+					return createExpander(calculator, checker, false);
 				})) ;
 		BlockListGenerator blockListGenerator(
-				solver, calc, checker, options_.blockListStones(), options_.blockListDistance());
+				solver, calculator, checker, options_.blockListStones(), options_.blockListDistance());
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
+		calculator = blockListGenerator.heurCalculator();
 	}
-	return createExpander(calc, std::make_shared<ComplexChecker>(checkers), log_);
+	return createExpander(calculator, std::make_shared<ComplexChecker>(checkers), log_);
 }
 
 Dumper::Ptr createDumperFromOptions(const Options & opts)

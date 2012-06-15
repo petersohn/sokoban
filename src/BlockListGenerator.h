@@ -17,7 +17,7 @@ class BlockListGenerator {
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
-//	std::shared_ptr<IndexedStatusList<int>> heurList_;
+	std::shared_ptr<IndexedStatusList<int>> heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;
@@ -26,7 +26,7 @@ class BlockListGenerator {
 
 	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
-//	void calculateHeurList(const Status& status);
+	void calculateHeurList(const Status& status);
 	void dumpStatus(const Status &status, const Point *p, const std::string &title) {
 		boost::lock_guard<MutexType> lck(dumpMutex_);
 		if (!dump_.good())
@@ -40,7 +40,7 @@ public:
 	BlockListGenerator(Solver::Ptr solver,
 			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance);
 	Checker::Ptr checker();
-//	HeurCalculator::Ptr heurCalculator();
+	HeurCalculator::Ptr heurCalculator();
 	void init(const FixedTable::Ptr& table);
 };
 

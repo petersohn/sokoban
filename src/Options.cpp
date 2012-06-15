@@ -18,7 +18,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		parallelOuterExpand_(false),
 		blockListStones_(0),
 		blockListDistance_(0),
-		numThreads_(1)
+		numThreads_(1),
+		test_(0)
 {
 	OptionsHelper oh;
 	bool help = false;
@@ -33,6 +34,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"blocklist. 0 means no limit.");
 	oh.addArgumentOption<int>("thread-num,t", &numThreads_, "The maximum number of threads to use.");
 	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_, "Expand several nodes in parallel. Only if --thread-num > 1.");
+	oh.addArgumentOption<int>("test", &test_, "Instead of solving a problem, solve each possible problem with the given number "
+			"of stones on the table.");
 
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);

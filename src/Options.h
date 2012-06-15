@@ -31,6 +31,7 @@ private:
 	int blockListStones_;
 	int blockListDistance_;
 	int numThreads_;
+	int test_;
 	CompareList compare_;
 	std::string filename_;
 public:
@@ -46,6 +47,7 @@ public:
 	int blockListStones() const { return blockListStones_; }
 	int blockListDistance() const { return blockListDistance_; }
 	int numThreads() const { return numThreads_; }
+	int test() { return test_; }
 	const std::string &filename() const { return filename_; }
 	const CompareList& compare() const { return compare_; }
 };

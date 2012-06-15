@@ -8,6 +8,8 @@
 #include "State.h"
 #include "ThreadPool.h"
 #include "SolutionChecker.h"
+#include "TableIterator.h"
+#include "ComplexChecker.h"
 #include <ctime>
 #include <iostream>
 #include <fstream>
@@ -19,6 +21,14 @@
 using namespace std;
 namespace pt = boost::posix_time;
 
+
+void solveTestProblem(Solver& solver, const Status& status)
+{
+	cerr << "Bing" << endl;
+	std::deque<Node::Ptr> solution = solver.solve(status);
+	checkResult(status, solution);
+}
+
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
 
@@ -29,39 +39,51 @@ int main(int argc, char** argv) {
 	ThreadPool::instance()->start();
 	clock_t processorTime0 = clock();
 	pt::ptime realTime0 = pt::microsec_clock::local_time();
+	CreateExpanderFromOptions expanderFactory(opts, st.tablePtr(), true);
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
-			CreateExpanderFromOptions(opts, st.tablePtr(), true),
+			expanderFactory,
 			std::bind(createDumperFromOptions, opts),
 			opts.parallelOuterExpand());
-	std::deque<Node::Ptr> solution = s.solve(st);
-	clock_t processorTime = clock() - processorTime0;
-	pt::time_duration realTime =  pt::microsec_clock::local_time() - realTime0;
-	cerr << "Length of solution: " << solution.size() << endl;
-	cerr << "Processor Time:" << (double)processorTime/CLOCKS_PER_SEC << endl;
-	cerr << "Real Time:" << pt::to_simple_string(realTime) << endl;
-	ThreadPool::instance()->wait();
-	if (solution.size() == 0)
-		cerr << "No solution." << endl;
-	else
-	{
-		if (checkResult(st, solution)) {
-			cerr << "Solution OK." << endl;
-		} else {
-			cerr << "Solution bad." << endl;
-		}
-		std::ofstream dump("solution.dump", std::ios::out | std::ios::trunc);
-		for (std::deque<Node::Ptr>::iterator it = solution.begin();
-				it != solution.end(); ++it)
+	if (opts.test() > 0) {
+		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
+		TableIterator it(
+				st.tablePtr(),
+				calculator,
+				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)),
+				std::bind(solveTestProblem, std::ref(s), std::placeholders::_1),
+				0);
+		it.iterate(opts.test());
+	} else {
+		std::deque<Node::Ptr> solution = s.solve(st);
+		clock_t processorTime = clock() - processorTime0;
+		pt::time_duration realTime =  pt::microsec_clock::local_time() - realTime0;
+		cerr << "Length of solution: " << solution.size() << endl;
+		cerr << "Processor Time:" << (double)processorTime/CLOCKS_PER_SEC << endl;
+		cerr << "Real Time:" << pt::to_simple_string(realTime) << endl;
+		ThreadPool::instance()->wait();
+		if (solution.size() == 0)
+			cerr << "No solution." << endl;
+		else
 		{
-			dumpNode(dump, st.tablePtr(), **it);
-			Point from = (*it)->from();
-			Point p(from - (*it)->d());
-			std::string dir =
-					! opts.oldStyleOutput() ? direction((*it)->d()) :
-						(boost::format("(%2d, %2d)") %
-						p.x % p.y).str();
-			cout << boost::format("(%2d, %2d) --> %s") %
-					from.x % from.y % dir << endl;
+			if (checkResult(st, solution)) {
+				cerr << "Solution OK." << endl;
+			} else {
+				cerr << "Solution bad." << endl;
+			}
+			std::ofstream dump("solution.dump", std::ios::out | std::ios::trunc);
+			for (std::deque<Node::Ptr>::iterator it = solution.begin();
+					it != solution.end(); ++it)
+			{
+				dumpNode(dump, st.tablePtr(), **it);
+				Point from = (*it)->from();
+				Point p(from - (*it)->d());
+				std::string dir =
+						! opts.oldStyleOutput() ? direction((*it)->d()) :
+							(boost::format("(%2d, %2d)") %
+							p.x % p.y).str();
+				cout << boost::format("(%2d, %2d) --> %s") %
+						from.x % from.y % dir << endl;
+			}
 		}
 	}
 	cerr << "Status copied " << Status::copyCount << " times." << endl;

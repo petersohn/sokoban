@@ -78,10 +78,10 @@ public:
 		return false;
 	}
 
-	std::vector<const Value&> getSubStatusValues(const Status &status, const Point &p) const
+	std::vector<Value> getSubStatusValues(const Status &status, const Point &p) const
 	{
 		boost::shared_lock<SharedMutexType> lock(mutex_);
-		std::vector<const Value&> result;
+		std::vector<Value> result;
 		RangeType range = index_.equal_range(p);
 		for (const auto& val: range) {
 			Status::ConstPtr sub = val.second.first;
@@ -99,7 +99,7 @@ public:
 				result.push_back(val.second.second);
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	size_t size() const { return size_; }

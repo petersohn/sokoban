@@ -15,9 +15,6 @@ class CreateExpanderFromOptions {
 	const Options &options_;
 	FixedTable::Ptr table_;
 	bool log_;
-	HeurCalculator::Ptr createAdvancedHeurCalcularor();
-	Expander::Ptr createExpander(HeurCalculator::Ptr calculator, Checker::Ptr checker, bool log);
-	std::vector<Checker::Ptr> createBasicCheckers(const HeurCalculator::Ptr& calculator);
 public:
 	CreateExpanderFromOptions(const Options &opts, FixedTable::Ptr table, bool log = true):
 		options_(opts),
@@ -25,6 +22,10 @@ public:
 		log_(log)
 	{
 	}
+
+	HeurCalculator::Ptr createAdvancedHeurCalcularor();
+	Expander::Ptr createExpander(HeurCalculator::Ptr calculator, Checker::Ptr checker, bool log);
+	std::vector<Checker::Ptr> createBasicCheckers(const HeurCalculator::Ptr& calculator);
 
 	Expander::Ptr operator()();
 };
