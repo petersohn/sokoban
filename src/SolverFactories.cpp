@@ -73,7 +73,7 @@ std::vector<Checker::Ptr> CreateExpanderFromOptions::createBasicCheckers(const H
 		checkers.push_back(Checker::Ptr(new MovableChecker(calculator)));
 	if (options_.useCorridorChecker())
 		checkers.push_back(Checker::Ptr(new CorridorChecker(calculator)));
-	return std::move(checkers);
+	return checkers;
 }
 
 Expander::Ptr CreateExpanderFromOptions::createExpander(HeurCalculator::Ptr calculator, Checker::Ptr checker, bool log)
