@@ -56,6 +56,7 @@ bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<N
 	Status status(initialStatus);
 	bool result = true;
 	Node::Ptr oldNode;
+	int resultLength = solution.back()->cost();
 	BOOST_FOREACH(std::shared_ptr<Node> node, solution) {
 		Point to(node->from() + node->d());
 		if (to != status.table().destination() && !node->state()[to]) {
@@ -77,6 +78,10 @@ bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<N
 		if (!isSuccessor(status, *node)) {
 			result = false;
 			printError(oldNode, node, status, "Not a successor");
+		}
+		if (node->costFgv() > resultLength) {
+			result = false;
+			printError(oldNode, node, status, "Invalid heuristic");
 		}
 		status.set(*node);
 		oldNode = node;
