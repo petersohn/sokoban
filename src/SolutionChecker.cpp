@@ -83,6 +83,9 @@ bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<N
 			result = false;
 			printError(oldNode, node, status, "Invalid heuristic");
 		}
+		if (node->experimtntalCostFgv() > resultLength) {
+			printError(oldNode, node, status, "Invalid experimental heuristic");
+		}
 		status.set(*node);
 		oldNode = node;
 	}

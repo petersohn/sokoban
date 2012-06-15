@@ -9,17 +9,25 @@
 class NodeFactory {
 	int numNodes_;
 	HeurCalculator::Ptr calculator_;
+	HeurCalculator::Ptr experimentalCalculator_;
 public:
 	typedef std::shared_ptr<NodeFactory> Ptr;
 
-	NodeFactory(HeurCalculator::Ptr calculator):
+	NodeFactory(
+			const HeurCalculator::Ptr& calculator,
+			const HeurCalculator::Ptr& experimentalCalculator = HeurCalculator::Ptr()):
 		numNodes_(0),
-		calculator_(calculator)
+		calculator_(calculator),
+		experimentalCalculator_(experimentalCalculator)
 	{}
 	Node::Ptr createNode(const Status & status, const Point &p,
 			const Point &d, Node::Ptr ans)
 	{
-		return std::make_shared<Node>(status.state(), p, d, ans, 1, calculator_->calculateStatus(status), ++numNodes_);
+		return std::make_shared<Node>(
+				status.state(), p, d, ans, 1,
+				calculator_->calculateStatus(status),
+				experimentalCalculator_ ? experimentalCalculator_->calculateStatus(status) : 0,
+				++numNodes_);
 	}
 };
 

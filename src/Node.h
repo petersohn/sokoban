@@ -14,6 +14,7 @@ private:
 	Ptr ansector_;
 	State state_;
 	int heur_;
+	int experimentalHeur_;
 	Point from_;
 	Point d_;
 	int depth_;
@@ -22,7 +23,7 @@ private:
 public:
 //	Node();
 	Node(const State &stones, const Point &from, const Point &d, Ptr ans,
-			int c, int heur, int time);
+			int c, int heur, int experimentalHeur, int time);
 	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
 	const Ptr& ansector() const { return ansector_; }
@@ -33,6 +34,9 @@ public:
 	const Point &from() const { return from_; }
 	const Point& d() const { return d_; }
 	int time() const { return time_; }
+	int experimtntalHeur() const { return experimentalHeur_; }
+	int experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
+
 	bool operator<(const Node &other) const
 	{
 		return (costFgv() < other.costFgv() ? false : (costFgv() > other.costFgv() ? true :
