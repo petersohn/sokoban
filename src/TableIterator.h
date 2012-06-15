@@ -11,7 +11,6 @@
 
 class TableIterator {
 public:
-
 	typedef std::function<void(const Status&)> Action;
 private:
 	FixedTable::Ptr table_;
@@ -21,6 +20,7 @@ private:
 	int maxDistance_;
 	int iters_, solved_;
 	int lastTicks_;
+	bool working_;
 
 	MutexType iterMutex_;
 	boost::asio::io_service &ioService_;
@@ -57,8 +57,16 @@ public:
 		iters_(0),
 		solved_(0),
 		lastTicks_(-1),
+		working_(false),
 		ioService_(ThreadPool::instance()->ioService())
 	{
+	}
+
+	const Action& getAction() { return action_; }
+	void setAction(const Action& action)
+	{
+		assert(!working);
+		action_ = action;
 	}
 	void iterate(int numStones);
 };

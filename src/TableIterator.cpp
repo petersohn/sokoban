@@ -85,6 +85,8 @@ void TableIterator::progress()
 
 void TableIterator::iterate(int numStones)
 {
+	assert(!working);
+	TempValue(working, true);
 	std::clock_t iterationStart = std::clock();
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;

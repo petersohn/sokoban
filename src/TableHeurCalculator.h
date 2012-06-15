@@ -18,8 +18,7 @@ class TableHeurCalculator: public HeurCalculator {
 		boost::lock_guard<MutexType> lck(heurMutex_);
 		if (table_ != status.tablePtr()) {
 			std::cerr << table_ << " --> " << status.tablePtr() << std::endl;
-			table_ = status.tablePtr();
-			init();
+			setTable(status.tablePtr());
 		}
 	}
 public:
@@ -29,6 +28,11 @@ public:
 	virtual int calculateStatus(const Status &status);
 	virtual int calculateStone(const Status &status, const Point &p);
 
+	void setTable(const FixedTable::Ptr& table)
+	{
+		table_ = table;
+		init();
+	}
 	const Table& table() const { return table_->get(); }
 	FixedTable::Ptr tablePtr() const { return table_; }
 };

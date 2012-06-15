@@ -3,7 +3,7 @@
 
 #include "Checker.h"
 #include "Solver.h"
-#include "HeurCalculator.h"
+#include "TableHeurCalculator.h"
 #include "IndexedStatusList.h"
 #include "DumperFunctions.h"
 #include "ThreadPool.h"
@@ -13,18 +13,21 @@
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
 
-class BlockListChecker: public Checker, public std::enable_shared_from_this<BlockListChecker> {
+class BlockListChecker: public Checker, public TableHeurCalculator, public std::enable_shared_from_this<BlockListChecker> {
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	IndexedStatusList<int> blockList_;
+	IndexedStatusList<int> heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;
 	std::ofstream dump_;
 	MutexType dumpMutex_;
 
-	void doWork(const Status& status);
+	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
+	void calculateBlockList(const Status& status);
+	void calculateHeurList(const Status& status);
 	void dumpStatus(const Status &status, const Point *p, const std::string &title) {
 		boost::lock_guard<MutexType> lck(dumpMutex_);
 		if (!dump_.good())
@@ -34,10 +37,10 @@ class BlockListChecker: public Checker, public std::enable_shared_from_this<Bloc
 			hl[*p] = true;
 		::dumpStatus(dump_, status, title, &hl);
 	}
+	virtual void init();
 public:
 	BlockListChecker(Solver::Ptr solver,
 			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance);
-	void init(FixedTable::Ptr table);
 	virtual bool check(const Status& status, const Point& p);
 	virtual const char* errorMessage();
 };

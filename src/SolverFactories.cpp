@@ -104,7 +104,7 @@ Expander::Ptr CreateExpanderFromOptions::operator()()
 				})) ;
 		std::shared_ptr<BlockListChecker> blocklistChecker(
 				new BlockListChecker(solver, calc, checker, options_.blockListStones(), options_.blockListDistance()));
-		blocklistChecker->init(table_);
+		blocklistChecker->setTable(table_);
 		checkers.push_back(blocklistChecker);
 	}
 	return createExpander(calc, std::make_shared<ComplexChecker>(checkers), log_);
