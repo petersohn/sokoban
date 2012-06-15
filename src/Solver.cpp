@@ -94,7 +94,7 @@ public:
 			}
 			dumper_->save();
 		}
-		return std::move(result);
+		return result;
 	}
 
 };
