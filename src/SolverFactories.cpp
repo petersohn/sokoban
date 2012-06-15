@@ -8,7 +8,7 @@
 #include "ComplexChecker.h"
 #include "MovableChecker.h"
 #include "CorridorChecker.h"
-#include "BlockListChecker.h"
+#include "BlockListGenerator.h"
 #include "BasicHeurCalculator.h"
 #include "AdvancedHeurCalculator.h"
 #include "VisitedStates.h"
@@ -102,10 +102,10 @@ Expander::Ptr CreateExpanderFromOptions::operator()()
 				[this, calc, checker]() {
 					return createExpander(calc, checker, false);
 				})) ;
-		std::shared_ptr<BlockListChecker> blocklistChecker(
-				new BlockListChecker(solver, calc, checker, options_.blockListStones(), options_.blockListDistance()));
-		blocklistChecker->setTable(table_);
-		checkers.push_back(blocklistChecker);
+		BlockListGenerator blockListGenerator(
+				solver, calc, checker, options_.blockListStones(), options_.blockListDistance());
+		blockListGenerator.init(table_);
+		checkers.push_back(blockListGenerator.checker());
 	}
 	return createExpander(calc, std::make_shared<ComplexChecker>(checkers), log_);
 }

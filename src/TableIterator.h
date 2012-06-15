@@ -65,7 +65,7 @@ public:
 	const Action& getAction() { return action_; }
 	void setAction(const Action& action)
 	{
-		assert(!working);
+		assert(!working_);
 		action_ = action;
 	}
 	void iterate(int numStones);

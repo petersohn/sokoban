@@ -52,10 +52,11 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	BasicHeurCalculator.$(OBJEXT) BlockListChecker.$(OBJEXT) \
-	Common.$(OBJEXT) ComplexChecker.$(OBJEXT) \
-	ComplexExpander.$(OBJEXT) CorridorChecker.$(OBJEXT) \
-	DumperFunctions.$(OBJEXT) MovableChecker.$(OBJEXT) \
-	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
+	BlockListGenerator.$(OBJEXT) Common.$(OBJEXT) \
+	ComplexChecker.$(OBJEXT) ComplexExpander.$(OBJEXT) \
+	CorridorChecker.$(OBJEXT) DumperFunctions.$(OBJEXT) \
+	MovableChecker.$(OBJEXT) Node.$(OBJEXT) \
+	NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
 	PrioNodeQueue.$(OBJEXT) SolutionChecker.$(OBJEXT) \
 	Solver.$(OBJEXT) SolverFactories.$(OBJEXT) Status.$(OBJEXT) \
@@ -183,6 +184,7 @@ sokoban_SOURCES = main.cpp \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
 		BlockListChecker.cpp \
+		BlockListGenerator.cpp \
 		Common.cpp \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
@@ -295,6 +297,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AdvancedHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BasicHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BlockListChecker.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BlockListGenerator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@

@@ -1,4 +1,5 @@
 #include "TableIterator.h"
+#include "TempValue.h"
 #include <ctime>
 
 void TableIterator::initIter(Point p, int stones, const State &state)
@@ -85,8 +86,8 @@ void TableIterator::progress()
 
 void TableIterator::iterate(int numStones)
 {
-	assert(!working);
-	TempValue(working, true);
+	assert(!working_);
+	TempValue<bool> working(working_, true);
 	std::clock_t iterationStart = std::clock();
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;

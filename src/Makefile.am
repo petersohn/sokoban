@@ -2,6 +2,7 @@ sokoban_SOURCES = main.cpp \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
 		BlockListChecker.cpp \
+		BlockListGenerator.cpp \
 		Common.cpp \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
