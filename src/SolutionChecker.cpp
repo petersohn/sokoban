@@ -4,6 +4,7 @@
 #include "DumperFunctions.h"
 #include "Common.h"
 #include <iostream>
+#include <fstream>
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 
@@ -57,6 +58,7 @@ bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<N
 	bool result = true;
 	Node::Ptr oldNode;
 	int resultLength = solution.back()->cost();
+	std::ofstream dump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	BOOST_FOREACH(std::shared_ptr<Node> node, solution) {
 		Point to(node->from() + node->d());
 		if (to != status.table().destination() && !node->state()[to]) {
@@ -84,11 +86,13 @@ bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<N
 			printError(oldNode, node, status, "Invalid heuristic");
 		}
 		if (node->experimtntalCostFgv() > node->costFgv()) {
-			std::cerr << "Found plus heur: " <<
+			dump << "Found plus heur: " <<
 					node->costFgv() << " --> " <<
 					node->experimtntalCostFgv() <<
 					" (real=" << resultLength << ")" << std::endl;
-			dumpStatus(std::cerr, status);
+			dumpStatus(dump, status,
+					node->experimtntalCostFgv() > resultLength ? "bad heur" : "good heur",
+					&status.reachableArray());
 		}
 		status.set(*node);
 		oldNode = node;
