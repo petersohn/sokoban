@@ -60,18 +60,7 @@ public:
 		boost::shared_lock<SharedMutexType> lock(mutex_);
 		RangeType range = index_.equal_range(p);
 		for (const auto& val: range) {
-			Status::ConstPtr sub = val.second.first;
-			if (!sub->reachable(status.currentPos())) {
-				continue;
-			}
-			bool ok = true;
-			for (const Point &pp: sub->state()) {
-				if (!status.state()[pp]) {
-					ok = false;
-					break;
-				}
-			}
-			if (ok) {
+			if (isSubStatus(*val.second.first, status)) {
 				return true;
 			}
 		}
@@ -84,18 +73,7 @@ public:
 		std::vector<Value> result;
 		RangeType range = index_.equal_range(p);
 		for (const auto& val: range) {
-			Status::ConstPtr sub = val.second.first;
-			if (!sub->reachable(status.currentPos())) {
-				continue;
-			}
-			bool ok = true;
-			for (const Point &pp: sub->state()) {
-				if (!status.state()[pp]) {
-					ok = false;
-					break;
-				}
-			}
-			if (ok) {
+			if (isSubStatus(*val.second.first, status)) {
 				result.push_back(val.second.second);
 			}
 		}

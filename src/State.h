@@ -6,6 +6,7 @@
 #include <memory>
 #include <assert.h>
 #include <functional>
+#include <boost/range/algorithm.hpp>
 
 class State {
 	typedef std::unordered_set<Point> ContainerType;
@@ -50,6 +51,11 @@ public:
 	const_iterator end() const { return stones_->end(); }
 };
 
+inline bool isSubState(const State& subState, const State& state)
+{
+	return boost::find_if(subState,
+			[&state](const Point &p) { return !state[p]; }) == subState.end();
+}
 
 namespace std {
 
