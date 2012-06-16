@@ -15,9 +15,11 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		useMovableChecker_(true),
 		useCorridorChecker_(true),
 		useAdvancedHeurCalculator_(true),
+		useBlocklistHeurCalculator_(false),
 		parallelOuterExpand_(false),
 		blockListStones_(0),
 		blockListDistance_(0),
+		maxHeurListSize_(0),
 		numThreads_(1),
 		test_(0)
 {
@@ -57,6 +59,10 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Enable/disable checking for corridors.\n");
 	oh.addBoolOption("advanced-heur-calculator", &useAdvancedHeurCalculator_,
 			"Enable/disable advanced heur calculator.\n");
+	oh.addBoolOption("blocklist-heur-calculator", &useBlocklistHeurCalculator_,
+			"Enable/disable blocklist heur calculator. Only meaningful if --blocklist-number > 1\n");
+	oh.addArgumentOption<int>("heur-list-size", &maxHeurListSize_,
+			"The maximum size for the heur list when blocklist-heur-calculator is enabled. 0 means no limitation.");
 	IndexedArgument cl;
 	cl.addElement("time", ctTime);
 	cl.addElement("heur", ctHeur);

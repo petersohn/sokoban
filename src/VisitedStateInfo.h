@@ -11,6 +11,7 @@ class VisitedStateInfo {
 	State state_;
 	Point firstReachable_;
 public:
+	VisitedStateInfo() {}
 	VisitedStateInfo(const Status& status);
 
 	const State& state() const { return state_; }

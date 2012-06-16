@@ -108,10 +108,14 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 					return createExpander(calculator, checker, false);
 				})) ;
 		BlockListGenerator blockListGenerator(
-				solver, calculator, checker, options_.blockListStones(), options_.blockListDistance());
+				solver, calculator, checker, options_.blockListStones(),
+				options_.blockListDistance(), options_.maxHeurListSize());
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
-		experimentalCalculator = blockListGenerator.heurCalculator();
+//		experimentalCalculator = blockListGenerator.heurCalculator();
+		if (options_.useBlocklistHeurCalculator()) {
+			calculator = blockListGenerator.heurCalculator();
+		}
 	}
 	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
 			calculator,

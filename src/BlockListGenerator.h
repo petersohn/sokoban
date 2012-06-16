@@ -22,6 +22,7 @@ class BlockListGenerator {
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;
+	int maxHeurListSize_;
 	std::ofstream dump_;
 	MutexType dumpMutex_;
 
@@ -42,7 +43,8 @@ class BlockListGenerator {
 	}
 public:
 	BlockListGenerator(Solver::Ptr solver,
-			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones, int maxDistance);
+			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones,
+			int maxDistance, int maxHeurListSize);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr heurCalculator();
 	void init(const FixedTable::Ptr& table);

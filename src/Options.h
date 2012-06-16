@@ -27,9 +27,11 @@ private:
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	bool useAdvancedHeurCalculator_;
+	bool useBlocklistHeurCalculator_;
 	bool parallelOuterExpand_;
 	int blockListStones_;
 	int blockListDistance_;
+	int maxHeurListSize_;
 	int numThreads_;
 	int test_;
 	CompareList compare_;
@@ -43,9 +45,11 @@ public:
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	bool useAdvancedHeurCalculator() const { return useAdvancedHeurCalculator_; }
+	bool useBlocklistHeurCalculator() const { return useBlocklistHeurCalculator_; }
 	bool parallelOuterExpand() const { return parallelOuterExpand_; }
 	int blockListStones() const { return blockListStones_; }
 	int blockListDistance() const { return blockListDistance_; }
+	int maxHeurListSize() const { return maxHeurListSize_; }
 	int numThreads() const { return numThreads_; }
 	int test() { return test_; }
 	const std::string &filename() const { return filename_; }

@@ -13,7 +13,7 @@
 
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
-		Checker::Ptr checker, int numStones, int maxDistance):
+		Checker::Ptr checker, int numStones, int maxDistance, int maxHeurListSize):
 		solver_(solver),
 		calculator_(calculator),
 		checker_(checker),
@@ -21,6 +21,7 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		heurList_(new std::vector<HeurInfo>),
 		numStones_(numStones),
 		maxDistance_(maxDistance),
+		maxHeurListSize_(maxHeurListSize),
 		dump_("blocklist.dump")
 {
 }
@@ -74,6 +75,9 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 	}
 	boost::sort(*heurList_, [](const HeurInfo& left, const HeurInfo& right) { return left.heur_ > right.heur_; });
+	if (maxHeurListSize_ > 0 && heurList_->size() > maxHeurListSize_) {
+		heurList_->resize(maxHeurListSize_);
+	}
 	dump_.flush();
 }
 
