@@ -22,11 +22,11 @@ using namespace std;
 namespace pt = boost::posix_time;
 
 
-void solveTestProblem(Solver& solver, const Status& status)
+void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, const Status& status)
 {
 	std::deque<Node::Ptr> solution = solver.solve(status);
 	if (!solution.empty()) {
-		checkResult(status, solution);
+		solutionChecker.checkResult(status, solution);
 	}
 }
 
@@ -46,13 +46,15 @@ int main(int argc, char** argv) {
 			createExpander,
 			std::bind(createDumperFromOptions, opts),
 			opts.parallelOuterExpand());
+	std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
+	SolutionChecker solutionChecker(std::cerr, heurDump);
 	if (opts.test() > 0) {
 		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
 		TableIterator it(
 				st.tablePtr(),
 				calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)),
-				std::bind(solveTestProblem, std::ref(s), std::placeholders::_1),
+				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
 				0);
 		it.iterate(opts.test());
 	} else {
@@ -67,7 +69,7 @@ int main(int argc, char** argv) {
 			cerr << "No solution." << endl;
 		else
 		{
-			if (checkResult(st, solution)) {
+			if (solutionChecker.checkResult(st, solution)) {
 				cerr << "Solution OK." << endl;
 			} else {
 				cerr << "Solution bad." << endl;

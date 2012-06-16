@@ -1,22 +1,17 @@
 #include "SolutionChecker.h"
-#include "Node.h"
 #include "Status.h"
 #include "DumperFunctions.h"
 #include "Common.h"
-#include <iostream>
 #include <fstream>
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 
-namespace {
-
-using std::cerr;
 using std::endl;
 
-bool isSuccessor(const Status& oldStatus, const Node& node)
+bool SolutionChecker::isSuccessor(const Status& oldStatus, const Node& node)
 {
 	if (!oldStatus.reachable(node.from() - node.d())) {
-		cerr << "Push point not reachable." << endl;
+		errorDump_ << "Push point not reachable." << endl;
 		return false;
 	}
 	Point to(node.from() + node.d());
@@ -25,40 +20,37 @@ bool isSuccessor(const Status& oldStatus, const Node& node)
 		--neededStones;
 	}
 	if (node.state().size() != neededStones) {
-		cerr << "Stone number mismatch." << "Needed: " << neededStones << ", found: " << node.state().size() << endl;
+		errorDump_ << "Stone number mismatch." << "Needed: " << neededStones << ", found: " << node.state().size() << endl;
 		return false;
 	}
 	BOOST_FOREACH(const Point& p, oldStatus.state()) {
 		if (p != node.from() && !node.state()[p]) {
-			cerr << "Stone point mismatch: " << pointStr(p) << endl;
+			errorDump_ << "Stone point mismatch: " << pointStr(p) << endl;
 			return false;
 		}
 	}
 	return true;
 }
 
-void printError(const Node::Ptr& oldNode, const Node::Ptr& newNode, const Status& status, const char* errorMessage)
+void SolutionChecker::printError(const Node::Ptr& oldNode, const Node::Ptr& newNode, const Status& status, const char* errorMessage)
 {
-	cerr << errorMessage << "\n";
+	errorDump_ << errorMessage << "\n";
 	if (oldNode) {
-		dumpNode(cerr, status.tablePtr(), *oldNode, (boost::format("Old node (depth = %d)") % oldNode->depth()).str());
+		dumpNode(errorDump_, status.tablePtr(), *oldNode, (boost::format("Old node (depth = %d)") % oldNode->depth()).str());
 	}
 	if (newNode) {
-		dumpNode(cerr, status.tablePtr(), *newNode, (boost::format("New node (depth = %d)") % newNode->depth()).str());
+		dumpNode(errorDump_, status.tablePtr(), *newNode, (boost::format("New node (depth = %d)") % newNode->depth()).str());
 	}
-	dumpStatus(cerr, status, "Status");
-	cerr << "\n" << endl;
+	dumpStatus(errorDump_, status, "Status");
+	errorDump_ << "\n" << endl;
 }
 
-}
-
-bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<Node> >& solution)
+bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<Node> >& solution)
 {
 	Status status(initialStatus);
 	bool result = true;
 	Node::Ptr oldNode;
 	int resultLength = solution.back()->cost();
-	std::ofstream dump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	BOOST_FOREACH(std::shared_ptr<Node> node, solution) {
 		Point to(node->from() + node->d());
 		if (to != status.table().destination() && !node->state()[to]) {
@@ -86,11 +78,11 @@ bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<N
 			printError(oldNode, node, status, "Invalid heuristic");
 		}
 		if (node->experimtntalCostFgv() > node->costFgv()) {
-			dump << "Found plus heur: " <<
+			heurDump_ << "Found plus heur: " <<
 					node->costFgv() << " --> " <<
 					node->experimtntalCostFgv() <<
 					" (real=" << resultLength << ")" << std::endl;
-			dumpStatus(dump, status,
+			dumpStatus(heurDump_, status,
 					node->experimtntalCostFgv() > resultLength ? "bad heur" : "good heur",
 					&status.reachableArray());
 		}
