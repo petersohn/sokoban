@@ -9,6 +9,7 @@
 #include <functional>
 #include <iostream>
 #include <cstdlib>
+#include <boost/range/algorithm.hpp>
 
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
@@ -17,7 +18,7 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		calculator_(calculator),
 		checker_(checker),
 		blockList_(new IndexedStatusList<int>),
-		heurList_(new IndexedStatusList<int>),
+		heurList_(new std::vector<HeurInfo>),
 		numStones_(numStones),
 		maxDistance_(maxDistance),
 		dump_("blocklist.dump")
@@ -43,15 +44,13 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 {
 	std::deque<Node::Ptr> result = doCalculateBlockList(status);
 	if (result.size() > 0) {
-		int heur = result.front()->heur();
+		int heur = calculator_->calculateStatus(status);
 		int cost = result.back()->cost();
 		int difference = cost - heur;
-		int addedValue = difference / numStones_;
-		assert(addedValue >= 0);
-		if (addedValue > 0) {
-			dump_ << heur << " --> " << cost << "(" << addedValue << ")\n";
+		if (difference > 0) {
+			dump_ << heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
-			heurList_->add(status, addedValue);
+			heurList_->push_back(HeurInfo(VisitedStateInfo(status), cost));
 		}
 	}
 }
@@ -74,6 +73,7 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 		tableIterator.iterate(n);
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 	}
+	boost::sort(*heurList_, [](const HeurInfo& left, const HeurInfo& right) { return left.heur_ > right.heur_; });
 	dump_.flush();
 }
 

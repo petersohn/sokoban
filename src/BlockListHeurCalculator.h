@@ -3,24 +3,25 @@
 
 #include "TableHeurCalculator.h"
 #include "IndexedStatusList.h"
+#include "HeurInfo.h"
 
-class BlocklistHeurCalculator: public TableHeurCalculator {
+class BlocklistHeurCalculator: public HeurCalculator {
 	HeurCalculator::Ptr baseCalculator_;
-	std::shared_ptr<IndexedStatusList<int>> heurList_;
+	std::shared_ptr<std::vector<HeurInfo>> heurList_;
 	FixedTable::Ptr table_;
-
-	virtual void init();
-	virtual int doCalculateStone(const Status &status, const Point &p);
 public:
 	BlocklistHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
-			std::shared_ptr<IndexedStatusList<int>> heurList,
+			std::shared_ptr<std::vector<HeurInfo>> heurList,
 			FixedTable::Ptr table):
 				heurList_(heurList),
 				baseCalculator_(baseCalculator),
 				table_(table)
 	{
 	}
+
+	virtual int calculateStone(const Status &status, const Point &p);
+	virtual int calculateStatus(const Status &status);
 };
 
 

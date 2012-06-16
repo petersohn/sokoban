@@ -77,7 +77,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 			result = false;
 			printError(oldNode, node, status, "Invalid heuristic");
 		}
-		if (node->experimtntalCostFgv() > node->costFgv()) {
+		if (node->experimtntalCostFgv() != node->costFgv()) {
 			heurDump_ << "Found plus heur: " <<
 					node->costFgv() << " --> " <<
 					node->experimtntalCostFgv() <<

@@ -6,6 +6,7 @@
 #include "DumperFunctions.h"
 #include "ThreadPool.h"
 #include "Checker.h"
+#include "HeurInfo.h"
 #include <fstream>
 #include <memory>
 #include <boost/thread.hpp>
@@ -17,7 +18,7 @@ class BlockListGenerator {
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
-	std::shared_ptr<IndexedStatusList<int>> heurList_;
+	std::shared_ptr<std::vector<HeurInfo>> heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;
@@ -31,10 +32,13 @@ class BlockListGenerator {
 		boost::lock_guard<MutexType> lck(dumpMutex_);
 		if (!dump_.good())
 			return;
-		Array<bool> hl = status.reachableArray();
-		if (p)
+		if (p) {
+			Array<bool> hl = status.reachableArray();
 			hl[*p] = true;
-		::dumpStatus(dump_, status, title, &hl);
+			::dumpStatus(dump_, status, title, &hl);
+		} else {
+			::dumpStatus(dump_, status, title, &status.reachableArray());
+		}
 	}
 public:
 	BlockListGenerator(Solver::Ptr solver,
