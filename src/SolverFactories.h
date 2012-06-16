@@ -11,12 +11,13 @@
 NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts);
 Dumper::Ptr createDumperFromOptions(const Options &opts);
 
-class CreateExpanderFromOptions {
+
+class OptionsBasedExpanderFactory {
 	const Options &options_;
 	FixedTable::Ptr table_;
 	bool log_;
 public:
-	CreateExpanderFromOptions(const Options &opts, FixedTable::Ptr table, bool log = true):
+	OptionsBasedExpanderFactory(const Options &opts, FixedTable::Ptr table, bool log = true):
 		options_(opts),
 		table_(table),
 		log_(log)
@@ -24,10 +25,14 @@ public:
 	}
 
 	HeurCalculator::Ptr createAdvancedHeurCalcularor();
-	Expander::Ptr createExpander(HeurCalculator::Ptr calculator, Checker::Ptr checker, bool log);
+	Expander::Ptr createExpander(
+			HeurCalculator::Ptr calculator,
+			Checker::Ptr checker,
+			bool log,
+			HeurCalculator::Ptr experimentalCalculator = HeurCalculator::Ptr());
 	std::vector<Checker::Ptr> createBasicCheckers(const HeurCalculator::Ptr& calculator);
 
-	Expander::Ptr operator()();
+	ExpanderFactory factory();
 };
 
 

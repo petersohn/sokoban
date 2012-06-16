@@ -53,7 +53,7 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 			funcs.begin(), funcs.end())));
 }
 
-HeurCalculator::Ptr CreateExpanderFromOptions::createAdvancedHeurCalcularor()
+HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 {
 	HeurCalculator::Ptr bhc(new BasicHeurCalculator);
 	Solver::Ptr s(new Solver(createPrioQueue,
@@ -66,7 +66,7 @@ HeurCalculator::Ptr CreateExpanderFromOptions::createAdvancedHeurCalcularor()
 	return HeurCalculator::Ptr(new AdvancedHeurCalculator(s));
 }
 
-std::vector<Checker::Ptr> CreateExpanderFromOptions::createBasicCheckers(const HeurCalculator::Ptr& calculator)
+std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
 {
 	std::vector<Checker::Ptr> checkers;
 	if (options_.useMovableChecker())
@@ -76,10 +76,14 @@ std::vector<Checker::Ptr> CreateExpanderFromOptions::createBasicCheckers(const H
 	return checkers;
 }
 
-Expander::Ptr CreateExpanderFromOptions::createExpander(HeurCalculator::Ptr calculator, Checker::Ptr checker, bool log)
+Expander::Ptr OptionsBasedExpanderFactory::createExpander(
+			HeurCalculator::Ptr calculator,
+			Checker::Ptr checker,
+			bool log,
+			HeurCalculator::Ptr experimentalCalculator)
 {
 	VisitedStateHolder::Ptr visitedStates(new VisitedStates());
-	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator));
+	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator, experimentalCalculator));
 	std::vector<Expander::Ptr> expanders;
 	if (options_.useStonePusher()) {
 		expanders.push_back(Expander::Ptr(new StonePusher(visitedStates, calculator, nodeFactory)));
@@ -88,12 +92,13 @@ Expander::Ptr CreateExpanderFromOptions::createExpander(HeurCalculator::Ptr calc
 	return Expander::Ptr(new ComplexExpander(expanders.begin(), expanders.end()));
 }
 
-Expander::Ptr CreateExpanderFromOptions::operator()()
+ExpanderFactory OptionsBasedExpanderFactory::factory()
 {
 	HeurCalculator::Ptr calculator =
 		options_.useAdvancedHeurCalculator() ?
 		createAdvancedHeurCalcularor() :
 		std::make_shared<BasicHeurCalculator>();
+	HeurCalculator::Ptr experimentalCalculator;
 	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
 	if (options_.blockListStones() > 1) {
 		Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
@@ -106,9 +111,13 @@ Expander::Ptr CreateExpanderFromOptions::operator()()
 				solver, calculator, checker, options_.blockListStones(), options_.blockListDistance());
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
-		calculator = blockListGenerator.heurCalculator();
+		experimentalCalculator = blockListGenerator.heurCalculator();
 	}
-	return createExpander(calculator, std::make_shared<ComplexChecker>(checkers), log_);
+	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
+			calculator,
+			std::make_shared<ComplexChecker>(checkers),
+			log_,
+			experimentalCalculator);
 }
 
 Dumper::Ptr createDumperFromOptions(const Options & opts)

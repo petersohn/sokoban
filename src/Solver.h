@@ -19,9 +19,6 @@ public:
 class Solver {
 public:
 	typedef std::shared_ptr<Solver> Ptr;
-	typedef std::function<NodeQueue::Ptr()> QueueFactory;
-	typedef std::function<Expander::Ptr()> ExpanderFactory;
-	typedef std::function<Dumper::Ptr()> DumperFactory;
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;

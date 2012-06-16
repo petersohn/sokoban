@@ -21,4 +21,6 @@ public:
 	virtual ~Dumper() {}
 };
 
+typedef std::function<Dumper::Ptr()> DumperFactory;
+
 #endif /* DUMPER_H_ */

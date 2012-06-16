@@ -24,9 +24,10 @@ namespace pt = boost::posix_time;
 
 void solveTestProblem(Solver& solver, const Status& status)
 {
-	cerr << "Bing" << endl;
 	std::deque<Node::Ptr> solution = solver.solve(status);
-	checkResult(status, solution);
+	if (!solution.empty()) {
+		checkResult(status, solution);
+	}
 }
 
 int main(int argc, char** argv) {
@@ -39,9 +40,10 @@ int main(int argc, char** argv) {
 	ThreadPool::instance()->start();
 	clock_t processorTime0 = clock();
 	pt::ptime realTime0 = pt::microsec_clock::local_time();
-	CreateExpanderFromOptions expanderFactory(opts, st.tablePtr(), true);
+	OptionsBasedExpanderFactory expanderFactory(opts, st.tablePtr(), !opts.test());
+	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
-			expanderFactory,
+			createExpander,
 			std::bind(createDumperFromOptions, opts),
 			opts.parallelOuterExpand());
 	if (opts.test() > 0) {

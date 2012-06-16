@@ -86,6 +86,6 @@ Checker::Ptr BlockListGenerator::checker()
 HeurCalculator::Ptr BlockListGenerator::heurCalculator()
 {
 	assert(table_);
-	return std::make_shared<BlocklistHeurCalculator>(calculator_, blockList_, table_);
+	return std::make_shared<BlocklistHeurCalculator>(calculator_, heurList_, table_);
 }
 
