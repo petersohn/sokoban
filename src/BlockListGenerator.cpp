@@ -78,6 +78,7 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	if (maxHeurListSize_ > 0 && heurList_->size() > maxHeurListSize_) {
 		heurList_->resize(maxHeurListSize_);
 	}
+	std::cerr << "Heur list size = " << heurList_->size() << std::endl;
 	dump_.flush();
 }
 

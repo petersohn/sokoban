@@ -18,9 +18,7 @@ int BlocklistHeurCalculator::calculateStatus(const Status &status)
 		if (status.reachable(subset.info_.firstReachable()) &&
 				isSubState(subset.info_.state(), state)) {
 			result += subset.heur_;
-			int sumHeur = 0;
 			for (const Point& p: subset.info_.state()) {
-				sumHeur += baseCalculator_->calculateStone(status, p);
 				state.removeStone(p);
 			}
 		}
@@ -28,7 +26,6 @@ int BlocklistHeurCalculator::calculateStatus(const Status &status)
 	for (const Point& p: state) {
 		result += baseCalculator_->calculateStone(status, p);
 	}
-	int old = baseCalculator_->calculateStatus(status);
 	return result;
 }
 
