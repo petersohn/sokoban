@@ -65,7 +65,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 			result = false;
 			printError(oldNode, node, status, "Error in node depth");
 		}
-		if (node->ansector() != oldNode) {
+		if (node->ancestor() != oldNode) {
 			result = false;
 			printError(oldNode, node, status, "Ansector link error");
 		}

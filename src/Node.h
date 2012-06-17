@@ -11,7 +11,7 @@ class Node: public boost::noncopyable {
 public:
 	typedef std::shared_ptr<Node> Ptr;
 private:
-	Ptr ansector_;
+	Ptr ancestor_;
 	State state_;
 	int heur_;
 	int experimentalHeur_;
@@ -26,7 +26,7 @@ public:
 			int c, int heur, int experimentalHeur, int time);
 	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
-	const Ptr& ansector() const { return ansector_; }
+	const Ptr& ancestor() const { return ancestor_; }
 	const State &state() const { return state_; }
 	int depth() const { return depth_; }
 	int cost() const { return cost_; }

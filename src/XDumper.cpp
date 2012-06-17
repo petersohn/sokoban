@@ -49,7 +49,7 @@ XDumper::ElementPtr XDumper::doAddNode(Node::Ptr node)
 	elem->attributes().insert(make_pair("heur", toStr(node->heur())));
 	elem->attributes().insert(make_pair("costFgv", toStr(node->costFgv())));
 	elements_[node] = elem;
-	elements_[node->ansector()]->children().push_back(elem);
+	elements_[node->ancestor()]->children().push_back(elem);
 	return elem;
 }
 

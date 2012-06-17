@@ -8,7 +8,7 @@ using namespace std;
 
 Node::Node(const State &stones, const Point &from, const Point &d, Ptr ans,
 		int c, int heur, int experimentalHeur, int time):
-	ansector_(ans),
+	ancestor_(ans),
 	state_(stones),
 	heur_(heur),
 	experimentalHeur_(experimentalHeur),
@@ -33,7 +33,7 @@ deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base)
 	while (node.get() != NULL && node != base)
 	{
 		result.push_front(node);
-		node = node->ansector();
+		node = node->ancestor();
 	}
 	return result;
 }
