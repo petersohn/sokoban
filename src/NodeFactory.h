@@ -25,8 +25,8 @@ public:
 	{
 		return std::make_shared<Node>(
 				status.state(), p, d, ans, 1,
-				calculator_->calculateStatus(status),
-				experimentalCalculator_ ? experimentalCalculator_->calculateStatus(status) : 0,
+				calculator_->calculateStatus(status, ans),
+				experimentalCalculator_ ? experimentalCalculator_->calculateStatus(status, ans) : 0,
 				++numNodes_);
 	}
 };

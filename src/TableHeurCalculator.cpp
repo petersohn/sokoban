@@ -1,6 +1,7 @@
 #include "TableHeurCalculator.h"
 
-int TableHeurCalculator::calculateStatus(const Status & status)
+int TableHeurCalculator::calculateStatus(const Status & status,
+			const std::shared_ptr<Node>& /*ancestor*/)
 {
 	checkTable(status);
 	int result = 0;

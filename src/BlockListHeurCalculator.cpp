@@ -1,5 +1,6 @@
 #include "BlockListHeurCalculator.h"
 #include "DumperFunctions.h"
+#include "Node.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 
@@ -9,7 +10,8 @@ int BlocklistHeurCalculator::calculateStone(const Status &status, const Point &p
 	return baseCalculator_->calculateStone(status, p);
 }
 
-int BlocklistHeurCalculator::calculateStatus(const Status &status)
+int BlocklistHeurCalculator::calculateStatus(const Status &status,
+			const std::shared_ptr<Node>& ancestor)
 {
 	assert(status.tablePtr() == table_);
 	State state = status.state();
@@ -25,6 +27,9 @@ int BlocklistHeurCalculator::calculateStatus(const Status &status)
 	}
 	for (const Point& p: state) {
 		result += baseCalculator_->calculateStone(status, p);
+	}
+	if (ancestor) {
+		return std::max(result, ancestor->heur() - 1);
 	}
 	return result;
 }
