@@ -31,6 +31,8 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
-bin_PROGRAMS = sokoban
+unitTest_SOURCES = UnitTest/testMain.cpp UnitTest/DecisionTreeTest.cpp 
+
+bin_PROGRAMS = sokoban unitTest
 
 AM_CXXFLAGS=-std=c++0x

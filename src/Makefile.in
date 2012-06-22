@@ -33,7 +33,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
-bin_PROGRAMS = sokoban$(EXEEXT)
+bin_PROGRAMS = sokoban$(EXEEXT) unitTest$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -66,6 +66,9 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	VisitedStates.$(OBJEXT) XDumper.$(OBJEXT) XML.$(OBJEXT)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
+am_unitTest_OBJECTS = testMain.$(OBJEXT) DecisionTreeTest.$(OBJEXT)
+unitTest_OBJECTS = $(am_unitTest_OBJECTS)
+unitTest_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -75,8 +78,8 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SOURCES = $(sokoban_SOURCES)
-DIST_SOURCES = $(sokoban_SOURCES)
+SOURCES = $(sokoban_SOURCES) $(unitTest_SOURCES)
+DIST_SOURCES = $(sokoban_SOURCES) $(unitTest_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -213,6 +216,7 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
+unitTest_SOURCES = UnitTest/testMain.cpp UnitTest/DecisionTreeTest.cpp 
 AM_CXXFLAGS = -std=c++0x
 all: all-am
 
@@ -288,6 +292,9 @@ clean-binPROGRAMS:
 sokoban$(EXEEXT): $(sokoban_OBJECTS) $(sokoban_DEPENDENCIES) 
 	@rm -f sokoban$(EXEEXT)
 	$(CXXLINK) $(sokoban_OBJECTS) $(sokoban_LDADD) $(LIBS)
+unitTest$(EXEEXT): $(unitTest_OBJECTS) $(unitTest_DEPENDENCIES) 
+	@rm -f unitTest$(EXEEXT)
+	$(CXXLINK) $(unitTest_OBJECTS) $(unitTest_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -304,6 +311,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CorridorChecker.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DecisionTreeTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DumperFunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MovableChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@
@@ -327,6 +335,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XDumper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XML.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testMain.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -341,6 +350,34 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+testMain.o: UnitTest/testMain.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT testMain.o -MD -MP -MF $(DEPDIR)/testMain.Tpo -c -o testMain.o `test -f 'UnitTest/testMain.cpp' || echo '$(srcdir)/'`UnitTest/testMain.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/testMain.Tpo $(DEPDIR)/testMain.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/testMain.cpp' object='testMain.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o testMain.o `test -f 'UnitTest/testMain.cpp' || echo '$(srcdir)/'`UnitTest/testMain.cpp
+
+testMain.obj: UnitTest/testMain.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT testMain.obj -MD -MP -MF $(DEPDIR)/testMain.Tpo -c -o testMain.obj `if test -f 'UnitTest/testMain.cpp'; then $(CYGPATH_W) 'UnitTest/testMain.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/testMain.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/testMain.Tpo $(DEPDIR)/testMain.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/testMain.cpp' object='testMain.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o testMain.obj `if test -f 'UnitTest/testMain.cpp'; then $(CYGPATH_W) 'UnitTest/testMain.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/testMain.cpp'; fi`
+
+DecisionTreeTest.o: UnitTest/DecisionTreeTest.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT DecisionTreeTest.o -MD -MP -MF $(DEPDIR)/DecisionTreeTest.Tpo -c -o DecisionTreeTest.o `test -f 'UnitTest/DecisionTreeTest.cpp' || echo '$(srcdir)/'`UnitTest/DecisionTreeTest.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/DecisionTreeTest.Tpo $(DEPDIR)/DecisionTreeTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/DecisionTreeTest.cpp' object='DecisionTreeTest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o DecisionTreeTest.o `test -f 'UnitTest/DecisionTreeTest.cpp' || echo '$(srcdir)/'`UnitTest/DecisionTreeTest.cpp
+
+DecisionTreeTest.obj: UnitTest/DecisionTreeTest.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT DecisionTreeTest.obj -MD -MP -MF $(DEPDIR)/DecisionTreeTest.Tpo -c -o DecisionTreeTest.obj `if test -f 'UnitTest/DecisionTreeTest.cpp'; then $(CYGPATH_W) 'UnitTest/DecisionTreeTest.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/DecisionTreeTest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/DecisionTreeTest.Tpo $(DEPDIR)/DecisionTreeTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/DecisionTreeTest.cpp' object='DecisionTreeTest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o DecisionTreeTest.obj `if test -f 'UnitTest/DecisionTreeTest.cpp'; then $(CYGPATH_W) 'UnitTest/DecisionTreeTest.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/DecisionTreeTest.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

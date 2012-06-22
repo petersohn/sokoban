@@ -65,6 +65,11 @@
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.131376241" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="0.1893680997.784998157" name="BlockListChecker.cpp" rcbsApplicability="disable" resourcePath="src/BlockListChecker.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.556152715">
+						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.556152715" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
+							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.289897762" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+						</tool>
+					</fileInfo>
 					<fileInfo id="0.1893680997.783921409" name="CorridorChecker.cpp" rcbsApplicability="disable" resourcePath="src/CorridorChecker.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1916335919">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1916335919" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
 							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.497167950" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
