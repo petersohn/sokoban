@@ -43,7 +43,7 @@ namespace detail {
 
 	template <class Arg>
 	struct SplittingValue {
-		const Arg& arg_;
+		Arg arg_;
 		int trueNum_;
 		int falseNum_;
 		SplittingValue(
@@ -58,8 +58,8 @@ namespace detail {
 	template <class Arg>
 	static bool operator<(const SplittingValue<Arg>& left, const SplittingValue<Arg>& right)
 	{
-		return std::abs(left.trueNum - left.falseNum) <
-				std::abs(right.trueNum - right.falseNum);
+		return std::abs(left.trueNum_ - left.falseNum_) <
+				std::abs(right.trueNum_ - right.falseNum_);
 	}
 
 	template <class ValueList, class Arg, class Functor>
@@ -105,7 +105,7 @@ namespace detail {
 					{
 						return calculateSplittingValue(functor, valueList, arg);
 					});
-			const SplittingValue<Arg>& bestSplit = boost::min_element(splittingValues);
+			const SplittingValue<Arg>& bestSplit = *boost::min_element(splittingValues);
 			Values trueValues;
 			trueValues.reserve(bestSplit.trueNum_);
 			Values falseValues;
@@ -121,8 +121,8 @@ namespace detail {
 			std::vector<Arg> newArgList;
 			newArgList.reserve(argList.size() - 1);
 			boost::remove_copy(argList, std::back_inserter(newArgList), bestSplit.arg_);
-			falseChild_ = buildNode(functor, falseValues, newArgList);
-			trueChild_ = buildNode(functor, trueValues, newArgList);
+			falseChild_ = buildNode(functor, falseValues | boost::adaptors::indirected, newArgList);
+			trueChild_ = buildNode(functor, trueValues | boost::adaptors::indirected, newArgList);
 			arg_ = bestSplit.arg_;
 		}
 		virtual const T* get(const Key& key)
@@ -147,7 +147,7 @@ buildNode(
 	typedef typename ValueList::value_type::first_type Key;
 	typedef typename ValueList::value_type::second_type T;
 	if (valueList.size() == 1) {
-		return std::unique_ptr<Node<Key, T>>(new detail::LeafNode<Key, T>(valueList.begin()->first));
+		return std::unique_ptr<Node<Key, T>>(new detail::LeafNode<Key, T>(valueList.begin()->second));
 	} else
 	if (valueList.size() == 0) {
 		return std::unique_ptr<Node<Key, T>>(new detail::EmptyLeafNode<Key, T>());
