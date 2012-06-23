@@ -6,6 +6,7 @@
 #include <boost/range/adaptors.hpp>
 #include <vector>
 #include <cstdlib>
+#include <iostream>
 
 
 namespace decisionTree {
@@ -13,7 +14,8 @@ namespace decisionTree {
 template <class Key, class T>
 class Node {
 public:
-	virtual const T* get(const Key& key) = 0;
+	typedef std::pair<Key, T> Value;
+	virtual const Value* get(const Key& key) = 0;
 	virtual ~Node() {}
 };
 
@@ -28,17 +30,23 @@ namespace detail {
 
 	template <class Key, class T>
 	class LeafNode: public Node<Key, T> {
-		T value_;
+		typedef typename Node<Key, T>::Value Value;
+		Value value_;
 	public:
-		LeafNode(const T& value):
+		LeafNode(const Value& value):
 			value_(value) {}
-		virtual const T* get(const Key&) { return &value_; }
+		virtual const Value* get(const Key&)
+		{
+			std::cout << "leafNode: (" << value_.first << ", " << value_.second << ")" << std::endl;
+			return &value_;
+		}
 	};
 
 	template <class Key, class T>
 	class EmptyLeafNode: public Node<Key, T> {
+		typedef typename Node<Key, T>::Value Value;
 	public:
-		virtual const T* get(const Key&) { return 0; }
+		virtual const Value* get(const Key&) { return 0; }
 	};
 
 	template <class Arg>
@@ -82,6 +90,7 @@ namespace detail {
 
 	template <class Key, class T, class Arg, class Functor>
 	struct DecisionNode: public Node<Key, T> {
+		typedef typename Node<Key, T>::Value Value;
 		Functor& functor_;
 		Arg arg_;
 		std::unique_ptr<Node<Key, T>> falseChild_;
@@ -125,11 +134,14 @@ namespace detail {
 			trueChild_ = buildNode(functor, trueValues | boost::adaptors::indirected, newArgList);
 			arg_ = bestSplit.arg_;
 		}
-		virtual const T* get(const Key& key)
+		virtual const Value* get(const Key& key)
 		{
+			std::cout << "decision node: (" << key << "->" << arg_ << "): ";
 			if (functor_(key, arg_)) {
+				std::cout << "true" << std::endl;
 				return trueChild_->get(key);
 			} else {
+				std::cout << "false" << std::endl;
 				return falseChild_->get(key);
 			}
 		}
@@ -147,7 +159,7 @@ buildNode(
 	typedef typename ValueList::value_type::first_type Key;
 	typedef typename ValueList::value_type::second_type T;
 	if (valueList.size() == 1) {
-		return std::unique_ptr<Node<Key, T>>(new detail::LeafNode<Key, T>(valueList.begin()->second));
+		return std::unique_ptr<Node<Key, T>>(new detail::LeafNode<Key, T>(*std::begin(valueList)));
 	} else
 	if (valueList.size() == 0) {
 		return std::unique_ptr<Node<Key, T>>(new detail::EmptyLeafNode<Key, T>());
