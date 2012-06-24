@@ -11,6 +11,22 @@
 
 namespace decisionTree {
 
+
+template <class Arg>
+struct SplittingValue {
+	Arg arg_;
+	int trueNum_;
+	int falseNum_;
+	SplittingValue(
+			const Arg& arg,
+			int trueNum,
+			int falseNum):
+		arg_(arg),
+		trueNum_(trueNum),
+		falseNum_(falseNum) {}
+};
+
+
 template <class Key, class T>
 class Node {
 public:
@@ -49,44 +65,6 @@ namespace detail {
 		virtual const Value* get(const Key&) { return 0; }
 	};
 
-	template <class Arg>
-	struct SplittingValue {
-		Arg arg_;
-		int trueNum_;
-		int falseNum_;
-		SplittingValue(
-				const Arg& arg,
-				int trueNum,
-				int falseNum):
-			arg_(arg),
-			trueNum_(trueNum),
-			falseNum_(falseNum) {}
-	};
-
-	template <class Arg>
-	static bool operator<(const SplittingValue<Arg>& left, const SplittingValue<Arg>& right)
-	{
-		return std::abs(left.trueNum_ - left.falseNum_) <
-				std::abs(right.trueNum_ - right.falseNum_);
-	}
-
-	template <class ValueList, class Arg, class Functor>
-	SplittingValue<Arg> calculateSplittingValue(
-			Functor& functor,
-			const ValueList& valueList,
-			const Arg& arg)
-	{
-		int trueNum = 0;
-		int falseNum = 0;
-		for (const auto& value: valueList) {
-			if (functor(value.first, arg)) {
-				++trueNum;
-			} else {
-				--falseNum;
-			}
-			return SplittingValue<Arg>(arg, trueNum, falseNum);
-		}
-	}
 
 	template <class Key, class T, class Arg, class Functor>
 	struct DecisionNode: public Node<Key, T> {
@@ -96,25 +74,18 @@ namespace detail {
 		std::unique_ptr<Node<Key, T>> falseChild_;
 		std::unique_ptr<Node<Key, T>> trueChild_;
 	public:
-		template <class ValueList, class ArgList>
+		template <class ValueList, class ArgList, class SplittingAlgorithm>
 		DecisionNode(
 				Functor& functor,
 				const ValueList& valueList,
-				const ArgList& argList):
+				const ArgList& argList,
+				const SplittingAlgorithm& splittingAlgoritm):
 			functor_(functor)
 		{
 			typedef typename ValueList::value_type Value;
 			typedef std::vector<const Value*> Values;
 
-			std::vector<SplittingValue<Arg>> splittingValues;
-			splittingValues.reserve(valueList.size());
-			boost::transform(
-					argList, std::back_inserter(splittingValues),
-					[&functor, &valueList](const Arg& arg)
-					{
-						return calculateSplittingValue(functor, valueList, arg);
-					});
-			const SplittingValue<Arg>& bestSplit = *boost::min_element(splittingValues);
+			SplittingValue<Arg> bestSplit = splittingAlgoritm(functor, valueList, argList);
 			Values trueValues;
 			trueValues.reserve(bestSplit.trueNum_);
 			Values falseValues;
@@ -130,8 +101,10 @@ namespace detail {
 			std::vector<Arg> newArgList;
 			newArgList.reserve(argList.size() - 1);
 			boost::remove_copy(argList, std::back_inserter(newArgList), bestSplit.arg_);
-			falseChild_ = buildNode(functor, falseValues | boost::adaptors::indirected, newArgList);
-			trueChild_ = buildNode(functor, trueValues | boost::adaptors::indirected, newArgList);
+			falseChild_ = buildNode(functor, falseValues | boost::adaptors::indirected,
+					newArgList, splittingAlgoritm);
+			trueChild_ = buildNode(functor, trueValues | boost::adaptors::indirected,
+					newArgList, splittingAlgoritm);
 			arg_ = bestSplit.arg_;
 		}
 		virtual const Value* get(const Key& key)
@@ -149,12 +122,13 @@ namespace detail {
 
 }
 
-template <class Functor, class ValueList, class ArgList>
+template <class Functor, class ValueList, class ArgList, class SplittingAlgorithm>
 std::unique_ptr<Node<typename ValueList::value_type::first_type, typename ValueList::value_type::second_type>>
 buildNode(
 		Functor& functor,
 		const ValueList& valueList,
-		const ArgList& argList)
+		const ArgList& argList,
+		const SplittingAlgorithm& splittingAlgoritm)
 {
 	typedef typename ValueList::value_type::first_type Key;
 	typedef typename ValueList::value_type::second_type T;
@@ -165,7 +139,8 @@ buildNode(
 		return std::unique_ptr<Node<Key, T>>(new detail::EmptyLeafNode<Key, T>());
 	} else {
 		return std::unique_ptr<Node<Key, T>>(
-				new detail::DecisionNode<Key, T, typename ArgList::value_type, Functor>(functor, valueList, argList));
+				new detail::DecisionNode<Key, T, typename ArgList::value_type, Functor>(
+						functor, valueList, argList, splittingAlgoritm));
 	}
 }
 
