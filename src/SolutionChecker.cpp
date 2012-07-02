@@ -67,7 +67,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 		}
 		if (node->ancestor() != oldNode) {
 			result = false;
-			printError(oldNode, node, status, "Ansector link error");
+			printError(oldNode, node, status, "Ancestor link error");
 		}
 		if (!isSuccessor(status, *node)) {
 			result = false;

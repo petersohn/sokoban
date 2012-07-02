@@ -10,6 +10,7 @@
 #include "SolutionChecker.h"
 #include "TableIterator.h"
 #include "ComplexChecker.h"
+#include "StatusCreator.h"
 #include <ctime>
 #include <iostream>
 #include <fstream>
@@ -33,7 +34,8 @@ void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, const St
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
 
-	Status st(Status::loadFromFile(opts.filename().c_str()));
+	Status st(loadStatusFromFile(opts.filename().c_str()));
+	dumpStatus(std::cerr, st);
 
 	cerr << "Number of threads: " << opts.numThreads() << endl;
 	ThreadPool::instance()->numThreads(opts.numThreads());

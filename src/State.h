@@ -40,9 +40,10 @@ public:
 		modify();
 		stones_->erase(p);
 	}
-//	void setStones(const std::vector<Point> &stones)0 {
-//		stones_=stones;
-//	}
+	void clear() {
+		modify();
+		stones_->clear();
+	}
 	bool operator[](const Point &p) const {
 		return stones_->count(p) != 0;
 	}
@@ -56,6 +57,21 @@ inline bool isSubState(const State& subState, const State& state)
 	return boost::find_if(subState,
 			[&state](const Point &p) { return !state[p]; }) == subState.end();
 }
+
+class AddStonesToState {
+	State& state_;
+public:
+	AddStonesToState(State& state):
+		state_(state){}
+	AddStonesToState& operator()(const Point& p)
+	{
+		state_.addStone(p);
+		return *this;
+	}
+	State& get() { return state_; }
+};
+
+
 
 namespace std {
 

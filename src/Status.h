@@ -31,7 +31,6 @@ private:
 
 public:
 	static int copyCount;
-	static Status loadFromFile(const char *filename);
 
 	explicit Status(FixedTable::Ptr table);
 	explicit Status(FixedTable::Ptr table, const State &state);

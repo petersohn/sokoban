@@ -20,6 +20,7 @@ sokoban_SOURCES = main.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
 		Status.cpp \
+		StatusCreator.cpp \
 		StonePusher.cpp \
 		Table.cpp \
 		TableIterator.cpp \
@@ -31,7 +32,9 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
-unitTest_SOURCES = UnitTest/testMain.cpp UnitTest/DecisionTreeTest.cpp 
+unitTest_SOURCES = UnitTest/testMain.cpp \
+		UnitTest/DecisionTreeTest.cpp \
+		UnitTest/IsSubStateTest.cpp
 
 bin_PROGRAMS = sokoban unitTest
 

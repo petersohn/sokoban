@@ -1,7 +1,5 @@
 #include "Status.h"
 #include "Node.h"
-#include <fstream>
-#include <sstream>
 
 int Status::copyCount(0);
 
@@ -104,78 +102,6 @@ void Status::set(const Node &node) {
 	currentPos_ = node.from();
 	reachOK_ = false;
 	init();
-}
-
-
-Status Status::loadFromFile(const char *filename) {
-	using namespace std;
-	ifstream file(filename, ifstream::in);
-	stringstream ss;
-	while (file.good()) {
-		string s;
-		getline(file, s);
-		if (s.size() == 0)
-			continue;
-		if (s[0] == '#') {
-			s.erase(s.begin());
-			ss << s << endl;
-		}
-	}
-	ss.seekg(0);
-	size_t height, width;
-	ss >> height >> width;
-	string line;
-	getline(ss, line); // dummy
-	Table t(width, height);
-	State st;
-	Point startPos;
-	bool startPosOK = false, destinationOK = false;
-	int stoneNum = 0;
-	Point p;
-	while (ss.good())
-	{
-		getline(ss, line);
-		for (p.x = 0; p.x < line.length() && p.x < width; p.x++)
-		{
-			cerr.width(3);
-			cerr << left << line[p.x];
-			switch (line[p.x])
-			{
-			case 'X':
-			case 'x':
-				t.destination(p);
-				t.wall(p, false);
-				destinationOK = true;
-				break;
-			case 'Y':
-			case 'y':
-				startPos = p;
-				t.wall(p, false);
-				startPosOK = true;
-				break;
-			case '.':
-				t.wall(p, false);
-				break;
-			case 'o':
-			case 'O':
-				t.wall(p, false);
-				st.addStone(p);
-				++stoneNum;
-				break;
-			default:
-				t.wall(p, true);
-			}
-		}
-		cerr << endl;
-		if (++p.y >= height)
-			break;
-	}
-	cerr << endl;
-	if (stoneNum == 0 || !startPosOK || !destinationOK)
-		throw SokobanException();
-	Status result(FixedTable::Ptr(new FixedTable(t)), st);
-	result.currentPos(startPos);
-	return result;
 }
 
 bool Status::shiftIter(const Point &p)
