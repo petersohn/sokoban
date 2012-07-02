@@ -18,7 +18,7 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		calculator_(calculator),
 		checker_(checker),
 		blockList_(new IndexedStatusList<int>),
-		heurList_(new std::vector<HeurInfo>),
+		heurList_(new HeurList),
 		numStones_(numStones),
 		maxDistance_(maxDistance),
 		maxHeurListSize_(maxHeurListSize),
@@ -51,7 +51,7 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 		if (difference > 0) {
 			dump_ << heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
-			heurList_->push_back(HeurInfo(VisitedStateInfo(status), cost));
+			heurList_->push_back(std::unique_ptr<HeurInfo>(new HeurInfo(status, cost)));
 		}
 	}
 }
@@ -74,7 +74,8 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 		tableIterator.iterate(n);
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 	}
-	boost::sort(*heurList_, [](const HeurInfo& left, const HeurInfo& right) { return left.heur_ > right.heur_; });
+	boost::sort(*heurList_, [](const std::unique_ptr<HeurInfo>& left, const std::unique_ptr<HeurInfo>& right)
+			{ return left->heur_ > right->heur_; });
 	if (maxHeurListSize_ > 0 && heurList_->size() > maxHeurListSize_) {
 		heurList_->resize(maxHeurListSize_);
 	}

@@ -14,11 +14,12 @@
 #include <boost/date_time.hpp>
 
 class BlockListGenerator {
+private:
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
-	std::shared_ptr<std::vector<HeurInfo>> heurList_;
+	HeurListPtr heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;

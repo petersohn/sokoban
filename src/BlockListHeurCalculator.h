@@ -7,12 +7,12 @@
 
 class BlocklistHeurCalculator: public HeurCalculator {
 	HeurCalculator::Ptr baseCalculator_;
-	std::shared_ptr<std::vector<HeurInfo>> heurList_;
+	HeurListPtr heurList_;
 	FixedTable::Ptr table_;
 public:
 	BlocklistHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
-			std::shared_ptr<std::vector<HeurInfo>> heurList,
+			const HeurListPtr& heurList,
 			FixedTable::Ptr table):
 				heurList_(heurList),
 				baseCalculator_(baseCalculator),

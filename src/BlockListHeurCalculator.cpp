@@ -16,11 +16,10 @@ int BlocklistHeurCalculator::calculateStatus(const Status &status,
 	assert(status.tablePtr() == table_);
 	State state = status.state();
 	int result = 0;
-	for (const HeurInfo& subset: *heurList_) {
-		if (status.reachable(subset.info_.firstReachable()) &&
-				isSubState(subset.info_.state(), state)) {
-			result += subset.heur_;
-			for (const Point& p: subset.info_.state()) {
+	for (const std::unique_ptr<HeurInfo>& subset: *heurList_) {
+		if (isSubStatus(subset->status_, status)) {
+			result += subset->heur_;
+			for (const Point& p: subset->status_.state()) {
 				state.removeStone(p);
 			}
 		}
@@ -28,6 +27,12 @@ int BlocklistHeurCalculator::calculateStatus(const Status &status,
 	for (const Point& p: state) {
 		result += baseCalculator_->calculateStone(status, p);
 	}
+//	int original = baseCalculator_->calculateStatus(status, ancestor);
+//	if (result > original) {
+//		std::ostringstream ss;
+//		ss << original << " --> " << result << std::endl;
+//		dumpStatus(std::cerr, status, ss.str());
+//	}
 	if (ancestor) {
 		return std::max(result, ancestor->heur() - 1);
 	}

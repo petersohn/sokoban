@@ -1,16 +1,21 @@
 #ifndef HEURINFO_H_
 #define HEURINFO_H_
 
-#include "VisitedStateInfo.h"
+#include "Status.h"
+#include <vector>
+#include <memory>
 
 struct HeurInfo {
-	VisitedStateInfo info_;
+	Status status_;
 	int heur_;
-	HeurInfo(): heur_(0) {}
-	HeurInfo(const VisitedStateInfo& info, int heur):
-		info_(info), heur_(heur)
+//	HeurInfo(): heur_(0) {}
+	HeurInfo(const Status& status, int heur):
+		status_(status), heur_(heur)
 	{}
 };
+
+typedef std::vector<std::unique_ptr<HeurInfo>> HeurList;
+typedef std::shared_ptr<HeurList> HeurListPtr;
 
 
 #endif /* HEURINFO_H_ */
