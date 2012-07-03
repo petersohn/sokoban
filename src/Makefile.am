@@ -1,4 +1,4 @@
-sokoban_SOURCES = main.cpp \
+common_source_files = \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
 		BlockListChecker.cpp \
@@ -32,9 +32,15 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
+
+sokoban_SOURCES = main.cpp $(common_source_files)
+		
+
 unitTest_SOURCES = UnitTest/testMain.cpp \
 		UnitTest/DecisionTreeTest.cpp \
-		UnitTest/IsSubStateTest.cpp
+		UnitTest/IsSubStateTest.cpp \
+		UnitTest/IsSubStatusTest.cpp \
+		 $(common_source_files)
 
 bin_PROGRAMS = sokoban unitTest
 

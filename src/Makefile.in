@@ -50,7 +50,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
+am__objects_1 = AdvancedHeurCalculator.$(OBJEXT) \
 	BasicHeurCalculator.$(OBJEXT) BlockListChecker.$(OBJEXT) \
 	BlockListGenerator.$(OBJEXT) BlockListHeurCalculator.$(OBJEXT) \
 	Common.$(OBJEXT) ComplexChecker.$(OBJEXT) \
@@ -65,10 +65,12 @@ am_sokoban_OBJECTS = main.$(OBJEXT) AdvancedHeurCalculator.$(OBJEXT) \
 	TextDumper.$(OBJEXT) ThreadPool.$(OBJEXT) \
 	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT) \
 	XDumper.$(OBJEXT) XML.$(OBJEXT)
+am_sokoban_OBJECTS = main.$(OBJEXT) $(am__objects_1)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 am_unitTest_OBJECTS = testMain.$(OBJEXT) DecisionTreeTest.$(OBJEXT) \
-	IsSubStateTest.$(OBJEXT)
+	IsSubStateTest.$(OBJEXT) IsSubStatusTest.$(OBJEXT) \
+	$(am__objects_1)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 unitTest_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -185,7 +187,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-sokoban_SOURCES = main.cpp \
+common_source_files = \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
 		BlockListChecker.cpp \
@@ -219,9 +221,12 @@ sokoban_SOURCES = main.cpp \
 		XDumper.cpp \
 		XML.cpp 
 
+sokoban_SOURCES = main.cpp $(common_source_files)
 unitTest_SOURCES = UnitTest/testMain.cpp \
 		UnitTest/DecisionTreeTest.cpp \
-		UnitTest/IsSubStateTest.cpp
+		UnitTest/IsSubStateTest.cpp \
+		UnitTest/IsSubStatusTest.cpp \
+		 $(common_source_files)
 
 AM_CXXFLAGS = -std=c++0x
 all: all-am
@@ -320,6 +325,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DecisionTreeTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DumperFunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IsSubStateTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IsSubStatusTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MovableChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Node.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NormalExpander.Po@am__quote@
@@ -400,6 +406,20 @@ IsSubStateTest.obj: UnitTest/IsSubStateTest.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/IsSubStateTest.cpp' object='IsSubStateTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o IsSubStateTest.obj `if test -f 'UnitTest/IsSubStateTest.cpp'; then $(CYGPATH_W) 'UnitTest/IsSubStateTest.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/IsSubStateTest.cpp'; fi`
+
+IsSubStatusTest.o: UnitTest/IsSubStatusTest.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT IsSubStatusTest.o -MD -MP -MF $(DEPDIR)/IsSubStatusTest.Tpo -c -o IsSubStatusTest.o `test -f 'UnitTest/IsSubStatusTest.cpp' || echo '$(srcdir)/'`UnitTest/IsSubStatusTest.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/IsSubStatusTest.Tpo $(DEPDIR)/IsSubStatusTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/IsSubStatusTest.cpp' object='IsSubStatusTest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o IsSubStatusTest.o `test -f 'UnitTest/IsSubStatusTest.cpp' || echo '$(srcdir)/'`UnitTest/IsSubStatusTest.cpp
+
+IsSubStatusTest.obj: UnitTest/IsSubStatusTest.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT IsSubStatusTest.obj -MD -MP -MF $(DEPDIR)/IsSubStatusTest.Tpo -c -o IsSubStatusTest.obj `if test -f 'UnitTest/IsSubStatusTest.cpp'; then $(CYGPATH_W) 'UnitTest/IsSubStatusTest.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/IsSubStatusTest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/IsSubStatusTest.Tpo $(DEPDIR)/IsSubStatusTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnitTest/IsSubStatusTest.cpp' object='IsSubStatusTest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o IsSubStatusTest.obj `if test -f 'UnitTest/IsSubStatusTest.cpp'; then $(CYGPATH_W) 'UnitTest/IsSubStatusTest.cpp'; else $(CYGPATH_W) '$(srcdir)/UnitTest/IsSubStatusTest.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
