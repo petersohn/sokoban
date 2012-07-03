@@ -63,7 +63,77 @@ BOOST_AUTO_TEST_CASE(equalBadReachable)
 		));
 }
 
+BOOST_AUTO_TEST_CASE(subStatus)
+{
+	BOOST_CHECK(isSubStatus(
+			createStatus(5, 2, {
+					"x.o..",
+					"..oy."
+				}),
+			createStatus(5, 2, {
+					"x.o.o",
+					"..o.y"
+				})
+		));
+	BOOST_CHECK(isSubStatus(
+			createStatus(5, 2, {
+					"x.o..",
+					"..oy."
+				}),
+			createStatus(5, 2, {
+					"x.o..",
+					"o.o.y"
+				})
+		));
+}
 
+BOOST_AUTO_TEST_CASE(subStatusBadReachable)
+{
+	BOOST_CHECK(!isSubStatus(
+			createStatus(5, 2, {
+					"x.o..",
+					"..oy."
+				}),
+			createStatus(5, 2, {
+					"x.o.o",
+					"y.o.."
+				})
+		));
+	BOOST_CHECK(!isSubStatus(
+			createStatus(5, 2, {
+					"x.o..",
+					".yo.."
+				}),
+			createStatus(5, 2, {
+					"x.o..",
+					"o.o.y"
+				})
+		));
+}
+
+BOOST_AUTO_TEST_CASE(notSubStatus)
+{
+	BOOST_CHECK(!isSubStatus(
+			createStatus(5, 2, {
+					"x.o.o",
+					"..oy."
+				}),
+			createStatus(5, 2, {
+					"x.o..",
+					"..o.y"
+				})
+		));
+	BOOST_CHECK(!isSubStatus(
+			createStatus(5, 2, {
+					"x.o.o",
+					"..o.y"
+				}),
+			createStatus(5, 2, {
+					"x.oo.",
+					"..o.y"
+				})
+		));
+}
 
 
 BOOST_AUTO_TEST_SUITE_END() // IsSubStatus
