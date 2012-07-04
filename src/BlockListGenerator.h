@@ -47,7 +47,7 @@ public:
 			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones,
 			int maxDistance, int maxHeurListSize);
 	Checker::Ptr checker();
-	HeurCalculator::Ptr heurCalculator();
+	HeurCalculator::Ptr heurCalculator(bool useIsSubStatus);
 	void init(const FixedTable::Ptr& table);
 };
 

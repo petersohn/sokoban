@@ -9,14 +9,17 @@ class BlocklistHeurCalculator: public HeurCalculator {
 	HeurCalculator::Ptr baseCalculator_;
 	HeurListPtr heurList_;
 	FixedTable::Ptr table_;
+	bool useIsSubStatus_;
 public:
 	BlocklistHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
 			const HeurListPtr& heurList,
-			FixedTable::Ptr table):
+			FixedTable::Ptr table,
+			bool useIsSubStatus):
 				heurList_(heurList),
 				baseCalculator_(baseCalculator),
-				table_(table)
+				table_(table),
+				useIsSubStatus_(useIsSubStatus)
 	{
 	}
 
