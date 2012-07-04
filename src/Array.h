@@ -2,9 +2,11 @@
 #define ARRAY_H_
 
 #include "Point.h"
-#include <iostream>
 #include "Hash.h"
 #include <assert.h>
+#include <vector>
+#include <boost/range/algorithm.hpp>
+#include <type_traits>
 
 //#define NDEBUG
 //
@@ -19,151 +21,79 @@
 
 template<class T>
 class Array {
-	size_t width_, height_, size_;
-	T *data;
+	std::size_t width_, height_;
+	std::vector<T> data_;
 public:
 	typedef T valueType;
+	typedef typename std::vector<T>::reference reference;
+	typedef typename std::vector<T>::const_reference const_reference;
 
-	Array();
-	Array(size_t width, size_t height);
-	Array(size_t width, size_t height, const T& defValue);
-	Array(const Array& other);
-	Array(Array&& other);
-	~Array() {
-		if (data != NULL)
-			delete[] data;
+	Array(): width_(0), height_(0) {}
+	Array(std::size_t width, std::size_t height, const T& defValue = T()):
+		width_(width), height_(height), data_(width * height, defValue)
+	{}
+	Array(const Array& other):
+		width_(other.width_), height_(other.height_), data_(other.data_)
+	{}
+	Array(Array&& other):
+		width_(other.width_), height_(other.height_), data_(std::move(other.data_))
+	{}
+	Array& operator=(const Array& other)
+	{
+		width_ = other.width_;
+		height_ = other.height_;
+		data_ = other.data_;
+		return *this;
 	}
-	Array& operator=(const Array& other);
-	Array& operator=(Array&& other);
+	Array& operator=(Array&& other)
+	 {
+		width_ = other.width_;
+		height_ = other.height_;
+		data_ = std::move(other.data_);
+		other.width_ = 0;
+		other.height_ = 0;
+		return *this;
+	}
 
-	T& operator[](size_t pos) {
-		return data[pos];
+	reference operator[](std::size_t pos) {
+		return data_[pos];
 	}
-	const T& operator[](size_t pos) const {
-		assert(pos >= 0 && pos < size_);
-		return data[pos];
+	const_reference operator[](std::size_t pos) const {
+		assert(pos >= 0 && pos < size());
+		return data_[pos];
 	}
-	T& operator[](const Point &p) {
+	reference operator[](const Point &p) {
 		assert(p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_);
-		return data[p.y*width_ + p.x];
+		return data_[p.y*width_ + p.x];
 	}
-	const T& operator[](const Point &p) const {
+	const_reference operator[](const Point &p) const {
 		assert(p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_);
-		return data[p.y*width_ + p.x];
+		return data_[p.y*width_ + p.x];
 	}
-	size_t size() const { return size_; }
-	size_t width() const { return width_; }
-	size_t height() const { return height_; }
-	void reset(size_t newWidth, size_t newHeight);
-	void reset(size_t newWidth, size_t newHeight, const T& defValue) {
-		reset(newWidth, newHeight);
+	std::size_t size() const { return data_.size(); }
+	std::size_t width() const { return width_; }
+	std::size_t height() const { return height_; }
+	void reset(std::size_t newWidth, std::size_t newHeight, const T& defValue = T())
+	{
+		width_ = newWidth;
+		height_ = newHeight;
+		data_.resize(width_ * height_);
 		fill(defValue);
 	}
-	void fill(const T &value) {
-		for (int i = 0; i < size_; i++)
-			data[i] = value;
+	void fill(const T &value)
+	{
+		boost::fill(data_, value);
 	}
-	void zero() {
-		if (data != NULL) {
-			delete[] data;
-			data = NULL;
-		}
+	void clear()
+	{
+		data_.clear();
+		width_ = 0;
+		height_ = 0;
 	}
 };
 
 template<class T>
-Array<T>::Array():
-	width_(0), height_(0), size_(0), data(NULL)
-{
-
-}
-
-template<class T>
-Array<T>::Array(size_t width, size_t height):
-	width_(width), height_(height), size_(width*height)
-{
-	data = new T[size_];
-}
-
-template<class T>
-Array<T>::Array(size_t width, size_t height, const T& defValue):
-	width_(width), height_(height), size_(width*height)
-{
-	data = new T[size_];
-	fill(defValue);
-}
-
-template<class T>
-Array<T>::Array(const Array<T>& other):
-	width_(other.width_), height_(other.height_), size_(other.size_)
-{
-	data = new T[size_];
-	for (int i = 0; i < size_; i++)
-		data[i] = other[i];
-}
-
-template<class T>
-Array<T>::Array(Array<T>&& other):
-	width_(other.width_), height_(other.height_), size_(other.size_), data(other.data)
-{
-	if (other.data) {
-		delete[] other.data;
-		other.data = 0;
-		other.width_ = 0;
-		other.height_ = 0;
-		other.size_ = 0;
-	}
-}
-
-
-template<class T>
-Array<T>& Array<T>::operator=(const Array &other) {
-	if (data) {
-		delete[] data;
-		data = 0;
-	}
-	width_ = other.width_;
-	height_ = other.height_;
-	size_ = width_ * height_;
-	data = new T[size_];
-	for (int i = 0; i < size_; i++)
-		data[i] = other[i];
-	return *this;
-}
-
-template<class T>
-Array<T>& Array<T>::operator=(Array&& other) {
-	if (data) {
-		delete[] data;
-		data = 0;
-	}
-	width_ = other.width_;
-	height_ = other.height_;
-	size_ = other.size_;
-	data = other.data;
-	if (other.data) {
-		delete[] other.data;
-		other.data = 0;
-		other.width_ = 0;
-		other.height_ = 0;
-		other.size_ = 0;
-	}
-	return *this;
-}
-
-
-template<class T>
-void Array<T>::reset(size_t newWidth, size_t newHeight) {
-	width_ = newWidth;
-	height_ = newHeight;
-	size_ = newWidth * newHeight;
-	if (data != NULL)
-		delete[] data;
-	data = new T[size_];
-}
-
-template<class T>
-inline const T& arrayAt(const Array<T> &arr, const Point &p, const T& def) {
+inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, const Point &p, const T& def) {
 	if (p.x >= 0 && p.y >= 0 && p.x < arr.width() && p.y < arr.height())
 			return arr[p];
 		return def;
