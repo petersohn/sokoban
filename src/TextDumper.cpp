@@ -1,5 +1,5 @@
 #include "TextDumper.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "Node.h"
 #include "DumperFunctions.h"
 #include <string>

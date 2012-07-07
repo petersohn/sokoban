@@ -2,7 +2,7 @@
 #define TEXTDUMPER_H_
 
 #include "Dumper.h"
-#include "Table.h"
+#include "Status/Table.h"
 #include "Common.h"
 #include "Mutexes.hpp"
 #include <iostream>

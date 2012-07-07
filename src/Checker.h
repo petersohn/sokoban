@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include "Dumper.h"
-#include "Table.h"
+#include "Status/Table.h"
 
 class Status;
 class Point;

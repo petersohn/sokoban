@@ -1,5 +1,5 @@
 #include "NormalExpander.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "Node.h"
 #include <iostream>
 #include <boost/thread/locks.hpp>

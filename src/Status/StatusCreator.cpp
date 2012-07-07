@@ -1,5 +1,5 @@
-#include "StatusCreator.h"
-#include "Status.h"
+#include "Status/StatusCreator.h"
+#include "Status/Status.h"
 #include <fstream>
 #include <sstream>
 

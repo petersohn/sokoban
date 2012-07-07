@@ -3,7 +3,7 @@
 
 #include "XML.h"
 #include "Node.h"
-#include "Table.h"
+#include "Status/Table.h"
 #include "Dumper.h"
 #include "Mutexes.hpp"
 #include <memory>

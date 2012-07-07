@@ -2,8 +2,8 @@
 #define MOVABLECHECKER_H_
 
 #include "Checker.h"
-#include "Status.h"
-#include "Point.h"
+#include "Status/Status.h"
+#include "Status/Point.h"
 #include "HeurCalculator.h"
 
 class MovableChecker: public Checker {

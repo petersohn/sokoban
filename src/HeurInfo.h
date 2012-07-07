@@ -1,7 +1,7 @@
 #ifndef HEURINFO_H_
 #define HEURINFO_H_
 
-#include "Status.h"
+#include "Status/Status.h"
 #include <vector>
 #include <memory>
 

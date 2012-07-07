@@ -1,7 +1,7 @@
 #ifndef DUMPER_H_
 #define DUMPER_H_
 
-#include "Table.h"
+#include "Status/Table.h"
 #include <memory>
 #include "Node.h"
 

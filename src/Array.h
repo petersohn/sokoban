@@ -1,7 +1,7 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
 
-#include "Point.h"
+#include "Status/Point.h"
 #include "Hash.h"
 #include <assert.h>
 #include <vector>

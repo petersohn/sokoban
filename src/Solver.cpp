@@ -1,5 +1,5 @@
 #include "Solver.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "Node.h"
 #include "ThreadPool.h"
 #include "DumperFunctions.h"

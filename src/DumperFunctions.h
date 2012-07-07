@@ -3,8 +3,8 @@
 
 #include "Common.h"
 #include "Array.h"
-#include "Table.h"
-#include "Status.h"
+#include "Status/Table.h"
+#include "Status/Status.h"
 #include "Node.h"
 #include <iostream>
 #include <string>

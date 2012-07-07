@@ -8,8 +8,8 @@
 #include <functional>
 #include <boost/thread/locks.hpp>
 #include "Mutexes.hpp"
-#include "Status.h"
-#include "State.h"
+#include "Status/Status.h"
+#include "Status/State.h"
 
 template <class Value>
 class IndexedStatusList {

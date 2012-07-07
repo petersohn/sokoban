@@ -1,7 +1,7 @@
 #include "StonePusher.h"
 #include "Array.h"
-#include "Status.h"
-#include "State.h"
+#include "Status/Status.h"
+#include "Status/State.h"
 #include "VisitedStateInfo.h"
 #include <iostream>
 #include <memory>

@@ -2,9 +2,9 @@
 #define VISITEDSTATES_H_
 
 #include "QueueInterfaces.h"
-#include "State.h"
+#include "Status/State.h"
 #include "VisitedStateInfo.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "Common.h"
 #include "Mutexes.hpp"
 #include <unordered_map>

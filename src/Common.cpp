@@ -1,8 +1,8 @@
 #include "Common.h"
 #include "Array.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "Node.h"
-#include "Table.h"
+#include "Status/Table.h"
 #include <algorithm>
 #include <boost/format.hpp>
 

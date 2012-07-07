@@ -57,20 +57,21 @@ am__objects_1 = AdvancedHeurCalculator.$(OBJEXT) \
 	ComplexExpander.$(OBJEXT) CorridorChecker.$(OBJEXT) \
 	DumperFunctions.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
-	OptionsHelper.$(OBJEXT) Point.$(OBJEXT) \
-	PrioNodeQueue.$(OBJEXT) SolutionChecker.$(OBJEXT) \
-	Solver.$(OBJEXT) SolverFactories.$(OBJEXT) Status.$(OBJEXT) \
-	StatusCreator.$(OBJEXT) StonePusher.$(OBJEXT) Table.$(OBJEXT) \
+	OptionsHelper.$(OBJEXT) PrioNodeQueue.$(OBJEXT) \
+	SolutionChecker.$(OBJEXT) Solver.$(OBJEXT) \
+	SolverFactories.$(OBJEXT) StonePusher.$(OBJEXT) \
 	TableIterator.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
 	TextDumper.$(OBJEXT) ThreadPool.$(OBJEXT) \
 	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT) \
 	XDumper.$(OBJEXT) XML.$(OBJEXT)
-am_sokoban_OBJECTS = main.$(OBJEXT) $(am__objects_1)
+am__objects_2 = Point.$(OBJEXT) Status.$(OBJEXT) \
+	StatusCreator.$(OBJEXT) Table.$(OBJEXT)
+am_sokoban_OBJECTS = main.$(OBJEXT) $(am__objects_1) $(am__objects_2)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 am_unitTest_OBJECTS = testMain.$(OBJEXT) DecisionTreeTest.$(OBJEXT) \
 	IsSubStateTest.$(OBJEXT) IsSubStatusTest.$(OBJEXT) \
-	$(am__objects_1)
+	$(am__objects_2)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 unitTest_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -187,7 +188,13 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-common_source_files = \
+status_source_files = \
+		Status/Point.cpp \
+		Status/Status.cpp \
+		Status/StatusCreator.cpp \
+		Status/Table.cpp
+
+sokoban_source_files = \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
 		BlockListChecker.cpp \
@@ -203,15 +210,11 @@ common_source_files = \
 		NormalExpander.cpp \
 		Options.cpp \
 		OptionsHelper.cpp \
-		Point.cpp \
 		PrioNodeQueue.cpp \
 		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
-		Status.cpp \
-		StatusCreator.cpp \
 		StonePusher.cpp \
-		Table.cpp \
 		TableIterator.cpp \
 		TableHeurCalculator.cpp \
 		TextDumper.cpp \
@@ -221,12 +224,12 @@ common_source_files = \
 		XDumper.cpp \
 		XML.cpp 
 
-sokoban_SOURCES = main.cpp $(common_source_files)
+sokoban_SOURCES = main.cpp $(sokoban_source_files) $(status_source_files)
 unitTest_SOURCES = UnitTest/testMain.cpp \
 		UnitTest/DecisionTreeTest.cpp \
 		UnitTest/IsSubStateTest.cpp \
 		UnitTest/IsSubStatusTest.cpp \
-		 $(common_source_files)
+		 $(status_source_files)
 
 AM_CXXFLAGS = -std=c++0x
 all: all-am
@@ -364,6 +367,62 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+Point.o: Status/Point.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Point.o -MD -MP -MF $(DEPDIR)/Point.Tpo -c -o Point.o `test -f 'Status/Point.cpp' || echo '$(srcdir)/'`Status/Point.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/Point.Tpo $(DEPDIR)/Point.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/Point.cpp' object='Point.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Point.o `test -f 'Status/Point.cpp' || echo '$(srcdir)/'`Status/Point.cpp
+
+Point.obj: Status/Point.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Point.obj -MD -MP -MF $(DEPDIR)/Point.Tpo -c -o Point.obj `if test -f 'Status/Point.cpp'; then $(CYGPATH_W) 'Status/Point.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/Point.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/Point.Tpo $(DEPDIR)/Point.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/Point.cpp' object='Point.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Point.obj `if test -f 'Status/Point.cpp'; then $(CYGPATH_W) 'Status/Point.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/Point.cpp'; fi`
+
+Status.o: Status/Status.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Status.o -MD -MP -MF $(DEPDIR)/Status.Tpo -c -o Status.o `test -f 'Status/Status.cpp' || echo '$(srcdir)/'`Status/Status.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/Status.Tpo $(DEPDIR)/Status.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/Status.cpp' object='Status.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Status.o `test -f 'Status/Status.cpp' || echo '$(srcdir)/'`Status/Status.cpp
+
+Status.obj: Status/Status.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Status.obj -MD -MP -MF $(DEPDIR)/Status.Tpo -c -o Status.obj `if test -f 'Status/Status.cpp'; then $(CYGPATH_W) 'Status/Status.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/Status.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/Status.Tpo $(DEPDIR)/Status.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/Status.cpp' object='Status.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Status.obj `if test -f 'Status/Status.cpp'; then $(CYGPATH_W) 'Status/Status.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/Status.cpp'; fi`
+
+StatusCreator.o: Status/StatusCreator.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT StatusCreator.o -MD -MP -MF $(DEPDIR)/StatusCreator.Tpo -c -o StatusCreator.o `test -f 'Status/StatusCreator.cpp' || echo '$(srcdir)/'`Status/StatusCreator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/StatusCreator.Tpo $(DEPDIR)/StatusCreator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/StatusCreator.cpp' object='StatusCreator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o StatusCreator.o `test -f 'Status/StatusCreator.cpp' || echo '$(srcdir)/'`Status/StatusCreator.cpp
+
+StatusCreator.obj: Status/StatusCreator.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT StatusCreator.obj -MD -MP -MF $(DEPDIR)/StatusCreator.Tpo -c -o StatusCreator.obj `if test -f 'Status/StatusCreator.cpp'; then $(CYGPATH_W) 'Status/StatusCreator.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/StatusCreator.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/StatusCreator.Tpo $(DEPDIR)/StatusCreator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/StatusCreator.cpp' object='StatusCreator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o StatusCreator.obj `if test -f 'Status/StatusCreator.cpp'; then $(CYGPATH_W) 'Status/StatusCreator.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/StatusCreator.cpp'; fi`
+
+Table.o: Status/Table.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Table.o -MD -MP -MF $(DEPDIR)/Table.Tpo -c -o Table.o `test -f 'Status/Table.cpp' || echo '$(srcdir)/'`Status/Table.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/Table.Tpo $(DEPDIR)/Table.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/Table.cpp' object='Table.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Table.o `test -f 'Status/Table.cpp' || echo '$(srcdir)/'`Status/Table.cpp
+
+Table.obj: Status/Table.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Table.obj -MD -MP -MF $(DEPDIR)/Table.Tpo -c -o Table.obj `if test -f 'Status/Table.cpp'; then $(CYGPATH_W) 'Status/Table.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/Table.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/Table.Tpo $(DEPDIR)/Table.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Status/Table.cpp' object='Table.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Table.obj `if test -f 'Status/Table.cpp'; then $(CYGPATH_W) 'Status/Table.cpp'; else $(CYGPATH_W) '$(srcdir)/Status/Table.cpp'; fi`
 
 testMain.o: UnitTest/testMain.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT testMain.o -MD -MP -MF $(DEPDIR)/testMain.Tpo -c -o testMain.o `test -f 'UnitTest/testMain.cpp' || echo '$(srcdir)/'`UnitTest/testMain.cpp

@@ -1,7 +1,7 @@
 #ifndef STATE_H_
 #define STATE_H_
 
-#include "Point.h"
+#include "Status/Point.h"
 #include <unordered_set>
 #include <memory>
 #include <assert.h>

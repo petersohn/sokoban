@@ -2,8 +2,8 @@
 #define TABLEITERATOR_H_
 
 #include "Common.h"
-#include "Table.h"
-#include "Status.h"
+#include "Status/Table.h"
+#include "Status/Status.h"
 #include "Checker.h"
 #include "Mutexes.hpp"
 #include "ThreadPool.h"

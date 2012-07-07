@@ -3,7 +3,7 @@
 
 #include "Node.h"
 #include "HeurCalculator.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include <memory>
 
 class NodeFactory {

@@ -3,8 +3,8 @@
 
 #include "HeurCalculator.h"
 #include "Array.h"
-#include "Status.h"
-#include "Table.h"
+#include "Status/Status.h"
+#include "Status/Table.h"
 #include "Mutexes.hpp"
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread/locks.hpp>

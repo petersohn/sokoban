@@ -1,5 +1,5 @@
 #include "ComplexExpander.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "Node.h"
 
 bool ComplexExpander::expand(const Status &status, std::shared_ptr<Node> base,

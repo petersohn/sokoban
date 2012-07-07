@@ -184,14 +184,6 @@
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.430530215" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="0.1893680997.33769475" name="Table.cpp" rcbsApplicability="disable" resourcePath="src/Table.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1890267468">
-						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1890267468" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
-							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1208688541" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
-								<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-							</option>
-							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.901192740" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
-						</tool>
-					</fileInfo>
 					<fileInfo id="0.1893680997.198885046" name="BasicHeurCalculator.cpp" rcbsApplicability="disable" resourcePath="src/BasicHeurCalculator.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1349973596">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1349973596" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
 							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.470367048" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
@@ -248,14 +240,6 @@
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.151494226" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="0.1893680997.955652520" name="Status.cpp" rcbsApplicability="disable" resourcePath="src/Status.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1139571632">
-						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1139571632" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
-							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.2131247705" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
-								<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-							</option>
-							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.732827254" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
-						</tool>
-					</fileInfo>
 					<fileInfo id="0.1893680997.358171095" name="XML.cpp" rcbsApplicability="disable" resourcePath="src/XML.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.733667233">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.733667233" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
 							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.952821810" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
@@ -270,14 +254,6 @@
 								<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
 							</option>
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.127605909" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
-						</tool>
-					</fileInfo>
-					<fileInfo id="0.1893680997.327507805" name="Point.cpp" rcbsApplicability="disable" resourcePath="src/Point.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.206195277">
-						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.206195277" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
-							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1354201433" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
-								<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
-							</option>
-							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1514473576" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
 					<fileInfo id="0.1893680997.870259609" name="DumperFunctions.cpp" rcbsApplicability="disable" resourcePath="src/DumperFunctions.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1812772253">

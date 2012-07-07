@@ -1,4 +1,10 @@
-common_source_files = \
+status_source_files = \
+		Status/Point.cpp \
+		Status/Status.cpp \
+		Status/StatusCreator.cpp \
+		Status/Table.cpp
+		
+sokoban_source_files = \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
 		BlockListChecker.cpp \
@@ -14,15 +20,11 @@ common_source_files = \
 		NormalExpander.cpp \
 		Options.cpp \
 		OptionsHelper.cpp \
-		Point.cpp \
 		PrioNodeQueue.cpp \
 		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
-		Status.cpp \
-		StatusCreator.cpp \
 		StonePusher.cpp \
-		Table.cpp \
 		TableIterator.cpp \
 		TableHeurCalculator.cpp \
 		TextDumper.cpp \
@@ -33,14 +35,14 @@ common_source_files = \
 		XML.cpp 
 
 
-sokoban_SOURCES = main.cpp $(common_source_files)
+sokoban_SOURCES = main.cpp $(sokoban_source_files) $(status_source_files)
 		
 
 unitTest_SOURCES = UnitTest/testMain.cpp \
 		UnitTest/DecisionTreeTest.cpp \
 		UnitTest/IsSubStateTest.cpp \
 		UnitTest/IsSubStatusTest.cpp \
-		 $(common_source_files)
+		 $(status_source_files)
 
 bin_PROGRAMS = sokoban unitTest
 

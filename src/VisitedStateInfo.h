@@ -1,8 +1,8 @@
 #ifndef VISITEDSTATE_H_
 #define VISITEDSTATE_H_
 
-#include "Point.h"
-#include "State.h"
+#include "Status/Point.h"
+#include "Status/State.h"
 #include "Hash.h"
 
 class Status;

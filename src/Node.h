@@ -4,7 +4,7 @@
 #include <memory>
 #include <boost/noncopyable.hpp>
 #include <deque>
-#include "State.h"
+#include "Status/State.h"
 #include "HeurCalculator.h"
 
 class Node: public boost::noncopyable {

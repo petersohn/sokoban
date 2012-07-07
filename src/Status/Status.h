@@ -3,8 +3,8 @@
 
 #include "Common.h"
 #include "Array.h"
-#include "Table.h"
-#include "State.h"
+#include "Status/Table.h"
+#include "Status/State.h"
 #include <memory>
 #include <functional>
 #include <vector>

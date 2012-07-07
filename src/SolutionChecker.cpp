@@ -1,5 +1,5 @@
 #include "SolutionChecker.h"
-#include "Status.h"
+#include "Status/Status.h"
 #include "DumperFunctions.h"
 #include "Common.h"
 #include <fstream>
