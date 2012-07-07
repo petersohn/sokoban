@@ -1,7 +1,8 @@
 #ifndef OPTIMALSPLITTING_H_
 #define OPTIMALSPLITTING_H_
 
-#include "DecisionTree/DecisionTree.h"
+#include "DecisionTree/SplittingValue.h"
+#include <boost/range/algorithm.hpp>
 
 namespace decisionTree {
 
@@ -14,21 +15,20 @@ namespace detail {
 				std::abs(right.trueNum_ - right.falseNum_);
 	}
 
-	template <class ValueList, class Arg, class Functor>
-	SplittingValue<Arg> calculateSplittingValue(
-			Functor& functor,
-			const ValueList& valueList,
-			const Arg& arg)
+	template <class ValueList, class FunctorIterator>
+	SplittingValue<FunctorIterator> calculateSplittingValue(
+			FunctorIterator& functor,
+			const ValueList& valueList)
 	{
 		int trueNum = 0;
 		int falseNum = 0;
 		for (const auto& value: valueList) {
-			if (functor(value.first, arg)) {
+			if ((*functor)(value.first)) {
 				++trueNum;
 			} else {
 				--falseNum;
 			}
-			return SplittingValue<Arg>(arg, trueNum, falseNum);
+			return SplittingValue<FunctorIterator>(functor, trueNum, falseNum);
 		}
 	}
 
@@ -37,22 +37,20 @@ namespace detail {
 class OptimalSplitting {
 public:
 
-	template <class Functor, class ValueList, class ArgList>
-	SplittingValue<typename ArgList::value_type> operator()(
-			Functor& functor,
+	template <class ValueList, class FunctorList>
+	typename FunctorList::const_iterator operator()(
 			const ValueList& valueList,
-			const ArgList& argList) const
+			const FunctorList& functorList) const
 	{
-		typedef typename ArgList::value_type Arg;
-		std::vector<SplittingValue<Arg>> splittingValues;
+		typedef typename FunctorList::const_iterator FunctorIterator;
+		std::vector<SplittingValue<FunctorIterator>> splittingValues;
 		splittingValues.reserve(valueList.size());
-		boost::transform(
-				argList, std::back_inserter(splittingValues),
-				[&functor, &valueList](const Arg& arg)
-				{
-					return detail::calculateSplittingValue(functor, valueList, arg);
-				});
-		return *boost::min_element(splittingValues, detail::betterSplittingValue<Arg>);
+		for (FunctorIterator it = functorList.begin();
+				it != functorList.end(); ++it) {
+			splittingValues.push_back(detail::calculateSplittingValue(it, valueList));
+		}
+		return boost::min_element(splittingValues,
+				detail::betterSplittingValue<FunctorIterator>)->arg_;
 	}
 };
 

@@ -1,6 +1,6 @@
 #include <boost/test/unit_test.hpp>
 #include <DecisionTree/OptimalSplitting.h>
-#include <DecisionTree/PrioritySplitting.h>
+#include <DecisionTree/DecisionTree.h>
 #include <vector>
 #include <set>
 #include <boost/algorithm/string.hpp>
@@ -25,9 +25,18 @@ BOOST_AUTO_TEST_SUITE(DecisionTreeTest)
 typedef std::set<int> Key;
 typedef std::pair<Key, int> Value;
 
+using std::placeholders::_1;
+using std::placeholders::_2;
+
 bool inSet(const Key& key, int arg) {
 	return key.count(arg) > 0;
 }
+
+std::function<bool(const Key&)> inSetFunctor(int arg)
+{
+	return std::bind(inSet, _1, arg);
+}
+
 
 
 BOOST_AUTO_TEST_SUITE(OptimalSplitting)
@@ -45,10 +54,13 @@ public:
 			std::make_pair(Key{3,4,5}, 4),
 			std::make_pair(Key{1,3,5}, 5)
 		},
-		args{1,2,3,4,5},
-		tree(decisionTree::buildNode(inSet, valueList, args,
-				decisionTree::OptimalSplitting()))
+		args{1,2,3,4,5}
 	{
+		auto functorList = args | boost::adaptors::transformed(inSetFunctor);
+		tree = decisionTree::buildNode(
+				valueList,
+				functorList,
+				decisionTree::OptimalSplitting());
 	}
 };
 
