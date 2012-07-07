@@ -113,8 +113,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
 		if (options_.useBlocklistHeurCalculator()) {
-			calculator = blockListGenerator.heurCalculator(false);
-			experimentalCalculator = blockListGenerator.heurCalculator(true);
+			calculator = blockListGenerator.heurCalculator();
 		}
 	}
 	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,

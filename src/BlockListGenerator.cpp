@@ -89,9 +89,9 @@ Checker::Ptr BlockListGenerator::checker()
 	return std::make_shared<BlockListChecker>(blockList_, table_);
 }
 
-HeurCalculator::Ptr BlockListGenerator::heurCalculator(bool useIsSubStatus)
+HeurCalculator::Ptr BlockListGenerator::heurCalculator()
 {
 	assert(table_);
-	return std::make_shared<BlocklistHeurCalculator>(calculator_, heurList_, table_, useIsSubStatus);
+	return std::make_shared<BlocklistHeurCalculator>(calculator_, heurList_, table_);
 }
 

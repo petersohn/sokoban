@@ -53,7 +53,7 @@ namespace detail {
 			value_(value) {}
 		virtual const Value* get(const Key&)
 		{
-			std::cout << "leafNode: (" << value_.first << ", " << value_.second << ")" << std::endl;
+//			std::cout << "leafNode: (" << value_.first << ", " << value_.second << ")" << std::endl;
 			return &value_;
 		}
 	};
@@ -109,12 +109,12 @@ namespace detail {
 		}
 		virtual const Value* get(const Key& key)
 		{
-			std::cout << "decision node: (" << key << "->" << arg_ << "): ";
+//			std::cout << "decision node: (" << key << "->" << arg_ << "): ";
 			if (functor_(key, arg_)) {
-				std::cout << "true" << std::endl;
+//				std::cout << "true" << std::endl;
 				return trueChild_->get(key);
 			} else {
-				std::cout << "false" << std::endl;
+//				std::cout << "false" << std::endl;
 				return falseChild_->get(key);
 			}
 		}
