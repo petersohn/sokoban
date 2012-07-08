@@ -1,7 +1,7 @@
 #ifndef BLOCKLISTHEURCALCULATOR_H_
 #define BLOCKLISTHEURCALCULATOR_H_
 
-#include "TableHeurCalculator.h"
+#include "HeurCalculator.h"
 #include "IndexedStatusList.h"
 #include "HeurInfo.h"
 

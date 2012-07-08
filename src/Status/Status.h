@@ -98,7 +98,8 @@ std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state
 
 bool checkStatus(const Status& status);
 
-inline bool isSubStatus(const Status& subStatus, const Status& status)
+template <class Status1, class Status2>
+inline bool isSubStatus(const Status1& subStatus, const Status2& status)
 {
 	return subStatus.reachable(status.currentPos()) &&
 			isSubState(subStatus.state(), status.state());
