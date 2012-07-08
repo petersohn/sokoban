@@ -2,7 +2,7 @@
 #include "Status/Status.h"
 #include "Node.h"
 #include "ThreadPool.h"
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include "JobManager.h"
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>

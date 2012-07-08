@@ -1,4 +1,4 @@
-#include "XML.h"
+#include "Dumper/XML.h"
 #include <iostream>
 #include <fstream>
 #include <boost/format.hpp>

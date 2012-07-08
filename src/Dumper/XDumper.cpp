@@ -1,5 +1,5 @@
-#include "XDumper.h"
-#include "DumperFunctions.h"
+#include "Dumper/XDumper.h"
+#include "Dumper/DumperFunctions.h"
 #include "Common.h"
 #include <iostream>
 #include <sstream>

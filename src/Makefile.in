@@ -55,23 +55,25 @@ am__objects_1 = AdvancedHeurCalculator.$(OBJEXT) \
 	BlockListGenerator.$(OBJEXT) BlockListHeurCalculator.$(OBJEXT) \
 	Common.$(OBJEXT) ComplexChecker.$(OBJEXT) \
 	ComplexExpander.$(OBJEXT) CorridorChecker.$(OBJEXT) \
-	DumperFunctions.$(OBJEXT) MovableChecker.$(OBJEXT) \
-	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
+	MovableChecker.$(OBJEXT) Node.$(OBJEXT) \
+	NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) PrioNodeQueue.$(OBJEXT) \
 	SolutionChecker.$(OBJEXT) Solver.$(OBJEXT) \
 	SolverFactories.$(OBJEXT) StonePusher.$(OBJEXT) \
 	TableIterator.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
-	TextDumper.$(OBJEXT) ThreadPool.$(OBJEXT) \
-	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT) \
+	ThreadPool.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
+	VisitedStates.$(OBJEXT)
+am__objects_2 = DumperFunctions.$(OBJEXT) TextDumper.$(OBJEXT) \
 	XDumper.$(OBJEXT) XML.$(OBJEXT)
-am__objects_2 = Point.$(OBJEXT) Status.$(OBJEXT) \
+am__objects_3 = Point.$(OBJEXT) Status.$(OBJEXT) \
 	StatusCreator.$(OBJEXT) Table.$(OBJEXT)
-am_sokoban_OBJECTS = main.$(OBJEXT) $(am__objects_1) $(am__objects_2)
+am_sokoban_OBJECTS = main.$(OBJEXT) $(am__objects_1) $(am__objects_2) \
+	$(am__objects_3)
 sokoban_OBJECTS = $(am_sokoban_OBJECTS)
 sokoban_LDADD = $(LDADD)
 am_unitTest_OBJECTS = testMain.$(OBJEXT) DecisionTreeTest.$(OBJEXT) \
 	IsSubStateTest.$(OBJEXT) IsSubStatusTest.$(OBJEXT) \
-	$(am__objects_2)
+	$(am__objects_3)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 unitTest_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -194,6 +196,12 @@ status_source_files = \
 		Status/StatusCreator.cpp \
 		Status/Table.cpp
 
+dumper_source_files = \
+		Dumper/DumperFunctions.cpp \
+		Dumper/TextDumper.cpp \
+		Dumper/XDumper.cpp \
+		Dumper/XML.cpp 
+
 sokoban_source_files = \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
@@ -204,7 +212,6 @@ sokoban_source_files = \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
-		DumperFunctions.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \
@@ -217,14 +224,15 @@ sokoban_source_files = \
 		StonePusher.cpp \
 		TableIterator.cpp \
 		TableHeurCalculator.cpp \
-		TextDumper.cpp \
 		ThreadPool.cpp \
 		VisitedStateInfo.cpp \
-		VisitedStates.cpp \
-		XDumper.cpp \
-		XML.cpp 
+		VisitedStates.cpp
 
-sokoban_SOURCES = main.cpp $(sokoban_source_files) $(status_source_files)
+sokoban_SOURCES = main.cpp \
+		$(sokoban_source_files) \
+		$(dumper_source_files) \
+		$(status_source_files)
+
 unitTest_SOURCES = UnitTest/testMain.cpp \
 		UnitTest/DecisionTreeTest.cpp \
 		UnitTest/IsSubStateTest.cpp \
@@ -367,6 +375,62 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+DumperFunctions.o: Dumper/DumperFunctions.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT DumperFunctions.o -MD -MP -MF $(DEPDIR)/DumperFunctions.Tpo -c -o DumperFunctions.o `test -f 'Dumper/DumperFunctions.cpp' || echo '$(srcdir)/'`Dumper/DumperFunctions.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/DumperFunctions.Tpo $(DEPDIR)/DumperFunctions.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/DumperFunctions.cpp' object='DumperFunctions.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o DumperFunctions.o `test -f 'Dumper/DumperFunctions.cpp' || echo '$(srcdir)/'`Dumper/DumperFunctions.cpp
+
+DumperFunctions.obj: Dumper/DumperFunctions.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT DumperFunctions.obj -MD -MP -MF $(DEPDIR)/DumperFunctions.Tpo -c -o DumperFunctions.obj `if test -f 'Dumper/DumperFunctions.cpp'; then $(CYGPATH_W) 'Dumper/DumperFunctions.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/DumperFunctions.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/DumperFunctions.Tpo $(DEPDIR)/DumperFunctions.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/DumperFunctions.cpp' object='DumperFunctions.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o DumperFunctions.obj `if test -f 'Dumper/DumperFunctions.cpp'; then $(CYGPATH_W) 'Dumper/DumperFunctions.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/DumperFunctions.cpp'; fi`
+
+TextDumper.o: Dumper/TextDumper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT TextDumper.o -MD -MP -MF $(DEPDIR)/TextDumper.Tpo -c -o TextDumper.o `test -f 'Dumper/TextDumper.cpp' || echo '$(srcdir)/'`Dumper/TextDumper.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/TextDumper.Tpo $(DEPDIR)/TextDumper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/TextDumper.cpp' object='TextDumper.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o TextDumper.o `test -f 'Dumper/TextDumper.cpp' || echo '$(srcdir)/'`Dumper/TextDumper.cpp
+
+TextDumper.obj: Dumper/TextDumper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT TextDumper.obj -MD -MP -MF $(DEPDIR)/TextDumper.Tpo -c -o TextDumper.obj `if test -f 'Dumper/TextDumper.cpp'; then $(CYGPATH_W) 'Dumper/TextDumper.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/TextDumper.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/TextDumper.Tpo $(DEPDIR)/TextDumper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/TextDumper.cpp' object='TextDumper.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o TextDumper.obj `if test -f 'Dumper/TextDumper.cpp'; then $(CYGPATH_W) 'Dumper/TextDumper.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/TextDumper.cpp'; fi`
+
+XDumper.o: Dumper/XDumper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT XDumper.o -MD -MP -MF $(DEPDIR)/XDumper.Tpo -c -o XDumper.o `test -f 'Dumper/XDumper.cpp' || echo '$(srcdir)/'`Dumper/XDumper.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/XDumper.Tpo $(DEPDIR)/XDumper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/XDumper.cpp' object='XDumper.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o XDumper.o `test -f 'Dumper/XDumper.cpp' || echo '$(srcdir)/'`Dumper/XDumper.cpp
+
+XDumper.obj: Dumper/XDumper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT XDumper.obj -MD -MP -MF $(DEPDIR)/XDumper.Tpo -c -o XDumper.obj `if test -f 'Dumper/XDumper.cpp'; then $(CYGPATH_W) 'Dumper/XDumper.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/XDumper.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/XDumper.Tpo $(DEPDIR)/XDumper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/XDumper.cpp' object='XDumper.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o XDumper.obj `if test -f 'Dumper/XDumper.cpp'; then $(CYGPATH_W) 'Dumper/XDumper.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/XDumper.cpp'; fi`
+
+XML.o: Dumper/XML.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT XML.o -MD -MP -MF $(DEPDIR)/XML.Tpo -c -o XML.o `test -f 'Dumper/XML.cpp' || echo '$(srcdir)/'`Dumper/XML.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/XML.Tpo $(DEPDIR)/XML.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/XML.cpp' object='XML.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o XML.o `test -f 'Dumper/XML.cpp' || echo '$(srcdir)/'`Dumper/XML.cpp
+
+XML.obj: Dumper/XML.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT XML.obj -MD -MP -MF $(DEPDIR)/XML.Tpo -c -o XML.obj `if test -f 'Dumper/XML.cpp'; then $(CYGPATH_W) 'Dumper/XML.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/XML.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/XML.Tpo $(DEPDIR)/XML.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Dumper/XML.cpp' object='XML.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o XML.obj `if test -f 'Dumper/XML.cpp'; then $(CYGPATH_W) 'Dumper/XML.cpp'; else $(CYGPATH_W) '$(srcdir)/Dumper/XML.cpp'; fi`
 
 Point.o: Status/Point.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Point.o -MD -MP -MF $(DEPDIR)/Point.Tpo -c -o Point.o `test -f 'Status/Point.cpp' || echo '$(srcdir)/'`Status/Point.cpp

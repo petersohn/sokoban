@@ -1,5 +1,5 @@
 #include "BlockListHeurCalculator.h"
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include "Node.h"
 #include "VisitedStateInfo.h"
 #include <boost/range/algorithm.hpp>

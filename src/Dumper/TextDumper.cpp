@@ -1,7 +1,7 @@
-#include "TextDumper.h"
+#include "Dumper/TextDumper.h"
 #include "Status/Status.h"
 #include "Node.h"
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include <string>
 
 

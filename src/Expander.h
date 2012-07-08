@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "QueueInterfaces.h"
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 
 class Status;
 class Node;

@@ -1,10 +1,10 @@
 #ifndef XDUMPER_H_
 #define XDUMPER_H_
 
-#include "XML.h"
+#include "Dumper/XML.h"
 #include "Node.h"
 #include "Status/Table.h"
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 #include "Mutexes.hpp"
 #include <memory>
 #include <map>

@@ -1,6 +1,6 @@
 #include "VisitedStateInfo.h"
 #include "Status/Status.h"
-#include <DumperFunctions.h>
+#include "Dumper/DumperFunctions.h"
 
 
 VisitedStateInfo::VisitedStateInfo(const Status& status):

@@ -3,7 +3,7 @@
 
 #include "QueueInterfaces.h"
 #include "Expander.h"
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 #include <deque>
 #include <functional>
 #include <memory>

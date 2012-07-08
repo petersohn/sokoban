@@ -4,7 +4,7 @@
 #include "Node.h"
 #include "Solver.h"
 #include "SolverFactories.h"
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include "Status/State.h"
 #include "ThreadPool.h"
 #include "SolutionChecker.h"

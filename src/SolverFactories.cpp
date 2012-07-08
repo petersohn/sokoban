@@ -13,8 +13,8 @@
 #include "AdvancedHeurCalculator.h"
 #include "VisitedStates.h"
 #include "CompareQueue.h"
-#include "TextDumper.h"
-#include "XDumper.h"
+#include "Dumper/TextDumper.h"
+#include "Dumper/XDumper.h"
 #include "NodeFactory.h"
 #include <vector>
 #include <functional>

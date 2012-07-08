@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 #include "Status/Table.h"
 
 class Status;

@@ -4,6 +4,12 @@ status_source_files = \
 		Status/StatusCreator.cpp \
 		Status/Table.cpp
 		
+dumper_source_files = \
+		Dumper/DumperFunctions.cpp \
+		Dumper/TextDumper.cpp \
+		Dumper/XDumper.cpp \
+		Dumper/XML.cpp 
+		
 sokoban_source_files = \
 		AdvancedHeurCalculator.cpp \
 		BasicHeurCalculator.cpp \
@@ -14,7 +20,6 @@ sokoban_source_files = \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
-		DumperFunctions.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \
@@ -27,15 +32,15 @@ sokoban_source_files = \
 		StonePusher.cpp \
 		TableIterator.cpp \
 		TableHeurCalculator.cpp \
-		TextDumper.cpp \
 		ThreadPool.cpp \
 		VisitedStateInfo.cpp \
-		VisitedStates.cpp \
-		XDumper.cpp \
-		XML.cpp 
+		VisitedStates.cpp
 
 
-sokoban_SOURCES = main.cpp $(sokoban_source_files) $(status_source_files)
+sokoban_SOURCES = main.cpp \
+		$(sokoban_source_files) \
+		$(dumper_source_files) \
+		$(status_source_files)
 		
 
 unitTest_SOURCES = UnitTest/testMain.cpp \

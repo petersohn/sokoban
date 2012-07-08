@@ -4,7 +4,7 @@
 #include "QueueInterfaces.h"
 #include "Expander.h"
 #include "HeurCalculator.h"
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 #include "Options.h"
 #include "Checker.h"
 

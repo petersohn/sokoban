@@ -3,7 +3,7 @@
 
 #include "Solver.h"
 #include "IndexedStatusList.h"
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include "ThreadPool.h"
 #include "Checker.h"
 #include "HeurInfo.h"

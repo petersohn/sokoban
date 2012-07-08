@@ -1,6 +1,6 @@
 #include "SolutionChecker.h"
 #include "Status/Status.h"
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include "Common.h"
 #include <fstream>
 #include <boost/foreach.hpp>

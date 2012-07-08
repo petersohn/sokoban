@@ -4,7 +4,7 @@
 #include "Expander.h"
 #include "Checker.h"
 #include "HeurCalculator.h"
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 #include "NodeFactory.h"
 #include "Mutexes.hpp"
 

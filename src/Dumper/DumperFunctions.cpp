@@ -1,4 +1,4 @@
-#include "DumperFunctions.h"
+#include "Dumper/DumperFunctions.h"
 #include <boost/format.hpp>
 
 void dumpStatus(std::ostream &file, const Status &status,

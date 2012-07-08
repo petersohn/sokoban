@@ -1,7 +1,7 @@
 #ifndef TEXTDUMPER_H_
 #define TEXTDUMPER_H_
 
-#include "Dumper.h"
+#include "Dumper/Dumper.h"
 #include "Status/Table.h"
 #include "Common.h"
 #include "Mutexes.hpp"
