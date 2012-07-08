@@ -18,10 +18,10 @@ int BlocklistHeurCalculator::calculateStatus(const Status &status,
 	State state = status.state();
 	int result = 0;
 	for (const std::unique_ptr<HeurInfo>& subset: *heurList_) {
-		if (subset->status_.reachable(status.currentPos()) &&
-						isSubState(subset->status_.state(), state)) {
-			result += subset->heur_;
-			for (const Point& p: subset->status_.state()) {
+		if (subset->first.reachable(status.currentPos()) &&
+						isSubState(subset->first.state(), state)) {
+			result += subset->second;
+			for (const Point& p: subset->first.state()) {
 				state.removeStone(p);
 			}
 		}

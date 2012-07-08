@@ -75,7 +75,7 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 	}
 	boost::sort(*heurList_, [](const std::unique_ptr<HeurInfo>& left, const std::unique_ptr<HeurInfo>& right)
-			{ return left->heur_ > right->heur_; });
+			{ return left->second > right->second; });
 	if (maxHeurListSize_ > 0 && heurList_->size() > maxHeurListSize_) {
 		heurList_->resize(maxHeurListSize_);
 	}
