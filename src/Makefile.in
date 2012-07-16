@@ -55,8 +55,8 @@ am__objects_1 = AdvancedHeurCalculator.$(OBJEXT) \
 	BlockListGenerator.$(OBJEXT) BlockListHeurCalculator.$(OBJEXT) \
 	Common.$(OBJEXT) ComplexChecker.$(OBJEXT) \
 	ComplexExpander.$(OBJEXT) CorridorChecker.$(OBJEXT) \
-	MovableChecker.$(OBJEXT) Node.$(OBJEXT) \
-	NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
+	DecisionTreeHeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
+	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) PrioNodeQueue.$(OBJEXT) \
 	SolutionChecker.$(OBJEXT) Solver.$(OBJEXT) \
 	SolverFactories.$(OBJEXT) StonePusher.$(OBJEXT) \
@@ -212,6 +212,7 @@ sokoban_source_files = \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
+		DecisionTreeHeurCalculator.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \
@@ -333,6 +334,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComplexExpander.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CorridorChecker.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DecisionTreeHeurCalculator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DecisionTreeTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DumperFunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IsSubStateTest.Po@am__quote@

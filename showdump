@@ -6,4 +6,7 @@ if ! which hl >/dev/null; then
 fi
 
 filename="$1"
+if [ -z "$filename" ]; then
+    filename=/dev/stdin
+fi
 cat "$filename" | hl Red '[.+]' | hl IYellow '[oO]' | hl IBlue 'Y' | hl IGreen 'X' | less -R

@@ -20,6 +20,7 @@ sokoban_source_files = \
 		ComplexChecker.cpp \
 		ComplexExpander.cpp \
 		CorridorChecker.cpp \
+		DecisionTreeHeurCalculator.cpp \
 		MovableChecker.cpp \
 		Node.cpp \
 		NormalExpander.cpp \

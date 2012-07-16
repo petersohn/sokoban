@@ -4,7 +4,6 @@
 #include "Common.h"
 #include "Array.h"
 #include "Status/Table.h"
-#include "Status/Status.h"
 #include "Node.h"
 #include <iostream>
 #include <string>
@@ -12,32 +11,38 @@
 
 template<class T>
 void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title = "", const std::string &prefix = "");
+		const std::string &title = "", const std::string &prefix = "", int indent = 0);
 
+template <class Status>
 void dumpStatus(std::ostream &file, const Status &status,
-		std::string title = "", const Array<bool> *highlight = NULL);
+		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
 
 void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
-		std::string title = "", const Array<bool> *highlight = NULL);
+		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
 
 
 
 
 template<class T>
 void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title, const std::string &prefix) {
-	file << title << std::endl;
+		const std::string &title, const std::string &prefix, int indent) {
+	std::string indentString(indent, ' ');
+	if (!title.empty()) {
+		file << indentString << title << std::endl;
+	}
 	Array<std::string> txts(table.width(), table.height());
 	Point p;
 	size_t maxlen = 0;
-	for (p.y = 0; p.y < table.height(); p.y++)
+	for (p.y = 0; p.y < table.height(); p.y++) {
 		for (p.x = 0; p.x < table.width(); p.x++) {
 			txts[p] = (boost::format("%1%") % table[p]).str();
 			maxlen = std::max(maxlen, txts[p].size());
 		}
+	}
 	// leave a space between characters
 	++maxlen;
 	for (p.y = 0; p.y < table.height(); p.y++) {
+		file << indentString;
 		for (p.x = 0; p.x < table.width(); p.x++) {
 			file.width(maxlen);
 			file << txts[p];
@@ -46,5 +51,51 @@ void dumpArray(std::ostream &file, const Array<T> table,
 	}
 	file << std::endl;
 }
+
+template <class Status>
+void dumpStatus(std::ostream &file, const Status &status,
+		std::string title , const Array<bool> *highlight, int indent)
+{
+	if (!title.empty()) {
+		title += "\n";
+		title += std::string(indent, ' ');
+	}
+	for (State::const_iterator it = status.state().begin();
+			it != status.state().end(); ++it) {
+		title += (boost::format("%d,%d ") %
+				it->x % it->y).str();
+	}
+	Point p;
+	Array<char> output(status.width(), status.height());
+	for (p.y = 0; p.y < status.height(); p.y++)
+	{
+		for (p.x = 0; p.x < status.width(); p.x++)
+		{
+			if (status.currentPos() == p)
+				output[p] = 'Y';
+			else if (status.table().destination() == p)
+				output[p] = 'X';
+			else if (status.value(p) == ftWall)
+				output[p] = '*';
+			else if (status.value(p) == ftFloor)
+			{
+				if (highlight != NULL && (*highlight)[p])
+					output[p] = '+';
+				else
+					output[p] = '.';
+			} else if (status.value(p) == ftStone)
+			{
+				if (highlight != NULL && (*highlight)[p])
+					output[p] = 'O';
+				else
+					output[p] = 'o';
+			}
+		}
+	}
+	dumpArray(file, output, title, "", indent);
+}
+
+
+
 
 #endif /* DUMPERFUNCTIONS_H_ */

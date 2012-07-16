@@ -1,6 +1,7 @@
 #include "BlockListGenerator.h"
 #include "BlockListChecker.h"
 #include "BlockListHeurCalculator.h"
+#include "DecisionTreeHeurCalculator.h"
 #include "ComplexChecker.h"
 #include "TableIterator.h"
 #include "TableHeurCalculator.h"
@@ -89,9 +90,15 @@ Checker::Ptr BlockListGenerator::checker()
 	return std::make_shared<BlockListChecker>(blockList_, table_);
 }
 
-HeurCalculator::Ptr BlockListGenerator::heurCalculator()
+HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 {
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(calculator_, heurList_, table_);
+}
+
+HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator()
+{
+	assert(table_);
+	return std::make_shared<DecisionTreeHeurCalculator>(calculator_, heurList_, table_);
 }
 

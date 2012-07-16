@@ -26,10 +26,10 @@ namespace detail {
 			if ((*functor)(value.first)) {
 				++trueNum;
 			} else {
-				--falseNum;
+				++falseNum;
 			}
-			return SplittingValue<FunctorIterator>(functor, trueNum, falseNum);
 		}
+		return SplittingValue<FunctorIterator>(functor, trueNum, falseNum);
 	}
 
 }
@@ -45,10 +45,18 @@ public:
 		typedef typename FunctorList::const_iterator FunctorIterator;
 		std::vector<SplittingValue<FunctorIterator>> splittingValues;
 		splittingValues.reserve(valueList.size());
-		for (FunctorIterator it = functorList.begin();
-				it != functorList.end(); ++it) {
-			splittingValues.push_back(detail::calculateSplittingValue(it, valueList));
+		for (FunctorIterator it = std::begin(functorList);
+				it != std::end(functorList); ++it) {
+			auto splittingValue = detail::calculateSplittingValue(it, valueList);
+//			std::cerr << "(" <<  splittingValue.falseNum_ << "," <<
+//					splittingValue.trueNum_ << ") ";
+			if (splittingValue.trueNum_ == 0 || splittingValue.falseNum_ == 0) {
+				continue;
+			}
+			splittingValues.push_back(std::move(splittingValue));
 		}
+		std::cerr << std::endl;
+		assert(splittingValues.size() != 0);
 		return boost::min_element(splittingValues,
 				detail::betterSplittingValue<FunctorIterator>)->arg_;
 	}
