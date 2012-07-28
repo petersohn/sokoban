@@ -11,6 +11,7 @@ class Options {
 public:
 	enum DumpStyle {dsNone, dsText, dsXML};
 	enum CompareMethod {ctTime = 1, ctHeur, ctDepth};
+	enum BlockListHeurType {bhNone, bhVector, bhDecisionTree};
 
 	struct Compare {
 		CompareMethod type;
@@ -27,7 +28,7 @@ private:
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	bool useAdvancedHeurCalculator_;
-	bool useBlocklistHeurCalculator_;
+	BlockListHeurType blocklistHeurCalculatorType_;
 	bool parallelOuterExpand_;
 	int blockListStones_;
 	int blockListDistance_;
@@ -45,7 +46,7 @@ public:
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	bool useAdvancedHeurCalculator() const { return useAdvancedHeurCalculator_; }
-	bool useBlocklistHeurCalculator() const { return useBlocklistHeurCalculator_; }
+	BlockListHeurType blocklistHeurCalculatorType() const { return blocklistHeurCalculatorType_; }
 	bool parallelOuterExpand() const { return parallelOuterExpand_; }
 	int blockListStones() const { return blockListStones_; }
 	int blockListDistance() const { return blockListDistance_; }

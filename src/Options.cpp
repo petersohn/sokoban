@@ -15,7 +15,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		useMovableChecker_(true),
 		useCorridorChecker_(true),
 		useAdvancedHeurCalculator_(true),
-		useBlocklistHeurCalculator_(false),
+		blocklistHeurCalculatorType_(bhNone),
 		parallelOuterExpand_(false),
 		blockListStones_(0),
 		blockListDistance_(0),
@@ -59,10 +59,19 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Enable/disable checking for corridors.\n");
 	oh.addBoolOption("advanced-heur-calculator", &useAdvancedHeurCalculator_,
 			"Enable/disable advanced heur calculator.\n");
-	oh.addBoolOption("blocklist-heur-calculator", &useBlocklistHeurCalculator_,
-			"Enable/disable blocklist heur calculator. Only meaningful if --blocklist-number > 1\n");
 	oh.addArgumentOption<int>("heur-list-size", &maxHeurListSize_,
 			"The maximum size for the heur list when blocklist-heur-calculator is enabled. 0 means no limitation.");
+	IndexedArgument bh;
+	bh.addElement("none", bhNone);
+	bh.addElement("vector", bhVector);
+	bh.addElement("decision-tree", bhDecisionTree);
+	int blocklistHeurCalculatorType;
+	oh.addIndexedOption("blocklist-heur-calculator", &blocklistHeurCalculatorType, bh,
+			"The type of the blocklist heur calculator. Only meaningful if --blocklist-number > 1. "
+			"Possible values:\n"
+			"    (n)one          \tDisable blocklist heur calculator.\n"
+			"    (v)ector        \tUse vector and linear search. More optimal, but slower than decision tree.\n"
+			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n");
 	IndexedArgument cl;
 	cl.addElement("time", ctTime);
 	cl.addElement("heur", ctHeur);
@@ -91,6 +100,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		oh.parseConfigFile(filename_.c_str());
 		oh.parseCommandLine(argc, argv);
 		dumpStyle_ = static_cast<DumpStyle>(dumpStyle);
+		blocklistHeurCalculatorType_ = static_cast<BlockListHeurType>(blocklistHeurCalculatorType);
 		for (std::vector<int>::iterator it = compare.begin();
 				it != compare.end(); ++it) {
 			compare_.push_back(Compare(

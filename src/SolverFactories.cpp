@@ -112,9 +112,15 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 				options_.blockListDistance(), options_.maxHeurListSize());
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
-		if (options_.useBlocklistHeurCalculator()) {
+		switch (options_.blocklistHeurCalculatorType()) {
+		case Options::bhNone:
+			break;
+		case Options::bhVector:
 			calculator = blockListGenerator.vectorHeurCalculator();
-			experimentalCalculator = blockListGenerator.decisionTreeHeurCalculator();
+			break;
+		case Options::bhDecisionTree:
+			calculator = blockListGenerator.decisionTreeHeurCalculator();
+			break;
 		}
 	}
 	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
