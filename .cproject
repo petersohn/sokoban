@@ -213,12 +213,22 @@
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.2133065856" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="0.1893680997.1100808021" name="TextDumper.cpp" rcbsApplicability="disable" resourcePath="src/TextDumper.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1555103477">
+						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1555103477" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
+							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1782958565" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+						</tool>
+					</fileInfo>
 					<fileInfo id="0.1893680997.481867291" name="Solver.cpp" rcbsApplicability="disable" resourcePath="src/Solver.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1345773925">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1345773925" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
 							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.669102489" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
 								<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
 							</option>
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.410859151" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="0.1893680997.369373199" name="XDumper.cpp" rcbsApplicability="disable" resourcePath="src/XDumper.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.578955062">
+						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.578955062" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
+							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.558675337" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
 					<fileInfo id="0.1893680997.287756865" name="TableHeurCalculator.cpp" rcbsApplicability="disable" resourcePath="src/TableHeurCalculator.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1517609981">
@@ -234,6 +244,11 @@
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.926836666" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="0.1893680997.1628494304" name="XML.cpp" rcbsApplicability="disable" resourcePath="src/XML.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.1963243157">
+						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.1963243157" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
+							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1085618255" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+						</tool>
+					</fileInfo>
 					<fileInfo id="0.1893680997.499533532" name="SolutionChecker.cpp" rcbsApplicability="disable" resourcePath="src/SolutionChecker.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.2028638004">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.2028638004" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
 							<option id="org.eclipse.cdt.build.core.settings.holder.symbols.2075116633" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
@@ -247,6 +262,11 @@
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1788413397" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="0.1893680997.1361854975" name="DumperFunctions.cpp" rcbsApplicability="disable" resourcePath="src/DumperFunctions.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.672263037.102977850">
+						<tool id="org.eclipse.cdt.build.core.settings.holder.672263037.102977850" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.151719979">
+							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1072948130" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+						</tool>
+					</fileInfo>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -255,8 +275,10 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="sokoban2.null.918687781" name="sokoban2"/>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/sokoban2"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/sokoban2"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
@@ -265,4 +287,33 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>CXXFLAGS='-O0 -g'</buildArguments>
+				<buildTarget>all</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments/>
+				<buildTarget>clean</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="make" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments/>
+				<buildTarget>all</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+		</buildTargets>
+	</storageModule>
 </cproject>
