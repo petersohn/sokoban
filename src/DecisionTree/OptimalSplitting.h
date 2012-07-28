@@ -48,14 +48,11 @@ public:
 		for (FunctorIterator it = std::begin(functorList);
 				it != std::end(functorList); ++it) {
 			auto splittingValue = detail::calculateSplittingValue(it, valueList);
-//			std::cerr << "(" <<  splittingValue.falseNum_ << "," <<
-//					splittingValue.trueNum_ << ") ";
 			if (splittingValue.trueNum_ == 0 || splittingValue.falseNum_ == 0) {
 				continue;
 			}
 			splittingValues.push_back(std::move(splittingValue));
 		}
-		std::cerr << std::endl;
 		assert(splittingValues.size() != 0);
 		return boost::min_element(splittingValues,
 				detail::betterSplittingValue<FunctorIterator>)->arg_;

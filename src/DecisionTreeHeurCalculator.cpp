@@ -25,6 +25,7 @@ int DecisionTreeHeurCalculator::calculateStatus(const Status &status,
 		if (!subset || !isSubStatus(subset->first, mockStatus)) {
 			break;
 		}
+		result += subset->second;
 		for (const Point& p: subset->first.state()) {
 			mockStatus.state().removeStone(p);
 		}

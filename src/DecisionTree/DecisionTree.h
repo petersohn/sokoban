@@ -7,7 +7,6 @@
 #include <boost/format.hpp>
 #include <vector>
 #include <cstdlib>
-#include <iostream>
 #include "AnnotatedFunction.h"
 #include "Dumper/IndentedOutput.h"
 
@@ -69,18 +68,14 @@ namespace detail {
 			typename FunctorList::const_iterator bestSplit = splittingAlgoritm(valueList, functorList);
 			assert(bestSplit != std::end(functorList));
 			functor_ = *bestSplit;
-			indentedOutput(std::cerr, functionName(functor_), level);
 			Values trueValues;
 			Values falseValues;
 			for (const Value& value: valueList) {
 				if (functor_(value.first)) {
-//					indentedOutput(std::cerr, "True", level);
 					trueValues.push_back(&value);
 				} else {
-//					indentedOutput(std::cerr, "False", level);
 					falseValues.push_back(&value);
 				}
-//				indentedOutput(std::cerr, value.first, level);
 			}
 
 			std::vector<Functor> newFunctorList;
@@ -88,21 +83,16 @@ namespace detail {
 			std::copy(functorList.begin(), bestSplit, std::back_inserter(newFunctorList));
 			std::copy(++bestSplit, functorList.end(), std::back_inserter(newFunctorList));
 			boost::format branchOutputFormat("%s branch (%d)");
-			indentedOutput(std::cerr, (boost::format(branchOutputFormat) % "False" % falseValues.size()).str(), level);
 			falseChild_ = buildNode(falseValues | boost::adaptors::indirected,
 					newFunctorList, splittingAlgoritm, level + indentLevel);
-			indentedOutput(std::cerr, (boost::format(branchOutputFormat) % "True" % trueValues.size()).str(), level);
 			trueChild_ = buildNode(trueValues | boost::adaptors::indirected,
 					newFunctorList, splittingAlgoritm, level + indentLevel);
 		}
 		virtual const Value* get(const Key& key)
 		{
-//			std::cout << "decision node: (" << key << "->" << arg_ << "): ";
 			if (functor_(key)) {
-//				std::cout << "true" << std::endl;
 				return trueChild_->get(key);
 			} else {
-//				std::cout << "false" << std::endl;
 				return falseChild_->get(key);
 			}
 		}
@@ -125,16 +115,11 @@ buildNode(
 	assert(valueList.size() != 0);
 	if (valueList.size() == 1) {
 		const auto& value = *std::begin(valueList);
-		indentedOutput(std::cerr, "Final value", level);
-		indentedOutput(std::cerr, value.first, level);
-		indentedOutput(std::cerr, value.second, level);
 		return std::unique_ptr<Node<Key, T>>(new detail::LeafNode<Key, T>(value));
 	} else
 	if (valueList.size() == 0) {
-		indentedOutput(std::cerr, "No value", level);
 		return std::unique_ptr<Node<Key, T>>(new detail::EmptyLeafNode<Key, T>());
 	} else {
-		indentedOutput(std::cerr, "Decision point", level);
 		return std::unique_ptr<Node<Key, T>>(
 				new detail::DecisionNode<Key, T, Functor>(
 						valueList, functorList, splittingAlgoritm, level));
