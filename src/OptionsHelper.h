@@ -41,7 +41,6 @@ class OptionsHelper {
 	boost::program_options::options_description positionalParametersDescription_;
 	boost::program_options::positional_options_description positionalParameters_;
 	std::vector<FlagType> commandLineFlags_;
-	std::vector<FlagType> boolOptions_;
 	std::vector<IndexedType> indexedOptions_;
 	std::vector<IndexedListType> indexedListOptions_;
 
@@ -49,38 +48,37 @@ class OptionsHelper {
 	static std::string stripComma(const std::string &s);
 public:
 	void addCommandLineFlag(const std::string &name, bool *target, const char *description);
-	void addBoolOption(const std::string &name, bool *target, const char *description);
+	void addBoolOption(const std::string &name, bool *target, const char *description)
+	{
+		addArgumentOption<bool>(name, target, description);
+	}
+
 	void addIndexedOption(const std::string &name, int *target, const IndexedArgument &arg,
 			const char *description);
 	void addIndexedListOption(const std::string &name, std::vector<int> *target,
 			const IndexedArgument &arg, const char *description);
 
 	template <class T>
-	void addArgumentOption(const std::string &name, T *target, const char *description);
+	void addArgumentOption(const std::string &name, T *target, const char *description)
+	{
+		using namespace boost::program_options;
+		commandLineDescription_.add_options()
+				(name.c_str(), value<T>(target), description);
+		configFileDescription_.add_options()
+				(name.c_str(), value<T>(target), description);
+	}
 	template <class T>
-	void addPositionalParameter(const std::string &name, T *target, const char *description);
+	void addPositionalParameter(const std::string &name, T *target, const char *description)
+	{
+		using namespace boost::program_options;
+		positionalParametersDescription_.add_options()(name.c_str(), value<T>(target), description);
+		positionalParameters_.add(name.c_str(), 1);
+	}
 
 	void parseCommandLine(int argc, char **argv);
 	void parseConfigFile(const char *configFile);
 	void print(const char *programName) const;
 };
-
-
-template <class T>
-void OptionsHelper::addArgumentOption(const std::string &name, T *target, const char *description)
-{
-	using namespace boost::program_options;
-	commandLineDescription_.add_options()(name.c_str(), value<T>(target), description);
-	configFileDescription_.add_options()(name.c_str(), value<T>(target), description);
-}
-
-template <class T>
-void OptionsHelper::addPositionalParameter(const std::string &name, T *target, const char *description)
-{
-	using namespace boost::program_options;
-	positionalParametersDescription_.add_options()(name.c_str(), value<T>(target), description);
-	positionalParameters_.add(name.c_str(), 1);
-}
 
 
 #endif /* OPTIONSHELPER_H_ */

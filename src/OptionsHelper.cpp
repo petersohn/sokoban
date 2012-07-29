@@ -47,18 +47,6 @@ void OptionsHelper::addCommandLineFlag(const std::string &name, bool *target, co
 	commandLineFlags_.push_back(FlagType(stripComma(name), target));
 }
 
-void OptionsHelper::addBoolOption(const std::string &name, bool *target,
-		const char *description)
-{
-	using namespace boost::program_options;
-	std::string s = "enable-" + name;
-	commandLineDescription_.add_options()(s.c_str(), "");
-	s = "disable-" + name;
-	commandLineDescription_.add_options()(s.c_str(), description);
-	configFileDescription_.add_options()(name.c_str(), value<std::string>(), description);
-	boolOptions_.push_back(FlagType(stripComma(name), target));
-}
-
 void OptionsHelper::addIndexedOption(const std::string &name, int *target,
 		const IndexedArgument &arg, const char *description)
 {
@@ -91,18 +79,6 @@ void OptionsHelper::parseCommandLine(int argc, char **argv)
 	for (std::vector<FlagType>::iterator it = commandLineFlags_.begin();
 			it != commandLineFlags_.end(); ++it)
 		*(it->second) = vm.count(it->first) != 0;
-	for (std::vector<FlagType>::iterator it = boolOptions_.begin();
-			it != boolOptions_.end(); ++it) {
-		bool enable = vm.count("enable-"+it->first) > 0;
-		bool disable = vm.count("disable-"+it->first) > 0;
-		if (enable && disable)
-			throw BadOptions((boost::format("The option \"%s\" cannot be enabled "
-					"and disabled at the same time.") % it->first).str());
-		else if (enable)
-			*(it->second) = true;
-		else if (disable)
-			*(it->second) = false;
-	}
 	doParse(vm);
 }
 
@@ -112,20 +88,6 @@ void OptionsHelper::parseConfigFile(const char *configFile)
 	variables_map vm;
 	store(parse_config_file<char>(configFile, configFileDescription_, false), vm);
 	notify(vm);
-	for (std::vector<FlagType>::iterator it = boolOptions_.begin();
-			it != boolOptions_.end(); ++it) {
-		if (vm.count(it->first) == 0)
-			continue;
-		std::string s = vm[it->first].as<std::string>();
-		boost::to_upper(s);
-		if (s == "YES")
-			*(it->second) = true;
-		else if (s == "NO")
-			*(it->second) = false;
-		else
-			throw BadOptions((boost::format("Invalid value: \"%s\". Value"
-					" must be \"YES\" or \"NO\"") % it->first).str());
-	}
 	doParse(vm);
 }
 
