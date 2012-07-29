@@ -43,8 +43,8 @@ std::string OptionsHelper::stripComma(const std::string &s)
 
 void OptionsHelper::addCommandLineFlag(const std::string &name, bool *target, const char *description)
 {
-	commandLineDescription_.add_options()(name.c_str(), description);
-	commandLineFlags_.push_back(FlagType(stripComma(name), target));
+	using namespace boost::program_options;
+	commandLineDescription_.add_options()(name.c_str(), bool_switch(target), description);
 }
 
 void OptionsHelper::addIndexedOption(const std::string &name, int *target,
@@ -76,9 +76,6 @@ void OptionsHelper::parseCommandLine(int argc, char **argv)
 				positional(positionalParameters_).
 				run(), vm);
 	notify(vm);
-	for (std::vector<FlagType>::iterator it = commandLineFlags_.begin();
-			it != commandLineFlags_.end(); ++it)
-		*(it->second) = vm.count(it->first) != 0;
 	doParse(vm);
 }
 

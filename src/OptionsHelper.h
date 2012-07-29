@@ -32,7 +32,6 @@ public:
 };
 
 class OptionsHelper {
-	typedef std::pair<std::string, bool*> FlagType;
 	typedef std::tuple<std::string, IndexedArgument, int*> IndexedType;
 	typedef std::tuple<std::string, IndexedArgument, std::vector<int>* > IndexedListType;
 
@@ -40,7 +39,6 @@ class OptionsHelper {
 	boost::program_options::options_description configFileDescription_;
 	boost::program_options::options_description positionalParametersDescription_;
 	boost::program_options::positional_options_description positionalParameters_;
-	std::vector<FlagType> commandLineFlags_;
 	std::vector<IndexedType> indexedOptions_;
 	std::vector<IndexedListType> indexedListOptions_;
 
