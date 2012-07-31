@@ -1,5 +1,6 @@
 #include "TableIterator.h"
 #include "TempValue.h"
+#include "ProgressBar.h"
 #include <ctime>
 
 void TableIterator::initIter(Point p, int stones, const State &state)
@@ -59,31 +60,6 @@ void TableIterator::doWork(Status::Ptr status)
 	done_.notify_all();
 }
 
-void TableIterator::progress()
-{
-	int iters, solved;
-	{
-		boost::lock_guard<MutexType> lck(iterMutex_);
-		iters = iters_;
-		solved = solved_;
-	}
-	if (solved <= iters) {
-		float div = iters / 100.0f;
-		int n1 = (int)(solved / div);
-		if (n1 != lastTicks_) {
-			int n2 = 100 - n1;
-			std::cerr << "[";
-			for (int i = 0; i < n1; ++i)
-				std::cerr << "#";
-			for (int i = 0; i < n2; ++i)
-				std::cerr << "-";
-			std::cerr << "]\r";
-			std::cerr.flush();
-			lastTicks_ = n1;
-		}
-	}
-}
-
 void TableIterator::iterate(int numStones)
 {
 	assert(!working_);
@@ -93,15 +69,16 @@ void TableIterator::iterate(int numStones)
 	lastTicks_ = -1;
 	initIter(Point(0, 0), numStones, State());
 	{
+		ProgressBar progressBar(iters_);
 		boost::unique_lock<MutexType> lck(iterMutex_);
 		while (solved_ < iters_) {
 			done_.wait(lck);
 			lck.unlock();
-			progress();
+			progressBar.draw(solved_);
 			lck.lock();
 		}
 	}
 	clock_t processorTime = clock() - iterationStart;
-	std::cerr << "\nIteration processor time: " <<
+	std::cerr << "Iteration processor time: " <<
 			(double)processorTime/CLOCKS_PER_SEC << std::endl;
 }

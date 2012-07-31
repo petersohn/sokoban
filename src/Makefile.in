@@ -58,11 +58,11 @@ am__objects_1 = AdvancedHeurCalculator.$(OBJEXT) \
 	DecisionTreeHeurCalculator.$(OBJEXT) MovableChecker.$(OBJEXT) \
 	Node.$(OBJEXT) NormalExpander.$(OBJEXT) Options.$(OBJEXT) \
 	OptionsHelper.$(OBJEXT) PrioNodeQueue.$(OBJEXT) \
-	SolutionChecker.$(OBJEXT) Solver.$(OBJEXT) \
-	SolverFactories.$(OBJEXT) StonePusher.$(OBJEXT) \
-	TableIterator.$(OBJEXT) TableHeurCalculator.$(OBJEXT) \
-	ThreadPool.$(OBJEXT) VisitedStateInfo.$(OBJEXT) \
-	VisitedStates.$(OBJEXT)
+	ProgressBar.$(OBJEXT) SolutionChecker.$(OBJEXT) \
+	Solver.$(OBJEXT) SolverFactories.$(OBJEXT) \
+	StonePusher.$(OBJEXT) TableIterator.$(OBJEXT) \
+	TableHeurCalculator.$(OBJEXT) ThreadPool.$(OBJEXT) \
+	VisitedStateInfo.$(OBJEXT) VisitedStates.$(OBJEXT)
 am__objects_2 = DumperFunctions.$(OBJEXT) TextDumper.$(OBJEXT) \
 	XDumper.$(OBJEXT) XML.$(OBJEXT)
 am__objects_3 = Point.$(OBJEXT) Status.$(OBJEXT) \
@@ -218,6 +218,7 @@ sokoban_source_files = \
 		Options.cpp \
 		OptionsHelper.cpp \
 		PrioNodeQueue.cpp \
+		ProgressBar.cpp \
 		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
@@ -343,6 +344,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OptionsHelper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Point.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PrioNodeQueue.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ProgressBar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolutionChecker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Solver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SolverFactories.Po@am__quote@

@@ -27,6 +27,7 @@ sokoban_source_files = \
 		Options.cpp \
 		OptionsHelper.cpp \
 		PrioNodeQueue.cpp \
+		ProgressBar.cpp \
 		SolutionChecker.cpp \
 		Solver.cpp \
 		SolverFactories.cpp \
