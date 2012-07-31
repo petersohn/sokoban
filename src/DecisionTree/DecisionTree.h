@@ -7,6 +7,8 @@
 #include <boost/format.hpp>
 #include <vector>
 #include <cstdlib>
+#include <iostream>
+#include "ProgressBar.h"
 #include "AnnotatedFunction.h"
 #include "Dumper/IndentedOutput.h"
 
@@ -71,7 +73,92 @@ namespace detail {
 		}
 	}; // class DecisionNode
 
+	template <class SplittingAlgorithm>
+	class NodeBuilder {
+		const SplittingAlgorithm& splittingAlgoritm_;
+		int maxDepth_;
+		ProgressBar progressBar_;
+		int progress_;
 
+		void advanceProgress(int depthRemaining)
+		{
+			progress_ += static_cast<int>(exp2(depthRemaining));
+			progressBar_.draw(progress_);
+		}
+
+		template <class Key, class T, class FunctorList>
+		std::unique_ptr<Node<Key, T>>
+		doBuildNode(
+			typename Node<Key, T>::ValueList&& valueList,
+			const FunctorList& functorList,
+			int depthRemaining)
+		{
+			typedef typename Node<Key, T>::ValuePtr ValuePtr;
+			typedef typename Node<Key, T>::ValueList ValueList;
+			typedef typename FunctorList::value_type Functor;
+
+			if (valueList.size() == 0 || depthRemaining == 0) {
+				advanceProgress(depthRemaining);
+				return std::unique_ptr<Node<Key, T>>(
+						new detail::LeafNode<Key, T>(std::move(valueList)));
+			} else {
+				typename FunctorList::const_iterator bestSplit =
+						splittingAlgoritm_(valueList, functorList);
+				assert(bestSplit != std::end(functorList));
+				Functor functor = *bestSplit;
+				ValueList falseValues;
+				boost::remove_copy_if(valueList,
+						std::back_inserter(falseValues),
+						[&functor](const ValuePtr& value)
+						{ return functor(value->first); });
+
+
+				std::vector<Functor> newFunctorList;
+				newFunctorList.reserve(functorList.size() - 1);
+				std::copy(functorList.begin(), bestSplit,
+						std::back_inserter(newFunctorList));
+				std::copy(++bestSplit, functorList.end(),
+						std::back_inserter(newFunctorList));
+				if (falseValues.size() == valueList.size()) {
+					advanceProgress(depthRemaining);
+					return std::unique_ptr<Node<Key, T>>(
+						new detail::LeafNode<Key, T>(std::move(valueList)));
+				}
+				return std::unique_ptr<Node<Key, T>>(
+						new detail::DecisionNode<Key, T, Functor>(
+								functor,
+								doBuildNode<Key, T>(std::move(falseValues),
+										newFunctorList,
+										depthRemaining - 1),
+								doBuildNode<Key, T>(std::move(valueList),
+										newFunctorList,
+										depthRemaining - 1)
+						));
+			}
+		} // doBuildNode
+	public:
+		NodeBuilder(
+				const SplittingAlgorithm& splittingAlgorithm,
+				int maxDepth):
+			splittingAlgoritm_(splittingAlgorithm),
+			maxDepth_(maxDepth),
+			progressBar_(static_cast<int>(exp2(maxDepth))),
+			progress_(0)
+		{}
+
+		template <class Key, class T, class FunctorList>
+		std::unique_ptr<Node<Key, T>>
+		buildNode(
+			typename Node<Key, T>::ValueList&& valueList,
+			const FunctorList& functorList)
+		{
+			return doBuildNode<Key, T>(
+					std::move(valueList),
+					functorList,
+					maxDepth_);
+		}
+
+	}; // class NodeBuilder
 
 } // namespace detail
 
@@ -81,51 +168,14 @@ buildNode(
 		typename Node<Key, T>::ValueList&& valueList,
 		const FunctorList& functorList,
 		const SplittingAlgorithm& splittingAlgoritm,
-		int depthToGo
+		int maxDepth
 		)
 	{
-		typedef typename Node<Key, T>::ValuePtr ValuePtr;
-		typedef typename Node<Key, T>::ValueList ValueList;
-		typedef typename FunctorList::value_type Functor;
-
-		if (valueList.size() == 0 || depthToGo == 0) {
-			return std::unique_ptr<Node<Key, T>>(
-					new detail::LeafNode<Key, T>(std::move(valueList)));
-		} else {
-			typename FunctorList::const_iterator bestSplit =
-					splittingAlgoritm(valueList, functorList);
-			assert(bestSplit != std::end(functorList));
-			Functor functor = *bestSplit;
-			ValueList falseValues;
-			boost::remove_copy_if(valueList,
-					std::back_inserter(falseValues),
-					[&functor](const ValuePtr& value)
-					{ return functor(value->first); });
-
-
-			std::vector<Functor> newFunctorList;
-			newFunctorList.reserve(functorList.size() - 1);
-			std::copy(functorList.begin(), bestSplit,
-					std::back_inserter(newFunctorList));
-			std::copy(++bestSplit, functorList.end(),
-					std::back_inserter(newFunctorList));
-			if (falseValues.size() == valueList.size()) {
-				return std::unique_ptr<Node<Key, T>>(
-					new detail::LeafNode<Key, T>(std::move(valueList)));
-			}
-			return std::unique_ptr<Node<Key, T>>(
-					new detail::DecisionNode<Key, T, Functor>(
-							functor,
-							buildNode<Key, T>(std::move(falseValues),
-									newFunctorList,
-									splittingAlgoritm,
-									depthToGo - 1),
-							buildNode<Key, T>(std::move(valueList),
-									newFunctorList,
-									splittingAlgoritm,
-									depthToGo - 1)
-					));
-		}
+		std::cerr << "Building decision tree\n";
+		return detail::NodeBuilder<SplittingAlgorithm>(
+				splittingAlgoritm, maxDepth).buildNode<Key, T>(
+				std::move(valueList),
+				functorList);
 	} // buildNode
 
 
