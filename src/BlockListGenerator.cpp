@@ -93,12 +93,14 @@ Checker::Ptr BlockListGenerator::checker()
 HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 {
 	assert(table_);
-	return std::make_shared<BlocklistHeurCalculator>(calculator_, heurList_, table_);
+	return std::make_shared<BlocklistHeurCalculator>(
+			calculator_, heurList_, table_);
 }
 
-HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator()
+HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth)
 {
 	assert(table_);
-	return std::make_shared<DecisionTreeHeurCalculator>(calculator_, heurList_, table_);
+	return std::make_shared<DecisionTreeHeurCalculator>(
+			calculator_, heurList_, table_, maxDepth);
 }
 

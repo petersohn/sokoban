@@ -119,7 +119,8 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 			calculator = blockListGenerator.vectorHeurCalculator();
 			break;
 		case Options::bhDecisionTree:
-			calculator = blockListGenerator.decisionTreeHeurCalculator();
+			calculator = blockListGenerator.decisionTreeHeurCalculator(
+					options_.maxDecisionTreeDepth());
 			break;
 		}
 	}

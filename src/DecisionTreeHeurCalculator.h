@@ -8,15 +8,17 @@
 #include "DecisionTree/DecisionTree.h"
 
 class DecisionTreeHeurCalculator: public HeurCalculator {
+	typedef decisionTree::Node<MockStatus, int> NodeType;
+
 	HeurCalculator::Ptr baseCalculator_;
 	FixedTable::Ptr table_;
-	std::unique_ptr<decisionTree::Node<MockStatus, int>> decisionTree_;
+	std::unique_ptr<NodeType> decisionTree_;
 public:
 	DecisionTreeHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
 			const HeurListPtr& heurList,
 			FixedTable::Ptr table,
-			int level = 0);
+			int maxDepth);
 	virtual int calculateStone(const Status &status, const Point &p);
 	virtual int calculateStatus(const Status &status,
 			const std::shared_ptr<Node>& ancestor);

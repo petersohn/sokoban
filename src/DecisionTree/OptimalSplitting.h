@@ -11,8 +11,7 @@ namespace detail {
 	template <class Arg>
 	bool betterSplittingValue(const SplittingValue<Arg>& left, const SplittingValue<Arg>& right)
 	{
-		return std::abs(left.trueNum_ - left.falseNum_) <
-				std::abs(right.trueNum_ - right.falseNum_);
+		return left.trueNum_ > right.trueNum_;
 	}
 
 	template <class ValueList, class FunctorIterator>
@@ -23,7 +22,7 @@ namespace detail {
 		int trueNum = 0;
 		int falseNum = 0;
 		for (const auto& value: valueList) {
-			if ((*functor)(value.first)) {
+			if ((*functor)(value->first)) {
 				++trueNum;
 			} else {
 				++falseNum;
@@ -48,9 +47,6 @@ public:
 		for (FunctorIterator it = std::begin(functorList);
 				it != std::end(functorList); ++it) {
 			auto splittingValue = detail::calculateSplittingValue(it, valueList);
-			if (splittingValue.trueNum_ == 0 || splittingValue.falseNum_ == 0) {
-				continue;
-			}
 			splittingValues.push_back(std::move(splittingValue));
 		}
 		assert(splittingValues.size() != 0);

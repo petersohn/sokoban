@@ -35,6 +35,7 @@ private:
 	int maxHeurListSize_;
 	int numThreads_;
 	int test_;
+	int maxDecisionTreeDepth_;
 	CompareList compare_;
 	std::string filename_;
 public:
@@ -52,7 +53,8 @@ public:
 	int blockListDistance() const { return blockListDistance_; }
 	int maxHeurListSize() const { return maxHeurListSize_; }
 	int numThreads() const { return numThreads_; }
-	int test() { return test_; }
+	int test() const { return test_; }
+	int maxDecisionTreeDepth() const { return maxDecisionTreeDepth_; }
 	const std::string &filename() const { return filename_; }
 	const CompareList& compare() const { return compare_; }
 };

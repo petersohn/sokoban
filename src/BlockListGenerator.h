@@ -48,7 +48,7 @@ public:
 			int maxDistance, int maxHeurListSize);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
-	HeurCalculator::Ptr decisionTreeHeurCalculator();
+	HeurCalculator::Ptr decisionTreeHeurCalculator(int maxDepth);
 	void init(const FixedTable::Ptr& table);
 };
 

@@ -7,6 +7,7 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 #include <functional>
+#include <iostream>
 
 int DecisionTreeHeurCalculator::calculateStone(const Status &status, const Point &p)
 {
@@ -18,16 +19,17 @@ int DecisionTreeHeurCalculator::calculateStatus(const Status &status,
 			const std::shared_ptr<Node>& ancestor)
 {
 	assert(status.tablePtr() == table_);
+
 	MockStatus mockStatus(status);
+	const NodeType::ValueList& heurList =
+			decisionTree_->get(mockStatus);
 	int result = 0;
-	while (true) {
-		const std::pair<MockStatus, int>* subset = decisionTree_->get(mockStatus);
-		if (!subset || !isSubStatus(subset->first, mockStatus)) {
-			break;
-		}
-		result += subset->second;
-		for (const Point& p: subset->first.state()) {
-			mockStatus.state().removeStone(p);
+	for (const NodeType::ValuePtr& subset: heurList) {
+		if (isSubStatus(subset->first, mockStatus)) {
+			result += subset->second;
+			for (const Point& p: subset->first.state()) {
+				mockStatus.state().removeStone(p);
+			}
 		}
 	}
 	for (const Point& p: mockStatus.state()) {
@@ -56,38 +58,35 @@ FunctorList functorList(const FixedTable::Ptr& table)
 							return status.state()[p];
 						} );
 				result.back().name("hasStone" + pointStr(p));
-				result.push_back([p](const MockStatus& status)
-						{
-							return status.reachable(p);
-						} );
-				result.back().name("reachable" + pointStr(p));
 			}
 		}
 	}
 	return result;
 }
 
-std::pair<MockStatus, int>
-convertHeurInfo(const std::unique_ptr<HeurInfo>& heurInfo)
-{
-	return std::make_pair(MockStatus(heurInfo->first), heurInfo->second);
-}
-
-}
+} // namespace
 
 DecisionTreeHeurCalculator::DecisionTreeHeurCalculator(
 		const HeurCalculator::Ptr& baseCalculator,
 		const HeurListPtr& heurList,
 		FixedTable::Ptr table,
-		int level):
+		int maxDepth):
 			baseCalculator_(baseCalculator),
 			table_(table)
 {
-	std::vector<std::pair<MockStatus, int>> convertedHeurList;
+	std::cerr << "Building decision tree...";
+	NodeType::ValueList convertedHeurList;
 	convertedHeurList.reserve(heurList->size());
-	boost::transform(*heurList, std::back_inserter(convertedHeurList), convertHeurInfo);
-	decisionTree_ = decisionTree::buildNode(
-			convertedHeurList,
+	boost::transform(*heurList, std::back_inserter(convertedHeurList),
+			[](const std::unique_ptr<HeurInfo>& heurInfo)
+			{
+				return std::make_shared<std::pair<MockStatus, int>>
+						(MockStatus(heurInfo->first), heurInfo->second);
+			});
+	decisionTree_ = decisionTree::buildNode<MockStatus, int>(
+			std::move(convertedHeurList),
 			functorList(table),
-			decisionTree::OptimalSplitting());
+			decisionTree::OptimalSplitting(),
+			maxDepth);
+	std::cerr << " Done." << std::endl;
 }

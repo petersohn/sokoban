@@ -45,7 +45,6 @@ sokoban_SOURCES = main.cpp \
 		
 
 unitTest_SOURCES = UnitTest/testMain.cpp \
-		UnitTest/DecisionTreeTest.cpp \
 		UnitTest/IsSubStateTest.cpp \
 		UnitTest/IsSubStatusTest.cpp \
 		 $(status_source_files)

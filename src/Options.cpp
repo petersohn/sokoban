@@ -21,7 +21,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		blockListDistance_(0),
 		maxHeurListSize_(0),
 		numThreads_(1),
-		test_(0)
+		test_(0),
+		maxDecisionTreeDepth_(10)
 {
 	OptionsHelper oh;
 	bool help = false;
@@ -30,14 +31,21 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Produce output messages of (x1, y1) --> (x2, y2)"
 			" instead of (x1, y1) --> direction");
 	oh.addPositionalParameter("filename", &filename_, "Input file name");
-	oh.addArgumentOption<int>("blocklist-number", &blockListStones_, "The number of stones the blocklist contains. "
+	oh.addArgumentOption<int>("blocklist-number", &blockListStones_,
+			"The number of stones the blocklist contains. "
 			"The calculation time of the blocklist is exponential in this number.");
-	oh.addArgumentOption<int>("blocklist-distance", &blockListDistance_, "The maximum distance between stones in the "
+	oh.addArgumentOption<int>("blocklist-distance", &blockListDistance_,
+			"The maximum distance between stones in the "
 			"blocklist. 0 means no limit.");
-	oh.addArgumentOption<int>("thread-num,t", &numThreads_, "The maximum number of threads to use.");
-	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_, "Expand several nodes in parallel. Only if --thread-num > 1.");
-	oh.addArgumentOption<int>("test", &test_, "Instead of solving a problem, solve each possible problem with the given number "
+	oh.addArgumentOption<int>("thread-num,t", &numThreads_,
+			"The maximum number of threads to use.");
+	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_,
+			"Expand several nodes in parallel. Only if --thread-num > 1.");
+	oh.addArgumentOption<int>("test", &test_,
+			"Instead of solving a problem, solve each possible problem with the given number "
 			"of stones on the table.");
+	oh.addArgumentOption<int>("max-decision-tree-depth", &maxDecisionTreeDepth_,
+			"The maximum depth of the decision tree.");
 
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);
