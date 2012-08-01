@@ -3,6 +3,7 @@
 #include "Dumper/DumperFunctions.h"
 #include "Node.h"
 #include "VisitedStateInfo.h"
+#include "TimeMeter.h"
 #include "AnnotatedFunction.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
@@ -74,7 +75,7 @@ DecisionTreeHeurCalculator::DecisionTreeHeurCalculator(
 			baseCalculator_(baseCalculator),
 			table_(table)
 {
-	std::cerr << "Building decision tree...";
+	TimeMeter timeMeter;
 	NodeType::ValueList convertedHeurList;
 	convertedHeurList.reserve(heurList->size());
 	boost::transform(*heurList, std::back_inserter(convertedHeurList),
@@ -88,5 +89,8 @@ DecisionTreeHeurCalculator::DecisionTreeHeurCalculator(
 			functorList(table),
 			decisionTree::OptimalSplitting(),
 			maxDepth);
-	std::cerr << " Done." << std::endl;
+	std::cerr << "Processor time: " <<
+			timeMeter.processorTime() <<
+			"\nReal time: " <<
+			timeMeter.realTime() << std::endl;
 }

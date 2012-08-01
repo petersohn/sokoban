@@ -1,7 +1,7 @@
 #include "TableIterator.h"
 #include "TempValue.h"
 #include "ProgressBar.h"
-#include <ctime>
+#include "TimeMeter.h"
 
 void TableIterator::initIter(Point p, int stones, const State &state)
 {
@@ -36,7 +36,7 @@ void TableIterator::initIter(Point p, int stones, const State &state)
 				ioService_.post(std::bind(&TableIterator::doWork, this, status));
 			} else {
 				ok = true;
-			}
+			}std::clock_t iterationStart = std::clock();
 		}
 		if (!ok) {
 			return;
@@ -64,7 +64,7 @@ void TableIterator::iterate(int numStones)
 {
 	assert(!working_);
 	TempValue<bool> working(working_, true);
-	std::clock_t iterationStart = std::clock();
+	TimeMeter timeMeter;
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
 	initIter(Point(0, 0), numStones, State());
@@ -78,7 +78,8 @@ void TableIterator::iterate(int numStones)
 			lck.lock();
 		}
 	}
-	clock_t processorTime = clock() - iterationStart;
 	std::cerr << "Iteration processor time: " <<
-			(double)processorTime/CLOCKS_PER_SEC << std::endl;
+			timeMeter.processorTime() <<
+			"\nIteration time: " <<
+			timeMeter.realTime() << std::endl;
 }

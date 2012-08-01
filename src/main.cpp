@@ -10,14 +10,13 @@
 #include "SolutionChecker.h"
 #include "TableIterator.h"
 #include "ComplexChecker.h"
+#include "TimeMeter.h"
 #include "Status/StatusCreator.h"
-#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <deque>
 #include <boost/format.hpp>
 #include <functional>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
 namespace pt = boost::posix_time;
@@ -40,8 +39,7 @@ int main(int argc, char** argv) {
 	cerr << "Number of threads: " << opts.numThreads() << endl;
 	ThreadPool::instance()->numThreads(opts.numThreads());
 	ThreadPool::instance()->start();
-	clock_t processorTime0 = clock();
-	pt::ptime realTime0 = pt::microsec_clock::local_time();
+	TimeMeter timeMeter;
 	OptionsBasedExpanderFactory expanderFactory(opts, st.tablePtr(), !opts.test());
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
@@ -61,11 +59,9 @@ int main(int argc, char** argv) {
 		it.iterate(opts.test());
 	} else {
 		std::deque<Node::Ptr> solution = s.solve(st);
-		clock_t processorTime = clock() - processorTime0;
-		pt::time_duration realTime =  pt::microsec_clock::local_time() - realTime0;
 		cerr << "Length of solution: " << solution.size() << endl;
-		cerr << "Processor Time:" << (double)processorTime/CLOCKS_PER_SEC << endl;
-		cerr << "Real Time:" << pt::to_simple_string(realTime) << endl;
+		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
+		cerr << "Real Time:" << timeMeter.realTime() << endl;
 		ThreadPool::instance()->wait();
 		if (solution.size() == 0)
 			cerr << "No solution." << endl;
