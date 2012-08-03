@@ -44,20 +44,22 @@ int DecisionTreeHeurCalculator::calculateStatus(const Status &status,
 namespace {
 
 typedef AnnotatedFunction<bool(const MockStatus&)> Functor;
-typedef std::vector<Functor> FunctorList;
+typedef std::shared_ptr<Functor> FunctorPtr;
+typedef std::vector<FunctorPtr> FunctorPtrList;
 
-FunctorList functorList(const FixedTable::Ptr& table)
+FunctorPtrList functorList(const FixedTable::Ptr& table)
 {
-	FunctorList result;
+	FunctorPtrList result;
 	Point p;
 	for (p.y = 0; p.y < table->get().height(); ++p.y) {
 		for (p.x = 0; p.x < table->get().width(); ++p.x) {
 			if (!table->get().wall(p)) {
-				result.push_back([p](const MockStatus& status)
+				result.push_back(std::make_shared<Functor>(
+						[p](const MockStatus& status)
 						{
 							return status.state()[p];
-						} );
-				result.back().name("hasStone" + pointStr(p));
+						} ));
+				result.back()->name("hasStone" + pointStr(p));
 			}
 		}
 	}

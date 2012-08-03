@@ -85,15 +85,16 @@ namespace detail {
 			progressBar_.draw(progress_);
 		}
 
-		template <class ValueList, class FunctorList>
-		std::shared_ptr<typename FunctorList::value_type>
+		template <class ValueList, class FunctorPtrList>
+		typename FunctorPtrList::value_type
 		filterFunctorList(
 				const ValueList& valueList,
-				const FunctorList& functorList,
-				std::vector<typename FunctorList::value_type>& newFunctorList) const
+				const FunctorPtrList& functorList,
+				std::vector<typename FunctorPtrList::value_type>& newFunctorList) const
 		{
-			typedef typename FunctorList::value_type Functor;
-			typedef typename FunctorList::const_iterator FunctorIterator;
+			typedef typename FunctorPtrList::value_type FunctorPtr;
+			typedef typename FunctorPtr::element_type Functor;
+			typedef typename FunctorPtrList::const_iterator FunctorIterator;
 			typedef std::vector<SplittingValue<FunctorIterator>> SplittingValues;
 			typedef typename SplittingValues::const_iterator SplittingValueIterator;
 
@@ -106,11 +107,11 @@ namespace detail {
 			}
 			boost::sort(splittingValues, betterSplittingValue<FunctorIterator>);
 
-			std::shared_ptr<Functor> result;
+			FunctorPtr result;
 			if (splittingValues.empty()) {
 				return result;
 			}
-			result = std::make_shared<Functor>(*splittingValues.front().arg_);
+			result = *splittingValues.front().arg_;
 			SplittingValueIterator begin = ++splittingValues.begin();
 			SplittingValueIterator end = boost::find_if(splittingValues,
 					[](const SplittingValue<FunctorIterator>& value)
@@ -123,13 +124,13 @@ namespace detail {
 			return result;
 		} // filterFunctorList
 
-		template <class FunctorList>
-		std::shared_ptr<typename FunctorList::value_type>
+		template <class FunctorPtrList>
+		typename FunctorPtrList::value_type
 		fastFilterFunctorList(
-				const FunctorList& functorList,
-				std::vector<typename FunctorList::value_type>& newFunctorList) const
+				const FunctorPtrList& functorList,
+				std::vector<typename FunctorPtrList::value_type>& newFunctorList) const
 		{
-			typedef typename FunctorList::value_type Functor;
+			typedef typename FunctorPtrList::value_type Functor;
 
 			assert(!functorList.empty());
 			newFunctorList.reserve(functorList.size() - 1);
@@ -138,20 +139,21 @@ namespace detail {
 					functorList.end(),
 					std::back_inserter(newFunctorList)
 					);
-			return std::make_shared<Functor>(functorList.front());
+			return functorList.front();
 		} // fastFilterFunctorList
 
-		template <class Key, class T, class FunctorList>
+		template <class Key, class T, class FunctorPtrList>
 		std::unique_ptr<Node<Key, T>>
 		doBuildNode(
 			typename Node<Key, T>::ValueList&& valueList,
-			const FunctorList& functorList,
+			const FunctorPtrList& functorList,
 			int depthRemaining,
 			bool trueBranch)
 		{
 			typedef typename Node<Key, T>::ValuePtr ValuePtr;
 			typedef typename Node<Key, T>::ValueList ValueList;
-			typedef typename FunctorList::value_type Functor;
+			typedef typename FunctorPtrList::value_type FunctorPtr;
+			typedef typename FunctorPtr::element_type Functor;
 
 			if (valueList.size() == 0 ||
 					functorList.size() == 0 ||
@@ -160,8 +162,8 @@ namespace detail {
 				return std::unique_ptr<Node<Key, T>>(
 						new detail::LeafNode<Key, T>(std::move(valueList)));
 			} else {
-				std::vector<Functor> newFunctorList;
-				std::shared_ptr<Functor> functor;
+				std::vector<FunctorPtr> newFunctorList;
+				FunctorPtr functor;
 				if (trueBranch) {
 					functor = fastFilterFunctorList(
 							functorList,
@@ -206,11 +208,11 @@ namespace detail {
 			progress_(0)
 		{}
 
-		template <class Key, class T, class FunctorList>
+		template <class Key, class T, class FunctorPtrList>
 		std::unique_ptr<Node<Key, T>>
 		buildNode(
 			typename Node<Key, T>::ValueList&& valueList,
-			const FunctorList& functorList)
+			const FunctorPtrList& functorList)
 		{
 			return doBuildNode<Key, T>(
 					std::move(valueList),
@@ -223,11 +225,11 @@ namespace detail {
 
 } // namespace detail
 
-template <class Key, class T, class FunctorList>
+template <class Key, class T, class FunctorPtrList>
 std::unique_ptr<Node<Key, T>>
 buildNode(
 		typename Node<Key, T>::ValueList&& valueList,
-		const FunctorList& functorList,
+		const FunctorPtrList& functorList,
 		int maxDepth
 		)
 	{
