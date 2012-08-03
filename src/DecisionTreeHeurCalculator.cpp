@@ -1,4 +1,3 @@
-#include "DecisionTree/OptimalSplitting.h"
 #include "DecisionTreeHeurCalculator.h"
 #include "Dumper/DumperFunctions.h"
 #include "Node.h"
@@ -87,7 +86,6 @@ DecisionTreeHeurCalculator::DecisionTreeHeurCalculator(
 	decisionTree_ = decisionTree::buildNode<MockStatus, int>(
 			std::move(convertedHeurList),
 			functorList(table),
-			decisionTree::OptimalSplitting(),
 			maxDepth);
 	std::cerr << "Processor time: " <<
 			timeMeter.processorTime() <<
