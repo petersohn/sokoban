@@ -10,3 +10,6 @@
 #*o.*..****....****
 #..o..........*****
 #...*..*.....******
+blocklist-distance=3
+blocklist-number=2
+blocklist-heur-calculator=vector
