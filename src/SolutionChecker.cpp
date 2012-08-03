@@ -23,7 +23,7 @@ bool SolutionChecker::isSuccessor(const Status& oldStatus, const Node& node)
 		errorDump_ << "Stone number mismatch." << "Needed: " << neededStones << ", found: " << node.state().size() << endl;
 		return false;
 	}
-	BOOST_FOREACH(const Point& p, oldStatus.state()) {
+	for(const Point& p: oldStatus.state()) {
 		if (p != node.from() && !node.state()[p]) {
 			errorDump_ << "Stone point mismatch: " << pointStr(p) << endl;
 			return false;
@@ -51,7 +51,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 	bool result = true;
 	Node::Ptr oldNode;
 	int resultLength = solution.back()->cost();
-	BOOST_FOREACH(std::shared_ptr<Node> node, solution) {
+	for(std::shared_ptr<Node> node: solution) {
 		Point to(node->from() + node->d());
 		if (to != status.table().destination() && !node->state()[to]) {
 			result = false;
@@ -88,6 +88,14 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 		}
 		status.set(*node);
 		oldNode = node;
+	}
+	if (oldNode && oldNode->heur() != 0) {
+		printError(Node::Ptr(), oldNode, status, "Last heur is not 0.");
+		result = false;
+	}
+	if (status.state().size() != 0) {
+		printError(Node::Ptr(), Node::Ptr(), status, "Last status contains stones.");
+		result = false;
 	}
 	return result;
 }

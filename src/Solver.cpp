@@ -87,7 +87,10 @@ public:
 		if (parallelOuterExpand_) {
 			jobManager_.waitAllJobs();
 		}
-		std::deque<Node::Ptr> result = pathToRoot(currentNode_);
+		std::deque<Node::Ptr> result;
+		if (currentNode_ && currentNode_->heur() == 0) {
+			result = pathToRoot(currentNode_);
+		}
 		if (dumper_) {
 			BOOST_FOREACH(Node::Ptr node, result) {
 				dumper_->addToSolution(node);
