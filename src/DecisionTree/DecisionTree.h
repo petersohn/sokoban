@@ -121,14 +121,33 @@ namespace detail {
 					{ return *(value.arg_); });
 
 			return result;
-		}
+		} // filterFunctorList
+
+		template <class FunctorList>
+		std::shared_ptr<typename FunctorList::value_type>
+		fastFilterFunctorList(
+				const FunctorList& functorList,
+				std::vector<typename FunctorList::value_type>& newFunctorList) const
+		{
+			typedef typename FunctorList::value_type Functor;
+
+			assert(!functorList.empty());
+			newFunctorList.reserve(functorList.size() - 1);
+			std::copy(
+					++functorList.begin(),
+					functorList.end(),
+					std::back_inserter(newFunctorList)
+					);
+			return std::make_shared<Functor>(functorList.front());
+		} // fastFilterFunctorList
 
 		template <class Key, class T, class FunctorList>
 		std::unique_ptr<Node<Key, T>>
 		doBuildNode(
 			typename Node<Key, T>::ValueList&& valueList,
 			const FunctorList& functorList,
-			int depthRemaining)
+			int depthRemaining,
+			bool trueBranch)
 		{
 			typedef typename Node<Key, T>::ValuePtr ValuePtr;
 			typedef typename Node<Key, T>::ValueList ValueList;
@@ -142,10 +161,17 @@ namespace detail {
 						new detail::LeafNode<Key, T>(std::move(valueList)));
 			} else {
 				std::vector<Functor> newFunctorList;
-				std::shared_ptr<Functor> functor = filterFunctorList(
-						valueList,
-						functorList,
-						newFunctorList);
+				std::shared_ptr<Functor> functor;
+				if (trueBranch) {
+					functor = fastFilterFunctorList(
+							functorList,
+							newFunctorList);
+				} else {
+					functor = filterFunctorList(
+							valueList,
+							functorList,
+							newFunctorList);
+				}
 				if (!functor) {
 					advanceProgress(depthRemaining);
 					return std::unique_ptr<Node<Key, T>>(
@@ -164,10 +190,12 @@ namespace detail {
 								functor,
 								doBuildNode<Key, T>(std::move(falseValues),
 										newFunctorList,
-										depthRemaining - 1),
+										depthRemaining - 1,
+										false),
 								doBuildNode<Key, T>(std::move(valueList),
 										newFunctorList,
-										depthRemaining - 1)
+										depthRemaining - 1,
+										true)
 						));
 			}
 		} // doBuildNode
@@ -187,7 +215,8 @@ namespace detail {
 			return doBuildNode<Key, T>(
 					std::move(valueList),
 					functorList,
-					maxDepth_);
+					maxDepth_,
+					false);
 		}
 
 	}; // class NodeBuilder
