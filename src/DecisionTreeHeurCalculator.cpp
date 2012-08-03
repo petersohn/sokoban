@@ -21,17 +21,23 @@ int DecisionTreeHeurCalculator::calculateStatus(const Status &status,
 	assert(status.tablePtr() == table_);
 
 	MockStatus mockStatus(status);
-	const NodeType::ValueList& heurList =
-			decisionTree_->get(mockStatus);
 	int result = 0;
-	for (const NodeType::ValuePtr& subset: heurList) {
-		if (isSubStatus(subset->first, mockStatus)) {
-			result += subset->second;
-			for (const Point& p: subset->first.state()) {
-				mockStatus.state().removeStone(p);
+	bool found;
+	do {
+		found = false;
+		const NodeType::ValueList& heurList =
+			decisionTree_->get(mockStatus);
+		for (const NodeType::ValuePtr& subset: heurList) {
+			if (isSubStatus(subset->first, mockStatus)) {
+				result += subset->second;
+				for (const Point& p: subset->first.state()) {
+					mockStatus.state().removeStone(p);
+				}
+				found = true;
+				break;
 			}
 		}
-	}
+	} while (found);
 	for (const Point& p: mockStatus.state()) {
 		result += baseCalculator_->calculateStone(status, p);
 	}
