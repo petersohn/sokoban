@@ -8,17 +8,17 @@ int TableHeurCalculator::calculateStatus(
 			const std::shared_ptr<Node>& ancestor)
 {
 	checkTable(status);
-	if (moveDescriptor && ancestor) {
-		Status oldStatus(status.tablePtr(), *ancestor);
-		int oldHeur = doCalculateStone(oldStatus, moveDescriptor->from_);
-		int newHeur = doCalculateStone(status, moveDescriptor->from_ + moveDescriptor->d_);
-		if (newHeur < 0) {
-			return -1;
-		}
-		return ancestor->heur() -
-				oldHeur +
-				newHeur;
-	} else
+//	if (moveDescriptor && ancestor) {
+//		Status oldStatus(status.tablePtr(), *ancestor);
+//		int oldHeur = doCalculateStone(oldStatus, moveDescriptor->from_);
+//		int newHeur = doCalculateStone(status, moveDescriptor->from_ + moveDescriptor->d_);
+//		if (newHeur < 0) {
+//			return -1;
+//		}
+//		return ancestor->heur() -
+//				oldHeur +
+//				newHeur;
+//	} else
 	{
 		int result = 0;
 		for (State::const_iterator it = status.state().begin();
