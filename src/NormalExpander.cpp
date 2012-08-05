@@ -38,7 +38,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 		if (owner_.calculator_->calculateStone(status, pd) < 0 || !status.moveStone(p, pd)) {
 			return;
 		}
-		node = owner_.nodeFactory_->createNode(status, p, d, base_);
+		node = owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
 		if (pd != status.table().destination()) {
 			if (owner_.checker_ && !owner_.checker_->check(status, pd)) {
 				if (dumper_)

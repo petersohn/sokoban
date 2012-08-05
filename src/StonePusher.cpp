@@ -82,7 +82,7 @@ bool InternalPusher::pushStoneIter(const Status& status, const Point &p, const P
 		std::cerr << "Whoopsie doopsie!";
 		return false; // should never happen
 	}
-	node_ = nodeFactory_->createNode(newStatus, p, d, node_);
+	node_ = nodeFactory_->createNode(newStatus, MoveDescriptor(p, d), node_);
 	if (pushStone(newStatus, pd))
 		return true;
 	node_ = node_->ancestor();

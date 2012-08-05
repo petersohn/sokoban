@@ -6,6 +6,7 @@
 #include <deque>
 #include "Status/State.h"
 #include "HeurCalculator.h"
+#include "MoveDescriptor.h"
 
 class Node: public boost::noncopyable {
 public:
@@ -15,14 +16,13 @@ private:
 	State state_;
 	int heur_;
 	int experimentalHeur_;
-	Point from_;
-	Point d_;
+	MoveDescriptor moveDescriptor_;
 	int depth_;
 	int cost_;
 	int time_;
 public:
 //	Node();
-	Node(const State &stones, const Point &from, const Point &d, Ptr ans,
+	Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ans,
 			int c, int heur, int experimentalHeur, int time);
 	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
@@ -31,8 +31,9 @@ public:
 	int depth() const { return depth_; }
 	int cost() const { return cost_; }
 	int costFgv() const { return cost_ + heur_; }
-	const Point &from() const { return from_; }
-	const Point& d() const { return d_; }
+	const Point &from() const { return moveDescriptor_.from_; }
+	const Point& d() const { return moveDescriptor_.d_; }
+	const MoveDescriptor& moveDescriptor() const { return moveDescriptor_; }
 	int time() const { return time_; }
 	int experimtntalHeur() const { return experimentalHeur_; }
 	int experimtntalCostFgv() const { return cost_ + experimentalHeur_; }

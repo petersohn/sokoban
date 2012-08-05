@@ -20,11 +20,13 @@ public:
 		calculator_(calculator),
 		experimentalCalculator_(experimentalCalculator)
 	{}
-	Node::Ptr createNode(const Status & status, const Point &p,
-			const Point &d, Node::Ptr ans)
+	Node::Ptr createNode(
+			const Status & status,
+			const MoveDescriptor& moveDescriptor,
+			const Node::Ptr& ans)
 	{
 		return std::make_shared<Node>(
-				status.state(), p, d, ans, 1,
+				status.state(), moveDescriptor, ans, 1,
 				calculator_->calculateStatus(status, ans),
 				experimentalCalculator_ ? experimentalCalculator_->calculateStatus(status, ans) : 0,
 				++numNodes_);

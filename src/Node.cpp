@@ -6,14 +6,13 @@ using namespace std;
 //{
 //}
 
-Node::Node(const State &stones, const Point &from, const Point &d, Ptr ans,
+Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ans,
 		int c, int heur, int experimentalHeur, int time):
 	ancestor_(ans),
 	state_(stones),
 	heur_(heur),
 	experimentalHeur_(experimentalHeur),
-	from_(from),
-	d_(d),
+	moveDescriptor_(moveDescriptor),
 	time_(time)
 {
 	if (ans.get() == NULL)
