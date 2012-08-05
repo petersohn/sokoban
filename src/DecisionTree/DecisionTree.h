@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include <iterator>
 #include "ProgressBar.h"
 #include "AnnotatedFunction.h"
 #include "DecisionTree/SplittingValue.h"
@@ -23,7 +24,7 @@ public:
 	typedef std::pair<Key, T> Value;
 	typedef std::shared_ptr<Value> ValuePtr;
 	typedef std::vector<ValuePtr> ValueList;
-	virtual const ValueList& get(const Key& key) = 0;
+	virtual const ValueList& get(const Key& key) const = 0;
 	virtual ~Node() {}
 };
 
@@ -41,7 +42,7 @@ namespace detail {
 			value_(value) {}
 		LeafNode(ValueList&& value):
 			value_(std::move(value)) {}
-		virtual const ValueList& get(const Key&)
+		virtual const ValueList& get(const Key&) const
 		{
 			return value_;
 		}
@@ -64,7 +65,7 @@ namespace detail {
 			trueChild_(std::move(trueChild))
 		{}
 
-		virtual const ValueList& get(const Key& key)
+		virtual const ValueList& get(const Key& key) const
 		{
 			if ((*functor_)(key)) {
 				return trueChild_->get(key);
@@ -108,7 +109,7 @@ namespace detail {
 			boost::sort(splittingValues, betterSplittingValue<FunctorIterator>);
 
 			FunctorPtr result;
-			if (splittingValues.empty()) {
+			if (splittingValues.empty() || splittingValues.front().trueNum_ == 0) {
 				return result;
 			}
 			result = *splittingValues.front().arg_;
@@ -116,11 +117,12 @@ namespace detail {
 			SplittingValueIterator end = boost::find_if(splittingValues,
 					[](const SplittingValue<FunctorIterator>& value)
 					{ return value.trueNum_ == 0; });
-			newFunctorList.reserve(end - begin);
-			std::transform(begin, end, std::back_inserter(newFunctorList),
-					[](const SplittingValue<FunctorIterator>& value)
-					{ return *(value.arg_); });
-
+			if (begin != end) {
+				newFunctorList.reserve(std::distance(begin, end));
+				std::transform(begin, end, std::back_inserter(newFunctorList),
+						[](const SplittingValue<FunctorIterator>& value)
+						{ return *(value.arg_); });
+			}
 			return result;
 		} // filterFunctorList
 
