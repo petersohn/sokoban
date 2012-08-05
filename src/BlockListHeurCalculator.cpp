@@ -12,8 +12,10 @@ int BlocklistHeurCalculator::calculateStone(const Status &status, const Point &p
 	return baseCalculator_->calculateStone(status, p);
 }
 
-int BlocklistHeurCalculator::calculateStatus(const Status &status,
-			const std::shared_ptr<Node>& ancestor)
+int BlocklistHeurCalculator::calculateStatus(
+		const Status &status,
+		const MoveDescriptor* /*moveDescriptor*/,
+		const std::shared_ptr<Node>& ancestor)
 {
 	assert(status.tablePtr() == table_);
 	MockStatus mockStatus(status);

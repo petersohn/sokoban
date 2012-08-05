@@ -21,7 +21,9 @@ public:
 	}
 
 	virtual int calculateStone(const Status &status, const Point &p);
-	virtual int calculateStatus(const Status &status,
+	virtual int calculateStatus(
+			const Status &status,
+			const MoveDescriptor* /*moveDescriptor*/,
 			const std::shared_ptr<Node>& ancestor);
 };
 

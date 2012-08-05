@@ -27,8 +27,10 @@ public:
 	{
 		return std::make_shared<Node>(
 				status.state(), moveDescriptor, ans, 1,
-				calculator_->calculateStatus(status, ans),
-				experimentalCalculator_ ? experimentalCalculator_->calculateStatus(status, ans) : 0,
+				calculator_->calculateStatus(status, &moveDescriptor, ans),
+				experimentalCalculator_ ?
+						experimentalCalculator_->calculateStatus(status, &moveDescriptor, ans) :
+						0,
 				++numNodes_);
 	}
 };

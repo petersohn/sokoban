@@ -15,8 +15,10 @@ int DecisionTreeHeurCalculator::calculateStone(const Status &status, const Point
 	return baseCalculator_->calculateStone(status, p);
 }
 
-int DecisionTreeHeurCalculator::calculateStatus(const Status &status,
-			const std::shared_ptr<Node>& ancestor)
+int DecisionTreeHeurCalculator::calculateStatus(
+		const Status &status,
+		const MoveDescriptor* /*moveDescriptor*/,
+		const std::shared_ptr<Node>& ancestor)
 {
 	assert(status.tablePtr() == table_);
 

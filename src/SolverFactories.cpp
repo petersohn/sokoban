@@ -126,6 +126,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 			break;
 		}
 	}
+//	experimentalCalculator = calculator;
 	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
 			calculator,
 			std::make_shared<ComplexChecker>(checkers),

@@ -25,8 +25,10 @@ public:
 	TableHeurCalculator():
 		MUTEX_DECL(heurMutex_)
 	{}
-	virtual int calculateStatus(const Status &status,
-			const std::shared_ptr<Node>& /*ancestor*/);
+	virtual int calculateStatus(
+			const Status &status,
+			const MoveDescriptor* moveDescriptor,
+			const std::shared_ptr<Node>& ancestor);
 	virtual int calculateStone(const Status &status, const Point &p);
 
 	void setTable(const FixedTable::Ptr& table)
