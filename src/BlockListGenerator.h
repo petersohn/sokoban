@@ -17,6 +17,7 @@ class BlockListGenerator {
 private:
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
+	HeurCalculator::Ptr incrementalCalculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
 	HeurListPtr heurList_;

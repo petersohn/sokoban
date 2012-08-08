@@ -14,7 +14,7 @@ public:
 			const HeurCalculator::Ptr& baseCalculator,
 			const HeurListPtr& heurList,
 			FixedTable::Ptr table):
-				heurList_(heurList),
+				heurList_(std::make_shared<HeurList>(*heurList)),
 				baseCalculator_(baseCalculator),
 				table_(table)
 	{

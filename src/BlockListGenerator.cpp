@@ -46,7 +46,7 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 {
 	std::deque<Node::Ptr> result = doCalculateBlockList(status);
 	if (result.size() > 0) {
-		int heur = calculator_->calculateStatus(status);
+		int heur = incrementalCalculator_->calculateStatus(status);
 		int cost = result.back()->cost();
 		int difference = cost - heur;
 		if (difference > 0) {
@@ -64,19 +64,25 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	std::vector<Checker::Ptr> checkers{checker_, checker()};
 	Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
 	TableIterator tableIterator(table, calculator_, checker,
-			std::bind(&BlockListGenerator::calculateBlockList, this, std::placeholders::_1),
+			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
 			maxDistance_);
 	blockList_->clear();
+	incrementalCalculator_ = calculator_;
 	for (int n = 2; n <= numStones_; ++n) {
-		if (n == numStones_) {
-			tableIterator.setAction(std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1));
-		}
+		heurList_ = std::make_shared<HeurList>();
 		std::cerr << "Stones = " << n << std::endl;
 		tableIterator.iterate(n);
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
+		std::cerr << "Heur list size = " << heurList_->size() << std::endl;
+		boost::sort(*heurList_,
+			[](const std::unique_ptr<HeurInfo>& left, const std::unique_ptr<HeurInfo>& right)
+			{ return left->second > right->second ||
+					(left->second == right->second &&
+					left->first.state().size() < right->first.state().size());
+			});
+		incrementalCalculator_ = vectorHeurCalculator();
 	}
-	boost::sort(*heurList_, [](const std::unique_ptr<HeurInfo>& left, const std::unique_ptr<HeurInfo>& right)
-			{ return left->second > right->second; });
+
 	if (maxHeurListSize_ > 0 && heurList_->size() > maxHeurListSize_) {
 		heurList_->resize(maxHeurListSize_);
 	}
