@@ -15,11 +15,36 @@
 
 class BlockListGenerator {
 private:
+	struct IncrementInfo {
+		HeurInfo heurInfo_;
+		int	difference_;
+		IncrementInfo(const HeurInfo& heurInfo, int difference):
+			heurInfo_(heurInfo),
+			difference_(difference)
+		{}
+		IncrementInfo(HeurInfo&& heurInfo, int difference):
+			heurInfo_(std::move(heurInfo)),
+			difference_(difference)
+		{}
+		IncrementInfo(IncrementInfo&& other):
+			heurInfo_(std::move(other.heurInfo_)),
+			difference_(other.difference_)
+		{}
+		IncrementInfo& operator=(IncrementInfo&& other)
+		{
+			heurInfo_ = std::move(other.heurInfo_);
+			difference_ = other.difference_;
+			return *this;
+		}
+	};
+	typedef std::vector<IncrementInfo> IncrementList;
+	typedef std::shared_ptr<IncrementList> IncrementListPtr;
+
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
-	HeurListPtr heurList_;
+	HeurList heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;

@@ -7,12 +7,13 @@
 
 class BlocklistHeurCalculator: public HeurCalculator {
 	HeurCalculator::Ptr baseCalculator_;
-	HeurListPtr heurList_;
+	HeurList heurList_;
 	FixedTable::Ptr table_;
 public:
+	template <class HeurListType>
 	BlocklistHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
-			const HeurListPtr& heurList,
+			const HeurListType& heurList,
 			FixedTable::Ptr table):
 				heurList_(heurList),
 				baseCalculator_(baseCalculator),
