@@ -51,7 +51,9 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 		if (difference > 0) {
 			dump_ << heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
-			heurList_.push_back(std::unique_ptr<HeurInfo>(new HeurInfo(status, cost)));
+			HeurInfoConstPtr heurInfo = std::make_shared<HeurInfo>(status, cost);
+			heurList_.push_back(heurInfo);
+			heurList2_.push_back(IncrementInfo(heurInfo, difference));
 		}
 	}
 }
@@ -76,6 +78,8 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	}
 	boost::sort(heurList_, [](const HeurInfoConstPtr& left, const HeurInfoConstPtr& right)
 			{ return left->second > right->second; });
+	boost::sort(heurList2_, [](const IncrementInfo& left, const IncrementInfo& right)
+			{ return left.difference_ > right.difference_; });
 	if (maxHeurListSize_ > 0 && heurList_.size() > maxHeurListSize_) {
 		heurList_.resize(maxHeurListSize_);
 	}
@@ -95,6 +99,16 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 	return std::make_shared<BlocklistHeurCalculator>(
 			calculator_, heurList_, table_);
 }
+
+HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator2()
+{
+	assert(table_);
+	return std::make_shared<BlocklistHeurCalculator>(
+			calculator_,
+			heurList2_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
+			table_);
+}
+
 
 HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth)
 {
