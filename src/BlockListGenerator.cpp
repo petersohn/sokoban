@@ -52,8 +52,7 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 			dump_ << heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
 			HeurInfoConstPtr heurInfo = std::make_shared<HeurInfo>(status, cost);
-			heurList_.push_back(heurInfo);
-			heurList2_.push_back(IncrementInfo(heurInfo, difference));
+			heurList_.push_back(IncrementInfo(heurInfo, difference));
 		}
 	}
 }
@@ -76,12 +75,10 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 		tableIterator.iterate(n);
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 	}
-	boost::sort(heurList_, [](const HeurInfoConstPtr& left, const HeurInfoConstPtr& right)
-			{ return left->second > right->second; });
-	boost::sort(heurList2_, [](const IncrementInfo& left, const IncrementInfo& right)
+	boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)
 			{ return left.difference_ > right.difference_; });
 	if (maxHeurListSize_ > 0 && heurList_.size() > maxHeurListSize_) {
-		heurList_.resize(maxHeurListSize_);
+		IncrementList(heurList_.begin(), heurList_.begin() + maxHeurListSize_).swap(heurList_);
 	}
 	std::cerr << "Heur list size = " << heurList_.size() << std::endl;
 	dump_.flush();
@@ -97,15 +94,8 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 {
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(
-			calculator_, heurList_, table_);
-}
-
-HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator2()
-{
-	assert(table_);
-	return std::make_shared<BlocklistHeurCalculator>(
 			calculator_,
-			heurList2_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
+			heurList_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
 			table_);
 }
 
@@ -114,6 +104,9 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth)
 {
 	assert(table_);
 	return std::make_shared<DecisionTreeHeurCalculator>(
-			calculator_, heurList_, table_, maxDepth);
+			calculator_,
+			heurList_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
+			table_,
+			maxDepth);
 }
 

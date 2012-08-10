@@ -26,10 +26,20 @@ private:
 			heurInfo_(std::move(heurInfo)),
 			difference_(difference)
 		{}
+		IncrementInfo(const IncrementInfo& other):
+			heurInfo_(other.heurInfo_),
+			difference_(other.difference_)
+		{}
 		IncrementInfo(IncrementInfo&& other):
 			heurInfo_(std::move(other.heurInfo_)),
 			difference_(other.difference_)
 		{}
+		IncrementInfo& operator=(const IncrementInfo& other)
+		{
+			heurInfo_ = other.heurInfo_;
+			difference_ = other.difference_;
+			return *this;
+		}
 		IncrementInfo& operator=(IncrementInfo&& other)
 		{
 			heurInfo_ = std::move(other.heurInfo_);
@@ -48,8 +58,7 @@ private:
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
-	HeurList heurList_;
-	IncrementList heurList2_;
+	IncrementList heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;
@@ -78,7 +87,6 @@ public:
 			int maxDistance, int maxHeurListSize);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
-	HeurCalculator::Ptr vectorHeurCalculator2();
 	HeurCalculator::Ptr decisionTreeHeurCalculator(int maxDepth);
 	void init(const FixedTable::Ptr& table);
 };
