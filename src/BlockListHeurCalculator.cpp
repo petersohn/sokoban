@@ -20,7 +20,7 @@ int BlocklistHeurCalculator::calculateStatus(
 	assert(status.tablePtr() == table_);
 	MockStatus mockStatus(status);
 	int result = 0;
-	for (const std::unique_ptr<HeurInfo>& subset: *heurList_) {
+	for (const HeurInfoConstPtr& subset: heurList_) {
 		if (isSubStatus(subset->first, mockStatus)) {
 			result += subset->second;
 			for (const Point& p: subset->first.state()) {

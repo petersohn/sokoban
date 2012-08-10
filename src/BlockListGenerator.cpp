@@ -19,7 +19,6 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		calculator_(calculator),
 		checker_(checker),
 		blockList_(new IndexedStatusList<int>),
-		heurList_(new HeurList),
 		numStones_(numStones),
 		maxDistance_(maxDistance),
 		maxHeurListSize_(maxHeurListSize),
@@ -52,7 +51,8 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 		if (difference > 0) {
 			dump_ << heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
-			heurList_->push_back(std::unique_ptr<HeurInfo>(new HeurInfo(status, cost)));
+			HeurInfoConstPtr heurInfo = std::make_shared<HeurInfo>(status, cost);
+			heurList_.push_back(IncrementInfo(heurInfo, difference));
 		}
 	}
 }
@@ -67,26 +67,27 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
 			maxDistance_);
 	blockList_->clear();
+	heurList_.clear();
 	incrementalCalculator_ = calculator_;
 	for (int n = 2; n <= numStones_; ++n) {
-		heurList_ = std::make_shared<HeurList>();
 		std::cerr << "Stones = " << n << std::endl;
 		tableIterator.iterate(n);
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
-		std::cerr << "Heur list size = " << heurList_->size() << std::endl;
-		boost::sort(*heurList_,
-			[](const std::unique_ptr<HeurInfo>& left, const std::unique_ptr<HeurInfo>& right)
-			{ return left->second > right->second ||
-					(left->second == right->second &&
-					left->first.state().size() < right->first.state().size());
+		std::cerr << "Heur list size = " << heurList_.size() << std::endl;
+		boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)
+			{
+				return left.difference_ > right.difference_ ||
+						(left.difference_ == right.difference_ &&
+						left.heurInfo_->first.state().size() <
+						right.heurInfo_->first.state().size()
+						);
 			});
 		incrementalCalculator_ = vectorHeurCalculator();
 	}
-
-	if (maxHeurListSize_ > 0 && heurList_->size() > maxHeurListSize_) {
-		heurList_->resize(maxHeurListSize_);
+	if (maxHeurListSize_ > 0 && heurList_.size() > maxHeurListSize_) {
+		IncrementList(heurList_.begin(), heurList_.begin() + maxHeurListSize_).swap(heurList_);
 	}
-	std::cerr << "Heur list size = " << heurList_->size() << std::endl;
+	std::cerr << "Heur list size = " << heurList_.size() << std::endl;
 	dump_.flush();
 }
 
@@ -100,13 +101,19 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 {
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(
-			calculator_, heurList_, table_);
+			calculator_,
+			heurList_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
+			table_);
 }
+
 
 HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth)
 {
 	assert(table_);
 	return std::make_shared<DecisionTreeHeurCalculator>(
-			calculator_, heurList_, table_, maxDepth);
+			calculator_,
+			heurList_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
+			table_,
+			maxDepth);
 }
 

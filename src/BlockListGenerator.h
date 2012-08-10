@@ -15,12 +15,51 @@
 
 class BlockListGenerator {
 private:
+	struct IncrementInfo {
+		HeurInfoConstPtr heurInfo_;
+		int	difference_;
+		IncrementInfo(const HeurInfoConstPtr& heurInfo, int difference):
+			heurInfo_(heurInfo),
+			difference_(difference)
+		{}
+		IncrementInfo(HeurInfoConstPtr&& heurInfo, int difference):
+			heurInfo_(std::move(heurInfo)),
+			difference_(difference)
+		{}
+		IncrementInfo(const IncrementInfo& other):
+			heurInfo_(other.heurInfo_),
+			difference_(other.difference_)
+		{}
+		IncrementInfo(IncrementInfo&& other):
+			heurInfo_(std::move(other.heurInfo_)),
+			difference_(other.difference_)
+		{}
+		IncrementInfo& operator=(const IncrementInfo& other)
+		{
+			heurInfo_ = other.heurInfo_;
+			difference_ = other.difference_;
+			return *this;
+		}
+		IncrementInfo& operator=(IncrementInfo&& other)
+		{
+			heurInfo_ = std::move(other.heurInfo_);
+			difference_ = other.difference_;
+			return *this;
+		}
+		static const HeurInfoConstPtr& getHeurInfo(const IncrementInfo& incrementInfo) {
+			return incrementInfo.heurInfo_;
+		}
+	};
+
+
+	typedef std::vector<IncrementInfo> IncrementList;
+
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	HeurCalculator::Ptr incrementalCalculator_;
 	Checker::Ptr checker_;
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
-	HeurListPtr heurList_;
+	IncrementList heurList_;
 	FixedTable::Ptr table_;
 	int numStones_;
 	int maxDistance_;

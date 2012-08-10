@@ -2,7 +2,6 @@
 #include "Dumper/DumperFunctions.h"
 #include "Node.h"
 #include "VisitedStateInfo.h"
-#include "TimeMeter.h"
 #include "AnnotatedFunction.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
@@ -49,13 +48,8 @@ int DecisionTreeHeurCalculator::calculateStatus(
 	return result;
 }
 
-namespace {
-
-typedef AnnotatedFunction<bool(const MockStatus&)> Functor;
-typedef std::shared_ptr<Functor> FunctorPtr;
-typedef std::vector<FunctorPtr> FunctorPtrList;
-
-FunctorPtrList functorList(const FixedTable::Ptr& table)
+DecisionTreeHeurCalculator::FunctorPtrList
+DecisionTreeHeurCalculator::functorList(const FixedTable::Ptr& table)
 {
 	FunctorPtrList result;
 	Point p;
@@ -74,31 +68,3 @@ FunctorPtrList functorList(const FixedTable::Ptr& table)
 	return result;
 }
 
-} // namespace
-
-DecisionTreeHeurCalculator::DecisionTreeHeurCalculator(
-		const HeurCalculator::Ptr& baseCalculator,
-		const HeurListPtr& heurList,
-		FixedTable::Ptr table,
-		int maxDepth):
-			baseCalculator_(baseCalculator),
-			table_(table)
-{
-	TimeMeter timeMeter;
-	NodeType::ValueList convertedHeurList;
-	convertedHeurList.reserve(heurList->size());
-	boost::transform(*heurList, std::back_inserter(convertedHeurList),
-			[](const std::unique_ptr<HeurInfo>& heurInfo)
-			{
-				return std::make_shared<std::pair<MockStatus, int>>
-						(MockStatus(heurInfo->first), heurInfo->second);
-			});
-	decisionTree_ = decisionTree::buildNode<MockStatus, int>(
-			std::move(convertedHeurList),
-			functorList(table),
-			maxDepth);
-	std::cerr << "Processor time: " <<
-			timeMeter.processorTime() <<
-			"\nReal time: " <<
-			timeMeter.realTime() << std::endl;
-}
