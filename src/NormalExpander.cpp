@@ -33,12 +33,12 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 			status_.value(pd) == ftFloor && status_.reachable(pmd))
 	{
 		Status status(status_);
-		Node::Ptr node;
 		status.currentPos(p);
 		if (owner_.calculator_->calculateStone(status, pd) < 0 || !status.moveStone(p, pd)) {
 			return;
 		}
-		node = owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
+		Node::Ptr node =
+				owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
 		if (pd != status.table().destination()) {
 			if (owner_.checker_ && !owner_.checker_->check(status, pd)) {
 				if (dumper_)

@@ -2,6 +2,7 @@
 #include "Node.h"
 
 int Status::copyCount(0);
+int Status::calculateReachableCount(0);
 
 Status::Status(FixedTable::Ptr table):
 	table_(table),
@@ -46,6 +47,7 @@ void Status::init() {
 }
 
 void Status::calculateReachable() const {
+	++calculateReachableCount;
 	reachable_.reset(width(), height(), false);
 	border_.clear();
 	floodFill(*this, currentPos_, reachable_, &border_);

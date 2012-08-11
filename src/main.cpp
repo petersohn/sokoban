@@ -88,5 +88,6 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
-	cerr << "Status copied " << Status::copyCount << " times." << endl;
+	cerr << "Status copied " << Status::copyCount << " times.\n" <<
+			"calculateReachable called " << Status::calculateReachableCount << " times." << endl;
 }

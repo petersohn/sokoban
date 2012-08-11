@@ -31,6 +31,7 @@ private:
 
 public:
 	static int copyCount;
+	static int calculateReachableCount;
 
 	explicit Status(FixedTable::Ptr table);
 	explicit Status(FixedTable::Ptr table, const State &state);
