@@ -79,6 +79,11 @@ namespace detail {
 		int maxDepth_;
 		ProgressBar progressBar_;
 		int progress_;
+		size_t maxLength_;
+		size_t sumLength_;
+		size_t numNonemptyLeafs_;
+		size_t numEmptyLeafs_;
+		size_t numFullDepthLeafs_;
 
 		void advanceProgress(int depthRemaining)
 		{
@@ -144,6 +149,28 @@ namespace detail {
 			return functorList.front();
 		} // fastFilterFunctorList
 
+		template <class Key, class T>
+		std::unique_ptr<Node<Key, T>>
+		createLeaf(
+				typename Node<Key, T>::ValueList&& valueList,
+				int depthRemaining)
+		{
+			size_t size = valueList.size();
+			maxLength_ = std::max(maxLength_, size);
+			sumLength_ += size;
+			if (size == 0) {
+				++numEmptyLeafs_;
+			} else {
+				++numNonemptyLeafs_;
+			}
+			if (depthRemaining == 0) {
+				++numFullDepthLeafs_;
+			}
+			advanceProgress(depthRemaining);
+			return std::unique_ptr<Node<Key, T>>(
+						new detail::LeafNode<Key, T>(std::move(valueList)));
+		}
+
 		template <class Key, class T, class FunctorPtrList>
 		std::unique_ptr<Node<Key, T>>
 		doBuildNode(
@@ -160,9 +187,7 @@ namespace detail {
 			if (valueList.size() == 0 ||
 					functorList.size() == 0 ||
 					depthRemaining == 0) {
-				advanceProgress(depthRemaining);
-				return std::unique_ptr<Node<Key, T>>(
-						new detail::LeafNode<Key, T>(std::move(valueList)));
+				return createLeaf<Key, T>(std::move(valueList), depthRemaining);
 			} else {
 				std::vector<FunctorPtr> newFunctorList;
 				FunctorPtr functor;
@@ -177,9 +202,7 @@ namespace detail {
 							newFunctorList);
 				}
 				if (!functor) {
-					advanceProgress(depthRemaining);
-					return std::unique_ptr<Node<Key, T>>(
-							new detail::LeafNode<Key, T>(std::move(valueList)));
+					return createLeaf<Key, T>(std::move(valueList), depthRemaining);
 				}
 
 				ValueList falseValues;
@@ -207,8 +230,23 @@ namespace detail {
 		NodeBuilder(int maxDepth):
 			maxDepth_(maxDepth),
 			progressBar_(static_cast<int>(exp2(maxDepth))),
-			progress_(0)
+			progress_(0),
+			maxLength_(0),
+			sumLength_(0),
+			numNonemptyLeafs_(0),
+			numEmptyLeafs_(0),
+			numFullDepthLeafs_(0)
 		{}
+
+		~NodeBuilder()
+		{
+			std::cerr << "\nMaximum leaf length: " << maxLength_ << "\n"
+					"Average leaf length: " <<
+					static_cast<double>(sumLength_) / numNonemptyLeafs_ << "\n"
+					"Number of empty leaves: " << numEmptyLeafs_ << "\n"
+					"Number of non-empty leaves: " << numNonemptyLeafs_ << "\n"
+					"Number of full depth leaves: " << numFullDepthLeafs_ << std::endl;
+		}
 
 		template <class Key, class T, class FunctorPtrList>
 		std::unique_ptr<Node<Key, T>>

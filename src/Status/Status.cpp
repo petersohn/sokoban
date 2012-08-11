@@ -80,7 +80,9 @@ void Status::state(const State &value) {
 
 bool Status::currentPos(const Point & p) {
 	currentPos_ = p;
-	reachOK_ = false;
+	if (reachOK_ && !reachable_[p]) {
+		reachOK_ = false;
+	}
 	return true;
 }
 
