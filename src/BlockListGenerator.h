@@ -66,6 +66,7 @@ private:
 	int maxHeurListSize_;
 	std::ofstream dump_;
 	MutexType dumpMutex_;
+	ThreadPool threadPool_;
 
 	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
@@ -85,7 +86,7 @@ private:
 public:
 	BlockListGenerator(Solver::Ptr solver,
 			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones,
-			int maxDistance, int maxHeurListSize);
+			int maxDistance, int maxHeurListSize, int numThreads);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
 	HeurCalculator::Ptr decisionTreeHeurCalculator(int maxDepth);

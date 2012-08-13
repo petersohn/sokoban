@@ -18,12 +18,12 @@ class InternalSolver {
 	Node::Ptr currentNode_;
 public:
 	InternalSolver(NodeQueue::Ptr queue, Expander::Ptr expander, Dumper::Ptr dumper,
-			bool parallelOuterExpand):
+			bool parallelOuterExpand, boost::asio::io_service& ioService):
 		queue_(queue),
 		expander_(expander),
 		dumper_(dumper),
 		parallelOuterExpand_(parallelOuterExpand),
-		jobManager_(ThreadPool::instance()->ioService()),
+		jobManager_(ioService),
 		costFgv_(-1)
 	{
 		assert(queue.get() != NULL);
@@ -104,7 +104,16 @@ public:
 
 std::deque<Node::Ptr> Solver::solve(const Status &status)
 {
-	InternalSolver solver(queueFactory_(), expanderFactory_(), dumperFactory_(), multithread_);
+	std::unique_ptr<ThreadPoolRunner> runner;
+	if (numThreads_ > 0) {
+		runner.reset(new ThreadPoolRunner(threadPool_));
+	}
+	InternalSolver solver(
+			queueFactory_(),
+			expanderFactory_(),
+			dumperFactory_(),
+			numThreads_ > 0,
+			threadPool_.ioService());
 	return solver.solve(status);
 
 }

@@ -20,28 +20,33 @@ private:
 	std::size_t numThreads_;
 
 	void runInThread();
-
-	ThreadPool():
-		isRunning_(false),
-		numThreads_(0)
-	{
-	}
-	static Ptr instance_;
 public:
-	static Ptr instance()
-	{
-		if (!instance_) {
-			instance_.reset(new ThreadPool);
-		}
-		return instance_;
-	}
-
 	boost::asio::io_service& ioService() { return ioService_; }
 	std::size_t numThreads() const { return numThreads_; }
 	void numThreads(std::size_t value);
 	bool isRunning() const { return isRunning_; }
 	void start();
 	void wait();
+
+	ThreadPool():
+		isRunning_(false),
+		numThreads_(0)
+	{
+	}
+};
+
+class ThreadPoolRunner {
+	ThreadPool& threadPool_;
+public:
+	ThreadPoolRunner(ThreadPool& threadPool):
+		threadPool_(threadPool)
+	{
+		threadPool_.start();
+	}
+	~ThreadPoolRunner()
+	{
+		threadPool_.wait();
+	}
 };
 
 #endif /* THREADPOOL_H_ */

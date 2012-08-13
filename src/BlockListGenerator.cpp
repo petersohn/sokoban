@@ -14,7 +14,8 @@
 
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
-		Checker::Ptr checker, int numStones, int maxDistance, int maxHeurListSize):
+		Checker::Ptr checker, int numStones, int maxDistance, int maxHeurListSize,
+		int numThreads):
 		solver_(solver),
 		calculator_(calculator),
 		checker_(checker),
@@ -22,8 +23,10 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		numStones_(numStones),
 		maxDistance_(maxDistance),
 		maxHeurListSize_(maxHeurListSize),
-		dump_("blocklist.dump")
+		dump_("blocklist.dump"),
+		threadPool_()
 {
+	threadPool_.numThreads(numThreads);
 }
 
 std::deque<Node::Ptr> BlockListGenerator::doCalculateBlockList(const Status& status)
@@ -65,13 +68,16 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
 	TableIterator tableIterator(table, calculator_, checker,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
-			maxDistance_);
+			maxDistance_, threadPool_);
 	blockList_->clear();
 	heurList_.clear();
 	incrementalCalculator_ = calculator_;
 	for (int n = 2; n <= numStones_; ++n) {
 		std::cerr << "Stones = " << n << std::endl;
-		tableIterator.iterate(n);
+		{
+			ThreadPoolRunner runner(threadPool_);
+			tableIterator.iterate(n);
+		}
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 		std::cerr << "Heur list size = " << heurList_.size() << std::endl;
 		boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)

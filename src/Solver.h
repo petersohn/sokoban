@@ -4,6 +4,7 @@
 #include "QueueInterfaces.h"
 #include "Expander.h"
 #include "Dumper/Dumper.h"
+#include "ThreadPool.h"
 #include <deque>
 #include <functional>
 #include <memory>
@@ -23,15 +24,20 @@ private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
 	DumperFactory dumperFactory_;
-	bool multithread_;
+	int numThreads_;
+	ThreadPool threadPool_;
 public:
 	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory(),
-			bool multithread = false):
+			int numThreads = 0):
 		queueFactory_(qf),
 		expanderFactory_(ef),
 		dumperFactory_(df),
-		multithread_(multithread)
-	{}
+		numThreads_(numThreads)
+	{
+		if (numThreads > 0) {
+			threadPool_.numThreads(numThreads);
+		}
+	}
 	std::deque<std::shared_ptr<Node> > solve(const Status &status);
 	~Solver() {}
 private:

@@ -9,6 +9,7 @@
 #include "ThreadPool.h"
 #include <functional>
 
+
 class TableIterator {
 public:
 	typedef std::function<void(const Status&)> Action;
@@ -48,7 +49,8 @@ public:
 			const HeurCalculator::Ptr& heurCalculator,
 			const Checker::Ptr& checker,
 			const Action& action,
-			int maxDistance):
+			int maxDistance,
+			ThreadPool& threadPool):
 		table_(table),
 		heurCalculator_(heurCalculator),
 		checker_(checker),
@@ -58,7 +60,7 @@ public:
 		solved_(0),
 		lastTicks_(-1),
 		working_(false),
-		ioService_(ThreadPool::instance()->ioService())
+		ioService_(threadPool.ioService())
 	{
 	}
 

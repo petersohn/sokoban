@@ -4,11 +4,8 @@
 #include <boost/exception/all.hpp>
 #include <iostream>
 
-ThreadPool::Ptr ThreadPool::instance_;
-
 void ThreadPool::runInThread()
 {
-//	std::cerr << "Starting thread: " << boost::this_thread::get_id() << std::endl;
 	while (true) {
 		try {
 			ioService_.run();
@@ -18,7 +15,6 @@ void ThreadPool::runInThread()
 		}
 		// retry
 	}
-//	std::cerr << "Stopping thread: " << boost::this_thread::get_id() << std::endl;
 }
 
 void ThreadPool::numThreads(std::size_t value)
@@ -58,6 +54,7 @@ void ThreadPool::wait()
 			t->join();
 		}
 		threads_.clear();
+		ioService_.reset();
 		isRunning_ = false;
 	}
 }

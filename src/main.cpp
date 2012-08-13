@@ -6,7 +6,6 @@
 #include "SolverFactories.h"
 #include "Dumper/DumperFunctions.h"
 #include "Status/State.h"
-#include "ThreadPool.h"
 #include "SolutionChecker.h"
 #include "TableIterator.h"
 #include "ComplexChecker.h"
@@ -36,33 +35,33 @@ int main(int argc, char** argv) {
 	Status st(loadStatusFromFile(opts.filename().c_str()));
 	dumpStatus(std::cerr, st);
 
-	cerr << "Number of threads: " << opts.numThreads() << endl;
-	ThreadPool::instance()->numThreads(opts.numThreads());
-	ThreadPool::instance()->start();
 	TimeMeter timeMeter;
 	OptionsBasedExpanderFactory expanderFactory(opts, st.tablePtr(), !opts.test());
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
 			createExpander,
 			std::bind(createDumperFromOptions, opts),
-			opts.parallelOuterExpand());
+			opts.parallelOuterExpand() ? opts.numThreads() : 0);
 	std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	SolutionChecker solutionChecker(std::cerr, heurDump);
 	if (opts.test() > 0) {
 		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
+		ThreadPool threadPool;
+		ThreadPoolRunner runner(threadPool);
+		threadPool.numThreads(opts.numThreads());
 		TableIterator it(
 				st.tablePtr(),
 				calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
-				0);
+				0,
+				threadPool);
 		it.iterate(opts.test());
 	} else {
 		std::deque<Node::Ptr> solution = s.solve(st);
 		cerr << "Length of solution: " << solution.size() << endl;
 		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
 		cerr << "Real Time:" << timeMeter.realTime() << endl;
-		ThreadPool::instance()->wait();
 		if (solution.size() == 0)
 			cerr << "No solution." << endl;
 		else
