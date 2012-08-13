@@ -36,7 +36,7 @@ void TableIterator::initIter(Point p, int stones, const State &state)
 				ioService_.post(std::bind(&TableIterator::doWork, this, status));
 			} else {
 				ok = true;
-			}std::clock_t iterationStart = std::clock();
+			}
 		}
 		if (!ok) {
 			return;

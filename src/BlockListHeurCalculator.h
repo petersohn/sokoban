@@ -4,11 +4,13 @@
 #include "HeurCalculator.h"
 #include "IndexedStatusList.h"
 #include "HeurInfo.h"
+#include "Mutexes.hpp"
 
 class BlocklistHeurCalculator: public HeurCalculator {
 	HeurCalculator::Ptr baseCalculator_;
 	HeurList heurList_;
 	FixedTable::Ptr table_;
+	MutexType mutex_;
 public:
 	template <class HeurListType>
 	BlocklistHeurCalculator(

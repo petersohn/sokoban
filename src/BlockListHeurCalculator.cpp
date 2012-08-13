@@ -20,11 +20,14 @@ int BlocklistHeurCalculator::calculateStatus(
 	assert(status.tablePtr() == table_);
 	MockStatus mockStatus(status);
 	int result = 0;
-	for (const HeurInfoConstPtr& subset: heurList_) {
-		if (isSubStatus(subset->first, mockStatus)) {
-			result += subset->second;
-			for (const Point& p: subset->first.state()) {
-				mockStatus.state().removeStone(p);
+	{
+		boost::unique_lock<MutexType> lock(mutex_);
+		for (const HeurInfoConstPtr& subset: heurList_) {
+			if (isSubStatus(subset->first, mockStatus)) {
+				result += subset->second;
+				for (const Point& p: subset->first.state()) {
+					mockStatus.state().removeStone(p);
+				}
 			}
 		}
 	}
