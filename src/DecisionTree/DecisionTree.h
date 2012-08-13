@@ -5,6 +5,7 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/adaptors.hpp>
 #include <boost/format.hpp>
+#include <boost/optional.hpp>
 #include <vector>
 #include <cstdlib>
 #include <iostream>
@@ -13,18 +14,18 @@
 #include "AnnotatedFunction.h"
 #include "DecisionTree/SplittingValue.h"
 #include "Dumper/IndentedOutput.h"
-
+#include "Status/Status.h"
 
 namespace decisionTree {
 
 
-template <class Key, class T>
+template <class Status, class T>
 class Node {
 public:
-	typedef std::pair<Key, T> Value;
+	typedef std::pair<Status, T> Value;
 	typedef std::shared_ptr<Value> ValuePtr;
 	typedef std::vector<ValuePtr> ValueList;
-	virtual const ValueList& get(const Key& key) const = 0;
+	virtual const ValueList& get(const Status& key) const = 0;
 	virtual ~Node() {}
 };
 
@@ -32,45 +33,45 @@ namespace detail {
 
 	const int indentLevel = 2;
 
-	template <class Key, class T>
-	class LeafNode: public Node<Key, T> {
-		typedef typename Node<Key, T>::Value Value;
-		typedef typename Node<Key, T>::ValueList ValueList;
+	template <class Status, class T>
+	class LeafNode: public Node<Status, T> {
+		typedef typename Node<Status, T>::Value Value;
+		typedef typename Node<Status, T>::ValueList ValueList;
 		ValueList value_;
 	public:
 		LeafNode(const ValueList& value):
 			value_(value) {}
 		LeafNode(ValueList&& value):
 			value_(std::move(value)) {}
-		virtual const ValueList& get(const Key&) const
+		virtual const ValueList& get(const Status&) const
 		{
 			return value_;
 		}
 	};
 
-	template <class Key, class T, class Functor>
-	class DecisionNode: public Node<Key, T> {
-		typedef typename Node<Key, T>::Value Value;
-		typedef typename Node<Key, T>::ValueList ValueList;
-		std::shared_ptr<Functor> functor_;
+	template <class Status, class T>
+	class DecisionNode: public Node<Status, T> {
+		typedef typename Node<Status, T>::Value Value;
+		typedef typename Node<Status, T>::ValueList ValueList;
+		Point point_;
 
-		typedef std::unique_ptr<Node<Key, T>> ChildType;
+		typedef std::unique_ptr<Node<Status, T>> ChildType;
 		ChildType falseChild_;
 		ChildType trueChild_;
 	public:
-		DecisionNode(const std::shared_ptr<Functor>& functor,
+		DecisionNode(const Point& point,
 				ChildType&& falseChild, ChildType&& trueChild):
-			functor_(functor),
+			point_(point),
 			falseChild_(std::move(falseChild)),
 			trueChild_(std::move(trueChild))
 		{}
 
-		virtual const ValueList& get(const Key& key) const
+		virtual const ValueList& get(const Status& status) const
 		{
-			if ((*functor_)(key)) {
-				return trueChild_->get(key);
+			if (isStone(status, point_)) {
+				return trueChild_->get(status);
 			} else {
-				return falseChild_->get(key);
+				return falseChild_->get(status);
 			}
 		}
 	}; // class DecisionNode
@@ -91,68 +92,65 @@ namespace detail {
 			progressBar_.draw(progress_);
 		}
 
-		template <class ValueList, class FunctorPtrList>
-		typename FunctorPtrList::value_type
-		filterFunctorList(
+		template <class ValueList, class PointList>
+		boost::optional<Point>
+		filterPointList(
 				const ValueList& valueList,
-				const FunctorPtrList& functorList,
-				std::vector<typename FunctorPtrList::value_type>& newFunctorList) const
+				const PointList& pointList,
+				std::vector<Point>& newPointList) const
 		{
-			typedef typename FunctorPtrList::value_type FunctorPtr;
-			typedef typename FunctorPtr::element_type Functor;
-			typedef typename FunctorPtrList::const_iterator FunctorIterator;
-			typedef std::vector<SplittingValue<FunctorIterator>> SplittingValues;
+			typedef typename PointList::const_iterator PointIterator;
+			typedef std::vector<SplittingValue<PointIterator>> SplittingValues;
 			typedef typename SplittingValues::const_iterator SplittingValueIterator;
 
 			SplittingValues splittingValues;
 			splittingValues.reserve(valueList.size());
-			for (FunctorIterator it = std::begin(functorList);
-					it != std::end(functorList); ++it) {
+			for (PointIterator it = std::begin(pointList);
+					it != std::end(pointList); ++it) {
 				auto splittingValue = calculateSplittingValue(it, valueList);
 				splittingValues.push_back(std::move(splittingValue));
 			}
-			boost::sort(splittingValues, betterSplittingValue<FunctorIterator>);
+			boost::sort(splittingValues, betterSplittingValue<PointIterator>);
 
-			FunctorPtr result;
 			if (splittingValues.empty() || splittingValues.front().trueNum_ == 0) {
-				return result;
+				return boost::optional<Point>();
 			}
-			result = *splittingValues.front().arg_;
+			Point result = *splittingValues.front().arg_;
 			SplittingValueIterator begin = ++splittingValues.begin();
 			SplittingValueIterator end = boost::find_if(splittingValues,
-					[](const SplittingValue<FunctorIterator>& value)
+					[](const SplittingValue<PointIterator>& value)
 					{ return value.trueNum_ == 0; });
 			if (begin != end) {
-				newFunctorList.reserve(std::distance(begin, end));
-				std::transform(begin, end, std::back_inserter(newFunctorList),
-						[](const SplittingValue<FunctorIterator>& value)
+				newPointList.reserve(std::distance(begin, end));
+				std::transform(begin, end, std::back_inserter(newPointList),
+						[](const SplittingValue<PointIterator>& value)
 						{ return *(value.arg_); });
 			}
 			return result;
 		} // filterFunctorList
 
-		template <class FunctorPtrList>
-		typename FunctorPtrList::value_type
-		fastFilterFunctorList(
-				const FunctorPtrList& functorList,
-				std::vector<typename FunctorPtrList::value_type>& newFunctorList) const
+		template <class PointList>
+		boost::optional<Point>
+		fastFilterPointList(
+				const PointList& pointList,
+				std::vector<Point>& newPointList) const
 		{
-			typedef typename FunctorPtrList::value_type Functor;
+			typedef typename PointList::value_type Functor;
 
-			assert(!functorList.empty());
-			newFunctorList.reserve(functorList.size() - 1);
+			assert(!pointList.empty());
+			newPointList.reserve(pointList.size() - 1);
 			std::copy(
-					++functorList.begin(),
-					functorList.end(),
-					std::back_inserter(newFunctorList)
+					++pointList.begin(),
+					pointList.end(),
+					std::back_inserter(newPointList)
 					);
-			return functorList.front();
+			return boost::optional<Point>(pointList.front());
 		} // fastFilterFunctorList
 
-		template <class Key, class T>
-		std::unique_ptr<Node<Key, T>>
+		template <class Status, class T>
+		std::unique_ptr<Node<Status, T>>
 		createLeaf(
-				typename Node<Key, T>::ValueList&& valueList,
+				typename Node<Status, T>::ValueList&& valueList,
 				int depthRemaining)
 		{
 			size_t size = valueList.size();
@@ -167,54 +165,52 @@ namespace detail {
 				++numFullDepthLeafs_;
 			}
 			advanceProgress(depthRemaining);
-			return std::unique_ptr<Node<Key, T>>(
-						new detail::LeafNode<Key, T>(std::move(valueList)));
+			return std::unique_ptr<Node<Status, T>>(
+						new detail::LeafNode<Status, T>(std::move(valueList)));
 		}
 
-		template <class Key, class T, class FunctorPtrList>
+		template <class Key, class T, class PointList>
 		std::unique_ptr<Node<Key, T>>
 		doBuildNode(
 			typename Node<Key, T>::ValueList&& valueList,
-			const FunctorPtrList& functorList,
+			const PointList& pointList,
 			int depthRemaining,
 			bool trueBranch)
 		{
 			typedef typename Node<Key, T>::ValuePtr ValuePtr;
 			typedef typename Node<Key, T>::ValueList ValueList;
-			typedef typename FunctorPtrList::value_type FunctorPtr;
-			typedef typename FunctorPtr::element_type Functor;
 
 			if (valueList.size() == 0 ||
-					functorList.size() == 0 ||
+					pointList.size() == 0 ||
 					depthRemaining == 0) {
 				return createLeaf<Key, T>(std::move(valueList), depthRemaining);
 			} else {
-				std::vector<FunctorPtr> newFunctorList;
-				FunctorPtr functor;
+				std::vector<Point> newFunctorList;
+				boost::optional<Point> point;
 				if (trueBranch) {
-					functor = fastFilterFunctorList(
-							functorList,
+					point = fastFilterPointList(
+							pointList,
 							newFunctorList);
 				} else {
-					functor = filterFunctorList(
+					point = filterPointList(
 							valueList,
-							functorList,
+							pointList,
 							newFunctorList);
 				}
-				if (!functor) {
+				if (!point) {
 					return createLeaf<Key, T>(std::move(valueList), depthRemaining);
 				}
 
 				ValueList falseValues;
 				boost::remove_copy_if(valueList,
 						std::back_inserter(falseValues),
-						[&functor](const ValuePtr& value)
-						{ return (*functor)(value->first); });
+						[&point](const ValuePtr& value)
+						{ return isStone(value->first, *point); });
 
 				assert(falseValues.size() != valueList.size());
 				return std::unique_ptr<Node<Key, T>>(
-						new detail::DecisionNode<Key, T, Functor>(
-								functor,
+						new detail::DecisionNode<Key, T>(
+								*point,
 								doBuildNode<Key, T>(std::move(falseValues),
 										newFunctorList,
 										depthRemaining - 1,
@@ -248,15 +244,15 @@ namespace detail {
 					"Number of full depth leaves: " << numFullDepthLeafs_ << std::endl;
 		}
 
-		template <class Key, class T, class FunctorPtrList>
+		template <class Key, class T, class PointList>
 		std::unique_ptr<Node<Key, T>>
 		buildNode(
 			typename Node<Key, T>::ValueList&& valueList,
-			const FunctorPtrList& functorList)
+			const PointList& pointList)
 		{
 			return doBuildNode<Key, T>(
 					std::move(valueList),
-					functorList,
+					pointList,
 					maxDepth_,
 					false);
 		}
@@ -265,18 +261,18 @@ namespace detail {
 
 } // namespace detail
 
-template <class Key, class T, class FunctorPtrList>
+template <class Key, class T, class PointList>
 std::unique_ptr<Node<Key, T>>
 buildNode(
 		typename Node<Key, T>::ValueList&& valueList,
-		const FunctorPtrList& functorList,
+		const PointList& pointList,
 		int maxDepth
 		)
 	{
 		std::cerr << "Building decision tree\n";
 		return detail::NodeBuilder(maxDepth).buildNode<Key, T>(
 				std::move(valueList),
-				functorList);
+				pointList);
 	} // buildNode
 
 

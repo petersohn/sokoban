@@ -15,10 +15,7 @@ class DecisionTreeHeurCalculator: public HeurCalculator {
 	FixedTable::Ptr table_;
 	std::unique_ptr<NodeType> decisionTree_;
 
-	typedef AnnotatedFunction<bool(const MockStatus&)> Functor;
-	typedef std::shared_ptr<Functor> FunctorPtr;
-	typedef std::vector<FunctorPtr> FunctorPtrList;
-	static FunctorPtrList functorList(const FixedTable::Ptr& table);
+	static std::vector<Point> pointList(const FixedTable::Ptr& table);
 public:
 	template <class HeurListType>
 	DecisionTreeHeurCalculator(
@@ -40,7 +37,7 @@ public:
 				});
 		decisionTree_ = decisionTree::buildNode<MockStatus, int>(
 				std::move(convertedHeurList),
-				functorList(table),
+				pointList(table),
 				maxDepth);
 		std::cerr << "Processor time: " <<
 				timeMeter.processorTime() <<

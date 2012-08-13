@@ -106,4 +106,10 @@ inline bool isSubStatus(const Status1& subStatus, const Status2& status)
 			isSubState(subStatus.state(), status.state());
 }
 
+template <class Status>
+inline bool isStone(const Status& status, const Point& p)
+{
+	return status.value(p) == ftStone;
+}
+
 #endif /* STATUS_H_ */

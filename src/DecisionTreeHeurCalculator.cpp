@@ -48,20 +48,15 @@ int DecisionTreeHeurCalculator::calculateStatus(
 	return result;
 }
 
-DecisionTreeHeurCalculator::FunctorPtrList
-DecisionTreeHeurCalculator::functorList(const FixedTable::Ptr& table)
+std::vector<Point>
+DecisionTreeHeurCalculator::pointList(const FixedTable::Ptr& table)
 {
-	FunctorPtrList result;
+	std::vector<Point> result;
 	Point p;
 	for (p.y = 0; p.y < table->get().height(); ++p.y) {
 		for (p.x = 0; p.x < table->get().width(); ++p.x) {
 			if (!table->get().wall(p)) {
-				result.push_back(std::make_shared<Functor>(
-						[p](const MockStatus& status)
-						{
-							return status.state()[p];
-						} ));
-				result.back()->name("hasStone" + pointStr(p));
+				result.push_back(p);
 			}
 		}
 	}
