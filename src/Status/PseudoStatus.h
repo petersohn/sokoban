@@ -1,15 +1,15 @@
-#ifndef MOCKSTATUS_H_
-#define MOCKSTATUS_H_
+#ifndef PSEUDOSTATUS_H_
+#define PSEUDOSTATUS_H_
 
 #include "Status/Status.h"
 
-class MockStatus {
+class PseudoStatus {
 	FixedTable::Ptr table_;
 	State state_;
 	Point currentPos_;
 	Array<bool> reachableArray_;
 public:
-	explicit MockStatus(const Status& status):
+	explicit PseudoStatus(const Status& status):
 		table_(status.tablePtr()),
 		state_(status.state()),
 		currentPos_(status.currentPos()),
@@ -34,4 +34,4 @@ public:
 };
 
 
-#endif /* MOCKSTATUS_H_ */
+#endif /* PSEUDOSTATUS_H_ */

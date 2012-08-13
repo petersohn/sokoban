@@ -4,12 +4,12 @@
 #include "HeurCalculator.h"
 #include "IndexedStatusList.h"
 #include "HeurInfo.h"
-#include "Status/MockStatus.h"
+#include "Status/PseudoStatus.h"
 #include "DecisionTree/DecisionTree.h"
 #include "TimeMeter.h"
 
 class DecisionTreeHeurCalculator: public HeurCalculator {
-	typedef decisionTree::Node<MockStatus, int> NodeType;
+	typedef decisionTree::Node<PseudoStatus, int> NodeType;
 
 	HeurCalculator::Ptr baseCalculator_;
 	FixedTable::Ptr table_;
@@ -32,10 +32,10 @@ public:
 		boost::transform(heurList, std::back_inserter(convertedHeurList),
 				[](const HeurInfoConstPtr& heurInfo)
 				{
-					return std::make_shared<std::pair<MockStatus, int>>
-							(MockStatus(heurInfo->first), heurInfo->second);
+					return std::make_shared<std::pair<PseudoStatus, int>>
+							(PseudoStatus(heurInfo->first), heurInfo->second);
 				});
-		decisionTree_ = decisionTree::buildNode<MockStatus, int>(
+		decisionTree_ = decisionTree::buildNode<PseudoStatus, int>(
 				std::move(convertedHeurList),
 				pointList(table),
 				maxDepth);

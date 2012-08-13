@@ -21,7 +21,7 @@ int DecisionTreeHeurCalculator::calculateStatus(
 {
 	assert(status.tablePtr() == table_);
 
-	MockStatus mockStatus(status);
+	PseudoStatus mockStatus(status);
 	int result = 0;
 	bool found;
 	do {

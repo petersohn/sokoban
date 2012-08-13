@@ -2,7 +2,7 @@
 #include "Dumper/DumperFunctions.h"
 #include "Node.h"
 #include "VisitedStateInfo.h"
-#include "Status/MockStatus.h"
+#include "Status/PseudoStatus.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 
@@ -18,7 +18,7 @@ int BlocklistHeurCalculator::calculateStatus(
 		const std::shared_ptr<Node>& ancestor)
 {
 	assert(status.tablePtr() == table_);
-	MockStatus mockStatus(status);
+	PseudoStatus mockStatus(status);
 	int result = 0;
 	{
 		boost::unique_lock<MutexType> lock(mutex_);

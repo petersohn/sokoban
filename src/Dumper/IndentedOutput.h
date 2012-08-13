@@ -3,7 +3,7 @@
 
 #include <ostream>
 #include "Status/Status.h"
-#include "Status/MockStatus.h"
+#include "Status/PseudoStatus.h"
 #include "Dumper/DumperFunctions.h"
 
 template <class T>
@@ -25,7 +25,7 @@ void indentedOutput(std::ostream& os, const Status& status, int level)
 
 template <>
 inline
-void indentedOutput(std::ostream& os, const MockStatus& status, int level)
+void indentedOutput(std::ostream& os, const PseudoStatus& status, int level)
 {
 	dumpStatus(os, status, "", &status.reachableArray(), level);
 }
