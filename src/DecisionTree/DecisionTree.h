@@ -81,6 +81,7 @@ namespace detail {
 		ProgressBar progressBar_;
 		int progress_;
 		size_t maxLength_;
+		size_t minLength_;
 		size_t sumLength_;
 		size_t numNonemptyLeafs_;
 		size_t numEmptyLeafs_;
@@ -159,6 +160,7 @@ namespace detail {
 			if (size == 0) {
 				++numEmptyLeafs_;
 			} else {
+				minLength_ = std::min(minLength_, size);
 				++numNonemptyLeafs_;
 			}
 			if (depthRemaining == 0) {
@@ -228,6 +230,7 @@ namespace detail {
 			progressBar_(static_cast<int>(exp2(maxDepth))),
 			progress_(0),
 			maxLength_(0),
+			minLength_(0),
 			sumLength_(0),
 			numNonemptyLeafs_(0),
 			numEmptyLeafs_(0),
@@ -237,6 +240,7 @@ namespace detail {
 		~NodeBuilder()
 		{
 			std::cerr << "\nMaximum leaf length: " << maxLength_ << "\n"
+					"Minimum non-empty leaf length: " << minLength_ << "\n"
 					"Average leaf length: " <<
 					static_cast<double>(sumLength_) / numNonemptyLeafs_ << "\n"
 					"Number of empty leaves: " << numEmptyLeafs_ << "\n"
@@ -250,6 +254,7 @@ namespace detail {
 			typename Node<Key, T>::ValueList&& valueList,
 			const PointList& pointList)
 		{
+			minLength_ = pointList.size();
 			return doBuildNode<Key, T>(
 					std::move(valueList),
 					pointList,
