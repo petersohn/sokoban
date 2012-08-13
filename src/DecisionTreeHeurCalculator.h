@@ -7,6 +7,7 @@
 #include "Status/PseudoStatus.h"
 #include "DecisionTree/DecisionTree.h"
 #include "TimeMeter.h"
+#include "Checker.h"
 
 class DecisionTreeHeurCalculator: public HeurCalculator {
 	typedef decisionTree::Node<PseudoStatus, int> NodeType;
@@ -21,6 +22,7 @@ public:
 	DecisionTreeHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
 			const HeurListType& heurList,
+			const Checker::Ptr checker,
 			FixedTable::Ptr table,
 			int maxDepth):
 				baseCalculator_(baseCalculator),
@@ -36,8 +38,9 @@ public:
 							(PseudoStatus(heurInfo->first), heurInfo->second);
 				});
 		decisionTree_ = decisionTree::buildNode<PseudoStatus, int>(
-				std::move(convertedHeurList),
+				convertedHeurList,
 				pointList(table),
+				checker,
 				maxDepth);
 		std::cerr << "Processor time: " <<
 				timeMeter.processorTime() <<

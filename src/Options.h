@@ -36,6 +36,7 @@ private:
 	int numThreads_;
 	int test_;
 	int maxDecisionTreeDepth_;
+	bool useCheckerForDecisionTree_;
 	CompareList compare_;
 	std::string filename_;
 public:
@@ -55,6 +56,7 @@ public:
 	int numThreads() const { return numThreads_; }
 	int test() const { return test_; }
 	int maxDecisionTreeDepth() const { return maxDecisionTreeDepth_; }
+	bool useCheckerForDecisionTree() const { return useCheckerForDecisionTree_; }
 	const std::string &filename() const { return filename_; }
 	const CompareList& compare() const { return compare_; }
 };

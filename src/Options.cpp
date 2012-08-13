@@ -22,7 +22,8 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		maxHeurListSize_(0),
 		numThreads_(1),
 		test_(0),
-		maxDecisionTreeDepth_(10)
+		maxDecisionTreeDepth_(10),
+		useCheckerForDecisionTree_(false)
 {
 	OptionsHelper oh;
 	bool help = false;
@@ -44,8 +45,6 @@ Options::Options(int argc, char **argv, const char *configFileName):
 	oh.addArgumentOption<int>("test", &test_,
 			"Instead of solving a problem, solve each possible problem with the given number "
 			"of stones on the table.");
-	oh.addArgumentOption<int>("max-decision-tree-depth", &maxDecisionTreeDepth_,
-			"The maximum depth of the decision tree.");
 
 	IndexedArgument ds;
 	ds.addElement("none", dsNone);
@@ -80,6 +79,10 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"    (n)one          \tDisable blocklist heur calculator.\n"
 			"    (v)ector        \tUse vector and linear search. More optimal, but slower than decision tree.\n"
 			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n");
+	oh.addArgumentOption<int>("max-decision-tree-depth", &maxDecisionTreeDepth_,
+			"The maximum depth of the decision tree.");
+	oh.addBoolOption("decision-tree-checker", &useCheckerForDecisionTree_,
+			"Enable/disable usage of checker in DecisionTree building.\n");
 	IndexedArgument cl;
 	cl.addElement("time", ctTime);
 	cl.addElement("heur", ctHeur);

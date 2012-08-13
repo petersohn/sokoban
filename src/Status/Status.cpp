@@ -1,5 +1,6 @@
 #include "Status/Status.h"
 #include "Node.h"
+#include "Checker.h"
 
 int Status::copyCount(0);
 int Status::calculateReachableCount(0);
@@ -223,23 +224,24 @@ ki:
 	return result;
 }
 
-bool checkStatus(const Status& status)
+bool checkStatus(Checker& checker, const Status& status)
 {
-	Point p;
-	for (p.x = 0; p.x < status.width(); ++p.x) {
-		for (p.y = 0; p.y < status.height(); ++p.y) {
-			FieldType fieldNeeded;
-			if (status.table().wall(p)) {
-				fieldNeeded = ftWall;
-			} else if (status.state()[p]) {
-				fieldNeeded = ftStone;
-			} else {
-				fieldNeeded = ftFloor;
-			}
-			if (status.value(p) != fieldNeeded) {
-				return false;
-			}
+	for (const Point &pp: status.state()) {
+		if (!checker.check(status, pp)) {
+			return false;
 		}
 	}
 	return true;
 }
+
+bool checkState(Checker& checker, const FixedTable::Ptr& table, const State& state)
+{
+	std::vector<Status::Ptr> partitions = getPartitions(table, state);
+	for (const Status::Ptr& status: partitions) {
+		if (checkStatus(checker, *status)) {
+			return true;
+		}
+	}
+	return false;
+}
+

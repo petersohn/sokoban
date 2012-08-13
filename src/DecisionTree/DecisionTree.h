@@ -15,6 +15,7 @@
 #include "DecisionTree/SplittingValue.h"
 #include "Dumper/IndentedOutput.h"
 #include "Status/Status.h"
+#include "Checker.h"
 
 namespace decisionTree {
 
@@ -80,6 +81,7 @@ namespace detail {
 		int maxDepth_;
 		ProgressBar progressBar_;
 		int progress_;
+		Checker::Ptr checker_;
 		size_t maxLength_;
 		size_t minLength_;
 		size_t sumLength_;
@@ -151,9 +153,29 @@ namespace detail {
 		template <class Status, class T>
 		std::unique_ptr<Node<Status, T>>
 		createLeaf(
-				typename Node<Status, T>::ValueList&& valueList,
-				int depthRemaining)
+				const typename Node<Status, T>::ValueList& originalValueList,
+				int depthRemaining,
+				const State& collectedState)
 		{
+			typedef typename Node<Status, T>::ValuePtr ValuePtr;
+			typedef typename Node<Status, T>::ValueList ValueList;
+
+			ValueList valueList;
+			if (checker_) {
+				boost::remove_copy_if(
+						originalValueList,
+						std::back_inserter(valueList),
+						[this, &collectedState](const ValuePtr& value)
+						{
+							State state(collectedState);
+							for (const Point& p: value->first.state()) {
+								state.addStone(p);
+							}
+							return !checkState(*checker_, value->first.tablePtr(), state);
+						});
+			} else {
+				valueList = originalValueList;
+			}
 			size_t size = valueList.size();
 			maxLength_ = std::max(maxLength_, size);
 			sumLength_ += size;
@@ -171,28 +193,32 @@ namespace detail {
 						new detail::LeafNode<Status, T>(std::move(valueList)));
 		}
 
-		template <class Key, class T, class PointList>
-		std::unique_ptr<Node<Key, T>>
+		template <class Status, class T, class PointList>
+		std::unique_ptr<Node<Status, T>>
 		doBuildNode(
-			typename Node<Key, T>::ValueList&& valueList,
+			const typename Node<Status, T>::ValueList& valueList,
 			const PointList& pointList,
 			int depthRemaining,
-			bool trueBranch)
+			bool trueBranch,
+			const State& collectedState)
 		{
-			typedef typename Node<Key, T>::ValuePtr ValuePtr;
-			typedef typename Node<Key, T>::ValueList ValueList;
+			typedef typename Node<Status, T>::ValuePtr ValuePtr;
+			typedef typename Node<Status, T>::ValueList ValueList;
 
 			if (valueList.size() == 0 ||
 					pointList.size() == 0 ||
 					depthRemaining == 0) {
-				return createLeaf<Key, T>(std::move(valueList), depthRemaining);
+				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
 			} else {
 				std::vector<Point> newFunctorList;
 				boost::optional<Point> point;
+				State newCollectedState(collectedState);
 				if (trueBranch) {
 					point = fastFilterPointList(
 							pointList,
 							newFunctorList);
+					assert(point);
+					newCollectedState.addStone(*point);
 				} else {
 					point = filterPointList(
 							valueList,
@@ -200,7 +226,7 @@ namespace detail {
 							newFunctorList);
 				}
 				if (!point) {
-					return createLeaf<Key, T>(std::move(valueList), depthRemaining);
+					return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
 				}
 
 				ValueList falseValues;
@@ -210,25 +236,28 @@ namespace detail {
 						{ return isStone(value->first, *point); });
 
 				assert(falseValues.size() != valueList.size());
-				return std::unique_ptr<Node<Key, T>>(
-						new detail::DecisionNode<Key, T>(
+				return std::unique_ptr<Node<Status, T>>(
+						new detail::DecisionNode<Status, T>(
 								*point,
-								doBuildNode<Key, T>(std::move(falseValues),
+								doBuildNode<Status, T>(falseValues,
 										newFunctorList,
 										depthRemaining - 1,
-										false),
-								doBuildNode<Key, T>(std::move(valueList),
+										false,
+										newCollectedState),
+								doBuildNode<Status, T>(valueList,
 										newFunctorList,
 										depthRemaining - 1,
-										true)
+										true,
+										newCollectedState)
 						));
 			}
 		} // doBuildNode
 	public:
-		NodeBuilder(int maxDepth):
+		NodeBuilder(int maxDepth, const Checker::Ptr& checker):
 			maxDepth_(maxDepth),
 			progressBar_(static_cast<int>(exp2(maxDepth))),
 			progress_(0),
+			checker_(checker),
 			maxLength_(0),
 			minLength_(0),
 			sumLength_(0),
@@ -251,15 +280,16 @@ namespace detail {
 		template <class Key, class T, class PointList>
 		std::unique_ptr<Node<Key, T>>
 		buildNode(
-			typename Node<Key, T>::ValueList&& valueList,
+			const typename Node<Key, T>::ValueList& valueList,
 			const PointList& pointList)
 		{
 			minLength_ = pointList.size();
 			return doBuildNode<Key, T>(
-					std::move(valueList),
+					valueList,
 					pointList,
 					maxDepth_,
-					false);
+					false,
+					State());
 		}
 
 	}; // class NodeBuilder
@@ -269,14 +299,15 @@ namespace detail {
 template <class Key, class T, class PointList>
 std::unique_ptr<Node<Key, T>>
 buildNode(
-		typename Node<Key, T>::ValueList&& valueList,
+		const typename Node<Key, T>::ValueList& valueList,
 		const PointList& pointList,
+		const Checker::Ptr& checker,
 		int maxDepth
 		)
 	{
 		std::cerr << "Building decision tree\n";
-		return detail::NodeBuilder(maxDepth).buildNode<Key, T>(
-				std::move(valueList),
+		return detail::NodeBuilder(maxDepth, checker).buildNode<Key, T>(
+				valueList,
 				pointList);
 	} // buildNode
 

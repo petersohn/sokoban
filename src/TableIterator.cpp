@@ -21,14 +21,7 @@ void TableIterator::initIter(Point p, int stones, const State &state)
 			if (heur < 0) {
 				continue;
 			}
-			bool ok2 = true;
-			for (const Point &pp: state) {
-				if (!checker_->check(*status, pp)) {
-					ok2 = false;
-					break;
-				}
-			}
-			if (!ok2) {
+			if (!checkStatus(*checker_, *status)) {
 				continue;
 			}
 			if (stones == 0) {

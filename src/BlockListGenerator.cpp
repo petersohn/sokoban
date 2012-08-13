@@ -113,12 +113,13 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 }
 
 
-HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth)
+HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth, bool useChecker)
 {
 	assert(table_);
 	return std::make_shared<DecisionTreeHeurCalculator>(
 			calculator_,
 			heurList_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
+			useChecker ? checker_ : Checker::Ptr(),
 			table_,
 			maxDepth);
 }

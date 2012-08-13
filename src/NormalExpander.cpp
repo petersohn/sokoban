@@ -47,8 +47,6 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 			}
 		}
 		VisitedStateInput vsi(status, node->costFgv());
-//		assert(checkStatus(status));
-//		assert(checkStatus(vsi.first));
 		if (owner_.visitedStates_ && !owner_.visitedStates_->checkAndPush(vsi)) {
 			if (dumper_)
 				dumper_->reject(node, "already visited");

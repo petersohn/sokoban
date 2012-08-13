@@ -97,7 +97,11 @@ void floodFill(const Status &table, const Point &p0, Array<bool> &result,
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state);
 
-bool checkStatus(const Status& status);
+class Checker;
+
+bool checkStatus(Checker& checker, const Status& status);
+
+bool checkState(Checker& checker, const FixedTable::Ptr& table, const State& state);
 
 template <class Status1, class Status2>
 inline bool isSubStatus(const Status1& subStatus, const Status2& status)
