@@ -218,7 +218,6 @@ namespace detail {
 							pointList,
 							newFunctorList);
 					assert(point);
-					newCollectedState.addStone(*point);
 				} else {
 					point = filterPointList(
 							valueList,
@@ -228,6 +227,7 @@ namespace detail {
 				if (!point) {
 					return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
 				}
+				newCollectedState.addStone(*point);
 
 				ValueList falseValues;
 				boost::remove_copy_if(valueList,
@@ -243,7 +243,7 @@ namespace detail {
 										newFunctorList,
 										depthRemaining - 1,
 										false,
-										newCollectedState),
+										collectedState),
 								doBuildNode<Status, T>(valueList,
 										newFunctorList,
 										depthRemaining - 1,
