@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "Hash.h"
+#include "Common.h"
 
 class Point
 {
@@ -72,6 +73,13 @@ inline Point operator-(const Point &p) {
 inline bool operator<(const Point &p1, const Point &p2) {
 	return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
 }
+
+inline std::ostream& operator<<(std::ostream& os, const Point& p)
+{
+	os << pointStr(p);
+	return os;
+}
+
 
 namespace std {
 

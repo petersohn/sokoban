@@ -49,6 +49,7 @@ sokoban_SOURCES = main.cpp \
 unitTest_SOURCES = UnitTest/testMain.cpp \
 		UnitTest/IsSubStateTest.cpp \
 		UnitTest/IsSubStatusTest.cpp \
+		UnitTest/PointRangeTest.cpp \
 		 $(status_source_files)
 
 bin_PROGRAMS = sokoban unitTest
