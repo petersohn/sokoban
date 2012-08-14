@@ -49,6 +49,10 @@ namespace detail {
 		ChildType falseChild_;
 		ChildType trueChild_;
 	public:
+		DecisionNode(const Point& point):
+			point_(point)
+		{}
+
 		DecisionNode(const Point& point,
 				ChildType&& falseChild, ChildType&& trueChild):
 			point_(point),
@@ -64,6 +68,9 @@ namespace detail {
 				return falseChild_->get(status);
 			}
 		}
+
+		ChildType& falseChild() { return falseChild_; }
+		ChildType& trueChild() { return trueChild_; }
 	}; // class DecisionNode
 
 	class NodeBuilder {
@@ -188,13 +195,14 @@ namespace detail {
 		}
 
 		template <class Status, class T, class PointList>
-		std::unique_ptr<Node<Status, T>>
+		void
 		doBuildNode(
 			const typename Node<Status, T>::ValueList& valueList,
 			const PointList& pointList,
 			int depthRemaining,
 			bool trueBranch,
-			const State& collectedState)
+			const State& collectedState,
+			std::unique_ptr<Node<Status, T>>& result)
 		{
 			typedef typename Node<Status, T>::ValuePtr ValuePtr;
 			typedef typename Node<Status, T>::ValueList ValueList;
@@ -202,7 +210,8 @@ namespace detail {
 			if (valueList.size() == 0 ||
 					pointList.size() == 0 ||
 					depthRemaining == 0) {
-				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				result = createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				return;
 			}
 			assert(valueList.size() > 0);
 			if (checker_ && !checkState(
@@ -211,7 +220,8 @@ namespace detail {
 					collectedState)) {
 				++numLeafsSaved_;
 				numLeafsSavedExp_ += static_cast<int>(exp2(depthRemaining));
-				return createLeaf<Status, T>(ValueList(), depthRemaining, collectedState);
+				result = createLeaf<Status, T>(ValueList(), depthRemaining, collectedState);
+				return;
 			}
 
 			std::vector<Point> newFunctorList;
@@ -229,7 +239,8 @@ namespace detail {
 						newFunctorList);
 			}
 			if (!point) {
-				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				result = createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				return;
 			}
 			newCollectedState.addStone(*point);
 
@@ -240,54 +251,25 @@ namespace detail {
 					{ return isStone(value->first, *point); });
 
 			assert(falseValues.size() != valueList.size());
-			std::unique_ptr<Node<Status, T>> falseChild;
-			std::unique_ptr<Node<Status, T>> trueChild;
-			if (numThreads_ > 1) {
-				boost::packaged_task<std::unique_ptr<Node<Status, T>>> falseTask(
-						[&]() {
-							return doBuildNode<Status, T>(
-									falseValues,
-									newFunctorList,
-									depthRemaining - 1,
-									false,
-									collectedState);
-						});
-				boost::unique_future<std::unique_ptr<Node<Status, T>>>
-						falseFuture = falseTask.get_future();
-				threadPool_.ioService().post(falseTask);
-				boost::packaged_task<std::unique_ptr<Node<Status, T>>> trueTask(
-						[&]() {
-							return doBuildNode<Status, T>(
-									valueList,
-									newFunctorList,
-									depthRemaining - 1,
-									true,
-									newCollectedState);
-						});
-				boost::unique_future<std::unique_ptr<Node<Status, T>>>
-						trueFuture = trueTask.get_future();
-				threadPool_.ioService().post(trueTask);
-				falseChild = falseFuture.get();
-				trueChild = trueFuture.get();
-			} else {
-				falseChild = doBuildNode<Status, T>(
-						falseValues,
-						newFunctorList,
-						depthRemaining - 1,
-						false,
-						collectedState);
-				trueChild = doBuildNode<Status, T>(
-						valueList,
-						newFunctorList,
-						depthRemaining - 1,
-						true,
-						newCollectedState);
-			}
-			return std::unique_ptr<Node<Status, T>>(
-					new detail::DecisionNode<Status, T>(
-							*point,
-							std::move(falseChild),
-							std::move(trueChild)));
+
+			result.reset(
+					new detail::DecisionNode<Status, T>(*point));
+			DecisionNode<Status, T>& resultNode =
+					static_cast<DecisionNode<Status, T>&>(*result);
+			doBuildNode<Status, T>(
+					falseValues,
+					newFunctorList,
+					depthRemaining - 1,
+					false,
+					collectedState,
+					resultNode.falseChild());
+			doBuildNode<Status, T>(
+					valueList,
+					newFunctorList,
+					depthRemaining - 1,
+					true,
+					newCollectedState,
+					resultNode.trueChild());
 		} // doBuildNode
 	public:
 		NodeBuilder(int maxDepth, const Checker::Ptr& checker, int numThreads):
@@ -328,12 +310,15 @@ namespace detail {
 			const PointList& pointList)
 		{
 			minLength_ = pointList.size();
-			return doBuildNode<Key, T>(
+			std::unique_ptr<Node<Key, T>> result;
+			doBuildNode<Key, T>(
 					valueList,
 					pointList,
 					maxDepth_,
 					false,
-					State());
+					State(),
+					result);
+			return result;
 		}
 
 	}; // class NodeBuilder
