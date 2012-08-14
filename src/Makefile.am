@@ -2,6 +2,7 @@ status_source_files = \
 		Status/Point.cpp \
 		Status/Status.cpp \
 		Status/StatusCreator.cpp \
+		Status/StatusUtils.cpp \
 		Status/Table.cpp
 		
 dumper_source_files = \

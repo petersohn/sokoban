@@ -12,7 +12,7 @@
 #include "DecisionTree/Node.h"
 #include "DecisionTree/SplittingValue.h"
 #include "Dumper/IndentedOutput.h"
-#include "Status/Status.h"
+#include "Status/StatusUtils.h"
 #include "Checker.h"
 
 namespace decisionTree {

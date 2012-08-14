@@ -1,5 +1,6 @@
 #include "AdvancedHeurCalculator.h"
 #include "Status/Status.h"
+#include "Status/StatusUtils.h"
 #include "Node.h"
 #include <vector>
 #include <algorithm>

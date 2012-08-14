@@ -1,4 +1,5 @@
 #include "Status/Status.h"
+#include "Status/StatusUtils.h"
 #include "Status/StatusCreator.h"
 #include <boost/test/unit_test.hpp>
 

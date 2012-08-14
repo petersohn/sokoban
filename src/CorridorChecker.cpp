@@ -1,6 +1,7 @@
 #include "CorridorChecker.h"
 #include "Array.h"
 #include "Status/Status.h"
+#include "Status/StatusUtils.h"
 
 bool CorridorChecker::check(const Status & status, const Point & p0)
 {

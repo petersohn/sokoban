@@ -3,6 +3,7 @@
 #include "Node.h"
 #include "VisitedStateInfo.h"
 #include "AnnotatedFunction.h"
+#include "Status/StatusUtils.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 #include <functional>

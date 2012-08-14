@@ -9,6 +9,7 @@
 #include <boost/thread/locks.hpp>
 #include "Mutexes.hpp"
 #include "Status/Status.h"
+#include "Status/StatusUtils.h"
 #include "Status/State.h"
 
 template <class Value>

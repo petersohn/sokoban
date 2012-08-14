@@ -3,6 +3,7 @@
 #include "Status/Status.h"
 #include "Status/State.h"
 #include "VisitedStateInfo.h"
+#include "Status/StatusUtils.h"
 #include <iostream>
 #include <memory>
 

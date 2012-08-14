@@ -2,6 +2,7 @@
 #include "TempValue.h"
 #include "ProgressBar.h"
 #include "TimeMeter.h"
+#include "Status/StatusUtils.h"
 
 void TableIterator::initIter(Point p, int stones, const State &state)
 {
