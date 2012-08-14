@@ -88,6 +88,8 @@ namespace detail {
 		size_t numNonemptyLeafs_;
 		size_t numEmptyLeafs_;
 		size_t numFullDepthLeafs_;
+		size_t numLeafsSaved_;
+		size_t numLeafsSavedExp_;
 
 		void advanceProgress(int depthRemaining)
 		{
@@ -209,48 +211,57 @@ namespace detail {
 					pointList.size() == 0 ||
 					depthRemaining == 0) {
 				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
-			} else {
-				std::vector<Point> newFunctorList;
-				boost::optional<Point> point;
-				State newCollectedState(collectedState);
-				if (trueBranch) {
-					point = fastFilterPointList(
-							pointList,
-							newFunctorList);
-					assert(point);
-				} else {
-					point = filterPointList(
-							valueList,
-							pointList,
-							newFunctorList);
-				}
-				if (!point) {
-					return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
-				}
-				newCollectedState.addStone(*point);
-
-				ValueList falseValues;
-				boost::remove_copy_if(valueList,
-						std::back_inserter(falseValues),
-						[&point](const ValuePtr& value)
-						{ return isStone(value->first, *point); });
-
-				assert(falseValues.size() != valueList.size());
-				return std::unique_ptr<Node<Status, T>>(
-						new detail::DecisionNode<Status, T>(
-								*point,
-								doBuildNode<Status, T>(falseValues,
-										newFunctorList,
-										depthRemaining - 1,
-										false,
-										collectedState),
-								doBuildNode<Status, T>(valueList,
-										newFunctorList,
-										depthRemaining - 1,
-										true,
-										newCollectedState)
-						));
 			}
+			assert(valueList.size() > 0);
+			if (checker_ && !checkState(
+					*checker_,
+					valueList.front()->first.tablePtr(),
+					collectedState)) {
+				++numLeafsSaved_;
+				numLeafsSavedExp_ += static_cast<int>(exp2(depthRemaining));
+				return createLeaf<Status, T>(ValueList(), depthRemaining, collectedState);
+			}
+
+			std::vector<Point> newFunctorList;
+			boost::optional<Point> point;
+			State newCollectedState(collectedState);
+			if (trueBranch) {
+				point = fastFilterPointList(
+						pointList,
+						newFunctorList);
+				assert(point);
+			} else {
+				point = filterPointList(
+						valueList,
+						pointList,
+						newFunctorList);
+			}
+			if (!point) {
+				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+			}
+			newCollectedState.addStone(*point);
+
+			ValueList falseValues;
+			boost::remove_copy_if(valueList,
+					std::back_inserter(falseValues),
+					[&point](const ValuePtr& value)
+					{ return isStone(value->first, *point); });
+
+			assert(falseValues.size() != valueList.size());
+			return std::unique_ptr<Node<Status, T>>(
+					new detail::DecisionNode<Status, T>(
+							*point,
+							doBuildNode<Status, T>(falseValues,
+									newFunctorList,
+									depthRemaining - 1,
+									false,
+									collectedState),
+							doBuildNode<Status, T>(valueList,
+									newFunctorList,
+									depthRemaining - 1,
+									true,
+									newCollectedState)
+					));
 		} // doBuildNode
 	public:
 		NodeBuilder(int maxDepth, const Checker::Ptr& checker):
@@ -263,7 +274,9 @@ namespace detail {
 			sumLength_(0),
 			numNonemptyLeafs_(0),
 			numEmptyLeafs_(0),
-			numFullDepthLeafs_(0)
+			numFullDepthLeafs_(0),
+			numLeafsSaved_(0),
+			numLeafsSavedExp_(0)
 		{}
 
 		~NodeBuilder()
@@ -272,6 +285,8 @@ namespace detail {
 					"Minimum non-empty leaf length: " << minLength_ << "\n"
 					"Average leaf length: " <<
 					static_cast<double>(sumLength_) / numNonemptyLeafs_ << "\n"
+					"Number of leaves saved by checker: " << numLeafsSaved_ <<
+					"(" << numLeafsSavedExp_ << ")\n"
 					"Number of empty leaves: " << numEmptyLeafs_ << "\n"
 					"Number of non-empty leaves: " << numNonemptyLeafs_ << "\n"
 					"Number of full depth leaves: " << numFullDepthLeafs_ << std::endl;
