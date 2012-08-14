@@ -89,9 +89,22 @@ namespace detail {
 		size_t numFullDepthLeafs_;
 		size_t numLeafsSaved_;
 		size_t numLeafsSavedExp_;
+		MutexType progressMutex_;
 
-		void advanceProgress(int depthRemaining)
+		void advanceProgress(size_t size, int depthRemaining)
 		{
+			boost::unique_lock<MutexType> lock(progressMutex_);
+			maxLength_ = std::max(maxLength_, size);
+			sumLength_ += size;
+			if (size == 0) {
+				++numEmptyLeafs_;
+			} else {
+				minLength_ = std::min(minLength_, size);
+				++numNonemptyLeafs_;
+			}
+			if (depthRemaining == 0) {
+				++numFullDepthLeafs_;
+			}
 			progress_ += static_cast<int>(exp2(depthRemaining));
 			progressBar_.draw(progress_);
 		}
@@ -177,19 +190,7 @@ namespace detail {
 			} else {
 				valueList = originalValueList;
 			}
-			size_t size = valueList.size();
-			maxLength_ = std::max(maxLength_, size);
-			sumLength_ += size;
-			if (size == 0) {
-				++numEmptyLeafs_;
-			} else {
-				minLength_ = std::min(minLength_, size);
-				++numNonemptyLeafs_;
-			}
-			if (depthRemaining == 0) {
-				++numFullDepthLeafs_;
-			}
-			advanceProgress(depthRemaining);
+			advanceProgress(valueList.size(), depthRemaining);
 			return std::unique_ptr<Node<Status, T>>(
 						new detail::LeafNode<Status, T>(std::move(valueList)));
 		}
@@ -218,8 +219,11 @@ namespace detail {
 					*checker_,
 					valueList.front()->first.tablePtr(),
 					collectedState)) {
-				++numLeafsSaved_;
-				numLeafsSavedExp_ += static_cast<int>(exp2(depthRemaining));
+				{
+					boost::unique_lock<MutexType> lock(progressMutex_);
+					++numLeafsSaved_;
+					numLeafsSavedExp_ += static_cast<int>(exp2(depthRemaining));
+				}
 				result = createLeaf<Status, T>(ValueList(), depthRemaining, collectedState);
 				return;
 			}
@@ -256,20 +260,41 @@ namespace detail {
 					new detail::DecisionNode<Status, T>(*point));
 			DecisionNode<Status, T>& resultNode =
 					static_cast<DecisionNode<Status, T>&>(*result);
-			doBuildNode<Status, T>(
-					falseValues,
-					newFunctorList,
-					depthRemaining - 1,
-					false,
-					collectedState,
-					resultNode.falseChild());
-			doBuildNode<Status, T>(
-					valueList,
-					newFunctorList,
-					depthRemaining - 1,
-					true,
-					newCollectedState,
-					resultNode.trueChild());
+			if (numThreads_ > 0) {
+				threadPool_.ioService().post(std::bind(
+						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
+						this,
+						falseValues,
+						newFunctorList,
+						depthRemaining - 1,
+						false,
+						collectedState,
+						std::ref(resultNode.falseChild())));
+				threadPool_.ioService().post(std::bind(
+						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
+						this,
+						valueList,
+						newFunctorList,
+						depthRemaining - 1,
+						true,
+						newCollectedState,
+						std::ref(resultNode.trueChild())));
+			} else {
+				doBuildNode<Status, T>(
+						falseValues,
+						newFunctorList,
+						depthRemaining - 1,
+						false,
+						collectedState,
+						resultNode.falseChild());
+				doBuildNode<Status, T>(
+						valueList,
+						newFunctorList,
+						depthRemaining - 1,
+						true,
+						newCollectedState,
+						resultNode.trueChild());
+			}
 		} // doBuildNode
 	public:
 		NodeBuilder(int maxDepth, const Checker::Ptr& checker, int numThreads):
@@ -311,13 +336,16 @@ namespace detail {
 		{
 			minLength_ = pointList.size();
 			std::unique_ptr<Node<Key, T>> result;
-			doBuildNode<Key, T>(
-					valueList,
-					pointList,
-					maxDepth_,
-					false,
-					State(),
-					result);
+			{
+				ThreadPoolRunner runner(threadPool_);
+				doBuildNode<Key, T>(
+						valueList,
+						pointList,
+						maxDepth_,
+						false,
+						State(),
+						result);
+			}
 			return result;
 		}
 
