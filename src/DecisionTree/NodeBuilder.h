@@ -147,8 +147,7 @@ namespace detail {
 		} // filterFunctorList
 
 		template <class PointList>
-		boost::optional<Point>
-		fastFilterPointList(
+		boost::optional<Point> fastFilterPointList(
 				const PointList& pointList,
 				std::vector<Point>& newPointList) const
 		{
@@ -196,8 +195,38 @@ namespace detail {
 		}
 
 		template <class Status, class T, class PointList>
-		void
-		doBuildNode(
+		void buildDecisionChildren(
+			const typename Node<Status, T>::ValueList& falseValues,
+			const typename Node<Status, T>::ValueList& trueValues,
+			const PointList& pointList,
+			int depthRemaining,
+			const State& falseCollectedState,
+			const State& trueCollectedState,
+			std::unique_ptr<Node<Status, T>>& result)
+		{
+			DecisionNode<Status, T>& resultNode =
+					static_cast<DecisionNode<Status, T>&>(*result);
+			if (numThreads_ > 1) {
+				threadPool_.ioService().post(std::bind(
+						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
+						this, falseValues, pointList, depthRemaining,
+						false, falseCollectedState, std::ref(resultNode.falseChild())));
+				threadPool_.ioService().post(std::bind(
+						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
+						this, trueValues, pointList, depthRemaining,
+						true, trueCollectedState, std::ref(resultNode.trueChild())));
+			} else {
+				doBuildNode<Status, T>(
+						falseValues, pointList, depthRemaining,
+						false, falseCollectedState, resultNode.falseChild());
+				doBuildNode<Status, T>(
+						trueValues, pointList, depthRemaining,
+						true, trueCollectedState, resultNode.trueChild());
+			}
+		}
+
+		template <class Status, class T, class PointList>
+		void doBuildNode(
 			const typename Node<Status, T>::ValueList& valueList,
 			const PointList& pointList,
 			int depthRemaining,
@@ -233,14 +262,11 @@ namespace detail {
 			State newCollectedState(collectedState);
 			if (trueBranch) {
 				point = fastFilterPointList(
-						pointList,
-						newFunctorList);
+						pointList, newFunctorList);
 				assert(point);
 			} else {
 				point = filterPointList(
-						valueList,
-						pointList,
-						newFunctorList);
+						valueList, pointList, newFunctorList);
 			}
 			if (!point) {
 				result = createLeaf<Status, T>(valueList, depthRemaining, collectedState);
@@ -255,46 +281,14 @@ namespace detail {
 					{ return isStone(value->first, *point); });
 
 			assert(falseValues.size() != valueList.size());
-
 			result.reset(
 					new detail::DecisionNode<Status, T>(*point));
-			DecisionNode<Status, T>& resultNode =
-					static_cast<DecisionNode<Status, T>&>(*result);
-			if (numThreads_ > 0) {
-				threadPool_.ioService().post(std::bind(
-						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
-						this,
-						falseValues,
-						newFunctorList,
-						depthRemaining - 1,
-						false,
-						collectedState,
-						std::ref(resultNode.falseChild())));
-				threadPool_.ioService().post(std::bind(
-						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
-						this,
-						valueList,
-						newFunctorList,
-						depthRemaining - 1,
-						true,
-						newCollectedState,
-						std::ref(resultNode.trueChild())));
-			} else {
-				doBuildNode<Status, T>(
-						falseValues,
-						newFunctorList,
-						depthRemaining - 1,
-						false,
-						collectedState,
-						resultNode.falseChild());
-				doBuildNode<Status, T>(
-						valueList,
-						newFunctorList,
-						depthRemaining - 1,
-						true,
-						newCollectedState,
-						resultNode.trueChild());
-			}
+			buildDecisionChildren(
+					falseValues, valueList,
+					newFunctorList, depthRemaining - 1,
+					collectedState, newCollectedState,
+					result);
+
 		} // doBuildNode
 	public:
 		NodeBuilder(int maxDepth, const Checker::Ptr& checker, int numThreads):
