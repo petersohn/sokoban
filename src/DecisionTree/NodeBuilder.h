@@ -273,10 +273,10 @@ namespace detail {
 					"Average leaf length: " <<
 					static_cast<double>(sumLength_) / numNonemptyLeafs_ << "\n"
 					"Number of leaves saved by checker: " << numLeafsSaved_ <<
-					"(" << numLeafsSavedExp_ << ")\n"
+					" (" << numLeafsSavedExp_ << ")\n"
 					"Number of empty leaves: " << numEmptyLeafs_ << "\n"
 					"Number of non-empty leaves: " << numNonemptyLeafs_ << "\n"
-					"Number of full depth leaves: " << numFullDepthLeafs_ << std::endl;
+					"Number of full depth leaves: " << numFullDepthLeafs_;
 		}
 
 		template <class Key, class T, class PointList>
