@@ -24,7 +24,8 @@ public:
 			const HeurListType& heurList,
 			const Checker::Ptr checker,
 			FixedTable::Ptr table,
-			int maxDepth):
+			int maxDepth,
+			int numThreads):
 				baseCalculator_(baseCalculator),
 				table_(table)
 	{
@@ -41,7 +42,8 @@ public:
 				convertedHeurList,
 				pointList(table),
 				checker,
-				maxDepth);
+				maxDepth,
+				numThreads);
 		std::cerr << "Processor time: " <<
 				timeMeter.processorTime() <<
 				"\nReal time: " <<

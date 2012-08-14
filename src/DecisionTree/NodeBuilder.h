@@ -5,6 +5,7 @@
 #include <boost/range/adaptors.hpp>
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
+#include <boost/thread.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <iterator>
@@ -14,6 +15,7 @@
 #include "Dumper/IndentedOutput.h"
 #include "Status/Status.h"
 #include "Checker.h"
+#include "ThreadPool.h"
 
 namespace decisionTree {
 
@@ -69,6 +71,9 @@ namespace detail {
 		ProgressBar progressBar_;
 		int progress_;
 		Checker::Ptr checker_;
+		ThreadPool threadPool_;
+		int numThreads_;
+
 		size_t maxLength_;
 		size_t minLength_;
 		size_t sumLength_;
@@ -235,27 +240,62 @@ namespace detail {
 					{ return isStone(value->first, *point); });
 
 			assert(falseValues.size() != valueList.size());
-			return std::unique_ptr<Node<Status, T>>(
-					new detail::DecisionNode<Status, T>(
-							*point,
-							doBuildNode<Status, T>(falseValues,
+			std::unique_ptr<Node<Status, T>> falseChild;
+			std::unique_ptr<Node<Status, T>> trueChild;
+			if (numThreads_ > 1) {
+				boost::packaged_task<std::unique_ptr<Node<Status, T>>> falseTask(
+						[&]() {
+							return doBuildNode<Status, T>(
+									falseValues,
 									newFunctorList,
 									depthRemaining - 1,
 									false,
-									collectedState),
-							doBuildNode<Status, T>(valueList,
+									collectedState);
+						});
+				boost::unique_future<std::unique_ptr<Node<Status, T>>>
+						falseFuture = falseTask.get_future();
+				threadPool_.ioService().post(falseTask);
+				boost::packaged_task<std::unique_ptr<Node<Status, T>>> trueTask(
+						[&]() {
+							return doBuildNode<Status, T>(
+									valueList,
 									newFunctorList,
 									depthRemaining - 1,
 									true,
-									newCollectedState)
-					));
+									newCollectedState);
+						});
+				boost::unique_future<std::unique_ptr<Node<Status, T>>>
+						trueFuture = trueTask.get_future();
+				threadPool_.ioService().post(trueTask);
+				falseChild = falseFuture.get();
+				trueChild = trueFuture.get();
+			} else {
+				falseChild = doBuildNode<Status, T>(
+						falseValues,
+						newFunctorList,
+						depthRemaining - 1,
+						false,
+						collectedState);
+				trueChild = doBuildNode<Status, T>(
+						valueList,
+						newFunctorList,
+						depthRemaining - 1,
+						true,
+						newCollectedState);
+			}
+			return std::unique_ptr<Node<Status, T>>(
+					new detail::DecisionNode<Status, T>(
+							*point,
+							std::move(falseChild),
+							std::move(trueChild)));
 		} // doBuildNode
 	public:
-		NodeBuilder(int maxDepth, const Checker::Ptr& checker):
+		NodeBuilder(int maxDepth, const Checker::Ptr& checker, int numThreads):
 			maxDepth_(maxDepth),
 			progressBar_(static_cast<int>(exp2(maxDepth))),
 			progress_(0),
 			checker_(checker),
+			numThreads_(numThreads),
 			maxLength_(0),
 			minLength_(0),
 			sumLength_(0),
@@ -264,7 +304,9 @@ namespace detail {
 			numFullDepthLeafs_(0),
 			numLeafsSaved_(0),
 			numLeafsSavedExp_(0)
-		{}
+		{
+			threadPool_.numThreads(numThreads);
+		}
 
 		~NodeBuilder()
 		{
