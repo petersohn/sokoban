@@ -23,6 +23,7 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	PointRange range(front, back);
 	std::unordered_set<Point> pointsConsidered;
 	for (const Point& p: range) {
+		BOOST_MESSAGE(p);
 		BOOST_REQUIRE_GE(p.x, front.x);
 		BOOST_REQUIRE_LE(p.x, back.x);
 		BOOST_REQUIRE_GE(p.y, front.y);
@@ -39,6 +40,7 @@ BOOST_AUTO_TEST_CASE(ForwardBackward)
 	PointRange range(front, back);
 	std::unordered_set<Point> pointsConsidered;
 	for (const Point& p: range) {
+		BOOST_MESSAGE(p);
 		BOOST_REQUIRE_GE(p.x, front.x);
 		BOOST_REQUIRE_LE(p.x, back.x);
 		BOOST_REQUIRE_LE(p.y, front.y);
@@ -71,6 +73,7 @@ BOOST_AUTO_TEST_CASE(BackwardBackward)
 	PointRange range(front, back);
 	std::unordered_set<Point> pointsConsidered;
 	for (const Point& p: range) {
+		BOOST_MESSAGE(p);
 		BOOST_REQUIRE_LE(p.x, front.x);
 		BOOST_REQUIRE_GE(p.x, back.x);
 		BOOST_REQUIRE_LE(p.y, front.y);

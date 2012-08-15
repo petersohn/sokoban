@@ -63,7 +63,7 @@ class PointRangeIterator: public boost::iterator_facade<
 			p_.x = owner_.front_.x;
 			p_.y += owner_.dy_;
 		} else {
-			p_.x += owner_.dy_;
+			p_.x += owner_.dx_;
 		}
 	}
 	void decrement()
@@ -72,7 +72,7 @@ class PointRangeIterator: public boost::iterator_facade<
 			p_.x = owner_.back_.x;
 			p_.y -= owner_.dy_;
 		} else {
-			p_.x -= owner_.dy_;
+			p_.x -= owner_.dx_;
 		}
 	}
 
