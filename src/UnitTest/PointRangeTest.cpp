@@ -135,6 +135,21 @@ BOOST_AUTO_TEST_CASE(BackwardForward)
 	BOOST_CHECK(++it == range.end());
 }
 
+BOOST_AUTO_TEST_CASE(BackwardBackward)
+{
+	Point front(10,5);
+	Point back(8,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it, Point(10,5));
+	BOOST_CHECK_EQUAL(*++it, Point(9,5));
+	BOOST_CHECK_EQUAL(*++it, Point(8,5));
+	BOOST_CHECK_EQUAL(*++it, Point(10,4));
+	BOOST_CHECK_EQUAL(*++it, Point(9,4));
+	BOOST_CHECK_EQUAL(*++it, Point(8,4));
+	BOOST_CHECK(++it == range.end());
+}
+
 
 
 BOOST_AUTO_TEST_SUITE_END() // PrePlus
