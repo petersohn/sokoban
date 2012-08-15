@@ -14,6 +14,17 @@ BOOST_AUTO_TEST_CASE(Endpoints)
 	BOOST_CHECK_EQUAL(range.back(), back);
 }
 
+BOOST_AUTO_TEST_CASE(SinglePointRange)
+{
+	Point p(1,10);
+	PointRange range(p, p);
+	BOOST_CHECK_EQUAL(range.front(), p);
+	BOOST_CHECK_EQUAL(range.back(), p);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it, p);
+	BOOST_CHECK(++it == range.end());
+}
+
 BOOST_AUTO_TEST_SUITE(InRange)
 
 BOOST_AUTO_TEST_CASE(ForwardForward)
@@ -150,9 +161,202 @@ BOOST_AUTO_TEST_CASE(BackwardBackward)
 	BOOST_CHECK(++it == range.end());
 }
 
-
-
 BOOST_AUTO_TEST_SUITE_END() // PrePlus
+
+BOOST_AUTO_TEST_SUITE(PreMinus)
+
+BOOST_AUTO_TEST_CASE(ForwardForward)
+{
+	Point front(2,2);
+	Point back(3,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it == range.end());
+	BOOST_CHECK_EQUAL(*--it, Point(3,4));
+	BOOST_CHECK_EQUAL(*--it, Point(2,4));
+	BOOST_CHECK_EQUAL(*--it, Point(3,3));
+	BOOST_CHECK_EQUAL(*--it, Point(2,3));
+	BOOST_CHECK_EQUAL(*--it, Point(3,2));
+	BOOST_CHECK_EQUAL(*--it, Point(2,2));
+}
+
+BOOST_AUTO_TEST_CASE(ForwardBackward)
+{
+	Point front(0,0);
+	Point back(1,-1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it == range.end());
+	BOOST_CHECK_EQUAL(*--it, Point(1,-1));
+	BOOST_CHECK_EQUAL(*--it, Point(0,-1));
+	BOOST_CHECK_EQUAL(*--it, Point(1,0));
+	BOOST_CHECK_EQUAL(*--it, Point(0,0));
+}
+
+BOOST_AUTO_TEST_CASE(BackwardForward)
+{
+	Point front(1,-1);
+	Point back(-1,1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it == range.end());
+	BOOST_CHECK_EQUAL(*--it, Point(-1,1));
+	BOOST_CHECK_EQUAL(*--it, Point(0,1));
+	BOOST_CHECK_EQUAL(*--it, Point(1,1));
+	BOOST_CHECK_EQUAL(*--it, Point(-1,0));
+	BOOST_CHECK_EQUAL(*--it, Point(0,0));
+	BOOST_CHECK_EQUAL(*--it, Point(1,0));
+	BOOST_CHECK_EQUAL(*--it, Point(-1,-1));
+	BOOST_CHECK_EQUAL(*--it, Point(0,-1));
+	BOOST_CHECK_EQUAL(*--it, Point(1,-1));
+}
+
+BOOST_AUTO_TEST_CASE(BackwardBackward)
+{
+	Point front(10,5);
+	Point back(8,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it == range.end());
+	BOOST_CHECK_EQUAL(*--it, Point(8,4));
+	BOOST_CHECK_EQUAL(*--it, Point(9,4));
+	BOOST_CHECK_EQUAL(*--it, Point(10,4));
+	BOOST_CHECK_EQUAL(*--it, Point(8,5));
+	BOOST_CHECK_EQUAL(*--it, Point(9,5));
+	BOOST_CHECK_EQUAL(*--it, Point(10,5));
+}
+
+BOOST_AUTO_TEST_SUITE_END() // PreMinus
+
+BOOST_AUTO_TEST_SUITE(PostPlus)
+
+BOOST_AUTO_TEST_CASE(ForwardForward)
+{
+	Point front(2,2);
+	Point back(3,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it++, Point(2,2));
+	BOOST_CHECK_EQUAL(*it++, Point(3,2));
+	BOOST_CHECK_EQUAL(*it++, Point(2,3));
+	BOOST_CHECK_EQUAL(*it++, Point(3,3));
+	BOOST_CHECK_EQUAL(*it++, Point(2,4));
+	BOOST_CHECK_EQUAL(*it++, Point(3,4));
+	BOOST_CHECK(it == range.end());
+}
+
+BOOST_AUTO_TEST_CASE(ForwardBackward)
+{
+	Point front(0,0);
+	Point back(1,-1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it++, Point(0,0));
+	BOOST_CHECK_EQUAL(*it++, Point(1,0));
+	BOOST_CHECK_EQUAL(*it++, Point(0,-1));
+	BOOST_CHECK_EQUAL(*it++, Point(1,-1));
+	BOOST_CHECK(it == range.end());
+}
+
+BOOST_AUTO_TEST_CASE(BackwardForward)
+{
+	Point front(1,-1);
+	Point back(-1,1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it++, Point(1,-1));
+	BOOST_CHECK_EQUAL(*it++, Point(0,-1));
+	BOOST_CHECK_EQUAL(*it++, Point(-1,-1));
+	BOOST_CHECK_EQUAL(*it++, Point(1,0));
+	BOOST_CHECK_EQUAL(*it++, Point(0,0));
+	BOOST_CHECK_EQUAL(*it++, Point(-1,0));
+	BOOST_CHECK_EQUAL(*it++, Point(1,1));
+	BOOST_CHECK_EQUAL(*it++, Point(0,1));
+	BOOST_CHECK_EQUAL(*it++, Point(-1,1));
+	BOOST_CHECK(it == range.end());
+}
+
+BOOST_AUTO_TEST_CASE(BackwardBackward)
+{
+	Point front(10,5);
+	Point back(8,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it++, Point(10,5));
+	BOOST_CHECK_EQUAL(*it++, Point(9,5));
+	BOOST_CHECK_EQUAL(*it++, Point(8,5));
+	BOOST_CHECK_EQUAL(*it++, Point(10,4));
+	BOOST_CHECK_EQUAL(*it++, Point(9,4));
+	BOOST_CHECK_EQUAL(*it++, Point(8,4));
+	BOOST_CHECK(it == range.end());
+}
+
+BOOST_AUTO_TEST_SUITE_END() // PostPlus
+
+BOOST_AUTO_TEST_SUITE(PostMinus)
+
+BOOST_AUTO_TEST_CASE(ForwardForward)
+{
+	Point front(2,2);
+	Point back(3,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it-- == range.end());
+	BOOST_CHECK_EQUAL(*it--, Point(3,4));
+	BOOST_CHECK_EQUAL(*it--, Point(2,4));
+	BOOST_CHECK_EQUAL(*it--, Point(3,3));
+	BOOST_CHECK_EQUAL(*it--, Point(2,3));
+	BOOST_CHECK_EQUAL(*it--, Point(3,2));
+	BOOST_CHECK_EQUAL(*it, Point(2,2));
+}
+
+BOOST_AUTO_TEST_CASE(ForwardBackward)
+{
+	Point front(0,0);
+	Point back(1,-1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it-- == range.end());
+	BOOST_CHECK_EQUAL(*it--, Point(1,-1));
+	BOOST_CHECK_EQUAL(*it--, Point(0,-1));
+	BOOST_CHECK_EQUAL(*it--, Point(1,0));
+	BOOST_CHECK_EQUAL(*it, Point(0,0));
+}
+
+BOOST_AUTO_TEST_CASE(BackwardForward)
+{
+	Point front(1,-1);
+	Point back(-1,1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it-- == range.end());
+	BOOST_CHECK_EQUAL(*it--, Point(-1,1));
+	BOOST_CHECK_EQUAL(*it--, Point(0,1));
+	BOOST_CHECK_EQUAL(*it--, Point(1,1));
+	BOOST_CHECK_EQUAL(*it--, Point(-1,0));
+	BOOST_CHECK_EQUAL(*it--, Point(0,0));
+	BOOST_CHECK_EQUAL(*it--, Point(1,0));
+	BOOST_CHECK_EQUAL(*it--, Point(-1,-1));
+	BOOST_CHECK_EQUAL(*it--, Point(0,-1));
+	BOOST_CHECK_EQUAL(*it, Point(1,-1));
+}
+
+BOOST_AUTO_TEST_CASE(BackwardBackward)
+{
+	Point front(10,5);
+	Point back(8,4);
+	PointRange range(front, back);
+	PointRange::iterator it = range.end();
+	BOOST_CHECK(it-- == range.end());
+	BOOST_CHECK_EQUAL(*it--, Point(8,4));
+	BOOST_CHECK_EQUAL(*it--, Point(9,4));
+	BOOST_CHECK_EQUAL(*it--, Point(10,4));
+	BOOST_CHECK_EQUAL(*it--, Point(8,5));
+	BOOST_CHECK_EQUAL(*it--, Point(9,5));
+	BOOST_CHECK_EQUAL(*it, Point(10,5));
+}
+
+BOOST_AUTO_TEST_SUITE_END() // PostMinus
 
 BOOST_AUTO_TEST_SUITE_END() // Iterators
 
