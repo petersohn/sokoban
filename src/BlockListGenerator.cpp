@@ -24,7 +24,8 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		maxDistance_(maxDistance),
 		maxHeurListSize_(maxHeurListSize),
 		dump_("blocklist.dump"),
-		threadPool_()
+		threadPool_(),
+		numThreads_(numThreads)
 {
 	threadPool_.numThreads(numThreads);
 }
@@ -121,6 +122,7 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth,
 			heurList_ | boost::adaptors::transformed(IncrementInfo::getHeurInfo),
 			useChecker ? checker_ : Checker::Ptr(),
 			table_,
-			maxDepth);
+			maxDepth,
+			numThreads_);
 }
 

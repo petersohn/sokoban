@@ -67,6 +67,7 @@ private:
 	std::ofstream dump_;
 	MutexType dumpMutex_;
 	ThreadPool threadPool_;
+	int numThreads_;
 
 	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);

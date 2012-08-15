@@ -5,6 +5,7 @@
 #include <boost/range/adaptors.hpp>
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
+#include <boost/thread.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <iterator>
@@ -14,6 +15,7 @@
 #include "Dumper/IndentedOutput.h"
 #include "Status/StatusUtils.h"
 #include "Checker.h"
+#include "ThreadPool.h"
 
 namespace decisionTree {
 
@@ -47,6 +49,10 @@ namespace detail {
 		ChildType falseChild_;
 		ChildType trueChild_;
 	public:
+		DecisionNode(const Point& point):
+			point_(point)
+		{}
+
 		DecisionNode(const Point& point,
 				ChildType&& falseChild, ChildType&& trueChild):
 			point_(point),
@@ -62,6 +68,9 @@ namespace detail {
 				return falseChild_->get(status);
 			}
 		}
+
+		ChildType& falseChild() { return falseChild_; }
+		ChildType& trueChild() { return trueChild_; }
 	}; // class DecisionNode
 
 	class NodeBuilder {
@@ -69,6 +78,9 @@ namespace detail {
 		ProgressBar progressBar_;
 		int progress_;
 		Checker::Ptr checker_;
+		ThreadPool threadPool_;
+		int numThreads_;
+
 		size_t maxLength_;
 		size_t minLength_;
 		size_t sumLength_;
@@ -77,9 +89,22 @@ namespace detail {
 		size_t numFullDepthLeafs_;
 		size_t numLeafsSaved_;
 		size_t numLeafsSavedExp_;
+		MutexType progressMutex_;
 
-		void advanceProgress(int depthRemaining)
+		void advanceProgress(size_t size, int depthRemaining)
 		{
+			boost::unique_lock<MutexType> lock(progressMutex_);
+			maxLength_ = std::max(maxLength_, size);
+			sumLength_ += size;
+			if (size == 0) {
+				++numEmptyLeafs_;
+			} else {
+				minLength_ = std::min(minLength_, size);
+				++numNonemptyLeafs_;
+			}
+			if (depthRemaining == 0) {
+				++numFullDepthLeafs_;
+			}
 			progress_ += static_cast<int>(exp2(depthRemaining));
 			progressBar_.draw(progress_);
 		}
@@ -122,8 +147,7 @@ namespace detail {
 		} // filterFunctorList
 
 		template <class PointList>
-		boost::optional<Point>
-		fastFilterPointList(
+		boost::optional<Point> fastFilterPointList(
 				const PointList& pointList,
 				std::vector<Point>& newPointList) const
 		{
@@ -165,31 +189,50 @@ namespace detail {
 			} else {
 				valueList = originalValueList;
 			}
-			size_t size = valueList.size();
-			maxLength_ = std::max(maxLength_, size);
-			sumLength_ += size;
-			if (size == 0) {
-				++numEmptyLeafs_;
-			} else {
-				minLength_ = std::min(minLength_, size);
-				++numNonemptyLeafs_;
-			}
-			if (depthRemaining == 0) {
-				++numFullDepthLeafs_;
-			}
-			advanceProgress(depthRemaining);
+			advanceProgress(valueList.size(), depthRemaining);
 			return std::unique_ptr<Node<Status, T>>(
 						new detail::LeafNode<Status, T>(std::move(valueList)));
 		}
 
 		template <class Status, class T, class PointList>
-		std::unique_ptr<Node<Status, T>>
-		doBuildNode(
+		void buildDecisionChildren(
+			const typename Node<Status, T>::ValueList& falseValues,
+			const typename Node<Status, T>::ValueList& trueValues,
+			const PointList& pointList,
+			int depthRemaining,
+			const State& falseCollectedState,
+			const State& trueCollectedState,
+			std::unique_ptr<Node<Status, T>>& result)
+		{
+			DecisionNode<Status, T>& resultNode =
+					static_cast<DecisionNode<Status, T>&>(*result);
+			if (numThreads_ > 1) {
+				threadPool_.ioService().post(std::bind(
+						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
+						this, falseValues, pointList, depthRemaining,
+						false, falseCollectedState, std::ref(resultNode.falseChild())));
+				threadPool_.ioService().post(std::bind(
+						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
+						this, trueValues, pointList, depthRemaining,
+						true, trueCollectedState, std::ref(resultNode.trueChild())));
+			} else {
+				doBuildNode<Status, T>(
+						falseValues, pointList, depthRemaining,
+						false, falseCollectedState, resultNode.falseChild());
+				doBuildNode<Status, T>(
+						trueValues, pointList, depthRemaining,
+						true, trueCollectedState, resultNode.trueChild());
+			}
+		}
+
+		template <class Status, class T, class PointList>
+		void doBuildNode(
 			const typename Node<Status, T>::ValueList& valueList,
 			const PointList& pointList,
 			int depthRemaining,
 			bool trueBranch,
-			const State& collectedState)
+			const State& collectedState,
+			std::unique_ptr<Node<Status, T>>& result)
 		{
 			typedef typename Node<Status, T>::ValuePtr ValuePtr;
 			typedef typename Node<Status, T>::ValueList ValueList;
@@ -197,16 +240,21 @@ namespace detail {
 			if (valueList.size() == 0 ||
 					pointList.size() == 0 ||
 					depthRemaining == 0) {
-				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				result = createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				return;
 			}
 			assert(valueList.size() > 0);
 			if (checker_ && !checkState(
 					*checker_,
 					valueList.front()->first.tablePtr(),
 					collectedState)) {
-				++numLeafsSaved_;
-				numLeafsSavedExp_ += static_cast<int>(exp2(depthRemaining));
-				return createLeaf<Status, T>(ValueList(), depthRemaining, collectedState);
+				{
+					boost::unique_lock<MutexType> lock(progressMutex_);
+					++numLeafsSaved_;
+					numLeafsSavedExp_ += static_cast<int>(exp2(depthRemaining));
+				}
+				result = createLeaf<Status, T>(ValueList(), depthRemaining, collectedState);
+				return;
 			}
 
 			std::vector<Point> newFunctorList;
@@ -214,17 +262,15 @@ namespace detail {
 			State newCollectedState(collectedState);
 			if (trueBranch) {
 				point = fastFilterPointList(
-						pointList,
-						newFunctorList);
+						pointList, newFunctorList);
 				assert(point);
 			} else {
 				point = filterPointList(
-						valueList,
-						pointList,
-						newFunctorList);
+						valueList, pointList, newFunctorList);
 			}
 			if (!point) {
-				return createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				result = createLeaf<Status, T>(valueList, depthRemaining, collectedState);
+				return;
 			}
 			newCollectedState.addStone(*point);
 
@@ -235,27 +281,22 @@ namespace detail {
 					{ return isStone(value->first, *point); });
 
 			assert(falseValues.size() != valueList.size());
-			return std::unique_ptr<Node<Status, T>>(
-					new detail::DecisionNode<Status, T>(
-							*point,
-							doBuildNode<Status, T>(falseValues,
-									newFunctorList,
-									depthRemaining - 1,
-									false,
-									collectedState),
-							doBuildNode<Status, T>(valueList,
-									newFunctorList,
-									depthRemaining - 1,
-									true,
-									newCollectedState)
-					));
+			result.reset(
+					new detail::DecisionNode<Status, T>(*point));
+			buildDecisionChildren(
+					falseValues, valueList,
+					newFunctorList, depthRemaining - 1,
+					collectedState, newCollectedState,
+					result);
+
 		} // doBuildNode
 	public:
-		NodeBuilder(int maxDepth, const Checker::Ptr& checker):
+		NodeBuilder(int maxDepth, const Checker::Ptr& checker, int numThreads):
 			maxDepth_(maxDepth),
 			progressBar_(static_cast<int>(exp2(maxDepth))),
 			progress_(0),
 			checker_(checker),
+			numThreads_(numThreads),
 			maxLength_(0),
 			minLength_(0),
 			sumLength_(0),
@@ -264,7 +305,9 @@ namespace detail {
 			numFullDepthLeafs_(0),
 			numLeafsSaved_(0),
 			numLeafsSavedExp_(0)
-		{}
+		{
+			threadPool_.numThreads(numThreads);
+		}
 
 		~NodeBuilder()
 		{
@@ -286,12 +329,18 @@ namespace detail {
 			const PointList& pointList)
 		{
 			minLength_ = pointList.size();
-			return doBuildNode<Key, T>(
-					valueList,
-					pointList,
-					maxDepth_,
-					false,
-					State());
+			std::unique_ptr<Node<Key, T>> result;
+			{
+				ThreadPoolRunner runner(threadPool_);
+				doBuildNode<Key, T>(
+						valueList,
+						pointList,
+						maxDepth_,
+						false,
+						State(),
+						result);
+			}
+			return result;
 		}
 
 	}; // class NodeBuilder
