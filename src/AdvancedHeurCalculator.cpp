@@ -41,30 +41,25 @@ void AdvancedHeurCalculator::init()
 	Array<std::string> dump(table().width(), table().height());
 	std::vector<Partition> dumpPartitions;
 	partitions_.reset(table().width(), table().height());
-	Point p;
-	for (p.y = 0; p.y < table().height(); p.y++)
-		for (p.x = 0; p.x < table().width(); p.x++)
-		{
-			if (table().wall(p)) {
-				dump[p] = "*";
-				continue;
-			}
-			initPartitions(p);
-			dump[p] =
-					partitions_[p].size() == 0 ? "#" :
-					partitions_[p].size() > 1 ? "?" :
-					(boost::format("%d") % partitions_[p][0].heur).str();
+	for (const Point& p: arrayRange(table())) {
+		if (table().wall(p)) {
+			dump[p] = "*";
+			continue;
 		}
+		initPartitions(p);
+		dump[p] =
+				partitions_[p].size() == 0 ? "#" :
+				partitions_[p].size() > 1 ? "?" :
+				(boost::format("%d") % partitions_[p][0].heur).str();
+	}
 	if (useDumper_) {
 		dumper.printText("Heuristics table:");
 		dumper.dumpArray(dump);
 		dumper.printText("\nPartitions:");
-		for (p.y = 0; p.y < table().height(); p.y++) {
-			for (p.x = 0; p.x < table().width(); p.x++) {
-				if (partitions_[p].size() > 1) {
-					for (const Partition& partition: partitions_[p]) {
-						dumper.dumpPartition(*this, partition);
-					}
+		for (const Point& p: arrayRange(table())) {
+			if (partitions_[p].size() > 1) {
+				for (const Partition& partition: partitions_[p]) {
+					dumper.dumpPartition(*this, partition);
 				}
 			}
 		}

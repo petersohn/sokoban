@@ -53,12 +53,9 @@ std::vector<Point>
 DecisionTreeHeurCalculator::pointList(const FixedTable::Ptr& table)
 {
 	std::vector<Point> result;
-	Point p;
-	for (p.y = 0; p.y < table->get().height(); ++p.y) {
-		for (p.x = 0; p.x < table->get().width(); ++p.x) {
-			if (!table->get().wall(p)) {
-				result.push_back(p);
-			}
+	for (const Point& p: arrayRange(table->get())) {
+		if (!table->get().wall(p)) {
+			result.push_back(p);
 		}
 	}
 	return result;

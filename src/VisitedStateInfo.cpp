@@ -6,13 +6,10 @@
 VisitedStateInfo::VisitedStateInfo(const Status& status):
 	state_(status.state())
 {
-	Point p;
-	for (p.x = 0; p.x < status.width(); ++p.x) {
-		for (p.y = 0; p.y < status.height(); ++p.y) {
-			if (status.reachable(p)) {
-				firstReachable_ = p;
-				return;
-			}
+	for (const Point& p: arrayRange(status)) {
+		if (status.reachable(p)) {
+			firstReachable_ = p;
+			return;
 		}
 	}
 	dumpStatus(std::cerr, status);

@@ -88,6 +88,7 @@ PointRange::iterator PointRange::begin() const
 	return iterator(*this, front_);
 }
 
+inline
 PointRange::iterator PointRange::end() const
 {
 	return iterator(*this, end_);

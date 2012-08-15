@@ -2,6 +2,7 @@
 #define ARRAY_H_
 
 #include "Status/Point.h"
+#include "Status/PointRange.h"
 #include "Hash.h"
 #include <assert.h>
 #include <vector>
@@ -97,6 +98,12 @@ inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, con
 	if (p.x >= 0 && p.y >= 0 && p.x < arr.width() && p.y < arr.height())
 			return arr[p];
 		return def;
+}
+
+template <class Array>
+inline PointRange arrayRange(const Array& array)
+{
+	return PointRange(Point(0,0), Point(array.width() - 1, array.height() - 1));
 }
 
 namespace std {

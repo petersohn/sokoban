@@ -63,32 +63,32 @@ std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state
 {
 	Array<bool> kell(table->get().width(), table->get().height(), false);
 	int kellNum = 0;
-	Point pp;
-	for (pp.y = 0; pp.y < table->get().height(); pp.y++)
-		for (pp.x = 0; pp.x < table->get().width(); pp.x++)
-			if (!table->get().wall(pp) && !state[pp])
-			{
-				kell[pp] = true;
-				++kellNum;
-			} else
-				kell[pp] = false;
+	for (const Point& p: arrayRange(table->get())) {
+		if (!table->get().wall(p) && !state[p])
+		{
+			kell[p] = true;
+			++kellNum;
+		} else
+			kell[p] = false;
+	}
 	std::vector<Status::Ptr> result;
 	while (kellNum > 0) {
-		for (pp.y = 0; pp.y < table->get().height(); pp.y++)
-			for (pp.x = 0; pp.x < table->get().width(); pp.x++)
-				if (kell[pp])
-					goto ki;
-ki:
-		Status::Ptr status(new Status(table, state));
-		status->currentPos(pp);
-		for (pp.y = 0; pp.y < table->get().height(); pp.y++)
-			for (pp.x = 0; pp.x < table->get().width(); pp.x++) {
-				if (status->reachable(pp) && kell[pp])
-				{
-					kell[pp] = false;
-					--kellNum;
-				}
+		Point foundPoint;
+		for (const Point& p: arrayRange(table->get())) {
+			if (kell[p]) {
+				foundPoint = p;
+				break;
 			}
+		}
+		Status::Ptr status(new Status(table, state));
+		status->currentPos(foundPoint);
+		for (const Point& p: arrayRange(table->get())) {
+			if (status->reachable(p) && kell[p])
+			{
+				kell[p] = false;
+				--kellNum;
+			}
+		}
 		result.push_back(status);
 	}
 	return result;

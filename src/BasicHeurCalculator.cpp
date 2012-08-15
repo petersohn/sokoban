@@ -8,25 +8,23 @@ void BasicHeurCalculator::init() {
 	Point p;
 	do {
 		touched = false;
-		for (p.y = 0; p.y < table().height(); p.y++)
-			for (p.x = 0; p.x < table().width(); p.x++)
-			{
-				if (distances_[p] == 0)
-					continue;
-				int newDist = distances_[p]+1;
-				if (checkDistance(p, Point::p10, newDist))
-					touched = true;
-				if (checkDistance(p, Point::pm10, newDist))
-					touched = true;
-				if (checkDistance(p, Point::p01, newDist))
-					touched = true;
-				if (checkDistance(p, Point::p0m1, newDist))
-					touched = true;
-			}
+		for (const Point& p: arrayRange(table())) {
+			if (distances_[p] == 0)
+				continue;
+			int newDist = distances_[p]+1;
+			if (checkDistance(p, Point::p10, newDist))
+				touched = true;
+			if (checkDistance(p, Point::pm10, newDist))
+				touched = true;
+			if (checkDistance(p, Point::p01, newDist))
+				touched = true;
+			if (checkDistance(p, Point::p0m1, newDist))
+				touched = true;
+		}
 	} while (touched);
-	for (p.y = 0; p.y < table().height(); p.y++)
-		for (p.x = 0; p.x < table().width(); p.x++)
-			distances_[p]--;
+	for (const Point& p: arrayRange(table())) {
+		distances_[p]--;
+	}
 }
 
 int BasicHeurCalculator::doCalculateStone(const Status &status, const Point &p)

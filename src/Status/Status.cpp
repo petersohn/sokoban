@@ -36,11 +36,9 @@ Status::Status(FixedTable::Ptr table, const Node &node):
 
 void Status::init() {
 	Point p;
-	for (p.y = 0; p.y < table().height(); ++p.y) {
-		for (p.x = 0; p.x < table().width(); ++p.x)  {
-			fields_[p] =
-					table().wall(p) ? ftWall : ftFloor;
-		}
+	for (const Point& p: arrayRange(table())) {
+		fields_[p] =
+				table().wall(p) ? ftWall : ftFloor;
 	}
 	for (State::const_iterator it = state_.begin(); it != state_.end(); ++it) {
 		fields_[*it] = ftStone;

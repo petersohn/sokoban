@@ -31,16 +31,14 @@ void dumpArray(std::ostream &file, const Array<T> table,
 		file << indentString << title << std::endl;
 	}
 	Array<std::string> txts(table.width(), table.height());
-	Point p;
 	size_t maxlen = 0;
-	for (p.y = 0; p.y < table.height(); p.y++) {
-		for (p.x = 0; p.x < table.width(); p.x++) {
-			txts[p] = (boost::format("%1%") % table[p]).str();
-			maxlen = std::max(maxlen, txts[p].size());
-		}
+	for (const Point& p: arrayRange(table)) {
+		txts[p] = (boost::format("%1%") % table[p]).str();
+		maxlen = std::max(maxlen, txts[p].size());
 	}
 	// leave a space between characters
 	++maxlen;
+	Point p;
 	for (p.y = 0; p.y < table.height(); p.y++) {
 		file << indentString;
 		for (p.x = 0; p.x < table.width(); p.x++) {
