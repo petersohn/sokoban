@@ -4,12 +4,46 @@
 #include "Status/Point.h"
 #include <boost/iterator/iterator_facade.hpp>
 
-class PointRange;
+class PointRangeIterator;
+
+class PointRange {
+public:
+	typedef PointRangeIterator iterator;
+private:
+	Point front_;
+	Point back_;
+	Point end_;
+	int dx_;
+	int dy_;
+public:
+	typedef Point value_type;
+	friend class PointRangeIterator;
+
+	PointRange(const Point& front, const Point& back):
+		front_(front),
+		back_(back),
+		end_(front_.x, back_.y+1),
+		dx_(back.x > front.x ? 1 : -1),
+		dy_(back.y > front.y ? 1 : -1)
+	{}
+
+	iterator begin() const;
+	iterator end() const;
+	const Point& front() const
+	{
+		return front_;
+	}
+	const Point& back() const
+	{
+		return back_;
+	}
+}; // class PointRange
 
 class PointRangeIterator: public boost::iterator_facade<
 		PointRangeIterator,
-		PointRange,
-		boost::bidirectional_traversal_tag> {
+		Point,
+		boost::bidirectional_traversal_tag,
+		const Point&> {
 
 
 	const PointRange& owner_;
@@ -42,51 +76,22 @@ class PointRangeIterator: public boost::iterator_facade<
 		}
 	}
 
-	bool equal(const iterator& other)
+	bool equal(const PointRangeIterator& other) const
 	{
 		return p_ == other.p_;
 	}
-}; // class iterator
+}; // class PointRangeIterator
 
+inline
+PointRange::iterator PointRange::begin() const
+{
+	return iterator(*this, front_);
+}
 
-class PointRange {
-public:
-	typedef PointRangeIterator iterator;
-private:
-	Point front_;
-	Point back_;
-	iterator end_;
-	int dx_;
-	int dy_;
-public:
-	typedef Point value_type;
-	friend class PointRangeIterator;
-
-	PointRange(const Point& front, const Point& back):
-		front_(front),
-		back_(back),
-		end_(*this, Point(front_.x, back_.y+1)),
-		dx_(back.x > front.x ? 1 : -1),
-		dy_(back.y > front.y ? 1 : -1)
-	{}
-
-	iterator begin() const
-	{
-		return iterator(*this, front_);
-	}
-	iterator end() const
-	{
-		return end_;
-	}
-	const Point& front() const
-	{
-		return front_;
-	}
-	const Point& back() const
-	{
-		return back_;
-	}
-}; // class PointRange
+PointRange::iterator PointRange::end() const
+{
+	return iterator(*this, end_);
+}
 
 
 #endif /* POINTRANGE_H_ */

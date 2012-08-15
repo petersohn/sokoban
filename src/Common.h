@@ -75,8 +75,4 @@ inline std::string toStr(const T &t) {
 	return (boost::format("%1%") % t).str();
 }
 
-std::string direction(const Point &d);
-std::string pointStr(const Point &p);
-
-
 #endif /* COMMON_H_ */

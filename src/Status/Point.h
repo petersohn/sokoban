@@ -2,8 +2,8 @@
 #define POINT_H_
 
 #include <stddef.h>
+#include <boost/format.hpp>
 #include "Hash.h"
-#include "Common.h"
 
 class Point
 {
@@ -74,11 +74,26 @@ inline bool operator<(const Point &p1, const Point &p2) {
 	return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
 }
 
+inline std::string direction(const Point &d)
+ {
+	return
+			d.x > 0 ? "right" :
+			d.x < 0 ? "left" :
+			d.y > 0 ? "down" :
+			d.y < 0 ? "up" : "???";
+}
+
+inline std::string pointStr(const Point &p)
+{
+	return (boost::format("(%d, %d)") % p.x % p.y).str();
+}
+
 inline std::ostream& operator<<(std::ostream& os, const Point& p)
 {
 	os << pointStr(p);
 	return os;
 }
+
 
 
 namespace std {

@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	BOOST_CHECK_EQUAL(*++it, Point(3,3));
 	BOOST_CHECK_EQUAL(*++it, Point(2,4));
 	BOOST_CHECK_EQUAL(*++it, Point(3,4));
-	BOOST_CHECK_EQUAL(*++it, range.end());
+	BOOST_CHECK(++it == range.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END() // PrePlus
