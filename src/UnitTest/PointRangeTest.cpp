@@ -104,6 +104,39 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	BOOST_CHECK(++it == range.end());
 }
 
+BOOST_AUTO_TEST_CASE(ForwardBackward)
+{
+	Point front(0,0);
+	Point back(1,-1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it, Point(0,0));
+	BOOST_CHECK_EQUAL(*++it, Point(1,0));
+	BOOST_CHECK_EQUAL(*++it, Point(0,-1));
+	BOOST_CHECK_EQUAL(*++it, Point(1,-1));
+	BOOST_CHECK(++it == range.end());
+}
+
+BOOST_AUTO_TEST_CASE(BackwardForward)
+{
+	Point front(1,-1);
+	Point back(-1,1);
+	PointRange range(front, back);
+	PointRange::iterator it = range.begin();
+	BOOST_CHECK_EQUAL(*it, Point(1,-1));
+	BOOST_CHECK_EQUAL(*++it, Point(0,-1));
+	BOOST_CHECK_EQUAL(*++it, Point(-1,-1));
+	BOOST_CHECK_EQUAL(*++it, Point(1,0));
+	BOOST_CHECK_EQUAL(*++it, Point(0,0));
+	BOOST_CHECK_EQUAL(*++it, Point(-1,0));
+	BOOST_CHECK_EQUAL(*++it, Point(1,1));
+	BOOST_CHECK_EQUAL(*++it, Point(0,1));
+	BOOST_CHECK_EQUAL(*++it, Point(-1,1));
+	BOOST_CHECK(++it == range.end());
+}
+
+
+
 BOOST_AUTO_TEST_SUITE_END() // PrePlus
 
 BOOST_AUTO_TEST_SUITE_END() // Iterators

@@ -12,9 +12,9 @@ public:
 private:
 	Point front_;
 	Point back_;
-	Point end_;
 	int dx_;
 	int dy_;
+	Point end_;
 public:
 	typedef Point value_type;
 	friend class PointRangeIterator;
@@ -22,9 +22,9 @@ public:
 	PointRange(const Point& front, const Point& back):
 		front_(front),
 		back_(back),
-		end_(front_.x, back_.y+1),
 		dx_(back.x > front.x ? 1 : -1),
-		dy_(back.y > front.y ? 1 : -1)
+		dy_(back.y > front.y ? 1 : -1),
+		end_(front_.x, back_.y+dy_)
 	{}
 
 	iterator begin() const;
