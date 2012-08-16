@@ -1,7 +1,1 @@
-#!/bin/bash
-if [ -x src/sokoban ]; then
-    src/sokoban "$@"
-else
-    echo "Sokoban not found. Compile it first."
-    exit 1
-fi
+src/sokoban
