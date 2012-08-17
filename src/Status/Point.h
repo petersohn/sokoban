@@ -41,7 +41,7 @@ public:
 		return *this;
 	}
 
-	static const Point p10, pm10, p01, p0m1;
+	static const Point p10, pm10, p01, p0m1, p11, pm1m1;
 
 };
 

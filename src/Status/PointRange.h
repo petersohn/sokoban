@@ -3,6 +3,8 @@
 
 #include "Status/Point.h"
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/exception/all.hpp>
+#include <stdexcept>
 
 class PointRangeIterator;
 
@@ -10,31 +12,37 @@ class PointRange {
 public:
 	typedef PointRangeIterator iterator;
 private:
-	Point front_;
-	Point back_;
+	Point begin_;
 	int dx_;
 	int dy_;
-	Point end_;
+	Point back_;
+	Point end_; ///< The position of the end iterator.
 public:
 	typedef Point value_type;
 	friend class PointRangeIterator;
 
-	PointRange(const Point& front, const Point& back):
-		front_(front),
-		back_(back),
-		dx_(back.x > front.x ? 1 : -1),
-		dy_(back.y > front.y ? 1 : -1),
-		end_(front_.x, back_.y+dy_)
+	PointRange(const Point& begin, const Point& end):
+		begin_(begin),
+		dx_(end.x > begin.x ? 1 : -1),
+		dy_(end.y > begin.y ? 1 : -1),
+		back_(end.x - dx_, end.y - dy_),
+		end_(begin.x, end.y)
 	{}
 
 	iterator begin() const;
 	iterator end() const;
 	const Point& front() const
 	{
-		return front_;
+		if (begin_ == end_) {
+			BOOST_THROW_EXCEPTION(std::out_of_range("front() cannot be called on empty PointRange."));
+		}
+		return begin_;
 	}
 	const Point& back() const
 	{
+		if (begin_ == end_) {
+			BOOST_THROW_EXCEPTION(std::out_of_range("back() cannot be called on empty PointRange."));
+		}
 		return back_;
 	}
 }; // class PointRange
@@ -60,7 +68,7 @@ class PointRangeIterator: public boost::iterator_facade<
 	void increment()
 	{
 		if (p_.x == owner_.back_.x) {
-			p_.x = owner_.front_.x;
+			p_.x = owner_.begin_.x;
 			p_.y += owner_.dy_;
 		} else {
 			p_.x += owner_.dx_;
@@ -68,7 +76,7 @@ class PointRangeIterator: public boost::iterator_facade<
 	}
 	void decrement()
 	{
-		if (p_.x == owner_.front_.x) {
+		if (p_.x == owner_.begin_.x) {
 			p_.x = owner_.back_.x;
 			p_.y -= owner_.dy_;
 		} else {
@@ -85,7 +93,7 @@ class PointRangeIterator: public boost::iterator_facade<
 inline
 PointRange::iterator PointRange::begin() const
 {
-	return iterator(*this, front_);
+	return iterator(*this, begin_);
 }
 
 inline

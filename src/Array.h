@@ -103,7 +103,7 @@ inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, con
 template <class Array>
 inline PointRange arrayRange(const Array& array)
 {
-	return PointRange(Point(0,0), Point(array.width() - 1, array.height() - 1));
+	return PointRange(Point(0,0), Point(array.width(), array.height()));
 }
 
 namespace std {
