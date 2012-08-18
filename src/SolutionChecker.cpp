@@ -93,7 +93,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 		printError(Node::Ptr(), oldNode, status, "Last heur is not 0.");
 		result = false;
 	}
-	if (status.state().size() != 0) {
+	if (!status.state().empty()) {
 		printError(Node::Ptr(), Node::Ptr(), status, "Last status contains stones.");
 		result = false;
 	}

@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
 		cerr << "Length of solution: " << solution.size() << endl;
 		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
 		cerr << "Real Time:" << timeMeter.realTime() << endl;
-		if (solution.size() == 0)
+		if (solution.empty())
 			cerr << "No solution." << endl;
 		else
 		{

@@ -103,7 +103,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			oh.print(argv[0]);
 			exit(0);
 		}
-		if (filename_.size() == 0) {
+		if (filename_.empty()) {
 			std::cerr << "No filename given." << std::endl;
 			oh.print(argv[0]);
 			exit(1);

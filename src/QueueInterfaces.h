@@ -29,6 +29,7 @@ public:
 	virtual ~Holder() {}
 	virtual bool checkAndPush(const T&) = 0;
 	virtual size_t size() const = 0;
+	bool empty() const { return this->size() == 0; }
 };
 
 class Node;

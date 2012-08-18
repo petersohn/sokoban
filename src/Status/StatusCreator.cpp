@@ -61,7 +61,7 @@ Status loadStatusFromFile(const char *filename) {
 	while (file.good()) {
 		string s;
 		getline(file, s);
-		if (s.size() == 0)
+		if (s.empty())
 			continue;
 		if (s[0] == '#') {
 			s.erase(s.begin());

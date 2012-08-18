@@ -33,7 +33,7 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 std::deque<Node::Ptr> BlockListGenerator::doCalculateBlockList(const Status& status)
 {
 	std::deque<Node::Ptr> result = solver_->solve(status);
-	if (result.size() == 0) {
+	if (result.empty()) {
 		blockList_->add(status, 0);
 		dumpStatus(status, NULL, "Blocked");
 	}
@@ -48,7 +48,7 @@ void BlockListGenerator::calculateBlockList(const Status& status)
 void BlockListGenerator::calculateHeurList(const Status& status)
 {
 	std::deque<Node::Ptr> result = doCalculateBlockList(status);
-	if (result.size() > 0) {
+	if (!result.empty()) {
 		int heur = incrementalCalculator_->calculateStatus(status);
 		int cost = result.back()->cost();
 		int difference = cost - heur;

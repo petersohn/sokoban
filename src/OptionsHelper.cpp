@@ -29,7 +29,7 @@ int IndexedArgument::getElement(std::string value) const
 			++it;
 	if (map.size() > 1)
 		throw BadOptions("Ambiguous argument value: " + value);
-	if (map.size() == 0)
+	if (map.empty())
 		throw BadOptions("Unknown argument value: " + value);
 	return map.begin()->second * mul;
 }

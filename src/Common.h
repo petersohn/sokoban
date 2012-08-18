@@ -50,7 +50,7 @@ std::vector<T> intersect(const std::vector<T>& l1, const std::vector<T>& l2)
 	std::vector<T> result;
 	T last;
 	bool start = true;
-	while (q1.size() > 0 && q2.size() > 0)
+	while (!q1.empty() && !q2.empty())
 	{
 		if (q1.top() == q2.top())
 		{

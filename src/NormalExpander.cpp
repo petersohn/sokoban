@@ -72,7 +72,7 @@ void InternalExpander::expandNode(const Point &p, const Point &d)
 
 void InternalExpander::expand()
 {
-	if (owner_.visitedStates_->size() == 0) {
+	if (owner_.visitedStates_->empty()) {
 		owner_.visitedStates_->checkAndPush(std::pair<const Status&, int>(status_,
 				owner_.calculator_->calculateStatus(status_)));
 	}

@@ -48,7 +48,7 @@ void AdvancedHeurCalculator::init()
 		}
 		initPartitions(p);
 		dump[p] =
-				partitions_[p].size() == 0 ? "#" :
+				partitions_[p].empty() ? "#" :
 				partitions_[p].size() > 1 ? "?" :
 				(boost::format("%d") % partitions_[p][0].heur).str();
 	}
@@ -80,7 +80,7 @@ void AdvancedHeurCalculator::initPartitions(const Point & p)
 			part.heur = 0;
 		else {
 			std::deque<Node::Ptr> res = solver_->solve(*status);
-			if (res.size() != 0)
+			if (!res.empty())
 				part.heur = res.back()->cost();
 		}
 		partitions_[p].push_back(part);

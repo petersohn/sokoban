@@ -237,13 +237,13 @@ namespace detail {
 			typedef typename Node<Status, T>::ValuePtr ValuePtr;
 			typedef typename Node<Status, T>::ValueList ValueList;
 
-			if (valueList.size() == 0 ||
-					pointList.size() == 0 ||
+			if (valueList.empty() ||
+					pointList.empty() ||
 					depthRemaining == 0) {
 				result = createLeaf<Status, T>(valueList, depthRemaining, collectedState);
 				return;
 			}
-			assert(valueList.size() > 0);
+			assert(!valueList.empty());
 			if (checker_ && !checkState(
 					*checker_,
 					valueList.front()->first.tablePtr(),

@@ -48,6 +48,7 @@ public:
 		return stones_->count(p) != 0;
 	}
 	size_t size() const { return stones_->size(); }
+	bool empty() const { return stones_->empty(); }
 	const_iterator begin() const { return stones_->begin(); }
 	const_iterator end() const { return stones_->end(); }
 };
