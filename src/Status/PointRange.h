@@ -13,20 +13,22 @@ public:
 	typedef PointRangeIterator iterator;
 private:
 	Point begin_;
-	int dx_;
-	int dy_;
-	Point back_;
-	Point end_; ///< The position of the end iterator.
+	Point end_;
+	int dx() const
+	{
+		return end_.x > begin_.x ? 1 : -1;
+	}
+	int dy() const
+	{
+		return end_.y > begin_.y ? 1 : -1;
+	}
 public:
 	typedef Point value_type;
 	friend class PointRangeIterator;
 
 	PointRange(const Point& begin, const Point& end):
 		begin_(begin),
-		dx_(end.x > begin.x ? 1 : -1),
-		dy_(end.y > begin.y ? 1 : -1),
-		back_(end.x - dx_, end.y - dy_),
-		end_(begin.x, end.y)
+		end_(end)
 	{}
 
 	iterator begin() const;
@@ -38,12 +40,12 @@ public:
 		}
 		return begin_;
 	}
-	const Point& back() const
+	Point back() const
 	{
 		if (begin_ == end_) {
 			BOOST_THROW_EXCEPTION(std::out_of_range("back() cannot be called on empty PointRange."));
 		}
-		return back_;
+		return Point(end_.x - dx(), end_.y - dy());
 	}
 }; // class PointRange
 
@@ -67,20 +69,19 @@ class PointRangeIterator: public boost::iterator_facade<
 	const Point& dereference() const { return p_; }
 	void increment()
 	{
-		if (p_.x == owner_.back_.x) {
+		p_.x += owner_.dx();
+		if (p_.x == owner_.end_.x) {
 			p_.x = owner_.begin_.x;
-			p_.y += owner_.dy_;
-		} else {
-			p_.x += owner_.dx_;
+			p_.y += owner_.dy();
 		}
 	}
 	void decrement()
 	{
 		if (p_.x == owner_.begin_.x) {
-			p_.x = owner_.back_.x;
-			p_.y -= owner_.dy_;
+			p_.x = owner_.end_.x - owner_.dx();
+			p_.y -= owner_.dy();
 		} else {
-			p_.x -= owner_.dx_;
+			p_.x -= owner_.dx();
 		}
 	}
 
@@ -99,7 +100,7 @@ PointRange::iterator PointRange::begin() const
 inline
 PointRange::iterator PointRange::end() const
 {
-	return iterator(*this, end_);
+	return iterator(*this, Point(begin_.x, end_.y));
 }
 
 
