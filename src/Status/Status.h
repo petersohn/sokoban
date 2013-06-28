@@ -21,9 +21,16 @@ private:
 	Point currentPos_;
 	Array<FieldType> fields_;
 
-	mutable Array<bool> reachable_;
-	mutable BorderType border_;
-	mutable bool reachOK_;
+	struct CalculatedData {
+		Array<bool> reachable_;
+		BorderType border_;
+
+		CalculatedData(std::size_t width, std::size_t height):
+			reachable_(width, height, false)
+		{}
+	};
+
+	mutable std::shared_ptr<CalculatedData> calculatedData;
 
 	void calculateReachable() const;
 	void init();
@@ -41,9 +48,7 @@ public:
 		state_(other.state_),
 		currentPos_(other.currentPos_),
 		fields_(other.fields_),
-//		reachable_(other.reachable_),
-//		border_(other.border_),
-		reachOK_(false)
+		calculatedData(other.calculatedData)
 	{
 		++copyCount;
 	}
@@ -53,9 +58,7 @@ public:
 		state_=other.state_;
 		currentPos_=other.currentPos_;
 		fields_=other.fields_;
-//		reachable_=other.reachable_;
-//		border_=other.border_;
-		reachOK_=false;
+		calculatedData = other.calculatedData;
 		++copyCount;
 		return *this;
 	}
@@ -66,19 +69,19 @@ public:
 	size_t height() const { return table().height(); }
 	const State& state() const { return state_; }
 	bool reachable(const Point &p) const {
-		if (!reachOK_)
+		if (!calculatedData)
 			calculateReachable();
-		return arrayAt<bool>(reachable_, p, false);
+		return arrayAt<bool>(calculatedData->reachable_, p, false);
 	}
 	const Array<bool>& reachableArray() const {
-		if (!reachOK_)
+		if (!calculatedData)
 			calculateReachable();
-		return reachable_;
+		return calculatedData->reachable_;
 	}
 	const BorderType& border() const {
-		if (!reachOK_)
+		if (!calculatedData)
 			calculateReachable();
-		return border_;
+		return calculatedData->border_;
 	}
 	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
 	const Point &currentPos() const { return currentPos_; }

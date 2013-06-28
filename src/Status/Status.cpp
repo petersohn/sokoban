@@ -8,8 +8,7 @@ int Status::calculateReachableCount(0);
 Status::Status(FixedTable::Ptr table):
 	table_(table),
 	state_(),
-	fields_(table->get().width(), table->get().height()),
-	reachOK_(false)
+	fields_(table->get().width(), table->get().height())
 {
 	init();
 }
@@ -18,8 +17,7 @@ Status::Status(FixedTable::Ptr table):
 Status::Status(FixedTable::Ptr table, const State &state):
 	table_(table),
 	state_(state),
-	fields_(table->get().width(), table->get().height()),
-	reachOK_(false)
+	fields_(table->get().width(), table->get().height())
 {
 	init();
 }
@@ -28,8 +26,7 @@ Status::Status(FixedTable::Ptr table, const Node &node):
 		table_(table),
 		state_(node.state()),
 		currentPos_(node.from()),
-		fields_(table->get().width(), table->get().height()),
-		reachOK_(false)
+		fields_(table->get().width(), table->get().height())
 {
 	init();
 }
@@ -47,10 +44,9 @@ void Status::init() {
 
 void Status::calculateReachable() const {
 	++calculateReachableCount;
-	reachable_.reset(width(), height(), false);
-	border_.clear();
-	floodFill(*this, currentPos_, reachable_, &border_);
-	reachOK_ = true;
+	calculatedData.reset(new CalculatedData(width(), height()));
+	floodFill(*this, currentPos_, calculatedData->reachable_,
+			&calculatedData->border_);
 }
 
 bool Status::addStone(const Point &p) {
@@ -58,7 +54,7 @@ bool Status::addStone(const Point &p) {
 		return false;
 	fields_[p] = ftStone;
 	state_.addStone(p);
-	reachOK_ = false;
+	calculatedData.reset();
 	return true;
 }
 
@@ -67,20 +63,20 @@ bool Status::removeStone(const Point &p) {
 		return false;
 	fields_[p] = ftFloor;
 	state_.removeStone(p);
-	reachOK_ = false;
+	calculatedData.reset();
 	return true;
 }
 
 void Status::state(const State &value) {
 	state_ = value;
-	reachOK_ = false;
+	calculatedData.reset();
 	init();
 }
 
 bool Status::currentPos(const Point & p) {
 	currentPos_ = p;
-	if (reachOK_ && !reachable_[p]) {
-		reachOK_ = false;
+	if (calculatedData && !calculatedData->reachable_[p]) {
+		calculatedData.reset();
 	}
 	return true;
 }
@@ -96,14 +92,14 @@ bool Status::moveStone(const Point &from, const Point &to) {
 		fields_[to] = ftStone;
 		state_.addStone(to);
 	}
-	reachOK_ = false;
+	calculatedData.reset();
 	return true;
 }
 
 void Status::set(const Node &node) {
 	state_ = node.state();
 	currentPos_ = node.from();
-	reachOK_ = false;
+	calculatedData.reset();
 	init();
 }
 
