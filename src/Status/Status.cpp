@@ -57,7 +57,10 @@ void Status::calculateReachable() const {
 	calculatedData_.reset(new CalculatedData(width(), height()));
 	floodFill(*this, currentPos_, calculatedData_->reachable_,
 			&calculatedData_->border_);
-	statusPool_.insert(*this);
+
+	if (enableStatusPooling_) {
+		statusPool_.insert(*this);
+	}
 }
 
 bool Status::addStone(const Point &p) {
