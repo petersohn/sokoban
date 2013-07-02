@@ -4,6 +4,8 @@
 
 int Status::copyCount(0);
 int Status::calculateReachableCount(0);
+bool Status::enableStatusPooling_(false);
+std::unordered_set<Status> Status::statusPool_;
 
 Status::Status(FixedTable::Ptr table):
 	table_(table),
@@ -43,10 +45,19 @@ void Status::init() {
 }
 
 void Status::calculateReachable() const {
+	if (enableStatusPooling_) {
+		auto it = statusPool_.find(*this);
+		if (it != statusPool_.end()) {
+			calculatedData_ = it->calculatedData_;
+			return;
+		}
+	}
+
 	++calculateReachableCount;
-	calculatedData.reset(new CalculatedData(width(), height()));
-	floodFill(*this, currentPos_, calculatedData->reachable_,
-			&calculatedData->border_);
+	calculatedData_.reset(new CalculatedData(width(), height()));
+	floodFill(*this, currentPos_, calculatedData_->reachable_,
+			&calculatedData_->border_);
+	statusPool_.insert(*this);
 }
 
 bool Status::addStone(const Point &p) {
@@ -54,7 +65,7 @@ bool Status::addStone(const Point &p) {
 		return false;
 	fields_[p] = ftStone;
 	state_.addStone(p);
-	calculatedData.reset();
+	calculatedData_.reset();
 	return true;
 }
 
@@ -63,20 +74,20 @@ bool Status::removeStone(const Point &p) {
 		return false;
 	fields_[p] = ftFloor;
 	state_.removeStone(p);
-	calculatedData.reset();
+	calculatedData_.reset();
 	return true;
 }
 
 void Status::state(const State &value) {
 	state_ = value;
-	calculatedData.reset();
+	calculatedData_.reset();
 	init();
 }
 
 bool Status::currentPos(const Point & p) {
 	currentPos_ = p;
-	if (calculatedData && !calculatedData->reachable_[p]) {
-		calculatedData.reset();
+	if (calculatedData_ && !calculatedData_->reachable_[p]) {
+		calculatedData_.reset();
 	}
 	return true;
 }
@@ -92,14 +103,14 @@ bool Status::moveStone(const Point &from, const Point &to) {
 		fields_[to] = ftStone;
 		state_.addStone(to);
 	}
-	calculatedData.reset();
+	calculatedData_.reset();
 	return true;
 }
 
 void Status::set(const Node &node) {
 	state_ = node.state();
 	currentPos_ = node.from();
-	calculatedData.reset();
+	calculatedData_.reset();
 	init();
 }
 

@@ -59,6 +59,11 @@ inline bool isSubState(const State& subState, const State& state)
 			[&state](const Point &p) { return !state[p]; }) == subState.end();
 }
 
+inline bool operator!=(const State& lhs, const State& rhs)
+{
+	return !(lhs == rhs);
+}
+
 class AddStonesToState {
 	State& state_;
 public:

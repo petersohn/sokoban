@@ -15,6 +15,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 		useMovableChecker_(true),
 		useCorridorChecker_(true),
 		useAdvancedHeurCalculator_(true),
+		statusPooling_(false),
 		blocklistHeurCalculatorType_(bhNone),
 		parallelOuterExpand_(false),
 		blockListStones_(0),
@@ -91,6 +92,10 @@ Options::Options(int argc, char **argv, const char *configFileName):
 	std::vector<int> compare;
 	oh.addIndexedListOption("compare,c", &compare, cl,
 			"The compare algorithm to use when choosing equal elements.");
+	oh.addBoolOption("status-pooling", &statusPooling_,
+			"Pool Status objects to avoid many calculateReachable() calls.");
+
+
 	try {
 		try {
 			if (configFileName != NULL)

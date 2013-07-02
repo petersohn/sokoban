@@ -32,6 +32,8 @@ void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, const St
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
 
+	Status::enableStatusPooling(opts.statusPooling());
+
 	Status st(loadStatusFromFile(opts.filename().c_str()));
 	dumpStatus(std::cerr, st);
 
