@@ -1,62 +1,44 @@
 #include "Status/StatusUtils.h"
 #include "Checker.h"
+#include <stack>
 
-namespace {
+void floodFill(const Status &status, const Point &p0, Array<bool> &result,
+			Status::BorderType *border, MinMax *minmax)
+{
+	result.fill(false);
+	if (minmax != NULL) {
+		minmax->minX = status.width();
+		minmax->maxX = 0;
+		minmax->minY = status.height();
+		minmax->maxY = 0;
+	}
 
-class FloodFillIter {
-	const Status& status;
-	Array<bool>& result;
-	Status::BorderType* border;
-	MinMax* minmax;
-public:
-	FloodFillIter(const Status &status, Array<bool> &result,
-		Status::BorderType *border, MinMax *minmax):
-			status(status),
-			result(result),
-			border(border),
-			minmax(minmax)
-	{}
-	void iter(const Point& p);
-	void checkAndIter(const Point& p)
-	{
+	std::vector<Point> pointsToVisit;
+	pointsToVisit.reserve(status.width()*status.height());
+	pointsToVisit.push_back(p0);
+
+	while (!pointsToVisit.empty()) {
+		Point p = pointsToVisit.back();
+		pointsToVisit.pop_back();
+
 		if (status.value(p) != ftFloor || result[p])
 		{
 			if (border != NULL && status.value(p) == ftStone)
 				border->push_back(p);
 		} else {
-			iter(p);
+			result[p] = true;
+			if (minmax != NULL) {
+				minmax->minX = std::min(minmax->minX, p.x);
+				minmax->maxX = std::max(minmax->maxX, p.x);
+				minmax->minY = std::min(minmax->minY, p.y);
+				minmax->maxY = std::max(minmax->maxY, p.y);
+			}
+			pointsToVisit.push_back(p+Point::p10);
+			pointsToVisit.push_back(p+Point::pm10);
+			pointsToVisit.push_back(p+Point::p01);
+			pointsToVisit.push_back(p+Point::p0m1);
 		}
 	}
-};
-
-void FloodFillIter::iter(const Point & p)
-{
-	result[p] = true;
-	if (minmax != NULL) {
-		minmax->minX = std::min(minmax->minX, p.x);
-		minmax->maxX = std::max(minmax->maxX, p.x);
-		minmax->minY = std::min(minmax->minY, p.y);
-		minmax->maxY = std::max(minmax->maxY, p.y);
-	}
-	checkAndIter(p+Point::p10);
-	checkAndIter(p+Point::pm10);
-	checkAndIter(p+Point::p01);
-	checkAndIter(p+Point::p0m1);
-}
-
-} // namespace
-
-void floodFill(const Status &table, const Point &p0, Array<bool> &result,
-			Status::BorderType *border, MinMax *minmax)
-{
-	result.fill(false);
-	if (minmax != NULL) {
-		minmax->minX = table.width();
-		minmax->maxX = 0;
-		minmax->minY = table.height();
-		minmax->maxY = 0;
-	}
-	FloodFillIter(table, result, border, minmax).checkAndIter(p0);
 }
 
 std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state)
