@@ -5,7 +5,7 @@
 int Status::copyCount(0);
 int Status::calculateReachableCount(0);
 bool Status::enableStatusPooling_(false);
-std::unordered_set<Status> Status::statusPool_;
+std::unordered_map<State, Array<Status::CalculatedDataPtr>> Status::statusPool_;
 
 Status::Status(FixedTable::Ptr table):
 	table_(table),
@@ -44,22 +44,40 @@ void Status::init() {
 	}
 }
 
-void Status::calculateReachable() const {
-	if (enableStatusPooling_) {
-		auto it = statusPool_.find(*this);
-		if (it != statusPool_.end()) {
-			calculatedData_ = it->calculatedData_;
-			return;
-		}
-	}
-
+void Status::calculateReachable() const
+{
 	++calculateReachableCount;
 	calculatedData_.reset(new CalculatedData(width(), height()));
 	floodFill(*this, currentPos_, calculatedData_->reachable_,
 			&calculatedData_->border_);
+}
 
+void Status::fillReachable() const
+{
 	if (enableStatusPooling_) {
-		statusPool_.insert(*this);
+		auto poolIterator = statusPool_.find(state_);
+		CalculatedDataPtr storedData;
+		if (poolIterator != statusPool_.end() &&
+				(storedData = poolIterator->second[currentPos_])) {
+			calculatedData_ = storedData;
+			return;
+		}
+
+		calculateReachable();
+
+		// if the array doesn't exist in the map, insert it
+		if (poolIterator == statusPool_.end()) {
+			poolIterator = statusPool_.emplace(state_,
+					Array<CalculatedDataPtr>{width(), height()}).first;
+		}
+
+		for (const Point& p: arrayRange(table())) {
+			if (reachable(p)) {
+				poolIterator->second[p] = calculatedData_;
+			}
+		}
+	} else {
+		calculateReachable();
 	}
 }
 

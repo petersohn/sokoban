@@ -9,7 +9,7 @@
 #include <functional>
 #include <vector>
 #include <deque>
-#include <unordered_set>
+#include <unordered_map>
 
 class Status {
 public:
@@ -22,9 +22,6 @@ private:
 	Point currentPos_;
 	Array<FieldType> fields_;
 
-	static bool enableStatusPooling_;
-	static std::unordered_set<Status> statusPool_;
-
 	struct CalculatedData {
 		Array<bool> reachable_;
 		BorderType border_;
@@ -34,8 +31,14 @@ private:
 		{}
 	};
 
-	mutable std::shared_ptr<CalculatedData> calculatedData_;
+	typedef std::shared_ptr<CalculatedData> CalculatedDataPtr;
 
+	mutable  CalculatedDataPtr calculatedData_;
+
+	static bool enableStatusPooling_;
+	static std::unordered_map<State, Array<CalculatedDataPtr>> statusPool_;
+
+	void fillReachable() const;
 	void calculateReachable() const;
 	void init();
 	bool shiftIter(const Point &p);
@@ -87,17 +90,17 @@ public:
 	const State& state() const { return state_; }
 	bool reachable(const Point &p) const {
 		if (!calculatedData_)
-			calculateReachable();
+			fillReachable();
 		return arrayAt<bool>(calculatedData_->reachable_, p, false);
 	}
 	const Array<bool>& reachableArray() const {
 		if (!calculatedData_)
-			calculateReachable();
+			fillReachable();
 		return calculatedData_->reachable_;
 	}
 	const BorderType& border() const {
 		if (!calculatedData_)
-			calculateReachable();
+			fillReachable();
 		return calculatedData_->border_;
 	}
 	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
@@ -121,23 +124,5 @@ inline bool operator!=(const Status& lhs, const Status& rhs)
 {
 	return !(lhs == rhs);
 }
-
-
-namespace std {
-
-template<>
-struct hash<Status> {
-	size_t operator()(const Status &status) const
-	{
-		size_t seed = 0;
-		hash_combine(seed, status.tablePtr());
-		hash_combine(seed, status.state());
-		return seed;
-	}
-};
-
-
-}
-
 
 #endif /* STATUS_H_ */

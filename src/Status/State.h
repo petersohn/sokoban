@@ -21,8 +21,6 @@ public:
 
 	State():stones_(new ContainerType) {}
 	State(const State &other):stones_(other.stones_) {}
-//	explicit State(const ContainerType &stones):stones_(stones) {
-//	}
 
 	State& operator=(const State &other) {
 		stones_ = other.stones_;

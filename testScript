@@ -3,6 +3,8 @@
 input="$1"
 output="$2"
 
+shift 2
+
 rm -f "$output"
 
 while read file; do
@@ -14,7 +16,7 @@ while read file; do
     echo "$file"
     echo "$file" >>$"$output"
     echo "----------------------------------" >>"$output"
-    ./sokoban "$file" 2>&1 | tee >(egrep '^(Expanded nodes:|Length of solution:|Processor Time:|Status copied|calculateReachable called)' >>"$output")
+    ./sokoban "$@" "$file" 2>&1 | tee >(egrep '^(Expanded nodes:|Length of solution:|Processor Time:|Status copied|calculateReachable called)' >>"$output")
     echo "----------------------------------" >>"$output"
     echo >>"$output"
 done <"$input"
