@@ -32,7 +32,7 @@ void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, const St
 int main(int argc, char** argv) {
 	Options opts(argc, argv, "sokoban.cfg");
 
-	Status::enableStatusPooling(opts.statusPooling());
+	Status::statusPoolSize(opts.statusPoolSize());
 
 	Status st(loadStatusFromFile(opts.filename().c_str()));
 	dumpStatus(std::cerr, st);
@@ -90,5 +90,6 @@ int main(int argc, char** argv) {
 		}
 	}
 	cerr << "Status copied " << Status::copyCount << " times.\n" <<
-			"calculateReachable called " << Status::calculateReachableCount << " times." << endl;
+			"calculateReachable called " << Status::calculateReachableCount << " times.\n" <<
+			"Status pool size = " << Status::currentStatusPoolSize() << endl;
 }

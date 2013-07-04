@@ -5,6 +5,7 @@
 #include "Array.h"
 #include "Status/Table.h"
 #include "Status/State.h"
+#include <boost/thread/mutex.hpp>
 #include <memory>
 #include <functional>
 #include <vector>
@@ -35,8 +36,9 @@ private:
 
 	mutable  CalculatedDataPtr calculatedData_;
 
-	static bool enableStatusPooling_;
-	static std::unordered_map<State, Array<CalculatedDataPtr>> statusPool_;
+	static int statusPoolSize_;
+	static std::unordered_map<State, std::shared_ptr<Array<CalculatedDataPtr>>> statusPool_;
+	static boost::mutex statusPoolMutex_;
 
 	void fillReachable() const;
 	void calculateReachable() const;
@@ -114,10 +116,11 @@ public:
 	void set(const Node &node);
 	void shiftCurrentPos();
 
-	static void enableStatusPooling(bool value) {
-		enableStatusPooling_ = value;
+	static void statusPoolSize(int value) {
+		statusPoolSize_ = value;
 	}
-	bool enableStatusPooling() { return enableStatusPooling_; }
+	static int statusPoolSize() { return statusPoolSize_; }
+	static int currentStatusPoolSize() { return statusPool_.size(); }
 };
 
 inline bool operator!=(const Status& lhs, const Status& rhs)

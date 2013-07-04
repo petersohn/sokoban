@@ -28,7 +28,7 @@ private:
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	bool useAdvancedHeurCalculator_;
-	bool statusPooling_;
+	int statusPoolSize_;
 	BlockListHeurType blocklistHeurCalculatorType_;
 	bool parallelOuterExpand_;
 	int blockListStones_;
@@ -49,7 +49,7 @@ public:
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	bool useAdvancedHeurCalculator() const { return useAdvancedHeurCalculator_; }
-	bool statusPooling() const { return statusPooling_; }
+	int statusPoolSize() const { return statusPoolSize_; }
 	BlockListHeurType blocklistHeurCalculatorType() const { return blocklistHeurCalculatorType_; }
 	bool parallelOuterExpand() const { return parallelOuterExpand_; }
 	int blockListStones() const { return blockListStones_; }

@@ -16,7 +16,7 @@ while read file; do
     echo "$file"
     echo "$file" >>$"$output"
     echo "----------------------------------" >>"$output"
-    ./sokoban "$@" "$file" 2>&1 | tee >(egrep '^(Expanded nodes:|Length of solution:|Processor Time:|Status copied|calculateReachable called)' >>"$output")
+    ./sokoban "$@" "$file" 2>&1 | tee >(egrep '^(Expanded nodes:|Length of solution:|Processor Time:|Status copied|calculateReachable called|Status pool size)' >>"$output")
     echo "----------------------------------" >>"$output"
     echo >>"$output"
 done <"$input"

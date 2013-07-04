@@ -4,8 +4,10 @@
 
 int Status::copyCount(0);
 int Status::calculateReachableCount(0);
-bool Status::enableStatusPooling_(false);
-std::unordered_map<State, Array<Status::CalculatedDataPtr>> Status::statusPool_;
+int Status::statusPoolSize_(0);
+std::unordered_map<State, std::shared_ptr<Array<Status::CalculatedDataPtr>>>
+		Status::statusPool_;
+boost::mutex Status::statusPoolMutex_;
 
 Status::Status(FixedTable::Ptr table):
 	table_(table),
@@ -54,26 +56,40 @@ void Status::calculateReachable() const
 
 void Status::fillReachable() const
 {
-	if (enableStatusPooling_) {
-		auto poolIterator = statusPool_.find(state_);
-		CalculatedDataPtr storedData;
-		if (poolIterator != statusPool_.end() &&
-				(storedData = poolIterator->second[currentPos_])) {
-			calculatedData_ = storedData;
-			return;
+	if (statusPoolSize_ > 0) {
+		std::shared_ptr<Array<CalculatedDataPtr>> poolElement;
+		{
+			boost::unique_lock<boost::mutex> lock{statusPoolMutex_};
+			auto poolIterator = statusPool_.find(state_);
+			if (poolIterator != statusPool_.end()) {
+				poolElement = poolIterator->second;
+				auto storedData = (*poolElement)[currentPos_];
+				if (storedData) {
+					calculatedData_ = storedData;
+					return;
+				}
+			}
 		}
 
 		calculateReachable();
 
-		// if the array doesn't exist in the map, insert it
-		if (poolIterator == statusPool_.end()) {
-			poolIterator = statusPool_.emplace(state_,
-					Array<CalculatedDataPtr>{width(), height()}).first;
-		}
+		{
+			boost::unique_lock<boost::mutex> lock{statusPoolMutex_};
+			// if the array doesn't exist in the map, insert it
+			if (!poolElement) {
+				poolElement = statusPool_.emplace(state_, std::make_shared<
+						Array<CalculatedDataPtr>>(width(), height())).
+								first->second;
+			}
 
-		for (const Point& p: arrayRange(table())) {
-			if (reachable(p)) {
-				poolIterator->second[p] = calculatedData_;
+			for (const Point& p: arrayRange(table())) {
+				if (reachable(p)) {
+					(*poolElement)[p] = calculatedData_;
+				}
+			}
+
+			while (statusPool_.size() > statusPoolSize_) {
+				statusPool_.erase(statusPool_.begin());
 			}
 		}
 	} else {
