@@ -22,10 +22,10 @@ public:
 	}
 
 	void expand();
-	void expandNode(const Point &p, const Point &d);
+	void expandNode(Point p, Point d);
 };
 
-void InternalExpander::expandNode(const Point &p, const Point &d)
+void InternalExpander::expandNode(Point p, Point d)
 {
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < status_.width() &&

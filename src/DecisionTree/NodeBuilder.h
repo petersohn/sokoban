@@ -49,11 +49,11 @@ namespace detail {
 		ChildType falseChild_;
 		ChildType trueChild_;
 	public:
-		DecisionNode(const Point& point):
+		DecisionNode(Point  point):
 			point_(point)
 		{}
 
-		DecisionNode(const Point& point,
+		DecisionNode(Point  point,
 				ChildType&& falseChild, ChildType&& trueChild):
 			point_(point),
 			falseChild_(std::move(falseChild)),
@@ -181,7 +181,7 @@ namespace detail {
 						[this, &collectedState](const ValuePtr& value)
 						{
 							State state(collectedState);
-							for (const Point& p: value->first.state()) {
+							for (Point  p: value->first.state()) {
 								state.addStone(p);
 							}
 							return !checkState(*checker_, value->first.tablePtr(), state);

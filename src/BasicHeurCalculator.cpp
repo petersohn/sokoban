@@ -8,7 +8,7 @@ void BasicHeurCalculator::init() {
 	Point p;
 	do {
 		touched = false;
-		for (const Point& p: arrayRange(table())) {
+		for (Point  p: arrayRange(table())) {
 			if (distances_[p] == 0)
 				continue;
 			int newDist = distances_[p]+1;
@@ -22,17 +22,17 @@ void BasicHeurCalculator::init() {
 				touched = true;
 		}
 	} while (touched);
-	for (const Point& p: arrayRange(table())) {
+	for (Point  p: arrayRange(table())) {
 		distances_[p]--;
 	}
 }
 
-int BasicHeurCalculator::doCalculateStone(const Status &status, const Point &p)
+int BasicHeurCalculator::doCalculateStone(const Status &status, Point p)
 {
 	return distances_[p];
 }
 
-bool BasicHeurCalculator::checkDistance(const Point & p, const Point & d, int dist)
+bool BasicHeurCalculator::checkDistance(Point  p, Point  d, int dist)
 {
 	Point pd = p+d;
 	bool result =

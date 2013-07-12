@@ -15,7 +15,7 @@ public:
 	VisitedStateInfo(const Status& status);
 
 	const State& state() const { return state_; }
-	const Point& firstReachable() const { return firstReachable_; }
+	Point  firstReachable() const { return firstReachable_; }
 };
 
 bool operator==(const VisitedStateInfo& left, const VisitedStateInfo& right);

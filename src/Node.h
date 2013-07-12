@@ -31,8 +31,8 @@ public:
 	int depth() const { return depth_; }
 	int cost() const { return cost_; }
 	int costFgv() const { return cost_ + heur_; }
-	const Point &from() const { return moveDescriptor_.from_; }
-	const Point& d() const { return moveDescriptor_.d_; }
+	Point from() const { return moveDescriptor_.from_; }
+	Point  d() const { return moveDescriptor_.d_; }
 	const MoveDescriptor& moveDescriptor() const { return moveDescriptor_; }
 	int time() const { return time_; }
 	int experimtntalHeur() const { return experimentalHeur_; }

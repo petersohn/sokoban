@@ -23,7 +23,7 @@ public:
 	{
 	}
 
-	virtual int calculateStone(const Status &status, const Point &p);
+	virtual int calculateStone(const Status &status, Point p);
 	virtual int calculateStatus(
 			const Status &status,
 			const MoveDescriptor* /*moveDescriptor*/,

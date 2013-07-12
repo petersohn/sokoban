@@ -41,7 +41,7 @@ void AdvancedHeurCalculator::init()
 	Array<std::string> dump(table().width(), table().height());
 	std::vector<Partition> dumpPartitions;
 	partitions_.reset(table().width(), table().height());
-	for (const Point& p: arrayRange(table())) {
+	for (Point  p: arrayRange(table())) {
 		if (table().wall(p)) {
 			dump[p] = "*";
 			continue;
@@ -56,7 +56,7 @@ void AdvancedHeurCalculator::init()
 		dumper.printText("Heuristics table:");
 		dumper.dumpArray(dump);
 		dumper.printText("\nPartitions:");
-		for (const Point& p: arrayRange(table())) {
+		for (Point  p: arrayRange(table())) {
 			if (partitions_[p].size() > 1) {
 				for (const Partition& partition: partitions_[p]) {
 					dumper.dumpPartition(*this, partition);
@@ -66,7 +66,7 @@ void AdvancedHeurCalculator::init()
 	}
 }
 
-void AdvancedHeurCalculator::initPartitions(const Point & p)
+void AdvancedHeurCalculator::initPartitions(Point  p)
 {
 	State state;
 	state.addStone(p);
@@ -87,7 +87,7 @@ void AdvancedHeurCalculator::initPartitions(const Point & p)
 	}
 }
 
-int AdvancedHeurCalculator::doCalculateStone(const Status &status, const Point &p)
+int AdvancedHeurCalculator::doCalculateStone(const Status &status, Point p)
 {
 	std::vector<Partition>::const_iterator it;
 	// If the current position equals p, then partitions

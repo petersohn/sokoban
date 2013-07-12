@@ -11,24 +11,24 @@ public:
 	int x, y;
 	Point():x(0), y(0) { }
 	explicit Point(int x, int y):x(x),y(y) {}
-	Point(const Point &other):
+	Point(const Point& other):
 		x(other.x),
 		y(other.y)
 	{ }
-	Point& operator=(const Point &other)
+	Point& operator=(const Point& other)
 	{
 		x = other.x;
 		y = other.y;
 		return *this;
 	}
 
-	Point &operator+=(const Point &other)
+	Point &operator+=(Point other)
 	{
 		x += other.x;
 		y += other.y;
 		return *this;
 	}
-	Point &operator-=(const Point &other)
+	Point &operator-=(Point other)
 	{
 		x -= other.x;
 		y -= other.y;
@@ -46,35 +46,35 @@ public:
 };
 
 
-inline bool operator==(const Point &p1, const Point &p2) {
+inline bool operator==(Point p1, Point p2) {
 	return p1.x == p2.x && p1.y == p2.y;
 }
 
-inline bool operator!=(const Point &p1, const Point &p2) {
+inline bool operator!=(Point p1, Point p2) {
 	return !(p1 == p2);
 }
 
-inline Point operator+(const Point &p1, const Point &p2) {
+inline Point operator+(Point p1, Point p2) {
 	return Point(p1.x+p2.x, p1.y+p2.y);
 }
 
-inline Point operator-(const Point &p1, const Point &p2) {
+inline Point operator-(Point p1, Point p2) {
 	return Point(p1.x-p2.x, p1.y-p2.y);
 }
 
-inline Point operator*(const Point &p, int n) {
+inline Point operator*(Point p, int n) {
 	return Point(p.x*n, p.y*n);
 }
 
-inline Point operator-(const Point &p) {
+inline Point operator-(Point p) {
 	return p * -1;
 }
 
-inline bool operator<(const Point &p1, const Point &p2) {
+inline bool operator<(Point p1, Point p2) {
 	return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
 }
 
-inline std::string direction(const Point &d)
+inline std::string direction(Point d)
  {
 	return
 			d.x > 0 ? "right" :
@@ -83,12 +83,12 @@ inline std::string direction(const Point &d)
 			d.y < 0 ? "up" : "???";
 }
 
-inline std::string pointStr(const Point &p)
+inline std::string pointStr(Point p)
 {
 	return (boost::format("(%d, %d)") % p.x % p.y).str();
 }
 
-inline std::ostream& operator<<(std::ostream& os, const Point& p)
+inline std::ostream& operator<<(std::ostream& os, Point  p)
 {
 	os << pointStr(p);
 	return os;
@@ -100,7 +100,7 @@ namespace std {
 
 template<>
 struct hash<Point> {
-	size_t operator()(const Point &p) const
+	size_t operator()(Point p) const
 	{
 		size_t seed = 0;
 		hash_combine(seed, p.x);

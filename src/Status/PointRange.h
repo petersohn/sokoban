@@ -26,14 +26,14 @@ public:
 	typedef Point value_type;
 	friend class PointRangeIterator;
 
-	PointRange(const Point& begin, const Point& end):
+	PointRange(Point  begin, Point  end):
 		begin_(begin),
 		end_(end)
 	{}
 
 	iterator begin() const;
 	iterator end() const;
-	const Point& front() const
+	Point  front() const
 	{
 		if (begin_ == end_) {
 			BOOST_THROW_EXCEPTION(std::out_of_range("front() cannot be called on empty PointRange."));
@@ -53,7 +53,7 @@ class PointRangeIterator: public boost::iterator_facade<
 		PointRangeIterator,
 		Point,
 		boost::bidirectional_traversal_tag,
-		const Point&> {
+		Point > {
 
 
 	const PointRange& owner_;
@@ -62,11 +62,11 @@ class PointRangeIterator: public boost::iterator_facade<
 	friend class PointRange;
 	friend class boost::iterator_core_access;
 
-	PointRangeIterator(const PointRange& owner, const Point& p):
+	PointRangeIterator(const PointRange& owner, Point  p):
 		owner_(owner),
 		p_(p)
 	{}
-	const Point& dereference() const { return p_; }
+	Point  dereference() const { return p_; }
 	void increment()
 	{
 		p_.x += owner_.dx();

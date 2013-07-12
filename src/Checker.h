@@ -12,7 +12,7 @@ class Point;
 class Checker {
 public:
 	typedef std::shared_ptr<Checker> Ptr;
-	virtual bool check(const Status&, const Point&) = 0;
+	virtual bool check(const Status&, Point ) = 0;
 	virtual ~Checker() {}
 	// for efficiency reasons, it is assumed that it will
 	// return a *real* string constant, or at least

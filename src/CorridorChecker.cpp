@@ -3,7 +3,7 @@
 #include "Status/Status.h"
 #include "Status/StatusUtils.h"
 
-bool CorridorChecker::check(const Status & status, const Point & p0)
+bool CorridorChecker::check(const Status & status, Point  p0)
 {
 	bool kell[3][3];
 	for (int x = 0; x < 3; x++)
@@ -60,7 +60,7 @@ bool CorridorChecker::check(const Status & status, const Point & p0)
 }
 
 bool CorridorChecker::checkCorridorEnding(const Status & status,
-			const Point & p0, const Point & side)
+			Point  p0, Point  side)
 {
 	Point p1 = p0 + side;
 	Point pm1 = p0 - side;

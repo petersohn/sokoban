@@ -35,10 +35,10 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 	Array<std::vector<Partition> > partitions_;
 	Solver::Ptr solver_;
 	bool useDumper_;
-	virtual int doCalculateStone(const Status &status, const Point &p);
+	virtual int doCalculateStone(const Status &status, Point p);
 	virtual void init();
 
-	void initPartitions(const Point &p);
+	void initPartitions(Point p);
 public:
 	AdvancedHeurCalculator(Solver::Ptr solver, bool useDumper = true):
 		solver_(solver),

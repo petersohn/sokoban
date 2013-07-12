@@ -9,7 +9,7 @@
 #include <functional>
 #include <iostream>
 
-int DecisionTreeHeurCalculator::calculateStone(const Status &status, const Point &p)
+int DecisionTreeHeurCalculator::calculateStone(const Status &status, Point p)
 {
 	assert(status.tablePtr() == table_);
 	return baseCalculator_->calculateStone(status, p);
@@ -32,7 +32,7 @@ int DecisionTreeHeurCalculator::calculateStatus(
 		for (const NodeType::ValuePtr& subset: heurList) {
 			if (isSubStatus(subset->first, mockStatus)) {
 				result += subset->second;
-				for (const Point& p: subset->first.state()) {
+				for (Point  p: subset->first.state()) {
 					mockStatus.state().removeStone(p);
 				}
 				found = true;
@@ -40,7 +40,7 @@ int DecisionTreeHeurCalculator::calculateStatus(
 			}
 		}
 	} while (found);
-	for (const Point& p: mockStatus.state()) {
+	for (Point  p: mockStatus.state()) {
 		result += baseCalculator_->calculateStone(status, p);
 	}
 	if (ancestor) {
@@ -53,7 +53,7 @@ std::vector<Point>
 DecisionTreeHeurCalculator::pointList(const FixedTable::Ptr& table)
 {
 	std::vector<Point> result;
-	for (const Point& p: arrayRange(table->get())) {
+	for (Point  p: arrayRange(table->get())) {
 		if (!table->get().wall(p)) {
 			result.push_back(p);
 		}

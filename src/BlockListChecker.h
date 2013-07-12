@@ -17,7 +17,7 @@ public:
 	{
 	}
 
-	virtual bool check(const Status& status, const Point& p);
+	virtual bool check(const Status& status, Point  p);
 	virtual const char* errorMessage();
 };
 

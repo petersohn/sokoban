@@ -32,7 +32,7 @@ void dumpArray(std::ostream &file, const Array<T> table,
 	}
 	Array<std::string> txts(table.width(), table.height());
 	size_t maxlen = 0;
-	for (const Point& p: arrayRange(table)) {
+	for (Point  p: arrayRange(table)) {
 		txts[p] = (boost::format("%1%") % table[p]).str();
 		maxlen = std::max(maxlen, txts[p].size());
 	}

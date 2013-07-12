@@ -7,12 +7,12 @@
 class CorridorChecker: public Checker {
 	HeurCalculator::Ptr calculator_;
 	bool checkCorridorEnding(const Status &status,
-		const Point &p0, const Point &side);
+		Point p0, Point side);
 public:
 	CorridorChecker(HeurCalculator::Ptr calculator):
 		calculator_(calculator)
 	{}
-	virtual bool check(const Status &status, const Point &p0);
+	virtual bool check(const Status &status, Point p0);
 	virtual const char* errorMessage();
 };
 

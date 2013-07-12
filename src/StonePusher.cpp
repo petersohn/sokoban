@@ -14,8 +14,8 @@ private:
 	Node::Ptr node_;
 	HeurCalculator::Ptr calculator_;
 	NodeFactory::Ptr nodeFactory_;
-	bool pushStone(const Status& status, const Point &p);
-	bool pushStoneIter(const Status& status, const Point &p, const Point &d);
+	bool pushStone(const Status& status, Point p);
+	bool pushStoneIter(const Status& status, Point p, Point d);
 public:
 	InternalPusher(HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
 		calculator_(calculator),
@@ -48,7 +48,7 @@ Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
 	return touched2 ? node_ : Node::Ptr();
 }
 
-bool InternalPusher::pushStone(const Status& status, const Point &p) {
+bool InternalPusher::pushStone(const Status& status, Point p) {
 	if (p == status.table().destination())
 		return true;
 //	Point currentTmp(status.currentPos());
@@ -63,7 +63,7 @@ bool InternalPusher::pushStone(const Status& status, const Point &p) {
 	return false;
 }
 
-bool InternalPusher::pushStoneIter(const Status& status, const Point &p, const Point &d) {
+bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 	Point pd = p+d;
 	Point pmd = p-d;
 	if (status.value(pmd) != ftFloor || status.value(pd) != ftFloor || !status.reachable(pmd))

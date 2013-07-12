@@ -30,11 +30,11 @@ public:
 	bool operator==(const State &other) const {
 		return stones_ == other.stones_ || *stones_ == *(other.stones_);
 	}
-	void addStone(const Point &p) {
+	void addStone(Point p) {
 		modify();
 		stones_->insert(p);
 	}
-	void removeStone(const Point &p) {
+	void removeStone(Point p) {
 		modify();
 		stones_->erase(p);
 	}
@@ -42,7 +42,7 @@ public:
 		modify();
 		stones_->clear();
 	}
-	bool operator[](const Point &p) const {
+	bool operator[](Point p) const {
 		return stones_->count(p) != 0;
 	}
 	size_t size() const { return stones_->size(); }
@@ -54,7 +54,7 @@ public:
 inline bool isSubState(const State& subState, const State& state)
 {
 	return boost::find_if(subState,
-			[&state](const Point &p) { return !state[p]; }) == subState.end();
+			[&state](Point p) { return !state[p]; }) == subState.end();
 }
 
 inline bool operator!=(const State& lhs, const State& rhs)
@@ -67,7 +67,7 @@ class AddStonesToState {
 public:
 	AddStonesToState(State& state):
 		state_(state){}
-	AddStonesToState& operator()(const Point& p)
+	AddStonesToState& operator()(Point  p)
 	{
 		state_.addStone(p);
 		return *this;

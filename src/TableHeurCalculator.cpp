@@ -32,7 +32,7 @@ int TableHeurCalculator::calculateStatus(
 	}
 }
 
-int TableHeurCalculator::calculateStone(const Status &status, const Point &p)
+int TableHeurCalculator::calculateStone(const Status &status, Point p)
 {
 	checkTable(status);
 	return doCalculateStone(status, p);

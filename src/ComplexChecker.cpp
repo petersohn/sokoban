@@ -1,7 +1,7 @@
 #include "ComplexChecker.h"
 #include "Status/Status.h"
 
-bool ComplexChecker::check(const Status &status, const Point &p0) {
+bool ComplexChecker::check(const Status &status, Point p0) {
 	lastError_ = "";
 	for (ContainerType::iterator it = funcs_.begin(); it != funcs_.end(); ++it) {
 		assert(it->get() != NULL);

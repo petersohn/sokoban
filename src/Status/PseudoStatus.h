@@ -22,13 +22,13 @@ public:
 	const FixedTable::Ptr& tablePtr() const { return table_; }
 	State& state() { return state_; }
 	const State& state() const { return state_; }
-	FieldType value(const Point &p) const {
+	FieldType value(Point p) const {
 		return table().wall(p) ? ftWall :
 				(state()[p] ? ftStone : ftFloor);
 	}
 	Point& currentPos() { return currentPos_; }
-	const Point& currentPos() const { return currentPos_; }
-	bool reachable(const Point& p) const { return arrayAt<bool>(reachableArray_, p, false); }
+	Point  currentPos() const { return currentPos_; }
+	bool reachable(Point  p) const { return arrayAt<bool>(reachableArray_, p, false); }
 	Array<bool>& reachableArray() { return reachableArray_; }
 	const Array<bool>& reachableArray() const { return reachableArray_; }
 };

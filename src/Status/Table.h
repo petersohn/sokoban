@@ -18,15 +18,15 @@ public:
 
 	size_t width() const { return walls_.width(); }
 	size_t height() const { return walls_.height(); }
-	bool wall(const Point &p) const {
+	bool wall(Point p) const {
 		return arrayAt<bool>(walls_, p, true);
 	}
-	const Point& destination() const { return destination_; }
+	Point  destination() const { return destination_; }
 
-	void wall(const Point &p, bool value) {
+	void wall(Point p, bool value) {
 		walls_[p] = value;
 	}
-	void destination(const Point& p) {
+	void destination(Point  p) {
 		assert(p.x >= 0 && p.x < width() && p.y >= 0 && p.y < height());
 		destination_ = p;
 	}

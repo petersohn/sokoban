@@ -2,7 +2,7 @@
 #include "Checker.h"
 #include <stack>
 
-void floodFill(const Status &status, const Point &p0, Array<bool> &result,
+void floodFill(const Status &status, Point p0, Array<bool> &result,
 			Status::BorderType *border, MinMax *minmax)
 {
 	result.fill(false);
@@ -45,7 +45,7 @@ std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state
 {
 	Array<bool> kell(table->get().width(), table->get().height(), false);
 	int kellNum = 0;
-	for (const Point& p: arrayRange(table->get())) {
+	for (Point  p: arrayRange(table->get())) {
 		if (!table->get().wall(p) && !state[p])
 		{
 			kell[p] = true;
@@ -56,7 +56,7 @@ std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state
 	std::vector<Status::Ptr> result;
 	while (kellNum > 0) {
 		Point foundPoint;
-		for (const Point& p: arrayRange(table->get())) {
+		for (Point  p: arrayRange(table->get())) {
 			if (kell[p]) {
 				foundPoint = p;
 				break;
@@ -64,7 +64,7 @@ std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state
 		}
 		Status::Ptr status(new Status(table, state));
 		status->currentPos(foundPoint);
-		for (const Point& p: arrayRange(table->get())) {
+		for (Point  p: arrayRange(table->get())) {
 			if (status->reachable(p) && kell[p])
 			{
 				kell[p] = false;
@@ -78,7 +78,7 @@ std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state
 
 bool checkStatus(Checker& checker, const Status& status)
 {
-	for (const Point &pp: status.state()) {
+	for (Point pp: status.state()) {
 		if (!checker.check(status, pp)) {
 			return false;
 		}

@@ -6,7 +6,7 @@
 struct MoveDescriptor {
 	Point from_;
 	Point d_;
-	MoveDescriptor(const Point& p, const Point& d):
+	MoveDescriptor(Point  p, Point  d):
 		from_(p), d_(d) {}
 };
 

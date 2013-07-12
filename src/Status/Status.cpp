@@ -37,7 +37,7 @@ Status::Status(FixedTable::Ptr table, const Node &node):
 
 void Status::init() {
 	Point p;
-	for (const Point& p: arrayRange(table())) {
+	for (Point  p: arrayRange(table())) {
 		fields_[p] =
 				table().wall(p) ? ftWall : ftFloor;
 	}
@@ -82,7 +82,7 @@ void Status::fillReachable() const
 								first->second;
 			}
 
-			for (const Point& p: arrayRange(table())) {
+			for (Point  p: arrayRange(table())) {
 				if (reachable(p)) {
 					(*poolElement)[p] = calculatedData_;
 				}
@@ -97,7 +97,7 @@ void Status::fillReachable() const
 	}
 }
 
-bool Status::addStone(const Point &p) {
+bool Status::addStone(Point p) {
 	if (value(p) != ftFloor)
 		return false;
 	fields_[p] = ftStone;
@@ -106,7 +106,7 @@ bool Status::addStone(const Point &p) {
 	return true;
 }
 
-bool Status::removeStone(const Point &p) {
+bool Status::removeStone(Point p) {
 	if (value(p) != ftStone)
 		return false;
 	fields_[p] = ftFloor;
@@ -121,7 +121,7 @@ void Status::state(const State &value) {
 	init();
 }
 
-bool Status::currentPos(const Point & p) {
+bool Status::currentPos(Point  p) {
 	currentPos_ = p;
 	if (calculatedData_ && !calculatedData_->reachable_[p]) {
 		calculatedData_.reset();
@@ -129,7 +129,7 @@ bool Status::currentPos(const Point & p) {
 	return true;
 }
 
-bool Status::moveStone(const Point &from, const Point &to) {
+bool Status::moveStone(Point from, Point to) {
 	if (value(from) != ftStone && value(to) != ftFloor)
 		return false;
 	fields_[from] = ftFloor;
@@ -151,7 +151,7 @@ void Status::set(const Node &node) {
 	init();
 }
 
-bool Status::shiftIter(const Point &p)
+bool Status::shiftIter(Point p)
 {
 	if (value(p) == ftFloor && reachable(p)) {
 		currentPos_ = p;

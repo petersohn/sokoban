@@ -13,7 +13,7 @@ class HeurCalculator: public boost::noncopyable {
 public:
 	typedef std::shared_ptr<HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}
-	virtual int calculateStone(const Status& status, const Point& p) = 0;
+	virtual int calculateStone(const Status& status, Point  p) = 0;
 	virtual int calculateStatus(
 			const Status& status,
 			const MoveDescriptor* moveDescriptor = nullptr,

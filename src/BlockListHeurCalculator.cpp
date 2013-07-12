@@ -7,7 +7,7 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 
-int BlocklistHeurCalculator::calculateStone(const Status &status, const Point &p)
+int BlocklistHeurCalculator::calculateStone(const Status &status, Point p)
 {
 	assert(status.tablePtr() == table_);
 	return baseCalculator_->calculateStone(status, p);
@@ -26,13 +26,13 @@ int BlocklistHeurCalculator::calculateStatus(
 		for (const HeurInfoConstPtr& subset: heurList_) {
 			if (isSubStatus(subset->first, mockStatus)) {
 				result += subset->second;
-				for (const Point& p: subset->first.state()) {
+				for (Point  p: subset->first.state()) {
 					mockStatus.state().removeStone(p);
 				}
 			}
 		}
 	}
-	for (const Point& p: mockStatus.state()) {
+	for (Point  p: mockStatus.state()) {
 		result += baseCalculator_->calculateStone(status, p);
 	}
 	if (ancestor) {

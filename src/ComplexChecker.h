@@ -13,7 +13,7 @@ public:
 	ComplexChecker(const Range& range):
 		funcs_(range.begin(), range.end())
 	{}
-	virtual bool check(const Status &status, const Point &p0);
+	virtual bool check(const Status &status, Point p0);
 	virtual const char* errorMessage();
 };
 

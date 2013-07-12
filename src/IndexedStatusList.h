@@ -46,7 +46,7 @@ public:
 	{
 		boost::unique_lock<SharedMutexType> lock(mutex_);
 		Status::ConstPtr val(new Status(status));
-		for (const Point& p: status.state()) {
+		for (Point  p: status.state()) {
 			index_.insert(std::make_pair(p, std::make_pair(val, value)));
 		}
 		++size_;
@@ -56,7 +56,7 @@ public:
 		index_.clear();
 	}
 
-	bool hasSubStatus(const Status &status, const Point &p) const
+	bool hasSubStatus(const Status &status, Point p) const
 	{
 		boost::shared_lock<SharedMutexType> lock(mutex_);
 		RangeType range = index_.equal_range(p);
@@ -68,7 +68,7 @@ public:
 		return false;
 	}
 
-	std::vector<Value> getSubStatusValues(const Status &status, const Point &p) const
+	std::vector<Value> getSubStatusValues(const Status &status, Point p) const
 	{
 		boost::shared_lock<SharedMutexType> lock(mutex_);
 		std::vector<Value> result;

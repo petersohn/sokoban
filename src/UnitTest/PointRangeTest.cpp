@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	Point end(5,7);
 	PointRange range(begin, end);
 	std::unordered_set<Point> pointsConsidered;
-	for (const Point& p: range) {
+	for (Point  p: range) {
 		BOOST_MESSAGE(p);
 		BOOST_REQUIRE_GE(p.x, begin.x);
 		BOOST_REQUIRE_LT(p.x, end.x);
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(Forwardendward)
 	Point end(10,3);
 	PointRange range(begin, end);
 	std::unordered_set<Point> pointsConsidered;
-	for (const Point& p: range) {
+	for (Point  p: range) {
 		BOOST_MESSAGE(p);
 		BOOST_REQUIRE_GE(p.x, begin.x);
 		BOOST_REQUIRE_LT(p.x, end.x);
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(endwardForward)
 	Point end(-3,5);
 	PointRange range(begin, end);
 	std::unordered_set<Point> pointsConsidered;
-	for (const Point& p: range) {
+	for (Point  p: range) {
 		BOOST_REQUIRE_LE(p.x, begin.x);
 		BOOST_REQUIRE_GT(p.x, end.x);
 		BOOST_REQUIRE_GE(p.y, begin.y);
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(endwardendward)
 	Point end(10,-20);
 	PointRange range(begin, end);
 	std::unordered_set<Point> pointsConsidered;
-	for (const Point& p: range) {
+	for (Point  p: range) {
 		BOOST_MESSAGE(p);
 		BOOST_REQUIRE_LE(p.x, begin.x);
 		BOOST_REQUIRE_GT(p.x, end.x);

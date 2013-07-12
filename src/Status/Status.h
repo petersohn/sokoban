@@ -43,7 +43,7 @@ private:
 	void fillReachable() const;
 	void calculateReachable() const;
 	void init();
-	bool shiftIter(const Point &p);
+	bool shiftIter(Point p);
 
 public:
 	static int copyCount;
@@ -90,7 +90,7 @@ public:
 	size_t width() const { return table().width(); }
 	size_t height() const { return table().height(); }
 	const State& state() const { return state_; }
-	bool reachable(const Point &p) const {
+	bool reachable(Point p) const {
 		if (!calculatedData_)
 			fillReachable();
 		return arrayAt<bool>(calculatedData_->reachable_, p, false);
@@ -105,14 +105,14 @@ public:
 			fillReachable();
 		return calculatedData_->border_;
 	}
-	FieldType value(const Point &p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
-	const Point &currentPos() const { return currentPos_; }
+	FieldType value(Point p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
+	Point currentPos() const { return currentPos_; }
 
-	bool currentPos(const Point &p);
+	bool currentPos(Point p);
 	void state(const State &value);
-	bool addStone(const Point &p);
-	bool removeStone(const Point &p);
-	bool moveStone(const Point &from, const Point &to);
+	bool addStone(Point p);
+	bool removeStone(Point p);
+	bool moveStone(Point from, Point to);
 	void set(const Node &node);
 	void shiftCurrentPos();
 

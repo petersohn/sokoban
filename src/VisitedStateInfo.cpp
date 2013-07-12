@@ -6,7 +6,7 @@
 VisitedStateInfo::VisitedStateInfo(const Status& status):
 	state_(status.state())
 {
-	for (const Point& p: arrayRange(status)) {
+	for (Point  p: arrayRange(status)) {
 		if (status.reachable(p)) {
 			firstReachable_ = p;
 			return;

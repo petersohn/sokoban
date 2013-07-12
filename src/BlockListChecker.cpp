@@ -1,6 +1,6 @@
 #include "BlockListChecker.h"
 
-bool BlockListChecker::check(const Status& status, const Point& p)
+bool BlockListChecker::check(const Status& status, Point  p)
 {
 	assert(table_ == status.tablePtr());
 	return !blockList_->hasSubStatus(status, p);
