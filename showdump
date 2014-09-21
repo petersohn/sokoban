@@ -1,6 +1,12 @@
 #!/bin/bash
 
-if ! which hl >/dev/null; then
+if echo "$0" | grep -q /; then
+	hl="$(dirname "$0")/hl"
+else
+	hl="$(which hl)"
+fi
+
+if [ ! -x "$hl" ]; then
     echo "No hl script."
     exit 1
 fi
@@ -9,4 +15,4 @@ filename="$1"
 if [ -z "$filename" ]; then
     filename=/dev/stdin
 fi
-cat "$filename" | hl Red '[.+]' | hl IYellow '[oO]' | hl IBlue 'Y' | hl IGreen 'X' | less -R
+cat "$filename" | "$hl" Red '[.+]' | "$hl" IYellow '[oO]' | "$hl" IBlue 'Y' | "$hl" IGreen 'X' | less -R
