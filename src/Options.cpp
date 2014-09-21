@@ -1,4 +1,3 @@
-#include "config.h"
 #include "Options.h"
 #include "OptionsHelper.h"
 #include <iostream>

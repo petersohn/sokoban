@@ -1,0 +1,6 @@
+
+include_rules
+
+: foreach *.cpp |> !cxx |>
+: ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \
+		$(STATUS_DIR)/*.o |> !linker |> sokoban

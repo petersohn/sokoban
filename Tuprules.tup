@@ -1,0 +1,29 @@
+
+.gitignore
+
+CXX = @(COMPILER)
+LD = $(CXX)
+
+CPP_FLAGS += -std=c++11
+#CPP_FLAGS += -Wall -Wextra
+CPP_FLAGS += @(OPTIMALIZATION_FLAG)
+CPP_FLAGS += -ftemplate-backtrace-limit=0
+
+SOURCE_DIR = $(TUP_CWD)/src
+DECISION_TREE_DIR = $(SOURCE_DIR)/DecisionTree
+DUMPER_DIR = $(SOURCE_DIR)/Dumper
+STATUS_DIR = $(SOURCE_DIR)/Status
+
+INCLUDE_DIRS += -I$(SOURCE_DIR)
+
+LIBS += -lboost_program_options
+LIBS += -lboost_date_time
+LIBS += -lboost_thread
+LIBS += -lboost_system
+LIBS += -lpthread
+LIBS += @(PROFILER_LIBS)
+
+!cxx = |> ^ CXX %f^ $(CXX) $(CPP_FLAGS) $(INCLUDE_DIRS) -c %f -o %o |> %B.o
+!linker = |> ^ LD %o^ $(LD) $(LD_FLAGS) %f $(LIBS) -o %o |>
+!download = |> ^ DOWNLOAD %o^ wget --quiet https://dl.dropboxusercontent.com/u/12272246/car-game/%o |>
+!unitTest = |> ^ UT %f^ ./%f && touch %o |> %b.output
