@@ -9,8 +9,8 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 	if (!state.empty()) {
 		if (maxDistance_ > 0) {
 			for (Point pp: state) {
-				if (std::abs(p.x - pp.x) > maxDistance_ ||
-						std::abs(p.y - pp.y) > maxDistance_) {
+				if (static_cast<std::size_t>(std::abs(p.x - pp.x)) > maxDistance_ ||
+						static_cast<std::size_t>(std::abs(p.y - pp.y)) > maxDistance_) {
 					return;
 				}
 			}
