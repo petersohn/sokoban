@@ -1,4 +1,4 @@
-#include "BasicHeurCalculator.h"
+#include "BasicHeurCalculator.hpp"
 
 
 void BasicHeurCalculator::init() {

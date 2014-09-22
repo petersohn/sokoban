@@ -1,4 +1,4 @@
-#include "Status/Point.h"
+#include "Status/Point.hpp"
 
 const Point Point::p10(1, 0);
 const Point Point::p01(0, 1);

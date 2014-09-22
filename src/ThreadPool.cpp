@@ -1,4 +1,4 @@
-#include "ThreadPool.h"
+#include "ThreadPool.hpp"
 #include <functional>
 #include <boost/foreach.hpp>
 #include <boost/exception/all.hpp>

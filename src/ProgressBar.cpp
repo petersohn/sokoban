@@ -1,4 +1,4 @@
-#include "ProgressBar.h"
+#include "ProgressBar.hpp"
 #include <iostream>
 
 void ProgressBar::draw(int solved)

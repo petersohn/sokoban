@@ -1,9 +1,9 @@
-#include "DecisionTreeHeurCalculator.h"
-#include "Dumper/DumperFunctions.h"
-#include "Node.h"
-#include "VisitedStateInfo.h"
-#include "AnnotatedFunction.h"
-#include "Status/StatusUtils.h"
+#include "DecisionTreeHeurCalculator.hpp"
+#include "Dumper/DumperFunctions.hpp"
+#include "Node.hpp"
+#include "VisitedStateInfo.hpp"
+#include "AnnotatedFunction.hpp"
+#include "Status/StatusUtils.hpp"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 #include <functional>

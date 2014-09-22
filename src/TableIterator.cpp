@@ -1,8 +1,8 @@
-#include "TableIterator.h"
-#include "TempValue.h"
-#include "ProgressBar.h"
-#include "TimeMeter.h"
-#include "Status/StatusUtils.h"
+#include "TableIterator.hpp"
+#include "TempValue.hpp"
+#include "ProgressBar.hpp"
+#include "TimeMeter.hpp"
+#include "Status/StatusUtils.hpp"
 
 void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 {

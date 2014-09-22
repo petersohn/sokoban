@@ -1,7 +1,7 @@
-#include "AdvancedHeurCalculator.h"
-#include "Status/Status.h"
-#include "Status/StatusUtils.h"
-#include "Node.h"
+#include "AdvancedHeurCalculator.hpp"
+#include "Status/Status.hpp"
+#include "Status/StatusUtils.hpp"
+#include "Node.hpp"
 #include <vector>
 #include <algorithm>
 #include <boost/format.hpp>

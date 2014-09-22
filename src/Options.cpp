@@ -1,5 +1,5 @@
-#include "Options.h"
-#include "OptionsHelper.h"
+#include "Options.hpp"
+#include "OptionsHelper.hpp"
 #include <iostream>
 #include <boost/program_options.hpp>
 #include <boost/format.hpp>

@@ -1,7 +1,7 @@
-#include "Dumper/XDumper.h"
-#include "Dumper/DumperFunctions.h"
-#include "Common.h"
-#include "Status/Status.h"
+#include "Dumper/XDumper.hpp"
+#include "Dumper/DumperFunctions.hpp"
+#include "Common.hpp"
+#include "Status/Status.hpp"
 #include <iostream>
 #include <sstream>
 

@@ -1,5 +1,5 @@
-#include "Status/StatusUtils.h"
-#include "Checker.h"
+#include "Status/StatusUtils.hpp"
+#include "Checker.hpp"
 #include <stack>
 
 void floodFill(const Status &status, Point p0, Array<bool> &result,

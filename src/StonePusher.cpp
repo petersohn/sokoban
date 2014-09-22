@@ -1,9 +1,9 @@
-#include "StonePusher.h"
-#include "Array.h"
-#include "Status/Status.h"
-#include "Status/State.h"
-#include "VisitedStateInfo.h"
-#include "Status/StatusUtils.h"
+#include "StonePusher.hpp"
+#include "Array.hpp"
+#include "Status/Status.hpp"
+#include "Status/State.hpp"
+#include "VisitedStateInfo.hpp"
+#include "Status/StatusUtils.hpp"
 #include <iostream>
 #include <memory>
 

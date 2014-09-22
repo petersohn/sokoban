@@ -1,3 +1,3 @@
-#include "PrioNodeQueue.h"
-#include "CompareQueue.h"
+#include "PrioNodeQueue.hpp"
+#include "CompareQueue.hpp"
 

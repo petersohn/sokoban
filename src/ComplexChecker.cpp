@@ -1,5 +1,5 @@
-#include "ComplexChecker.h"
-#include "Status/Status.h"
+#include "ComplexChecker.hpp"
+#include "Status/Status.hpp"
 
 bool ComplexChecker::check(const Status &status, Point p0) {
 	lastError_ = "";

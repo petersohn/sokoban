@@ -1,6 +1,6 @@
-#include "Status/Status.h"
-#include "Status/StatusUtils.h"
-#include "Node.h"
+#include "Status/Status.hpp"
+#include "Status/StatusUtils.hpp"
+#include "Node.hpp"
 
 std::size_t Status::copyCount(0);
 std::size_t Status::calculateReachableCount(0);

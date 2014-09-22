@@ -1,9 +1,9 @@
-#include "Solver.h"
-#include "Status/Status.h"
-#include "Node.h"
-#include "ThreadPool.h"
-#include "Dumper/DumperFunctions.h"
-#include "JobManager.h"
+#include "Solver.hpp"
+#include "Status/Status.hpp"
+#include "Node.hpp"
+#include "ThreadPool.hpp"
+#include "Dumper/DumperFunctions.hpp"
+#include "JobManager.hpp"
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>

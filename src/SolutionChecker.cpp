@@ -1,7 +1,7 @@
-#include "SolutionChecker.h"
-#include "Status/Status.h"
-#include "Dumper/DumperFunctions.h"
-#include "Common.h"
+#include "SolutionChecker.hpp"
+#include "Status/Status.hpp"
+#include "Dumper/DumperFunctions.hpp"
+#include "Common.hpp"
 #include <fstream>
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>

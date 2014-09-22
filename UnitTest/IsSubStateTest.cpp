@@ -1,4 +1,4 @@
-#include "Status/State.h"
+#include "Status/State.hpp"
 #include <boost/test/unit_test.hpp>
 
 

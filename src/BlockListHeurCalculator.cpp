@@ -1,9 +1,9 @@
-#include "BlockListHeurCalculator.h"
-#include "Dumper/DumperFunctions.h"
-#include "Node.h"
-#include "VisitedStateInfo.h"
-#include "Status/PseudoStatus.h"
-#include "Status/StatusUtils.h"
+#include "BlockListHeurCalculator.hpp"
+#include "Dumper/DumperFunctions.hpp"
+#include "Node.hpp"
+#include "VisitedStateInfo.hpp"
+#include "Status/PseudoStatus.hpp"
+#include "Status/StatusUtils.hpp"
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 

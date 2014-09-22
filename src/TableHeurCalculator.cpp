@@ -1,5 +1,5 @@
-#include "TableHeurCalculator.h"
-#include "Node.h"
+#include "TableHeurCalculator.hpp"
+#include "Node.hpp"
 #include <iostream>
 
 int TableHeurCalculator::calculateStatus(

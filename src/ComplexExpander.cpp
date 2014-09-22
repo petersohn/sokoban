@@ -1,6 +1,6 @@
-#include "ComplexExpander.h"
-#include "Status/Status.h"
-#include "Node.h"
+#include "ComplexExpander.hpp"
+#include "Status/Status.hpp"
+#include "Node.hpp"
 
 bool ComplexExpander::expand(const Status &status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper) {

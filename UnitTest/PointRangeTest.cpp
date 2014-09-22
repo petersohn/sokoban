@@ -1,6 +1,6 @@
 #include <boost/test/unit_test.hpp>
 #include <unordered_set>
-#include "Status/PointRange.h"
+#include "Status/PointRange.hpp"
 
 
 BOOST_AUTO_TEST_SUITE(PointRangeTest)

@@ -1,5 +1,5 @@
-#include "Dumper/DumperFunctions.h"
-#include "Status/Status.h"
+#include "Dumper/DumperFunctions.hpp"
+#include "Status/Status.hpp"
 #include <boost/format.hpp>
 
 void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
