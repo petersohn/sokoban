@@ -11,16 +11,9 @@ public:
 	int x, y;
 	Point():x(0), y(0) { }
 	explicit Point(int x, int y):x(x),y(y) {}
-	Point(const Point& other):
-		x(other.x),
-		y(other.y)
-	{ }
-	Point& operator=(const Point& other)
-	{
-		x = other.x;
-		y = other.y;
-		return *this;
-	}
+
+	Point(const Point& other) = default;
+	Point& operator=(const Point& other) = default;
 
 	Point &operator+=(Point other)
 	{

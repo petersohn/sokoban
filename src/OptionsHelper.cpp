@@ -115,7 +115,7 @@ void OptionsHelper::print(const char *programName) const
 	using namespace std;
 	cerr << "Usage:" << endl;
 	cerr << "    " << programName << " [options]";
-	for (int i = 0; i < positionalParameters_.max_total_count(); ++i)
+	for (std::size_t i = 0; i < positionalParameters_.max_total_count(); ++i)
 		cerr << " " << positionalParameters_.name_for_position(i) << " ";
 	cerr << endl << endl << "Options:" << endl;
 	cerr << commandLineDescription_ << endl;

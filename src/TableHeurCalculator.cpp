@@ -4,8 +4,8 @@
 
 int TableHeurCalculator::calculateStatus(
 			const Status &status,
-			const MoveDescriptor* moveDescriptor,
-			const std::shared_ptr<Node>& ancestor)
+			const MoveDescriptor* /*moveDescriptor*/,
+			const std::shared_ptr<Node>& /*ancestor*/)
 {
 	checkTable(status);
 //	if (moveDescriptor && ancestor) {

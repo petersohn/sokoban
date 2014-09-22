@@ -28,8 +28,8 @@ public:
 void InternalExpander::expandNode(Point p, Point d)
 {
 	Point pd = p+d, pmd = p-d;
-	if (pmd.x >= 0 && pmd.x < status_.width() &&
-			pmd.y >= 0 && pmd.y < status_.height() &&
+	if (pmd.x >= 0 && pmd.x < static_cast<int>(status_.width()) &&
+			pmd.y >= 0 && pmd.y < static_cast<int>(status_.height()) &&
 			status_.value(pd) == ftFloor && status_.reachable(pmd))
 	{
 		Status status(status_);
