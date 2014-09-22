@@ -14,18 +14,18 @@
 
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
-		Checker::Ptr checker, int numStones, int maxDistance, int maxHeurListSize,
-		int numThreads):
-		solver_(solver),
-		calculator_(calculator),
-		checker_(checker),
-		blockList_(new IndexedStatusList<int>),
-		numStones_(numStones),
-		maxDistance_(maxDistance),
-		maxHeurListSize_(maxHeurListSize),
-		dump_("blocklist.dump"),
-		threadPool_(),
-		numThreads_(numThreads)
+		Checker::Ptr checker, std::size_t numStones, std::size_t maxDistance,
+		std::size_t maxHeurListSize, std::size_t numThreads):
+	solver_(solver),
+	calculator_(calculator),
+	checker_(checker),
+	blockList_(new IndexedStatusList<int>),
+	numStones_(numStones),
+	maxDistance_(maxDistance),
+	maxHeurListSize_(maxHeurListSize),
+	dump_("blocklist.dump"),
+	threadPool_(),
+	numThreads_(numThreads)
 {
 	threadPool_.numThreads(numThreads);
 }
@@ -73,7 +73,7 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	blockList_->clear();
 	heurList_.clear();
 	incrementalCalculator_ = calculator_;
-	for (int n = 2; n <= numStones_; ++n) {
+	for (std::size_t n = 2; n <= numStones_; ++n) {
 		std::cerr << "Stones = " << n << std::endl;
 		{
 			ThreadPoolRunner runner(threadPool_);
@@ -114,7 +114,8 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 }
 
 
-HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(int maxDepth, bool useChecker)
+HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t maxDepth, 
+		bool useChecker)
 {
 	assert(table_);
 	return std::make_shared<DecisionTreeHeurCalculator>(

@@ -151,8 +151,6 @@ namespace detail {
 				const PointList& pointList,
 				std::vector<Point>& newPointList) const
 		{
-			typedef typename PointList::value_type Functor;
-
 			assert(!pointList.empty());
 			newPointList.reserve(pointList.size() - 1);
 			std::copy(

@@ -61,13 +61,13 @@ private:
 	std::shared_ptr<IndexedStatusList<int>> blockList_;
 	IncrementList heurList_;
 	FixedTable::Ptr table_;
-	int numStones_;
-	int maxDistance_;
-	int maxHeurListSize_;
+	std::size_t numStones_;
+	std::size_t maxDistance_;
+	std::size_t maxHeurListSize_;
 	std::ofstream dump_;
 	MutexType dumpMutex_;
 	ThreadPool threadPool_;
-	int numThreads_;
+	std::size_t numThreads_;
 
 	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
@@ -86,11 +86,11 @@ private:
 	}
 public:
 	BlockListGenerator(Solver::Ptr solver,
-			HeurCalculator::Ptr calculator, Checker::Ptr checker, int numStones,
-			int maxDistance, int maxHeurListSize, int numThreads);
+			HeurCalculator::Ptr calculator, Checker::Ptr checker, std::size_t numStones,
+			std::size_t maxDistance, std::size_t maxHeurListSize, std::size_t numThreads);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
-	HeurCalculator::Ptr decisionTreeHeurCalculator(int maxDepth, bool useChecker);
+	HeurCalculator::Ptr decisionTreeHeurCalculator(std::size_t maxDepth, bool useChecker);
 	void init(const FixedTable::Ptr& table);
 };
 

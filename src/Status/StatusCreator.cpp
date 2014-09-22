@@ -14,7 +14,7 @@ Status createStatus(int width, int height, const std::vector<std::string>& lines
 	Point p;
 	for (const std::string& line: lines)
 	{
-		for (p.x = 0; p.x < line.length() && p.x < width; p.x++)
+		for (p.x = 0; p.x < static_cast<int>(line.length()) && p.x < width; p.x++)
 		{
 			switch (line[p.x])
 			{

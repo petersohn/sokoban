@@ -18,21 +18,21 @@ private:
 	HeurCalculator::Ptr heurCalculator_;
 	Checker::Ptr checker_;
 	Action action_;
-	int maxDistance_;
-	int iters_, solved_;
-	int lastTicks_;
+	std::size_t maxDistance_;
+	std::size_t iters_, solved_;
+	std::size_t lastTicks_;
 	bool working_;
 
 	MutexType iterMutex_;
 	boost::asio::io_service &ioService_;
 	boost::condition_variable done_;
 
-	void initIter(Point p, int stones, const State &state);
+	void initIter(Point p, std::size_t stones, const State &state);
 	void doWork(Status::Ptr status);
 	void progress();
 	bool advancePoint(Point &p) {
-		if (p.x == table_->get().width() - 1) {
-			if (p.y < table_->get().height() - 1) {
+		if (p.x == static_cast<int>(table_->get().width()) - 1) {
+			if (p.y < static_cast<int>(table_->get().height()) - 1) {
 				++p.y;
 				p.x = 0;
 			} else {
@@ -49,7 +49,7 @@ public:
 			const HeurCalculator::Ptr& heurCalculator,
 			const Checker::Ptr& checker,
 			const Action& action,
-			int maxDistance,
+			std::size_t maxDistance,
 			ThreadPool& threadPool):
 		table_(table),
 		heurCalculator_(heurCalculator),
@@ -70,7 +70,7 @@ public:
 		assert(!working_);
 		action_ = action;
 	}
-	void iterate(int numStones);
+	void iterate(std::size_t numStones);
 };
 
 

@@ -11,7 +11,7 @@
 
 template<class T>
 void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title = "", const std::string &prefix = "", int indent = 0);
+		const std::string &title = "", int indent = 0);
 
 template <class Status>
 void dumpStatus(std::ostream &file, const Status &status,
@@ -25,7 +25,7 @@ void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
 
 template<class T>
 void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title, const std::string &prefix, int indent) {
+		const std::string &title, int indent) {
 	std::string indentString(indent, ' ');
 	if (!title.empty()) {
 		file << indentString << title << std::endl;
@@ -90,7 +90,7 @@ void dumpStatus(std::ostream &file, const Status &status,
 			}
 		}
 	}
-	dumpArray(file, output, title, "", indent);
+	dumpArray(file, output, title, indent);
 }
 
 

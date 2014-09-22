@@ -27,7 +27,7 @@ void BasicHeurCalculator::init() {
 	}
 }
 
-int BasicHeurCalculator::doCalculateStone(const Status &status, Point p)
+int BasicHeurCalculator::doCalculateStone(const Status& /*status*/, Point p)
 {
 	return distances_[p];
 }

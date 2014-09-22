@@ -28,15 +28,15 @@ private:
 	bool useMovableChecker_;
 	bool useCorridorChecker_;
 	bool useAdvancedHeurCalculator_;
-	int statusPoolSize_;
+	std::size_t statusPoolSize_;
 	BlockListHeurType blocklistHeurCalculatorType_;
 	bool parallelOuterExpand_;
-	int blockListStones_;
-	int blockListDistance_;
-	int maxHeurListSize_;
-	int numThreads_;
-	int test_;
-	int maxDecisionTreeDepth_;
+	std::size_t blockListStones_;
+	std::size_t blockListDistance_;
+	std::size_t maxHeurListSize_;
+	std::size_t numThreads_;
+	std::size_t test_;
+	std::size_t maxDecisionTreeDepth_;
 	bool useCheckerForDecisionTree_;
 	CompareList compare_;
 	std::string filename_;
@@ -49,15 +49,15 @@ public:
 	bool useMovableChecker() const { return useMovableChecker_; }
 	bool useCorridorChecker() const { return useCorridorChecker_; }
 	bool useAdvancedHeurCalculator() const { return useAdvancedHeurCalculator_; }
-	int statusPoolSize() const { return statusPoolSize_; }
+	std::size_t statusPoolSize() const { return statusPoolSize_; }
 	BlockListHeurType blocklistHeurCalculatorType() const { return blocklistHeurCalculatorType_; }
 	bool parallelOuterExpand() const { return parallelOuterExpand_; }
-	int blockListStones() const { return blockListStones_; }
-	int blockListDistance() const { return blockListDistance_; }
-	int maxHeurListSize() const { return maxHeurListSize_; }
-	int numThreads() const { return numThreads_; }
-	int test() const { return test_; }
-	int maxDecisionTreeDepth() const { return maxDecisionTreeDepth_; }
+	std::size_t blockListStones() const { return blockListStones_; }
+	std::size_t blockListDistance() const { return blockListDistance_; }
+	std::size_t maxHeurListSize() const { return maxHeurListSize_; }
+	std::size_t numThreads() const { return numThreads_; }
+	std::size_t test() const { return test_; }
+	std::size_t maxDecisionTreeDepth() const { return maxDecisionTreeDepth_; }
 	bool useCheckerForDecisionTree() const { return useCheckerForDecisionTree_; }
 	const std::string &filename() const { return filename_; }
 	const CompareList& compare() const { return compare_; }

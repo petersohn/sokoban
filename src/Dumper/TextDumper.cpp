@@ -17,7 +17,7 @@ void TextDumper::addNode(Node::Ptr node) {
 	dumpNode(file_, table_, *node, "Added");
 }
 
-void TextDumper::addToSolution(Node::Ptr node) {
+void TextDumper::addToSolution(Node::Ptr /*node*/) {
 // nothing to be done here
 }
 

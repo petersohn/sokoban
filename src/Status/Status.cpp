@@ -2,9 +2,9 @@
 #include "Status/StatusUtils.h"
 #include "Node.h"
 
-int Status::copyCount(0);
-int Status::calculateReachableCount(0);
-int Status::statusPoolSize_(0);
+std::size_t Status::copyCount(0);
+std::size_t Status::calculateReachableCount(0);
+std::size_t Status::statusPoolSize_(0);
 std::unordered_map<State, std::shared_ptr<Array<Status::CalculatedDataPtr>>>
 		Status::statusPool_;
 boost::mutex Status::statusPoolMutex_;

@@ -24,8 +24,8 @@ public:
 			const HeurListType& heurList,
 			const Checker::Ptr checker,
 			FixedTable::Ptr table,
-			int maxDepth,
-			int numThreads):
+			std::size_t maxDepth,
+			std::size_t numThreads):
 				baseCalculator_(baseCalculator),
 				table_(table)
 	{

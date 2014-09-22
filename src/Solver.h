@@ -24,11 +24,11 @@ private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
 	DumperFactory dumperFactory_;
-	int numThreads_;
+	std::size_t numThreads_;
 	ThreadPool threadPool_;
 public:
 	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory(),
-			int numThreads = 0):
+			std::size_t numThreads = 0):
 		queueFactory_(qf),
 		expanderFactory_(ef),
 		dumperFactory_(df),

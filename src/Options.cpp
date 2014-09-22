@@ -32,17 +32,17 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Produce output messages of (x1, y1) --> (x2, y2)"
 			" instead of (x1, y1) --> direction");
 	oh.addPositionalParameter("filename", &filename_, "Input file name");
-	oh.addArgumentOption<int>("blocklist-number", &blockListStones_,
+	oh.addArgumentOption<std::size_t>("blocklist-number", &blockListStones_,
 			"The number of stones the blocklist contains. "
 			"The calculation time of the blocklist is exponential in this number.");
-	oh.addArgumentOption<int>("blocklist-distance", &blockListDistance_,
+	oh.addArgumentOption<std::size_t>("blocklist-distance", &blockListDistance_,
 			"The maximum distance between stones in the "
 			"blocklist. 0 means no limit.");
-	oh.addArgumentOption<int>("thread-num,t", &numThreads_,
+	oh.addArgumentOption<std::size_t>("thread-num,t", &numThreads_,
 			"The maximum number of threads to use.");
 	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_,
 			"Expand several nodes in parallel. Only if --thread-num > 1.");
-	oh.addArgumentOption<int>("test", &test_,
+	oh.addArgumentOption<std::size_t>("test", &test_,
 			"Instead of solving a problem, solve each possible problem with the given number "
 			"of stones on the table.");
 
@@ -66,7 +66,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"Enable/disable checking for corridors.\n");
 	oh.addBoolOption("advanced-heur-calculator", &useAdvancedHeurCalculator_,
 			"Enable/disable advanced heur calculator.\n");
-	oh.addArgumentOption<int>("heur-list-size", &maxHeurListSize_,
+	oh.addArgumentOption<std::size_t>("heur-list-size", &maxHeurListSize_,
 			"The maximum size for the heur list when blocklist-heur-calculator is enabled. 0 means no limitation.");
 	IndexedArgument bh;
 	bh.addElement("none", bhNone);
@@ -79,7 +79,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 			"    (n)one          \tDisable blocklist heur calculator.\n"
 			"    (v)ector        \tUse vector and linear search. More optimal, but slower than decision tree.\n"
 			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n");
-	oh.addArgumentOption<int>("max-decision-tree-depth", &maxDecisionTreeDepth_,
+	oh.addArgumentOption<std::size_t>("max-decision-tree-depth", &maxDecisionTreeDepth_,
 			"The maximum depth of the decision tree.");
 	oh.addBoolOption("decision-tree-checker", &useCheckerForDecisionTree_,
 			"Enable/disable usage of checker in DecisionTree building.\n");
@@ -91,7 +91,7 @@ Options::Options(int argc, char **argv, const char *configFileName):
 	std::vector<int> compare;
 	oh.addIndexedListOption("compare,c", &compare, cl,
 			"The compare algorithm to use when choosing equal elements.");
-	oh.addArgumentOption<int>("status-pool", &statusPoolSize_,
+	oh.addArgumentOption<std::size_t>("status-pool", &statusPoolSize_,
 			"The size of Status pool to avoid many calculateReachable() calls. 0 means no pooling.");
 
 

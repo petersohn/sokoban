@@ -11,7 +11,6 @@ public:
 private:
 	Array<bool> walls_;
 	Point destination_;
-	size_t a;
 public:
 	Table() {}
 	Table(size_t width, size_t height):walls_(width, height, true) {}
@@ -27,7 +26,8 @@ public:
 		walls_[p] = value;
 	}
 	void destination(Point  p) {
-		assert(p.x >= 0 && p.x < width() && p.y >= 0 && p.y < height());
+		assert(p.x >= 0 && p.x < static_cast<int>(width()) && 
+				p.y >= 0 && p.y < static_cast<int>(height()));
 		destination_ = p;
 	}
 };

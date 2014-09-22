@@ -5,7 +5,7 @@ CXX = @(COMPILER)
 LD = $(CXX)
 
 CPP_FLAGS += -std=c++11
-#CPP_FLAGS += -Wall -Wextra
+CPP_FLAGS += -Wall -Wextra
 CPP_FLAGS += @(OPTIMALIZATION_FLAG)
 CPP_FLAGS += -ftemplate-backtrace-limit=0
 

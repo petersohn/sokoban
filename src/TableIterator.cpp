@@ -4,7 +4,7 @@
 #include "TimeMeter.h"
 #include "Status/StatusUtils.h"
 
-void TableIterator::initIter(Point p, int stones, const State &state)
+void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 {
 	if (!state.empty()) {
 		if (maxDistance_ > 0) {
@@ -54,7 +54,7 @@ void TableIterator::doWork(Status::Ptr status)
 	done_.notify_all();
 }
 
-void TableIterator::iterate(int numStones)
+void TableIterator::iterate(std::size_t numStones)
 {
 	assert(!working_);
 	TempValue<bool> working(working_, true);

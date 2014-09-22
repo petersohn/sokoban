@@ -36,7 +36,7 @@ private:
 
 	mutable  CalculatedDataPtr calculatedData_;
 
-	static int statusPoolSize_;
+	static std::size_t statusPoolSize_;
 	static std::unordered_map<State, std::shared_ptr<Array<CalculatedDataPtr>>> statusPool_;
 	static boost::mutex statusPoolMutex_;
 
@@ -46,8 +46,8 @@ private:
 	bool shiftIter(Point p);
 
 public:
-	static int copyCount;
-	static int calculateReachableCount;
+	static std::size_t copyCount;
+	static std::size_t calculateReachableCount;
 
 	explicit Status(FixedTable::Ptr table);
 	explicit Status(FixedTable::Ptr table, const State &state);
@@ -87,8 +87,8 @@ public:
 
 	const Table& table() const { return table_->get(); }
 	FixedTable::Ptr tablePtr() const { return table_; }
-	size_t width() const { return table().width(); }
-	size_t height() const { return table().height(); }
+	std::size_t width() const { return table().width(); }
+	std::size_t height() const { return table().height(); }
 	const State& state() const { return state_; }
 	bool reachable(Point p) const {
 		if (!calculatedData_)
@@ -116,11 +116,11 @@ public:
 	void set(const Node &node);
 	void shiftCurrentPos();
 
-	static void statusPoolSize(int value) {
+	static void statusPoolSize(std::size_t value) {
 		statusPoolSize_ = value;
 	}
-	static int statusPoolSize() { return statusPoolSize_; }
-	static int currentStatusPoolSize() { return statusPool_.size(); }
+	static std::size_t statusPoolSize() { return statusPoolSize_; }
+	static std::size_t currentStatusPoolSize() { return statusPool_.size(); }
 };
 
 inline bool operator!=(const Status& lhs, const Status& rhs)
