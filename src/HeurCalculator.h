@@ -7,7 +7,7 @@
 class Point;
 class Status;
 class Node;
-class MoveDescriptor;
+struct MoveDescriptor;
 
 class HeurCalculator: public boost::noncopyable {
 public:

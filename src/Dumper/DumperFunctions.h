@@ -39,9 +39,9 @@ void dumpArray(std::ostream &file, const Array<T> table,
 	// leave a space between characters
 	++maxlen;
 	Point p;
-	for (p.y = 0; p.y < table.height(); p.y++) {
+	for (p.y = 0; p.y < static_cast<int>(table.height()); p.y++) {
 		file << indentString;
-		for (p.x = 0; p.x < table.width(); p.x++) {
+		for (p.x = 0; p.x < static_cast<int>(table.width()); p.x++) {
 			file.width(maxlen);
 			file << txts[p];
 		}
@@ -65,9 +65,9 @@ void dumpStatus(std::ostream &file, const Status &status,
 	}
 	Point p;
 	Array<char> output(status.width(), status.height());
-	for (p.y = 0; p.y < status.height(); p.y++)
+	for (p.y = 0; p.y < static_cast<int>(status.height()); p.y++)
 	{
-		for (p.x = 0; p.x < status.width(); p.x++)
+		for (p.x = 0; p.x < static_cast<int>(status.width()); p.x++)
 		{
 			if (status.currentPos() == p)
 				output[p] = 'Y';

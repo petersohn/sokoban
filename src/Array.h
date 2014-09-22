@@ -64,11 +64,15 @@ public:
 		return data_[pos];
 	}
 	reference operator[](Point p) {
-		assert(p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_);
+		assert(p.x >= 0 && p.y >= 0
+				&& p.x < static_cast<int>(width_) &&
+				p.y < static_cast<int>(height_));
 		return data_[p.y*width_ + p.x];
 	}
 	const_reference operator[](Point p) const {
-		assert(p.x >= 0 && p.y >= 0 && p.x < width_ && p.y < height_);
+		assert(p.x >= 0 && p.y >= 0
+				&& p.x < static_cast<int>(width_) &&
+				p.y < static_cast<int>(height_));
 		return data_[p.y*width_ + p.x];
 	}
 	std::size_t size() const { return data_.size(); }
@@ -95,7 +99,7 @@ public:
 
 template<class T>
 inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, Point p, const T& def) {
-	if (p.x >= 0 && p.y >= 0 && p.x < arr.width() && p.y < arr.height())
+	if (p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(arr.width()) && p.y < static_cast<int>(arr.height()))
 			return arr[p];
 		return def;
 }
