@@ -6,7 +6,7 @@
 #include "Status/Status.hpp"
 #include "Checker.hpp"
 #include "Mutexes.hpp"
-#include "ThreadPool.hpp"
+#include "util/ThreadPool.hpp"
 #include <functional>
 
 
@@ -50,7 +50,7 @@ public:
 			const Checker::Ptr& checker,
 			const Action& action,
 			std::size_t maxDistance,
-			ThreadPool& threadPool):
+			util::ThreadPool& threadPool):
 		table_(table),
 		heurCalculator_(heurCalculator),
 		checker_(checker),
@@ -60,7 +60,7 @@ public:
 		solved_(0),
 		lastTicks_(-1),
 		working_(false),
-		ioService_(threadPool.ioService())
+		ioService_(threadPool.getIoService())
 	{
 	}
 

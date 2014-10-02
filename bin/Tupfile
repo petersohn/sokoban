@@ -3,4 +3,4 @@ include_rules
 
 : foreach *.cpp |> !cxx |>
 : ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \
-		$(STATUS_DIR)/*.o |> !linker |> sokoban
+		$(STATUS_DIR)/*.o $(CPP_UTIL_DIR)/lib/libcpp-util.a |> !linker |> sokoban

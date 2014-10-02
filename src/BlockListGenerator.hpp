@@ -4,7 +4,7 @@
 #include "Solver.hpp"
 #include "IndexedStatusList.hpp"
 #include "Dumper/DumperFunctions.hpp"
-#include "ThreadPool.hpp"
+#include "util/ThreadPool.hpp"
 #include "Checker.hpp"
 #include "HeurInfo.hpp"
 #include <fstream>
@@ -66,7 +66,7 @@ private:
 	std::size_t maxHeurListSize_;
 	std::ofstream dump_;
 	MutexType dumpMutex_;
-	ThreadPool threadPool_;
+	util::ThreadPool threadPool_;
 	std::size_t numThreads_;
 
 	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);

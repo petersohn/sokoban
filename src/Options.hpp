@@ -55,7 +55,7 @@ public:
 	std::size_t blockListStones() const { return blockListStones_; }
 	std::size_t blockListDistance() const { return blockListDistance_; }
 	std::size_t maxHeurListSize() const { return maxHeurListSize_; }
-	std::size_t numThreads() const { return numThreads_; }
+	std::size_t getNumThreads() const { return numThreads_; }
 	std::size_t test() const { return test_; }
 	std::size_t maxDecisionTreeDepth() const { return maxDecisionTreeDepth_; }
 	bool useCheckerForDecisionTree() const { return useCheckerForDecisionTree_; }

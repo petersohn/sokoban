@@ -15,7 +15,7 @@
 #include "Dumper/IndentedOutput.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Checker.hpp"
-#include "ThreadPool.hpp"
+#include "util/ThreadPool.hpp"
 
 namespace decisionTree {
 
@@ -78,7 +78,7 @@ namespace detail {
 		ProgressBar progressBar_;
 		int progress_;
 		Checker::Ptr checker_;
-		ThreadPool threadPool_;
+		util::ThreadPool threadPool_;
 		int numThreads_;
 
 		size_t maxLength_;
@@ -205,11 +205,11 @@ namespace detail {
 			DecisionNode<Status, T>& resultNode =
 					static_cast<DecisionNode<Status, T>&>(*result);
 			if (numThreads_ > 1) {
-				threadPool_.ioService().post(std::bind(
+				threadPool_.getIoService().post(std::bind(
 						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
 						this, falseValues, pointList, depthRemaining,
 						false, falseCollectedState, std::ref(resultNode.falseChild())));
-				threadPool_.ioService().post(std::bind(
+				threadPool_.getIoService().post(std::bind(
 						&NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
 						this, trueValues, pointList, depthRemaining,
 						true, trueCollectedState, std::ref(resultNode.trueChild())));
@@ -304,7 +304,7 @@ namespace detail {
 			numLeafsSaved_(0),
 			numLeafsSavedExp_(0)
 		{
-			threadPool_.numThreads(numThreads);
+			threadPool_.setNumThreads(numThreads);
 		}
 
 		~NodeBuilder()
@@ -329,7 +329,7 @@ namespace detail {
 			minLength_ = pointList.size();
 			std::unique_ptr<Node<Key, T>> result;
 			{
-				ThreadPoolRunner runner(threadPool_);
+				util::ThreadPoolRunner runner(threadPool_);
 				doBuildNode<Key, T>(
 						valueList,
 						pointList,

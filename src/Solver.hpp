@@ -4,7 +4,7 @@
 #include "QueueInterfaces.hpp"
 #include "Expander.hpp"
 #include "Dumper/Dumper.hpp"
-#include "ThreadPool.hpp"
+#include "util/ThreadPool.hpp"
 #include <deque>
 #include <functional>
 #include <memory>
@@ -25,7 +25,7 @@ private:
 	ExpanderFactory expanderFactory_;
 	DumperFactory dumperFactory_;
 	std::size_t numThreads_;
-	ThreadPool threadPool_;
+	util::ThreadPool threadPool_;
 public:
 	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory(),
 			std::size_t numThreads = 0):
@@ -35,7 +35,7 @@ public:
 		numThreads_(numThreads)
 	{
 		if (numThreads > 0) {
-			threadPool_.numThreads(numThreads);
+			threadPool_.setNumThreads(numThreads);
 		}
 	}
 	std::deque<std::shared_ptr<Node> > solve(const Status &status);

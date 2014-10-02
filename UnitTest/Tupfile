@@ -5,5 +5,5 @@ LIBS += -lboost_unit_test_framework
 
 : foreach *.cpp |> !cxx |>
 : ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \
-		$(STATUS_DIR)/*.o |> !linker |> unitTest
+		$(STATUS_DIR)/*.o $(CPP_UTIL_LIB) |> !linker |> unitTest
 : unitTest |> !unitTest |>

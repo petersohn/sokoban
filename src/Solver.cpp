@@ -1,7 +1,7 @@
 #include "Solver.hpp"
 #include "Status/Status.hpp"
 #include "Node.hpp"
-#include "ThreadPool.hpp"
+#include "util/ThreadPool.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "JobManager.hpp"
 #include <boost/foreach.hpp>
@@ -104,16 +104,16 @@ public:
 
 std::deque<Node::Ptr> Solver::solve(const Status &status)
 {
-	std::unique_ptr<ThreadPoolRunner> runner;
+	std::unique_ptr<util::ThreadPoolRunner> runner;
 	if (numThreads_ > 0) {
-		runner.reset(new ThreadPoolRunner(threadPool_));
+		runner.reset(new util::ThreadPoolRunner(threadPool_));
 	}
 	InternalSolver solver(
 			queueFactory_(),
 			expanderFactory_(),
 			dumperFactory_(),
 			numThreads_ > 0,
-			threadPool_.ioService());
+			threadPool_.getIoService());
 	return solver.solve(status);
 
 }

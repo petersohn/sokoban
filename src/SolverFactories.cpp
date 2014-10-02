@@ -110,7 +110,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 		BlockListGenerator blockListGenerator(
 				solver, calculator, checker, options_.blockListStones(),
 				options_.blockListDistance(), options_.maxHeurListSize(),
-				options_.numThreads());
+				options_.getNumThreads());
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
 		switch (options_.blocklistHeurCalculatorType()) {

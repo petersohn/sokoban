@@ -27,7 +27,7 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 	threadPool_(),
 	numThreads_(numThreads)
 {
-	threadPool_.numThreads(numThreads);
+	threadPool_.setNumThreads(numThreads);
 }
 
 std::deque<Node::Ptr> BlockListGenerator::doCalculateBlockList(const Status& status)
@@ -76,7 +76,7 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	for (std::size_t n = 2; n <= numStones_; ++n) {
 		std::cerr << "Stones = " << n << std::endl;
 		{
-			ThreadPoolRunner runner(threadPool_);
+			util::ThreadPoolRunner runner(threadPool_);
 			tableIterator.iterate(n);
 		}
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;

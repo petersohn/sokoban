@@ -43,14 +43,14 @@ int main(int argc, char** argv) {
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
 			createExpander,
 			std::bind(createDumperFromOptions, opts),
-			opts.parallelOuterExpand() ? opts.numThreads() : 0);
+			opts.parallelOuterExpand() ? opts.getNumThreads() : 0);
 	std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	SolutionChecker solutionChecker(std::cerr, heurDump);
 	if (opts.test() > 0) {
 		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
-		ThreadPool threadPool;
-		ThreadPoolRunner runner(threadPool);
-		threadPool.numThreads(opts.numThreads());
+		util::ThreadPool threadPool;
+		util::ThreadPoolRunner runner(threadPool);
+		threadPool.setNumThreads(opts.getNumThreads());
 		TableIterator it(
 				st.tablePtr(),
 				calculator,
