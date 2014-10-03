@@ -12,8 +12,8 @@ To build the project:
 2. If necessary, set the environment variables `EXTRA_CPP_FLAGS` (for additional compiler flags, e.g. `-I`) and `EXTRA_LD_FLAGS` (for additional linker flags, e.g. `-L`).
 3. Initialize a tup variant from the build directory. `tup variant build/release.config`
 4. Build the project. `tup upd`
-5. To get a help of command line options, type: `./build-release/bin/sokoban --help`
-6. To solve a game, give it as a parameter: `./build-release/bin/sokoban games/game1.txt`
+5. To get a help of command line options, type. `./build-release/bin/sokoban --help`
+6. To solve a game, give it as a parameter. `./build-release/bin/sokoban games/game1.txt`
 
 # Input and output
 
@@ -106,11 +106,11 @@ The algorithm runs until either a solution (a node with no stones) is found or t
 
 The following heuristics calculation methods are used:
 
-### BasicHeurCalculator
+### Basic Heuristics Calculator
 
 This is the simplest method of heuristics calculation. It is typically only used for kickstarting more advanced calculators. The the manhattan distance of each tile from the target is stored. The heuristic values are added for each stone.
 
-### AdvancedHeurCalculator
+### Advanced Heuristics Calculator
 
 First, use a `BasicHeurCalculator` to calculate a preliminary heuristics table. Then for each tile:
 
@@ -119,23 +119,23 @@ First, use a `BasicHeurCalculator` to calculate a preliminary heuristics table. 
 3. For each partition:
  1. position the player on a floor tile in the partition.
  4. Solve the problem.
- 5. Store the solution
+ 5. Store the cost value of the solution (or that it is unsolvable).
 
 For each stone, get the heuristics value from the above calculated values. Use the partition that corresponds to the player's current position. Add the values for each stone.
 
 This heuristics calculator is used by default.
 
-### BlocklistHeurCalculator
+### Blocklist Heuristics Calculator
 
 This type of heuristics calculator requires preprocessing. During preprocessing, a set of states are found which have higher heuristics value than the value of the stones added. These states are stored, either in a vector or a decision tree. The difference between the two storage methods is that finding relevant states in the decision tree is algorithmically faster, although if there are a small amount of elements, vector can be faster because of the simpler data structure used.
 
-The vector and the decision tree should theoretically yield the same result, but in practice they can be different in some cases.
+This heuristics calculator is not used by default.
 
 ## Expanding nodes
 
 The following kind of expanders can be used.
 
-### Normal expander
+### Normal Expander
 
 1. For each stone, try to push the stone one tile in each direction.
 2. For each possible move, create a potential node.
@@ -147,6 +147,127 @@ For a move to become a potential node, the following need to hold:
 - The tile in the opposite direction of moving (i.e. before the stone) must be a floor tile that is reachable by the player.
 - The tile where the stone is moved must be a floor tile.
 - The heuristics calculator says that putting the stone to the destination tile is possible.
+
+This expander is always in use.
+
+### Stone Pusher
+
+If enabled, this expander runs before the normal expander.
+
+1. Find a stone that can be trivially pushed to the destination tile.
+2. Push the stone to the destination tile.
+3. Repeat the previous steps until no more trivial pushes are possible.
+4. If any stones are pushed:
+ - Add a node with the new state to the processing queue (if new).
+ - Stop processing the current node (skip normal expander)
+
+This expander is used by default.
+
+## Checkers
+
+The checkers are run for each potential node by the normal expander. They check for certain conditions that make the game unwinnable from the current state. There is no need for checking for the stone pusher, as it only makes "safe" moves. If there are multiple checkers, any check failing means that the state is unsolvable.
+
+### Movable Checker
+
+This checker checks whether the stone moved is not stuck (i.e. movable). A stone is movable, if both tiles directly next to the stone either horizontally or vertically (i.e. either the tiles left and right of the stone, or the tiles above and below the stone) are either:
+- Floor
+- Another movable stone
+
+For example, in the following situation the stones are not movable because all stones have another stone next to it which is not movable:
+
+```
+. . . .
+. o o .
+. o o .
+. . . .
+```
+
+On the other hand, in the next situation all stones are movable, becuase the stones at either end have floor tiles in one direction, and the middle stone has a movable stone in both directions.
+
+```
+. . . *
+. o o *
+. o . *
+. . . *
+```
+
+This checker is used by default.
+
+### Corridor Checker
+
+This checker checks for corridors near the stone moved. A corridor is a series of floor tiles that span either only one row or only one column. For example, the following situations have corridors (marked with +):
+
+```
+* * * *
+* + o .
+* + o .
+* o . .
+```
+
+```
+. . . . .
+o o o o .
+o + + + o
+. o o o .
+```
+
+The following is not a corridor though:
+
+```
+. . . .
+o o . .
+o . o .
+o . . o
+* * * *
+```
+
+It is also not a corridor if the player is standing inside it.
+
+If a corridor is found, the endpoints are checked. The check passes if the corridor can be opened from either end. A corridor can be opened if the tile just after the last floor tile in the row is a stone and both neighboring tiles perpendicular to the corridor are floor tiles. For example, the following corridor can be opened:
+
+```
+* o o o .
+* + + + o
+* o o o .
+```
+
+But this one can not:
+
+```
+o o o .
+o . . o
+. o o o
+```
+
+For 1x1 corridors (i.e. one isolated floor tile) the check passes if any of the four endpoints can be opened.
+
+This checker is used by default.
+
+### Blocklist Checker
+
+Use preprocessing to find a set of states which are unsolvable. If any of these states are found in the current state, then the check fails.
+
+This check is used if preprocessing is enabled.
+
+## Preprocessing
+
+Generate a set of states on the table with the following algorithm. The table does not contain the initial stones present in the game.
+1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if k=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k*x*k* portion of the table.
+2. Run checkers to see whether there is a possible solution.
+3. Find a solution.
+4. If no solution is found or the total cost of the solution is more than the initial heuristic value, store the state.
+
+The output is used by Blocklist Checker and Blocklist Heuristics Calculator.
+
+Preprocessing can be parallelized. Since for each substate the program operates on distinct data, they can be run in parallel. In fact, the solutions are always generated on separate thread(s) from the main thread, so the generation of states always runs parallel to the solutions, even if the number of threads are set to 1.
+
+Preprocessing is enabled if *n* > 1. If preprocessing is enabled, Blocklist Checker is automatically enabled. It is also a prerequisite for using Blocklist Heuristics Calculator.
+
+The following parameters control preprocessing:
+
+- `--blocklist-number`: Specifies *n*.
+- `--blocklist-distance`: Specifies *k*.
+- `--thread-num`: Specifies the number of working threads to use.
 
 
 
