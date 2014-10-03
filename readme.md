@@ -161,6 +161,10 @@ If enabled, this expander runs before the normal expander.
  - Add a node with the new state to the processing queue (if new).
  - Stop processing the current node (skip normal expander)
 
+A stone can be trivially pushed if both of the following is true:
+- The stone can be moved to the destination tile without moving any other stones.
+- At every move during the path, the heuristics value of the stone decreases by 1. This means that the cost + heuristics values does not increase, so the stone moves on an optimal path for the A\* algorithm.
+
 This expander is used by default.
 
 ## Checkers
