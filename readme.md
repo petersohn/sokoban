@@ -252,7 +252,8 @@ This check is used if preprocessing is enabled.
 ## Preprocessing
 
 Generate a set of states on the table with the following algorithm. The table does not contain the initial stones present in the game.
-1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if k=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k*x*k* portion of the table.
+
+1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if k=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k* x *k* portion of the table.
 2. Run checkers to see whether there is a possible solution.
 3. Find a solution.
 4. If no solution is found or the total cost of the solution is more than the initial heuristic value, store the state.
