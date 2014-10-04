@@ -60,7 +60,7 @@ The following additional files are written:
 - `partitions.dump`: Some information about the calculated heuristics table.
 - If `--blocklist-heur-calculator` is enabled:
  - `blocklist.dump`: The result of the preprocessing. Shows which states are blocked or have additional cost.
- - `plusHeur.dump`: Tracks the usage of the preprocessed data.
+- `plusHeur.dump`: Stores some information about experimental features. Currently it contains no useful information.
 - If `--dump-style=text` is enabled: `dump.dump`: shows the full progress of finding the solution.
 - If `--dump-style=xml` is enabled: `dump.xml`: shows the full progress in a hierarchical form (in xml format).
 
