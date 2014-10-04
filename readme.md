@@ -124,6 +124,8 @@ The algorithm runs until either a solution (a node with no stones) is found or t
 
 ## Heuristics calculation
 
+The heuristics calculators are used for each node (or one stone) to calculate the heuristic value for the A\* algorithm. At a time only one of them is used, but they can rely on others for their operation.
+
 The following heuristics calculation methods are used:
 
 ### Basic Heuristics Calculator
@@ -132,7 +134,7 @@ This is the simplest method of heuristics calculation. It is typically only used
 
 ### Advanced Heuristics Calculator
 
-First, use a `BasicHeurCalculator` to calculate a preliminary heuristics table. Then for each tile:
+First, use a Basic Heuristics Calculator to calculate a preliminary heuristics table. Then for each tile:
 
 1. Put a stone on the tile, and leave all other tiles empty.
 2. Partition the remaining floor tiles so that each partition consists of the tiles reachable by the player from each other.
@@ -141,19 +143,21 @@ First, use a `BasicHeurCalculator` to calculate a preliminary heuristics table. 
  4. Solve the problem.
  5. Store the cost value of the solution (or that it is unsolvable).
 
-For each stone, get the heuristics value from the above calculated values. Use the partition that corresponds to the player's current position. Add the values for each stone.
+For each stone, get the heuristics value from the above calculated values. Use the partition that corresponds to the player's current position. When calculating the heuristics for a node, add the values for each stone.
 
 This heuristics calculator is used by default.
 
 ### Blocklist Heuristics Calculator
 
-This type of heuristics calculator requires preprocessing. During preprocessing, a set of states are found which have higher heuristics value than the value of the stones added. These states are stored, either in a vector or a decision tree. The difference between the two storage methods is that finding relevant states in the decision tree is algorithmically faster, although if there are a small amount of elements, vector can be faster because of the simpler data structure used.
+This type of heuristics calculator requires preprocessing. During preprocessing, a set of states are found which have higher heuristics value than the value of the stones added. These substates are stored, and checked against the state during heuristics calculation. If a set of stones match any substate, the stored heuristics value is added. For stones that do not match any of the substates or where all matched substates are already used up, the heuristics value of the fallback calculator is used. If heuristics is calculated for one stone only, the fallback calculator is used.
+
+The states are stored either in a vector or a decision tree. The difference between the two storage methods is that finding relevant states in the decision tree is algorithmically faster, although if there are a small amount of elements, vector can be faster because of the simpler data structure used.
 
 This heuristics calculator is not used by default.
 
 ## Expanding nodes
 
-The following kind of expanders can be used.
+The task of the expanders is to find the child nodes for each node picked by the A\* algorithm. It is possible to use multiple expanders. The following expanders can be used.
 
 ### Normal Expander
 
@@ -277,7 +281,7 @@ This check is used if preprocessing is enabled.
 
 Generate a set of states on the table with the following algorithm. The table does not contain the initial stones present in the game.
 
-1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if k=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k* x *k* portion of the table.
+1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if *k*=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k* x *k* portion of the table.
 2. Run checkers to see whether there is a possible solution.
 3. Find a solution.
 4. If no solution is found or the total cost of the solution is more than the initial heuristic value, store the state.
@@ -293,6 +297,13 @@ The following parameters control preprocessing:
 - `--blocklist-number`: Specifies *n*.
 - `--blocklist-distance`: Specifies *k*.
 - `--thread-num`: Specifies the number of working threads to use.
+
+## Parallelization
+
+Apart from parallel preprocessing, it is possible to use some parallelization for the main search. It can be done with the `--parallel-outer-expand` parameter. However, this usually does not yield good performance, so its usage is not recommended.
+
+The basic concept of parallel expansion is to pick more than one nodes from the queue in the main loop and expand them in parallel. To keep the invariants of the A\* algorithm intact, only expand nodes with the same *cost + heuristics* value parallelly.
+
 
 
 
