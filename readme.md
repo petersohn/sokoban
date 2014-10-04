@@ -20,18 +20,55 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
 - [Preprocessing](#preprocessing)
 - [Parallelization](#parallelization)
 
-# Compiling and running
+# Getting started
+
+These are the first steps to start solving Sokoban problems. Read further for more detailed description of the program.
+
+## Building
 
 Sokoban uses [tup](http://gittup.org/tup/) as the build system. It requires a C++ compiler with C++11 support (tested with GCC 4.8 and Clang 3.4) and (a reasonably recent version of) Boost.
 
 To build the project:
 
-1. Initialize submodule dependencies. `git submodule update --init --recursive`
-2. If necessary, set the environment variables `EXTRA_CPP_FLAGS` (for additional compiler flags, e.g. `-I`) and `EXTRA_LD_FLAGS` (for additional linker flags, e.g. `-L`).
-3. Initialize a tup variant from the build directory. `tup variant build/release.config`
-4. Build the project. `tup upd`
-5. To get a help of command line options, type. `./build-release/bin/sokoban --help`
-6. To solve a game, give it as a parameter. `./build-release/bin/sokoban games/game1.txt`
+Initialize submodule dependencies.
+```bash
+git submodule update --init --recursive
+```
+
+If necessary, set the environment variables `EXTRA_CPP_FLAGS` (for additional compiler flags, e.g. `-I`) and `EXTRA_LD_FLAGS` (for additional linker flags, e.g. `-L`).
+```bash
+export EXTRA_CPP_FLAGS='-I/path/to/boost/include'
+export EXTRA_LD_FLAGS='-L/path/to/boost/lib'
+```
+
+Initialize a tup variant from the build directory.
+```bash
+tup variant build/release.config
+```
+
+Build the project.
+```bash
+tup upd
+```
+
+## Running
+
+Tup generates the binary files inside subdirectories corresponding to the variants. The actual binary has the path `build-<variant>/bin/sokoban`. In these examples, the *release* variant is used.
+
+To get a help of command line options, use the `--help` option.
+```bash
+./build-release/bin/sokoban --help
+```
+
+To solve a game, give the file name as a parameter. Games are found under the `games` subdirectory.
+```bash
+./build-release/bin/sokoban games/game1.txt
+```
+
+The solution is printed to the standard output, but it is not very visual. A more visual representation of the solution is saved to a file, which can be visualized with a script.
+```bash
+./showdump solution.dump
+```
 
 # Input and output
 
