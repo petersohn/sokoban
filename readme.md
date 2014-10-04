@@ -2,6 +2,23 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
 
 **Note:** Because the game is based on the Nethack Sokoban levels, the term "stone" is used for boxes (i.e. the things that are moved around the level).
 
+# Table of contents
+
+- [Input file format](#input-file-format)
+- [Output file format](#output-file-format)
+- [Heuristics calculation](#heuristics-calculation)
+    - [Basic Heuristics Calculator](#basic-heuristics-calculator)
+    - [Advanced Heuristics Calculator](#advanced-heuristics-calculator)
+    - [Blocklist Heuristics Calculator](#blocklist-heuristics-calculator)
+- [Expanding nodes](#expanding-nodes)
+    - [Normal Expander](#normal-expander)
+    - [Stone Pusher](#stone-pusher)
+- [Checkers](#checkers)
+    - [Movable Checker](#movable-checker)
+    - [Corridor Checker](#corridor-checker)
+    - [Blocklist Checker](#blocklist-checker)
+- [Preprocessing](#preprocessing)
+
 # Compiling and running
 
 Sokoban uses [tup](http://gittup.org/tup/) as the build system. It requires a C++ compiler with C++11 support (tested with GCC 4.8 and Clang 3.4) and (a reasonably recent version of) Boost.
