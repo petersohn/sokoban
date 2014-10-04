@@ -4,23 +4,21 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
 
 # Table of contents
 
-- [Compiling and running](#compiling-and-running)
-- [Input and output](#input-and-output)
-    - [Input file format](#input-file-format)
-    - [Output file format](#output-file-format)
-- [Algorithms](#algorithms)
-    - [Heuristics calculation](#heuristics-calculation)
-        - [Basic Heuristics Calculator](#basic-heuristics-calculator)
-        - [Advanced Heuristics Calculator](#advanced-heuristics-calculator)
-        - [Blocklist Heuristics Calculator](#blocklist-heuristics-calculator)
-    - [Expanding nodes](#expanding-nodes)
-        - [Normal Expander](#normal-expander)
-        - [Stone Pusher](#stone-pusher)
-    - [Checkers](#checkers)
-        - [Movable Checker](#movable-checker)
-        - [Corridor Checker](#corridor-checker)
-        - [Blocklist Checker](#blocklist-checker)
-    - [Preprocessing](#preprocessing)
+- [Input file format](#input-file-format)
+- [Output file format](#output-file-format)
+- [Heuristics calculation](#heuristics-calculation)
+    - [Basic Heuristics Calculator](#basic-heuristics-calculator)
+    - [Advanced Heuristics Calculator](#advanced-heuristics-calculator)
+    - [Blocklist Heuristics Calculator](#blocklist-heuristics-calculator)
+- [Expanding nodes](#expanding-nodes)
+    - [Normal Expander](#normal-expander)
+    - [Stone Pusher](#stone-pusher)
+- [Checkers](#checkers)
+    - [Movable Checker](#movable-checker)
+    - [Corridor Checker](#corridor-checker)
+    - [Blocklist Checker](#blocklist-checker)
+- [Preprocessing](#preprocessing)
+- [Parallelization](#parallelization)
 
 # Compiling and running
 
