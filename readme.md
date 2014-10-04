@@ -4,6 +4,8 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
 
 # Table of contents
 
+- [Building](#building)
+- [Running](#running)
 - [Input file format](#input-file-format)
 - [Output file format](#output-file-format)
 - [Heuristics calculation](#heuristics-calculation)
