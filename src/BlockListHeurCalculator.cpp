@@ -19,20 +19,20 @@ int BlocklistHeurCalculator::calculateStatus(
 		const std::shared_ptr<Node>& ancestor)
 {
 	assert(status.tablePtr() == table_);
-	PseudoStatus mockStatus(status);
+	PseudoStatus pseudoStatus(status);
 	int result = 0;
 	{
 		boost::unique_lock<MutexType> lock(mutex_);
 		for (const HeurInfoConstPtr& subset: heurList_) {
-			if (isSubStatus(subset->first, mockStatus)) {
+			if (isSubStatus(subset->first, pseudoStatus)) {
 				result += subset->second;
 				for (Point  p: subset->first.state()) {
-					mockStatus.state().removeStone(p);
+					pseudoStatus.state().removeStone(p);
 				}
 			}
 		}
 	}
-	for (Point  p: mockStatus.state()) {
+	for (Point  p: pseudoStatus.state()) {
 		result += baseCalculator_->calculateStone(status, p);
 	}
 	if (ancestor) {
