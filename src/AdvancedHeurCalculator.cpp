@@ -94,11 +94,13 @@ int AdvancedHeurCalculator::doCalculateStone(const Status &status, Point p)
 	// can't be used. Use the minimal non-negative
 	// partition's value instead
 	if (status.currentPos() == p) {
-		auto firstOk = std::find_if(partitions_[p].begin(), partitions_[p].end(),
-				[](const Partition& partition) { return partition.heur >= 0; });
-		auto minElement = std::min_element(firstOk, partitions_[p].end(),
+		auto minElement = std::min_element(
+				partitions_[p].begin(), partitions_[p].end(),
 				[](const Partition& left, const Partition& right)
-				{ return left.heur < right.heur; });
+				{
+					return static_cast<unsigned>(left.heur) <
+						static_cast<unsigned>(right.heur);
+				});
 		return (minElement == partitions_[p].end()) ? -1 : minElement->heur;
 	} else {
 		auto it = std::find_if(partitions_[p].begin(), partitions_[p].end(),
