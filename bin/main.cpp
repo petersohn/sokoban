@@ -46,6 +46,7 @@ int main(int argc, char** argv) {
 			opts.parallelOuterExpand() ? opts.getNumThreads() : 0);
 	std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	SolutionChecker solutionChecker(std::cerr, heurDump);
+	int returnCode = 0;
 	if (opts.test() > 0) {
 		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
 		util::ThreadPool threadPool;
@@ -72,6 +73,7 @@ int main(int argc, char** argv) {
 				cerr << "Solution OK." << endl;
 			} else {
 				cerr << "Solution bad." << endl;
+				returnCode = 1;
 			}
 			std::ofstream dump("solution.dump", std::ios::out | std::ios::trunc);
 			for (std::deque<Node::Ptr>::iterator it = solution.begin();
@@ -92,4 +94,5 @@ int main(int argc, char** argv) {
 	cerr << "Status copied " << Status::copyCount << " times.\n" <<
 			"calculateReachable called " << Status::calculateReachableCount << " times.\n" <<
 			"Status pool size = " << Status::currentStatusPoolSize() << endl;
+	return returnCode;
 }
