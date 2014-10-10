@@ -34,7 +34,8 @@ std::deque<Node::Ptr> BlockListGenerator::doCalculateBlockList(const Status& sta
 {
 	std::deque<Node::Ptr> result = solver_->solve(status);
 	if (result.empty()) {
-		blockList_->add(status, 0);
+		auto threadId = *util::ThreadPool::getCurrentThreadId();
+		calculationInfos_[threadId]->blockList_.push_back(status);
 		dumpStatus(status, NULL, "Blocked");
 	}
 	return result;
@@ -53,10 +54,13 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 		int cost = result.back()->cost();
 		int difference = cost - heur;
 		if (difference > 0) {
-			dump_ << heur << " --> " << cost << "(" << difference << ")\n";
+			auto threadId = *util::ThreadPool::getCurrentThreadId();
+			calculationInfos_[threadId]->dump_ <<
+					heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
 			HeurInfoConstPtr heurInfo = std::make_shared<HeurInfo>(status, cost);
-			heurList_.push_back(IncrementInfo(heurInfo, difference));
+			calculationInfos_[threadId]->heurList_.push_back(
+					IncrementInfo(heurInfo, difference));
 		}
 	}
 }
@@ -73,11 +77,28 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 	blockList_->clear();
 	heurList_.clear();
 	incrementalCalculator_ = calculator_;
+	calculationInfos_.resize(numThreads_);
 	for (std::size_t n = 2; n <= numStones_; ++n) {
+		for (auto& calculationInfo: calculationInfos_) {
+			calculationInfo.reset(new CalculationInfo);
+		}
 		std::cerr << "Stones = " << n << std::endl;
 		{
 			util::ThreadPoolRunner runner(threadPool_);
 			tableIterator.iterate(n);
+		}
+		for (const auto& calculationInfo: calculationInfos_) {
+			dump_ << calculationInfo->dump_.str();
+
+			for (const auto& status: calculationInfo->blockList_) {
+				blockList_->add(status, 0);
+			}
+
+			heurList_.reserve(heurList_.size() +
+					calculationInfo->heurList_.size());
+			std::move(calculationInfo->heurList_.begin(),
+					calculationInfo->heurList_.end(),
+					std::back_inserter(heurList_));
 		}
 		std::cerr << "Block list size = " << blockList_->size() << std::endl;
 		std::cerr << "Heur list size = " << heurList_.size() << std::endl;
@@ -114,7 +135,7 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 }
 
 
-HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t maxDepth, 
+HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t maxDepth,
 		bool useChecker)
 {
 	assert(table_);

@@ -54,6 +54,13 @@ private:
 
 	typedef std::vector<IncrementInfo> IncrementList;
 
+	struct CalculationInfo {
+		std::ostringstream dump_;
+		std::vector<Status> blockList_;
+		IncrementList heurList_;
+	};
+	typedef std::unique_ptr<CalculationInfo> CalculationInfoPtr;
+
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	HeurCalculator::Ptr incrementalCalculator_;
@@ -64,8 +71,8 @@ private:
 	std::size_t numStones_;
 	std::size_t maxDistance_;
 	std::size_t maxHeurListSize_;
+	std::vector<CalculationInfoPtr> calculationInfos_;
 	std::ofstream dump_;
-	MutexType dumpMutex_;
 	util::ThreadPool threadPool_;
 	std::size_t numThreads_;
 
@@ -73,15 +80,17 @@ private:
 	void calculateBlockList(const Status& status);
 	void calculateHeurList(const Status& status);
 	void dumpStatus(const Status &status, const Point *p, const std::string &title) {
-		boost::lock_guard<MutexType> lck(dumpMutex_);
-		if (!dump_.good())
-			return;
+		const std::size_t* threadId = util::ThreadPool::getCurrentThreadId();
+		std::ostream* dump = &dump_;
+		if (threadId) {
+			dump = &calculationInfos_[*threadId]->dump_;
+		}
 		if (p) {
 			Array<bool> hl = status.reachableArray();
 			hl[*p] = true;
-			::dumpStatus(dump_, status, title, &hl);
+			::dumpStatus(*dump, status, title, &hl);
 		} else {
-			::dumpStatus(dump_, status, title, &status.reachableArray());
+			::dumpStatus(*dump, status, title, &status.reachableArray());
 		}
 	}
 public:
