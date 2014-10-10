@@ -65,7 +65,7 @@ private:
 	HeurCalculator::Ptr calculator_;
 	HeurCalculator::Ptr incrementalCalculator_;
 	Checker::Ptr checker_;
-	std::shared_ptr<IndexedStatusList<int>> blockList_;
+	IndexedStatusList<int> blockList_;
 	IncrementList heurList_;
 	FixedTable::Ptr table_;
 	std::size_t numStones_;

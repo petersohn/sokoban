@@ -23,8 +23,8 @@ private:
 	{
 		index_.clear();
 		for (const auto& elem: other.index_) {
-			Status::ConstPtr copied(new Status(*(elem.second)));
-			index_.insert(std::make_pair(elem.first, copied));
+			Status::ConstPtr copied(new Status(*(elem.second.first)));
+			index_.insert(std::make_pair(elem.first, std::make_pair(copied, elem.second.second)));
 		}
 	}
 public:
@@ -39,6 +39,9 @@ public:
 		copyFrom(other);
 		return *this;
 	}
+
+	IndexedStatusList(IndexedStatusList&&) = default;
+	IndexedStatusList& operator=(IndexedStatusList&&) = default;
 
 	void add(const Status &status, const Value& value)
 	{

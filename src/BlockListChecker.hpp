@@ -6,13 +6,13 @@
 
 class BlockListChecker: public Checker {
 private:
-	std::shared_ptr<IndexedStatusList<int>> blockList_;
+	IndexedStatusList<int> blockList_;
 	FixedTable::Ptr table_;
 public:
 	BlockListChecker(
-			std::shared_ptr<IndexedStatusList<int>> blockList,
+			IndexedStatusList<int> blockList,
 			FixedTable::Ptr table):
-				blockList_(blockList),
+				blockList_(std::move(blockList)),
 				table_(table)
 	{
 	}
