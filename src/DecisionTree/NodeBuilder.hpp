@@ -90,7 +90,7 @@ namespace detail {
 		size_t numFullDepthLeafs_;
 		size_t numLeafsSaved_;
 		size_t numLeafsSavedExp_;
-		MutexType progressMutex_;
+		MutexType MUTEX_DECL(progressMutex_);
 
 		void advanceProgress(size_t size, int depthRemaining)
 		{

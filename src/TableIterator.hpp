@@ -26,7 +26,7 @@ private:
 
 	MutexType iterMutex_;
 	boost::asio::io_service &ioService_;
-	boost::condition_variable done_;
+	ConditionVariableType done_;
 
 	void initIter(Point p, std::size_t stones, const State &state);
 	void doWork(std::vector<Status::Ptr> statuses);
@@ -62,6 +62,7 @@ public:
 		solved_(0),
 		lastTicks_(-1),
 		working_(false),
+		MUTEX_DECL(iterMutex_),
 		ioService_(threadPool.getIoService())
 	{
 	}

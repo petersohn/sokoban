@@ -19,7 +19,8 @@ public:
 			FixedTable::Ptr table):
 				baseCalculator_(baseCalculator),
 				heurList_(std::begin(heurList), std::end(heurList)),
-				table_(table)
+				table_(table),
+				MUTEX_DECL(mutex_)
 	{
 	}
 

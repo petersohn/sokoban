@@ -16,6 +16,8 @@ template <class Mutex>
 class TraceMutex {
 	Mutex mutex;
 	boost::posix_time::time_duration waitTime;
+	unsigned uniqueNum = 0;
+	unsigned sharedNum = 0;
 	const char* name;
 public:
 	typedef Mutex MutexType;
@@ -26,7 +28,7 @@ public:
 	}
 	~TraceMutex()
 	{
-		std::cerr << "Mutex " << name << " destroyed. Total waiting time: " << waitTime << std::endl;
+		std::cerr << "Mutex " << name << " destroyed. Total waiting time: " << waitTime << " Unique locks: " << uniqueNum << " Shared locks: " << sharedNum << std::endl;
 	}
 
 	// Lockable Concept
@@ -46,6 +48,7 @@ public:
 	}
 	void unlock()
 	{
+		++uniqueNum;
 		mutex.unlock();
 	}
 
@@ -66,12 +69,13 @@ public:
 	}
 	void unlock_shared()
 	{
+		++sharedNum;
 		mutex.unlock_shared();
 	}
 
 };
 
-#define MUTEX_DECL(name) name(#name)
+#define MUTEX_DECL(name) name{#name}
 
 typedef TraceMutex<boost::mutex> MutexType;
 typedef TraceMutex<boost::shared_mutex> SharedMutexType;
@@ -80,7 +84,7 @@ typedef boost::condition_variable_any ConditionVariableType;
 
 #else
 
-#define MUTEX_DECL(name) name()
+#define MUTEX_DECL(name) name{}
 
 typedef boost::mutex MutexType;
 typedef boost::shared_mutex SharedMutexType;
