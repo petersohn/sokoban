@@ -6,8 +6,6 @@
 #include <memory>
 
 class Table {
-public:
-	typedef std::shared_ptr<Table> Ptr;
 private:
 	Array<bool> walls_;
 	Point destination_;
@@ -26,7 +24,7 @@ public:
 		walls_[p] = value;
 	}
 	void destination(Point  p) {
-		assert(p.x >= 0 && p.x < static_cast<int>(width()) && 
+		assert(p.x >= 0 && p.x < static_cast<int>(width()) &&
 				p.y >= 0 && p.y < static_cast<int>(height()));
 		destination_ = p;
 	}
