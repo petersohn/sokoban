@@ -16,6 +16,7 @@
 #include "Status/StatusUtils.hpp"
 #include "Checker.hpp"
 #include "util/ThreadPool.hpp"
+#include "Mutexes.hpp"
 
 namespace decisionTree {
 

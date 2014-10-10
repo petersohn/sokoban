@@ -2,7 +2,6 @@
 #define DECISIONTREEHEURCALCULATOR_H_
 
 #include "HeurCalculator.hpp"
-#include "IndexedStatusList.hpp"
 #include "HeurInfo.hpp"
 #include "Status/PseudoStatus.hpp"
 #include "DecisionTree/DecisionTree.hpp"

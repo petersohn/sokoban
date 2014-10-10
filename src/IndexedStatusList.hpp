@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <functional>
 #include <boost/thread/locks.hpp>
-#include "Mutexes.hpp"
 #include "Status/Status.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Status/State.hpp"
@@ -19,7 +18,6 @@ private:
 
 	IndexType index_;
 	size_t size_;
-	mutable SharedMutexType mutex_;
 
 	void copyFrom(const IndexedStatusList &other)
 	{
@@ -44,7 +42,6 @@ public:
 
 	void add(const Status &status, const Value& value)
 	{
-		boost::unique_lock<SharedMutexType> lock(mutex_);
 		Status::ConstPtr val(new Status(status));
 		for (Point  p: status.state()) {
 			index_.insert(std::make_pair(p, std::make_pair(val, value)));
@@ -58,7 +55,6 @@ public:
 
 	bool hasSubStatus(const Status &status, Point p) const
 	{
-		boost::shared_lock<SharedMutexType> lock(mutex_);
 		RangeType range = index_.equal_range(p);
 		for (const auto& val: range) {
 			if (isSubStatus(*val.second.first, status)) {
@@ -70,7 +66,6 @@ public:
 
 	std::vector<Value> getSubStatusValues(const Status &status, Point p) const
 	{
-		boost::shared_lock<SharedMutexType> lock(mutex_);
 		std::vector<Value> result;
 		RangeType range = index_.equal_range(p);
 		for (const auto& val: range) {
