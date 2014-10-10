@@ -21,6 +21,7 @@ private:
 	std::size_t maxDistance_;
 	std::size_t iters_, solved_;
 	std::size_t lastTicks_;
+	std::vector<Status::Ptr> workQueue;
 	bool working_;
 
 	MutexType iterMutex_;
@@ -28,7 +29,8 @@ private:
 	boost::condition_variable done_;
 
 	void initIter(Point p, std::size_t stones, const State &state);
-	void doWork(Status::Ptr status);
+	void doWork(std::vector<Status::Ptr> statuses);
+	void cleanWorkQueue();
 	void progress();
 	bool advancePoint(Point &p) {
 		if (p.x == static_cast<int>(table_->get().width()) - 1) {
