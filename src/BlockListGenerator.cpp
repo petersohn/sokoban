@@ -16,7 +16,7 @@
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
 		Checker::Ptr checker, std::size_t numStones, std::size_t maxDistance,
 		std::size_t maxHeurListSize, std::size_t numThreads):
-	solver_(solver),
+	solver_(std::move(solver)),
 	calculator_(calculator),
 	checker_(checker),
 	blockList_(new IndexedStatusList<int>),

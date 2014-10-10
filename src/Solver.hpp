@@ -19,7 +19,7 @@ public:
 
 class Solver {
 public:
-	typedef std::shared_ptr<Solver> Ptr;
+	typedef std::unique_ptr<Solver> Ptr;
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
@@ -38,7 +38,7 @@ public:
 			threadPool_.setNumThreads(numThreads);
 		}
 	}
-	std::deque<std::shared_ptr<Node> > solve(const Status &status);
+	std::deque<std::shared_ptr<Node>> solve(const Status &status);
 	~Solver() {}
 private:
 };

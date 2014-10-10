@@ -63,7 +63,7 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 					std::make_shared<ComplexChecker>(createBasicCheckers(bhc)),
 					false);
 		}));
-	return HeurCalculator::Ptr(new AdvancedHeurCalculator(s));
+	return HeurCalculator::Ptr(new AdvancedHeurCalculator(std::move(s)));
 }
 
 std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
@@ -108,7 +108,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 					return createExpander(calculator, checker, false);
 				})) ;
 		BlockListGenerator blockListGenerator(
-				solver, calculator, checker, options_.blockListStones(),
+				std::move(solver), calculator, checker, options_.blockListStones(),
 				options_.blockListDistance(), options_.maxHeurListSize(),
 				options_.getNumThreads());
 		blockListGenerator.init(table_);

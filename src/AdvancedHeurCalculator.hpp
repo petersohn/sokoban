@@ -41,10 +41,10 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 	void initPartitions(Point p);
 public:
 	AdvancedHeurCalculator(Solver::Ptr solver, bool useDumper = true):
-		solver_(solver),
+		solver_(std::move(solver)),
 		useDumper_(useDumper)
 	{
-		assert(solver_.get() != NULL);
+		assert(solver_.get());
 	}
 };
 
