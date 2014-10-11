@@ -29,7 +29,7 @@ private:
 	ConditionVariableType done_;
 
 	void initIter(Point p, std::size_t stones, const State &state);
-	void doWork(std::vector<Status> statuses);
+	void doWork(const std::vector<Status>& statuses);
 	void cleanWorkQueue();
 	void progress();
 	bool advancePoint(Point &p) {

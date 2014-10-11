@@ -18,7 +18,7 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 		}
 		auto parts = getPartitions(table_, state);
 		bool ok = false;
-		for (const auto& status: parts) {
+		for (auto& status: parts) {
 			int heur = heurCalculator_->calculateStatus(status);
 			if (heur < 0) {
 				continue;
@@ -56,7 +56,7 @@ void TableIterator::cleanWorkQueue() {
 	workQueue_.clear(); // in case it wouldn't be moved
 }
 
-void TableIterator::doWork(std::vector<Status> statuses)
+void TableIterator::doWork(const std::vector<Status>& statuses)
 {
 	for (const auto& status: statuses) {
 		action_(status);
