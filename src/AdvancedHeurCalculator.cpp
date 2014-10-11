@@ -83,7 +83,7 @@ void AdvancedHeurCalculator::initPartitions(Point  p)
 			if (!res.empty())
 				part.heur = res.back()->cost();
 		}
-		partitions_[p].push_back(part);
+		partitions_[p].push_back(std::move(part));
 	}
 }
 

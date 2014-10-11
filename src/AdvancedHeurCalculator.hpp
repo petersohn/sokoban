@@ -18,6 +18,10 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 			reachable(width, height, false),
 			heur(0)
 			{}
+		Partition(const Partition&) = default;
+		Partition& operator=(const Partition&) = default;
+		Partition(Partition&&) = default;
+		Partition& operator=(Partition&&) = default;
 	};
 	class HeurDumper {
 		std::ofstream file_;
