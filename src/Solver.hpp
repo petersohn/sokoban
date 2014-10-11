@@ -38,7 +38,7 @@ public:
 			threadPool_.setNumThreads(numThreads);
 		}
 	}
-	std::deque<std::shared_ptr<Node>> solve(const Status &status);
+	std::deque<std::shared_ptr<Node>> solve(Status status);
 	~Solver() {}
 private:
 };

@@ -67,7 +67,7 @@ public:
 		return true;
 	}
 
-	std::deque<Node::Ptr> solve(Status status) {
+	std::deque<Node::Ptr> solve(Status& status) {
 		costFgv_ = -1;
 		currentNode_.reset();
 		if (dumper_)
@@ -102,7 +102,7 @@ public:
 
 };
 
-std::deque<Node::Ptr> Solver::solve(const Status &status)
+std::deque<Node::Ptr> Solver::solve(Status status)
 {
 	std::unique_ptr<util::ThreadPoolRunner> runner;
 	if (numThreads_ > 0) {

@@ -21,9 +21,9 @@ using namespace std;
 namespace pt = boost::posix_time;
 
 
-void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, const Status& status)
+void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, Status status)
 {
-	std::deque<Node::Ptr> solution = solver.solve(status);
+	std::deque<Node::Ptr> solution = solver.solve(std::move(status));
 	if (!solution.empty()) {
 		solutionChecker.checkResult(status, solution);
 	}

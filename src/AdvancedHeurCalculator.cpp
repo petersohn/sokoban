@@ -71,7 +71,7 @@ void AdvancedHeurCalculator::initPartitions(Point  p)
 	State state;
 	state.addStone(p);
 	std::vector<Status> parts = getPartitions(tablePtr(), state);
-	for (const Status& status: parts) {
+	for (Status& status: parts) {
 		Partition part(table().width(), table().height());
 		part.pos = p;
 		part.heur = -1;
@@ -79,7 +79,7 @@ void AdvancedHeurCalculator::initPartitions(Point  p)
 		if (p == table().destination())
 			part.heur = 0;
 		else {
-			std::deque<Node::Ptr> res = solver_->solve(status);
+			std::deque<Node::Ptr> res = solver_->solve(std::move(status));
 			if (!res.empty())
 				part.heur = res.back()->cost();
 		}
