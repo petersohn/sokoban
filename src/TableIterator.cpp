@@ -16,19 +16,19 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 				}
 			}
 		}
-		std::vector<Status::Ptr> parts = getPartitions(table_, state);
+		auto parts = getPartitions(table_, state);
 		bool ok = false;
-		for (const Status::Ptr& status: parts) {
-			int heur = heurCalculator_->calculateStatus(*status);
+		for (const auto& status: parts) {
+			int heur = heurCalculator_->calculateStatus(status);
 			if (heur < 0) {
 				continue;
 			}
-			if (!checkStatus(*checker_, *status)) {
+			if (!checkStatus(*checker_, status)) {
 				continue;
 			}
 			if (stones == 0) {
-				workQueue.push_back(status);
-				if (workQueue.size() == workQueueLength) {
+				workQueue_.push_back(std::move(status));
+				if (workQueue_.size() == workQueueLength) {
 					cleanWorkQueue();
 				}
 			} else {
@@ -52,14 +52,14 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 void TableIterator::cleanWorkQueue() {
 	++iters_;
 	ioService_.post(std::bind(
-			&TableIterator::doWork, this, std::move(workQueue)));
-	workQueue.clear(); // in case it wouldn't be moved
+			&TableIterator::doWork, this, std::move(workQueue_)));
+	workQueue_.clear(); // in case it wouldn't be moved
 }
 
-void TableIterator::doWork(std::vector<Status::Ptr> statuses)
+void TableIterator::doWork(std::vector<Status> statuses)
 {
 	for (const auto& status: statuses) {
-		action_(*status);
+		action_(status);
 	}
 	boost::lock_guard<MutexType> lck(iterMutex_);
 	++solved_;

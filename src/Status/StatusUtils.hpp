@@ -7,7 +7,7 @@ class Checker;
 
 void floodFill(const Status &table, Point p0, Array<bool> &result,
 			Status::BorderType *border = NULL, MinMax *minmax = NULL);
-std::vector<Status::Ptr> getPartitions(FixedTable::Ptr table, const State &state);
+std::vector<Status> getPartitions(FixedTable::Ptr table, const State &state);
 bool checkStatus(Checker& checker, const Status& status);
 bool checkState(Checker& checker, const FixedTable::Ptr& table, const State& state);
 

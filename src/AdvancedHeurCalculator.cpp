@@ -70,16 +70,16 @@ void AdvancedHeurCalculator::initPartitions(Point  p)
 {
 	State state;
 	state.addStone(p);
-	std::vector<Status::Ptr> parts = getPartitions(tablePtr(), state);
-	for (Status::Ptr status: parts) {
+	std::vector<Status> parts = getPartitions(tablePtr(), state);
+	for (const Status& status: parts) {
 		Partition part(table().width(), table().height());
 		part.pos = p;
 		part.heur = -1;
-		part.reachable = status->reachableArray();
+		part.reachable = status.reachableArray();
 		if (p == table().destination())
 			part.heur = 0;
 		else {
-			std::deque<Node::Ptr> res = solver_->solve(*status);
+			std::deque<Node::Ptr> res = solver_->solve(status);
 			if (!res.empty())
 				part.heur = res.back()->cost();
 		}
