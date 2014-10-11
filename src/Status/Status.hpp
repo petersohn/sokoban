@@ -72,7 +72,7 @@ public:
 		return *this;
 	}
 
-	Status(Status&& other):
+	Status(Status&& other) noexcept:
 		table_(std::move(other.table_)),
 		state_(std::move(other.state_)),
 		currentPos_(std::move(other.currentPos_)),
@@ -81,7 +81,7 @@ public:
 	{
 		++moveCount;
 	}
-	Status& operator=(Status&& other) {
+	Status& operator=(Status&& other) noexcept {
 		table_ = std::move(other.table_);
 		state_ = std::move(other.state_);
 		currentPos_ = std::move(other.currentPos_);
