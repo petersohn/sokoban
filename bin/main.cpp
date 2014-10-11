@@ -92,6 +92,7 @@ int main(int argc, char** argv) {
 		}
 	}
 	cerr << "Status copied " << Status::copyCount << " times.\n" <<
+			"Status moved " << Status::moveCount << " times.\n" <<
 			"calculateReachable called " << Status::calculateReachableCount << " times.\n" <<
 			"Status pool size = " << Status::currentStatusPoolSize() << endl;
 	return returnCode;

@@ -3,6 +3,7 @@
 #include "Node.hpp"
 
 std::size_t Status::copyCount(0);
+std::size_t Status::moveCount(0);
 std::size_t Status::calculateReachableCount(0);
 std::size_t Status::statusPoolSize_(0);
 std::unordered_map<State, std::shared_ptr<Array<Status::CalculatedDataPtr>>>

@@ -20,12 +20,10 @@ public:
 	typedef ContainerType::const_iterator const_iterator;
 
 	State():stones_(new ContainerType) {}
-	State(const State &other):stones_(other.stones_) {}
-
-	State& operator=(const State &other) {
-		stones_ = other.stones_;
-		return *this;
-	}
+	State(const State& other) = default;
+	State& operator=(const State& other) = default;
+	State(State&& other) = default;
+	State& operator=(State&& other) = default;
 
 	bool operator==(const State &other) const {
 		return stones_ == other.stones_ || *stones_ == *(other.stones_);

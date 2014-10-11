@@ -33,28 +33,10 @@ public:
 	Array(std::size_t width, std::size_t height, const T& defValue = T()):
 		width_(width), height_(height), data_(width * height, defValue)
 	{}
-	Array(const Array& other):
-		width_(other.width_), height_(other.height_), data_(other.data_)
-	{}
-	Array(Array&& other):
-		width_(other.width_), height_(other.height_), data_(std::move(other.data_))
-	{}
-	Array& operator=(const Array& other)
-	{
-		width_ = other.width_;
-		height_ = other.height_;
-		data_ = other.data_;
-		return *this;
-	}
-	Array& operator=(Array&& other)
-	 {
-		width_ = other.width_;
-		height_ = other.height_;
-		data_ = std::move(other.data_);
-		other.width_ = 0;
-		other.height_ = 0;
-		return *this;
-	}
+	Array(const Array& other) = default;
+	Array(Array&& other) = default;
+	Array& operator=(const Array& other) = default;
+	Array& operator=(Array&& other) = default;
 
 	reference operator[](std::size_t pos) {
 		return data_[pos];

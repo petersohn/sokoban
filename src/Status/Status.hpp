@@ -47,12 +47,13 @@ private:
 
 public:
 	static std::size_t copyCount;
+	static std::size_t moveCount;
 	static std::size_t calculateReachableCount;
 
 	explicit Status(FixedTable::Ptr table);
 	explicit Status(FixedTable::Ptr table, const State &state);
 	explicit Status(FixedTable::Ptr table, const Node &node);
-	Status(const Status &other):
+	Status(const Status& other):
 		table_(other.table_),
 		state_(other.state_),
 		currentPos_(other.currentPos_),
@@ -61,14 +62,32 @@ public:
 	{
 		++copyCount;
 	}
-
-	Status& operator=(const Status &other) {
-		table_=other.table_;
-		state_=other.state_;
-		currentPos_=other.currentPos_;
-		fields_=other.fields_;
+	Status& operator=(const Status& other) {
+		table_ = other.table_;
+		state_ = other.state_;
+		currentPos_ = other.currentPos_;
+		fields_ = other.fields_;
 		calculatedData_ = other.calculatedData_;
 		++copyCount;
+		return *this;
+	}
+
+	Status(Status&& other):
+		table_(std::move(other.table_)),
+		state_(std::move(other.state_)),
+		currentPos_(std::move(other.currentPos_)),
+		fields_(std::move(other.fields_)),
+		calculatedData_(std::move(other.calculatedData_))
+	{
+		++moveCount;
+	}
+	Status& operator=(Status&& other) {
+		table_ = std::move(other.table_);
+		state_ = std::move(other.state_);
+		currentPos_ = std::move(other.currentPos_);
+		fields_ = std::move(other.fields_);
+		calculatedData_ = std::move(other.calculatedData_);
+		++moveCount;
 		return *this;
 	}
 
