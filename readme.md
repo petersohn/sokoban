@@ -1,4 +1,5 @@
 [![Stories in Ready](https://badge.waffle.io/petersohn/sokoban.png?label=ready&title=Ready)](https://waffle.io/petersohn/sokoban)
+
 A sokoban solver AI. It solves a simplified version of sokoban where each bix has to be pushed into one sink point, where it disappears. It is based on the sokoban levels of Nethack.
 
 **Note:** Because the game is based on the Nethack Sokoban levels, the term "stone" is used for boxes (i.e. the things that are moved around the level).
