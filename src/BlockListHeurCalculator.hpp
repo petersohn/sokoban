@@ -1,35 +1,29 @@
 #ifndef BLOCKLISTHEURCALCULATOR_H_
 #define BLOCKLISTHEURCALCULATOR_H_
 
-#include "HeurCalculator.hpp"
-#include "IndexedStatusList.hpp"
 #include "HeurInfo.hpp"
-#include "Mutexes.hpp"
+#include "SubStatusHeurCalculator.hpp"
 
-class BlocklistHeurCalculator: public HeurCalculator {
-	HeurCalculator::Ptr baseCalculator_;
+class BlockListHeurList {
 	HeurList heurList_;
-	FixedTable::Ptr table_;
-	MutexType mutex_;
+	HeurList::const_iterator iterator_;
 public:
-	template <class HeurListType>
-	BlocklistHeurCalculator(
-			const HeurCalculator::Ptr& baseCalculator,
-			const HeurListType& heurList,
-			FixedTable::Ptr table):
-				baseCalculator_(baseCalculator),
-				heurList_(std::begin(heurList), std::end(heurList)),
-				table_(table),
-				MUTEX_DECL(mutex_)
+	template <typename HeurListType>
+	BlockListHeurList(const HeurListType& heurList):
+		heurList_(std::begin(heurList), std::end(heurList)) {}
+
+	void start()
 	{
+		iterator_ = heurList_.begin();
 	}
 
-	virtual int calculateStone(const Status &status, Point p);
-	virtual int calculateStatus(
-			const Status &status,
-			const MoveDescriptor* /*moveDescriptor*/,
-			const std::shared_ptr<Node>& ancestor);
+	HeurInfoConstPtr operator()(const PseudoStatus&)
+	{
+		return iterator_ == heurList_.end() ? HeurInfoConstPtr{} :
+				*(iterator_++);
+	}
 };
 
+using BlocklistHeurCalculator = SubStatusHeurCalculator<BlockListHeurList>;
 
 #endif /* BLOCKLISTHEURCALCULATOR_H_ */

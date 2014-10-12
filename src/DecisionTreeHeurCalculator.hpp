@@ -7,26 +7,25 @@
 #include "DecisionTree/DecisionTree.hpp"
 #include "TimeMeter.hpp"
 #include "Checker.hpp"
+#include "SubStatusHeurCalculator.hpp"
 
-class DecisionTreeHeurCalculator: public HeurCalculator {
+class DecisionTreeHeurList {
 	typedef decisionTree::Node<PseudoStatus, int> NodeType;
 
-	HeurCalculator::Ptr baseCalculator_;
-	FixedTable::Ptr table_;
 	std::unique_ptr<NodeType> decisionTree_;
+	std::size_t lastSize_;
+	const NodeType::ValueList* heurList_;
+	NodeType::ValueList::const_iterator iterator_;
 
 	static std::vector<Point> pointList(const FixedTable::Ptr& table);
 public:
 	template <class HeurListType>
-	DecisionTreeHeurCalculator(
-			const HeurCalculator::Ptr& baseCalculator,
+	DecisionTreeHeurList(
+			const FixedTable::Ptr& table,
 			const HeurListType& heurList,
-			const Checker::Ptr checker,
-			FixedTable::Ptr table,
+			const Checker::Ptr& checker,
 			std::size_t maxDepth,
-			std::size_t numThreads):
-				baseCalculator_(baseCalculator),
-				table_(table)
+			std::size_t numThreads)
 	{
 		TimeMeter timeMeter;
 		NodeType::ValueList convertedHeurList;
@@ -48,12 +47,27 @@ public:
 				"\nReal time: " <<
 				timeMeter.realTime() << std::endl;
 	}
-	virtual int calculateStone(const Status &status, Point p);
-	virtual int calculateStatus(const Status &status,
-			const MoveDescriptor* /*moveDescriptor*/,
-			const std::shared_ptr<Node>& ancestor);
+
+	void start()
+	{
+		lastSize_ = 0;
+	}
+
+	NodeType::ValueConstPtr operator()(const PseudoStatus& pseudoStatus)
+	{
+		if (pseudoStatus.state().size() != lastSize_) {
+			lastSize_ = pseudoStatus.state().size();
+			heurList_ = &decisionTree_->get(pseudoStatus);
+			iterator_ = heurList_->begin();
+		}
+
+		return iterator_ == heurList_->end() ? NodeType::ValueConstPtr{} :
+			*(iterator_++);
+	}
+
 };
 
+using DecisionTreeHeurCalculator = SubStatusHeurCalculator<DecisionTreeHeurList>;
 
 
 #endif /* DECISIONTREEHEURCALCULATOR_H_ */
