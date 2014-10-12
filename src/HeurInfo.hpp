@@ -6,9 +6,7 @@
 #include <memory>
 
 typedef std::pair<Status, int> HeurInfo;
-typedef std::shared_ptr<const HeurInfo> HeurInfoConstPtr;
-typedef std::vector<HeurInfoConstPtr> HeurList;
-typedef std::shared_ptr<HeurList> HeurListPtr;
+typedef std::vector<HeurInfo> HeurList;
 
 
 #endif /* HEURINFO_H_ */

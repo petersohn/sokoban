@@ -31,10 +31,10 @@ public:
 		NodeType::ValueList convertedHeurList;
 		convertedHeurList.reserve(heurList.size());
 		boost::transform(heurList, std::back_inserter(convertedHeurList),
-				[](const HeurInfoConstPtr& heurInfo)
+				[](const HeurInfo& heurInfo)
 				{
 					return std::make_shared<std::pair<PseudoStatus, int>>
-							(PseudoStatus(heurInfo->first), heurInfo->second);
+							(PseudoStatus(heurInfo.first), heurInfo.second);
 				});
 		decisionTree_ = decisionTree::buildNode<PseudoStatus, int>(
 				convertedHeurList,

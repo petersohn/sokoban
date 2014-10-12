@@ -57,9 +57,9 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 			calculationInfos_[threadId]->dump_ <<
 					heur << " --> " << cost << "(" << difference << ")\n";
 			dumpStatus(status, NULL, "Added heur");
-			HeurInfoConstPtr heurInfo = std::make_shared<HeurInfo>(status, cost);
+			HeurInfo heurInfo{status, cost};
 			calculationInfos_[threadId]->heurList_.push_back(
-					IncrementInfo(heurInfo, difference));
+					IncrementInfo{std::move(heurInfo), difference});
 		}
 	}
 }
@@ -105,8 +105,8 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 			{
 				return left.difference_ > right.difference_ ||
 						(left.difference_ == right.difference_ &&
-						left.heurInfo_->first.state().size() <
-						right.heurInfo_->first.state().size()
+						left.heurInfo_.first.state().size() <
+						right.heurInfo_.first.state().size()
 						);
 			});
 		incrementalCalculator_ = vectorHeurCalculator();

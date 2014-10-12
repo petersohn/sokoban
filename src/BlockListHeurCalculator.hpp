@@ -17,10 +17,9 @@ public:
 		iterator_ = heurList_.begin();
 	}
 
-	HeurInfoConstPtr operator()(const PseudoStatus&)
+	const HeurInfo* operator()(const PseudoStatus&)
 	{
-		return iterator_ == heurList_.end() ? HeurInfoConstPtr{} :
-				*(iterator_++);
+		return iterator_ == heurList_.end() ? nullptr : &*(iterator_++);
 	}
 };
 

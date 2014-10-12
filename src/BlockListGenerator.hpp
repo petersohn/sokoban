@@ -16,37 +16,17 @@
 class BlockListGenerator {
 private:
 	struct IncrementInfo {
-		HeurInfoConstPtr heurInfo_;
+		HeurInfo heurInfo_;
 		int	difference_;
-		IncrementInfo(const HeurInfoConstPtr& heurInfo, int difference):
-			heurInfo_(heurInfo),
-			difference_(difference)
-		{}
-		IncrementInfo(HeurInfoConstPtr&& heurInfo, int difference):
+		IncrementInfo(HeurInfo heurInfo, int difference):
 			heurInfo_(std::move(heurInfo)),
 			difference_(difference)
 		{}
-		IncrementInfo(const IncrementInfo& other):
-			heurInfo_(other.heurInfo_),
-			difference_(other.difference_)
-		{}
-		IncrementInfo(IncrementInfo&& other):
-			heurInfo_(std::move(other.heurInfo_)),
-			difference_(other.difference_)
-		{}
-		IncrementInfo& operator=(const IncrementInfo& other)
-		{
-			heurInfo_ = other.heurInfo_;
-			difference_ = other.difference_;
-			return *this;
-		}
-		IncrementInfo& operator=(IncrementInfo&& other)
-		{
-			heurInfo_ = std::move(other.heurInfo_);
-			difference_ = other.difference_;
-			return *this;
-		}
-		static const HeurInfoConstPtr& getHeurInfo(const IncrementInfo& incrementInfo) {
+		IncrementInfo(const IncrementInfo& other) = default;
+		IncrementInfo(IncrementInfo&& other) = default;
+		IncrementInfo& operator=(const IncrementInfo& other) = default;
+		IncrementInfo& operator=(IncrementInfo&& other) = default;
+		static const HeurInfo& getHeurInfo(const IncrementInfo& incrementInfo) {
 			return incrementInfo.heurInfo_;
 		}
 	};
