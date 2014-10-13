@@ -14,7 +14,6 @@
 
 class Status {
 public:
-	typedef std::shared_ptr<Status> Ptr;
 	typedef std::shared_ptr<const Status> ConstPtr;
 	typedef std::vector<Point> BorderType;
 private:
