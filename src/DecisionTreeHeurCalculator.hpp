@@ -53,7 +53,7 @@ public:
 		lastSize_ = 0;
 	}
 
-	NodeType::ValueConstPtr operator()(const PseudoStatus& pseudoStatus)
+	const NodeType::Value* operator()(const PseudoStatus& pseudoStatus)
 	{
 		if (pseudoStatus.state().size() != lastSize_) {
 			lastSize_ = pseudoStatus.state().size();
@@ -61,8 +61,8 @@ public:
 			iterator_ = heurList_->begin();
 		}
 
-		return iterator_ == heurList_->end() ? NodeType::ValueConstPtr{} :
-			*(iterator_++);
+		return iterator_ == heurList_->end() ? nullptr :
+			(iterator_++)->get();
 	}
 
 };
