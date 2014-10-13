@@ -4,13 +4,20 @@
 #include "TableHeurCalculator.hpp"
 #include "Array.hpp"
 
-class BasicHeurCalculator: public TableHeurCalculator {
+class BasicStoneCalculator {
 	Array<int> distances_;
-	virtual void init();
-	virtual int doCalculateStone(const Status &status, Point p);
-	bool checkDistance(Point  p, Point  d, int dist);
+	bool checkDistance(const Table& table, Point  p, Point  d, int dist);
 public:
-	BasicHeurCalculator() {}
+	BasicStoneCalculator(const Table& table);
+
+	BasicStoneCalculator(const BasicStoneCalculator&) = default;
+	BasicStoneCalculator& operator=(const BasicStoneCalculator&) = default;
+	BasicStoneCalculator(BasicStoneCalculator&&) = default;
+	BasicStoneCalculator& operator=(BasicStoneCalculator&&) = default;
+
+	int operator()(const Status &status, Point p);
 };
+
+using BasicHeurCalculator = TableHeurCalculator<BasicStoneCalculator>;
 
 #endif /* BASICHEURCALCULATOR_H_ */

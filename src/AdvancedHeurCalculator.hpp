@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 
-class AdvancedHeurCalculator: public TableHeurCalculator {
+class AdvancedStoneCalculator {
 	struct Partition
 	{
 		Point pos;
@@ -27,35 +27,41 @@ class AdvancedHeurCalculator: public TableHeurCalculator {
 		std::ofstream file_;
 		void open();
 	public:
-		void dumpHeur(Array<int> values);
-		void dumpPartition(const AdvancedHeurCalculator &calc, const Partition &part);
+		void dumpPartition(const FixedTable::Ptr& table, const Partition& partition);
 		template<class T>
-		void dumpArray(const Array<T> arr);
-		void printText(const char *text);
+		void dumpArray(const Array<T>& arr)
+		{
+			::dumpArray<std::string>(file_, arr);
+		}
+		void printText(const char* text);
 	};
 
 	static HeurDumper dumper;
 
-	Array<std::vector<Partition> > partitions_;
+	Array<std::vector<Partition>> partitions_;
 	Solver::Ptr solver_;
 	bool useDumper_;
-	virtual int doCalculateStone(const Status &status, Point p);
-	virtual void init();
+	void init(const FixedTable::Ptr& table);
 
-	void initPartitions(Point p);
+	void initPartitions(const FixedTable::Ptr& table, Point p);
 public:
-	AdvancedHeurCalculator(Solver::Ptr solver, bool useDumper = true):
+	AdvancedStoneCalculator(const FixedTable::Ptr& table, Solver::Ptr solver, bool useDumper = true):
 		solver_(std::move(solver)),
 		useDumper_(useDumper)
 	{
 		assert(solver_.get());
+		init(table);
 	}
+
+	AdvancedStoneCalculator(const AdvancedStoneCalculator&) = default;
+	AdvancedStoneCalculator& operator=(const AdvancedStoneCalculator&) = default;
+	AdvancedStoneCalculator(AdvancedStoneCalculator&&) = default;
+	AdvancedStoneCalculator& operator=(AdvancedStoneCalculator&&) = default;
+
+	int operator()(const Status& status, Point p);
 };
 
+using AdvancedHeurCalculator = TableHeurCalculator<AdvancedStoneCalculator>;
 
-template<class T>
-void AdvancedHeurCalculator::HeurDumper::dumpArray(const Array<T> arr) {
-	::dumpArray<std::string>(file_, arr);
-}
 
 #endif /* ADVANCEDHEURCALCULATOR_H_ */

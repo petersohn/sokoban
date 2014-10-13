@@ -9,44 +9,46 @@
 #include <algorithm>
 
 
-/* AdvancedHeurCalculator::HeurDumper */
+/* AdvancedStoneCalculator::HeurDumper */
 
-void AdvancedHeurCalculator::HeurDumper::open() {
+void AdvancedStoneCalculator::HeurDumper::open() {
 	if (!file_.is_open())
 		file_.open("partitions.dump", std::ofstream::out | std::ofstream::trunc);
 }
 
-void AdvancedHeurCalculator::HeurDumper::dumpPartition(const AdvancedHeurCalculator &calc,
-		const Partition & part) {
+void AdvancedStoneCalculator::HeurDumper::dumpPartition(
+		const FixedTable::Ptr& table, const Partition& partition)
+{
 	open();
-	Status s(calc.tablePtr());
-	s.addStone(part.pos);
+	Status s(table);
+	s.addStone(partition.pos);
 	s.currentPos(Point(-1, -1));
-	dumpStatus(file_, s, (boost::format("Partition (%d)") % part.heur).str(), &part.reachable);
+	dumpStatus(file_, s, (boost::format("Partition (%d)") % partition.heur).str(), &partition.reachable);
 	file_ << std::endl;
 }
 
-void AdvancedHeurCalculator::HeurDumper::printText(const char *text) {
+void AdvancedStoneCalculator::HeurDumper::printText(const char *text)
+{
 	open();
 	file_ << text << std::endl;
 }
 
 
-/* AdvancedHeurCalculator */
+/* AdvancedStoneCalculator */
 
-AdvancedHeurCalculator::HeurDumper AdvancedHeurCalculator::dumper;
+AdvancedStoneCalculator::HeurDumper AdvancedStoneCalculator::dumper;
 
-void AdvancedHeurCalculator::init()
+void AdvancedStoneCalculator::init(const FixedTable::Ptr& table)
 {
-	Array<std::string> dump(table().width(), table().height());
+	Array<std::string> dump(table->get().width(), table->get().height());
 	std::vector<Partition> dumpPartitions;
-	partitions_.reset(table().width(), table().height());
-	for (Point  p: arrayRange(table())) {
-		if (table().wall(p)) {
+	partitions_.reset(table->get().width(), table->get().height());
+	for (Point  p: arrayRange(table->get())) {
+		if (table->get().wall(p)) {
 			dump[p] = "*";
 			continue;
 		}
-		initPartitions(p);
+		initPartitions(table, p);
 		dump[p] =
 				partitions_[p].empty() ? "#" :
 				partitions_[p].size() > 1 ? "?" :
@@ -56,38 +58,38 @@ void AdvancedHeurCalculator::init()
 		dumper.printText("Heuristics table:");
 		dumper.dumpArray(dump);
 		dumper.printText("\nPartitions:");
-		for (Point  p: arrayRange(table())) {
+		for (Point  p: arrayRange(table->get())) {
 			if (partitions_[p].size() > 1) {
 				for (const Partition& partition: partitions_[p]) {
-					dumper.dumpPartition(*this, partition);
+					dumper.dumpPartition(table, partition);
 				}
 			}
 		}
 	}
 }
 
-void AdvancedHeurCalculator::initPartitions(Point  p)
+void AdvancedStoneCalculator::initPartitions(const FixedTable::Ptr& table, Point  p)
 {
 	State state;
 	state.addStone(p);
-	std::vector<Status> parts = getPartitions(tablePtr(), state);
+	std::vector<Status> parts = getPartitions(table, state);
 	for (Status& status: parts) {
-		Partition part(table().width(), table().height());
-		part.pos = p;
-		part.heur = -1;
-		part.reachable = status.reachableArray();
-		if (p == table().destination())
-			part.heur = 0;
+		Partition partition(table->get().width(), table->get().height());
+		partition.pos = p;
+		partition.heur = -1;
+		partition.reachable = status.reachableArray();
+		if (p == table->get().destination())
+			partition.heur = 0;
 		else {
 			std::deque<Node::Ptr> res = solver_->solve(std::move(status));
 			if (!res.empty())
-				part.heur = res.back()->cost();
+				partition.heur = res.back()->cost();
 		}
-		partitions_[p].push_back(std::move(part));
+		partitions_[p].push_back(std::move(partition));
 	}
 }
 
-int AdvancedHeurCalculator::doCalculateStone(const Status &status, Point p)
+int AdvancedStoneCalculator::operator()(const Status &status, Point p)
 {
 	std::vector<Partition>::const_iterator it;
 	// If the current position equals p, then partitions

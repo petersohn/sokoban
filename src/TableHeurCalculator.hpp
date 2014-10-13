@@ -9,35 +9,32 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread/locks.hpp>
 
+template <typename StoneCalculator>
 class TableHeurCalculator: public HeurCalculator {
-	FixedTable::Ptr table_;
-	MutexType heurMutex_;
-	virtual void init() = 0;
-	virtual int doCalculateStone(const Status &status, Point p) = 0;
-	void checkTable(const Status &status) {
-		boost::lock_guard<MutexType> lck(heurMutex_);
-		if (table_ != status.tablePtr()) {
-			std::cerr << table_ << " --> " << status.tablePtr() << std::endl;
-			setTable(status.tablePtr());
-		}
-	}
+	StoneCalculator calculator_;
 public:
-	TableHeurCalculator():
-		MUTEX_DECL(heurMutex_)
+	TableHeurCalculator(StoneCalculator calculator):
+		calculator_(std::move(calculator))
 	{}
 	virtual int calculateStatus(
-			const Status &status,
-			const MoveDescriptor* moveDescriptor,
-			const std::shared_ptr<Node>& ancestor);
-	virtual int calculateStone(const Status &status, Point p);
-
-	void setTable(const FixedTable::Ptr& table)
+			const Status& status,
+			const MoveDescriptor*,
+			const std::shared_ptr<Node>&) override
 	{
-		table_ = table;
-		init();
+		int result = 0;
+		for (auto stone: status.state()) {
+			int val = calculator_(status, stone);
+			if (val < 0)
+				return -1;
+			result += val;
+		}
+		return result;
 	}
-	const Table& table() const { return table_->get(); }
-	FixedTable::Ptr tablePtr() const { return table_; }
+	virtual int calculateStone(const Status& status, Point p) override
+	{
+		return calculator_(status, p);
+	}
+
 };
 
 #endif /* TABLEHEURCALCULATOR_H_ */
