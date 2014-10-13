@@ -7,14 +7,14 @@
 class InternalExpander {
 	const Status &status_;
 	Node::Ptr base_;
-	NodePusher &queue_;
-	Dumper::Ptr dumper_;
-	NormalExpander &owner_;
+	NodePusher& queue_;
+	Dumper* dumper_;
+	NormalExpander& owner_;
 public:
-	InternalExpander(const Status & status, std::shared_ptr<Node> base,
-			NodePusher & queue, Dumper::Ptr dumper, NormalExpander &owner):
+	InternalExpander(const Status& status, std::shared_ptr<Node> base,
+			NodePusher& queue, Dumper* dumper, NormalExpander &owner):
 				status_(status),
-				base_(base),
+				base_(std::move(base)),
 				queue_(queue),
 				dumper_(dumper),
 				owner_(owner)
@@ -78,15 +78,14 @@ void InternalExpander::expand()
 	}
 	if (dumper_ && base_)
 		dumper_->expand(base_);
-	for (State::const_iterator it = status_.state().begin();
-			it != status_.state().end(); ++it)
+	for (const auto& state: status_.state())
 	{
-		if (*it == status_.table().destination())
+		if (state == status_.table().destination())
 			continue;
-		expandNode(*it, Point::p10);
-		expandNode(*it, Point::pm10);
-		expandNode(*it, Point::p01);
-		expandNode(*it, Point::p0m1);
+		expandNode(state, Point::p10);
+		expandNode(state, Point::pm10);
+		expandNode(state, Point::p01);
+		expandNode(state, Point::p0m1);
 	}
 }
 
@@ -94,10 +93,10 @@ void InternalExpander::expand()
 
 NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
 		Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog):
-		visitedStates_(vs),
-		calculator_(calculator),
-		checker_(ch),
-		nodeFactory_(nodeFactory),
+		visitedStates_(std::move(vs)),
+		calculator_(std::move(calculator)),
+		checker_(std::move(ch)),
+		nodeFactory_(std::move(nodeFactory)),
 		maxDepth_(0),
 		enableLog_(enableLog),
 		expandedNodes_(0),
@@ -115,7 +114,7 @@ NormalExpander::~NormalExpander()
 
 bool NormalExpander::expand(const Status &status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper) {
-	InternalExpander exp(status, base, queue, dumper, *this);
+	InternalExpander exp(status, std::move(base), queue, dumper.get(), *this);
 	exp.expand();
 	return true;
 }
