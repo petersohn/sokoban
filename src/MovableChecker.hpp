@@ -10,9 +10,9 @@ class MovableChecker: public Checker {
 	HeurCalculator::Ptr calculator_;
 public:
 	MovableChecker(HeurCalculator::Ptr calculator):
-		calculator_(calculator)
+		calculator_(std::move(calculator))
 	{}
-	virtual bool check(const Status &status, Point p);
+	virtual bool check(const Status& status, Point p);
 	virtual const char* errorMessage();
 };
 

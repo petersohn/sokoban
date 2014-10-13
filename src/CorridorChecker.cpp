@@ -3,21 +3,18 @@
 #include "Status/Status.hpp"
 #include "Status/StatusUtils.hpp"
 
-bool CorridorChecker::check(const Status & status, Point  p0)
+bool CorridorChecker::check(const Status& status, Point  p0)
 {
-	bool kell[3][3];
-	for (int x = 0; x < 3; x++)
-		for (int y = 0; y < 3; y++)
-			kell[x][y] = true;
-
-	for (int x = 0; x < 3; x++)
-		for (int y = 0; y < 3; y++) {
-			Point p = p0 + Point(x - 1, y - 1);
-			if (!kell[x][y] || status.value(p) != ftFloor || status.reachable(p))
+	Array<bool> unchecked(3, 3, true);
+	Point p1;
+	for (p1.x = 0; p1.x < 3; p1.x++)
+		for (p1.y = 0; p1.y < 3; p1.y++) {
+			Point p = p0 + p1 + Point::pm1m1;
+			if (!unchecked[p1] || status.value(p) != ftFloor || status.reachable(p))
 				continue;
 			Array<bool> reach(status.width(), status.height(), false);
 			MinMax minmax;
-			floodFill(status, p, reach, NULL, &minmax);
+			floodFill(status, p, reach, nullptr, &minmax);
 			if (!reach[status.table().destination()]) {
 				if (minmax.minX == minmax.maxX && minmax.minY == minmax.maxY) {
 					if (!checkCorridorEnding(status,
@@ -28,7 +25,6 @@ bool CorridorChecker::check(const Status & status, Point  p0)
 								Point(minmax.minX - 1, minmax.minY), Point::p01) &&
 						!checkCorridorEnding(status,
 								Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
-//						cerr << "Bing!" << endl;
 						return false;
 					}
 				} else
@@ -49,11 +45,12 @@ bool CorridorChecker::check(const Status & status, Point  p0)
 					}
 				}
 			}
-			for (int xx = 0; xx < 3; xx++)
-				for (int yy = 0; yy < 3; yy++) {
-					Point pp = p0 + Point(xx - 1, yy - 1);
+			Point p2;
+			for (p2.x = 0; p2.x < 3; p2.x++)
+				for (p2.y = 0; p2.y < 3; p2.y++) {
+					Point pp = p0 + p2 + Point::pm1m1;
 					if (arrayAt<bool>(reach, pp, false))
-						kell[xx][yy] = false;
+						unchecked[p2] = false;
 				}
 		}
 	return true;

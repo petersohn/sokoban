@@ -10,9 +10,9 @@ class CorridorChecker: public Checker {
 		Point p0, Point side);
 public:
 	CorridorChecker(HeurCalculator::Ptr calculator):
-		calculator_(calculator)
+		calculator_(std::move(calculator))
 	{}
-	virtual bool check(const Status &status, Point p0);
+	virtual bool check(const Status& status, Point p0);
 	virtual const char* errorMessage();
 };
 
