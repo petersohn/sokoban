@@ -12,12 +12,12 @@ public:
 	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
 private:
 	Node::Ptr node_;
-	HeurCalculator::Ptr calculator_;
-	NodeFactory::Ptr nodeFactory_;
+	HeurCalculator& calculator_;
+	NodeFactory& nodeFactory_;
 	bool pushStone(const Status& status, Point p);
 	bool pushStoneIter(const Status& status, Point p, Point d);
 public:
-	InternalPusher(HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
+	InternalPusher(HeurCalculator& calculator, NodeFactory& nodeFactory):
 		calculator_(calculator),
 		nodeFactory_(nodeFactory)
 	{}
@@ -25,7 +25,7 @@ public:
 };
 
 Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
-	node_ = base;
+	node_ = std::move(base);
 	Array<bool> destReachable(status.width(), status.height(), false);
 	bool touched;
 	bool touched2 = false;
@@ -51,7 +51,6 @@ Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
 bool InternalPusher::pushStone(const Status& status, Point p) {
 	if (p == status.table().destination())
 		return true;
-//	Point currentTmp(status.currentPos());
 	if (pushStoneIter(status, p, Point::p10))
 		return true;
 	if (pushStoneIter(status, p, Point::pm10))
@@ -71,9 +70,9 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 	Status newStatus(status);
 	if (newStatus.currentPos() == pd)
 		newStatus.shiftCurrentPos();
-	int heur1 = calculator_->calculateStone(newStatus, p);
+	int heur1 = calculator_.calculateStone(newStatus, p);
 	newStatus.currentPos(p);
-	int heur2 = calculator_->calculateStone(newStatus, pd);
+	int heur2 = calculator_.calculateStone(newStatus, pd);
 	if ((heur2 < 0 && (pd != newStatus.table().destination())) || heur2 >= heur1)
 	{
 		return false;
@@ -83,7 +82,7 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 		std::cerr << "Whoopsie doopsie!";
 		return false; // should never happen
 	}
-	node_ = nodeFactory_->createNode(newStatus, MoveDescriptor(p, d), node_);
+	node_ = nodeFactory_.createNode(newStatus, MoveDescriptor(p, d), node_);
 	if (pushStone(newStatus, pd))
 		return true;
 	node_ = node_->ancestor();
@@ -93,18 +92,18 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 
 StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates,
 		HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
-		visitedStates_(visitedStates),
-		calculator_(calculator),
-		nodeFactory_(nodeFactory)
+		visitedStates_(std::move(visitedStates)),
+		calculator_(std::move(calculator)),
+		nodeFactory_(std::move(nodeFactory))
 
 {
-	assert(calculator != NULL);
+	assert(calculator_ != NULL);
 }
 
 bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper)
 {
-	InternalPusher sp(calculator_, nodeFactory_);
+	InternalPusher sp(*calculator_, *nodeFactory_);
 	Node::Ptr node = sp.pushStones(status, base);
 	if (node.get() == NULL)
 		return false;
