@@ -10,28 +10,28 @@ std::unordered_map<State, std::shared_ptr<Array<Status::CalculatedDataPtr>>>
 		Status::statusPool_;
 boost::mutex Status::statusPoolMutex_;
 
-Status::Status(FixedTable::Ptr table):
-	table_(table),
+Status::Status(const Table& table):
+	table_(&table),
 	state_(),
-	fields_(table->get().width(), table->get().height())
+	fields_(table.width(), table.height())
 {
 	init();
 }
 
 
-Status::Status(FixedTable::Ptr table, const State &state):
-	table_(table),
+Status::Status(const Table& table, const State &state):
+	table_(&table),
 	state_(state),
-	fields_(table->get().width(), table->get().height())
+	fields_(table.width(), table.height())
 {
 	init();
 }
 
-Status::Status(FixedTable::Ptr table, const Node &node):
-		table_(table),
+Status::Status(const Table& table, const Node &node):
+		table_(&table),
 		state_(node.state()),
 		currentPos_(node.from()),
-		fields_(table->get().width(), table->get().height())
+		fields_(table.width(), table.height())
 {
 	init();
 }

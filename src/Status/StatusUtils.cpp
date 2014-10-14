@@ -41,12 +41,12 @@ void floodFill(const Status &status, Point p0, Array<bool> &result,
 	}
 }
 
-std::vector<Status> getPartitions(FixedTable::Ptr table, const State &state)
+std::vector<Status> getPartitions(const Table& table, const State &state)
 {
-	Array<bool> kell(table->get().width(), table->get().height(), false);
+	Array<bool> kell(table.width(), table.height(), false);
 	int kellNum = 0;
-	for (Point  p: arrayRange(table->get())) {
-		if (!table->get().wall(p) && !state[p])
+	for (Point  p: arrayRange(table)) {
+		if (!table.wall(p) && !state[p])
 		{
 			kell[p] = true;
 			++kellNum;
@@ -56,7 +56,7 @@ std::vector<Status> getPartitions(FixedTable::Ptr table, const State &state)
 	std::vector<Status> result;
 	while (kellNum > 0) {
 		Point foundPoint;
-		for (Point  p: arrayRange(table->get())) {
+		for (Point  p: arrayRange(table)) {
 			if (kell[p]) {
 				foundPoint = p;
 				break;
@@ -64,7 +64,7 @@ std::vector<Status> getPartitions(FixedTable::Ptr table, const State &state)
 		}
 		Status status{table, state};
 		status.currentPos(foundPoint);
-		for (Point  p: arrayRange(table->get())) {
+		for (Point  p: arrayRange(table)) {
 			if (status.reachable(p) && kell[p])
 			{
 				kell[p] = false;
@@ -86,7 +86,7 @@ bool checkStatus(Checker& checker, const Status& status)
 	return true;
 }
 
-bool checkState(Checker& checker, const FixedTable::Ptr& table, const State& state)
+bool checkState(Checker& checker, const Table& table, const State& state)
 {
 	std::vector<Status> partitions = getPartitions(table, state);
 	for (const Status& status: partitions) {

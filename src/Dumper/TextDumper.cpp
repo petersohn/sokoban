@@ -8,13 +8,13 @@
 void TextDumper::initialStatus(const Status &status) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
 	std::cerr << "Initial status" << std::endl;
-	table_ = status.tablePtr();
+	table_ = &status.table();
 	dumpStatus(file_, status, "Initial status");
 }
 
 void TextDumper::addNode(Node::Ptr node) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
-	dumpNode(file_, table_, *node, "Added");
+	dumpNode(file_, *table_, *node, "Added");
 }
 
 void TextDumper::addToSolution(Node::Ptr /*node*/) {
@@ -24,17 +24,17 @@ void TextDumper::addToSolution(Node::Ptr /*node*/) {
 void TextDumper::expand(Node::Ptr node) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
 	file_ << std::endl << std::endl;
-	dumpNode(file_, table_, *node, "Expanded");
+	dumpNode(file_, *table_, *node, "Expanded");
 }
 
 void TextDumper::push(Node::Ptr node) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
-	dumpNode(file_, table_, *node, "Pushed out");
+	dumpNode(file_, *table_, *node, "Pushed out");
 }
 
 void TextDumper::reject(Node::Ptr node, const char *text) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
-	dumpNode(file_, table_, *node, "Rejected: " + std::string(text));
+	dumpNode(file_, *table_, *node, "Rejected: " + std::string(text));
 }
 
 void TextDumper::save() {

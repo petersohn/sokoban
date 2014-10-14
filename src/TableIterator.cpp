@@ -16,7 +16,7 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 				}
 			}
 		}
-		auto parts = getPartitions(table_, state);
+		auto parts = getPartitions(*table_, state);
 		bool ok = false;
 		for (auto& status: parts) {
 			int heur = heurCalculator_->calculateStatus(status);
@@ -44,7 +44,7 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 		assert(stones > 0);
 	}
 	do {
-		if (!table_->get().wall(p) && !state[p] && p != table_->get().destination()) {
+		if (!table_->wall(p) && !state[p] && p != table_->destination()) {
 			State state2(state);
 			state2.addStone(p);
 			initIter(p, stones - 1, state2);

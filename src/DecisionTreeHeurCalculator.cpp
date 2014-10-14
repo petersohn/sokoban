@@ -10,11 +10,11 @@
 #include <iostream>
 
 std::vector<Point>
-DecisionTreeHeurList::pointList(const FixedTable::Ptr& table)
+DecisionTreeHeurList::pointList(const Table& table)
 {
 	std::vector<Point> result;
-	for (Point  p: arrayRange(table->get())) {
-		if (!table->get().wall(p)) {
+	for (Point  p: arrayRange(table)) {
+		if (!table.wall(p)) {
 			result.push_back(p);
 		}
 	}

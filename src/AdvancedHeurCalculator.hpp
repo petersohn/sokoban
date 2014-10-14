@@ -27,7 +27,7 @@ class AdvancedStoneCalculator {
 		std::ofstream file_;
 		void open();
 	public:
-		void dumpPartition(const FixedTable::Ptr& table, const Partition& partition);
+		void dumpPartition(const Table& table, const Partition& partition);
 		template<class T>
 		void dumpArray(const Array<T>& arr)
 		{
@@ -41,11 +41,11 @@ class AdvancedStoneCalculator {
 	Array<std::vector<Partition>> partitions_;
 	Solver::Ptr solver_;
 	bool useDumper_;
-	void init(const FixedTable::Ptr& table);
+	void init(const Table& table);
 
-	void initPartitions(const FixedTable::Ptr& table, Point p);
+	void initPartitions(const Table& table, Point p);
 public:
-	AdvancedStoneCalculator(const FixedTable::Ptr& table, Solver::Ptr solver, bool useDumper = true):
+	AdvancedStoneCalculator(const Table& table, Solver::Ptr solver, bool useDumper = true):
 		solver_(std::move(solver)),
 		useDumper_(useDumper)
 	{

@@ -108,7 +108,7 @@ bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 	if (node.get() == NULL)
 		return false;
 	queue.push(node);
-	Status st(status.tablePtr());
+	Status st(status.table());
 	std::deque<Node::Ptr> path = pathToBase(node, base);
 	for (std::deque<Node::Ptr>::iterator it = path.begin();
 			it != path.end(); ++it) {

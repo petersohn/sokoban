@@ -47,7 +47,7 @@ private:
 	Checker::Ptr checker_;
 	IndexedStatusList<int> blockList_;
 	IncrementList heurList_;
-	FixedTable::Ptr table_;
+	const Table* table_;
 	std::size_t numStones_;
 	std::size_t maxDistance_;
 	std::size_t maxHeurListSize_;
@@ -80,7 +80,7 @@ public:
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
 	HeurCalculator::Ptr decisionTreeHeurCalculator(std::size_t maxDepth, bool useChecker);
-	void init(const FixedTable::Ptr& table);
+	void init(const Table& table);
 };
 
 #endif /* BLOCKLISTGENERATOR_H */

@@ -183,7 +183,7 @@ namespace detail {
 							for (Point  p: value->first.state()) {
 								state.addStone(p);
 							}
-							return !checkState(*checker_, value->first.tablePtr(), state);
+							return !checkState(*checker_, value->first.table(), state);
 						});
 			} else {
 				valueList = originalValueList;
@@ -245,7 +245,7 @@ namespace detail {
 			assert(!valueList.empty());
 			if (checker_ && !checkState(
 					*checker_,
-					valueList.front()->first.tablePtr(),
+					valueList.front()->first.table(),
 					collectedState)) {
 				{
 					boost::unique_lock<MutexType> lock(progressMutex_);

@@ -36,10 +36,10 @@ void SolutionChecker::printError(const Node::Ptr& oldNode, const Node::Ptr& newN
 {
 	errorDump_ << errorMessage << "\n";
 	if (oldNode) {
-		dumpNode(errorDump_, status.tablePtr(), *oldNode, (boost::format("Old node (depth = %d)") % oldNode->depth()).str());
+		dumpNode(errorDump_, status.table(), *oldNode, (boost::format("Old node (depth = %d)") % oldNode->depth()).str());
 	}
 	if (newNode) {
-		dumpNode(errorDump_, status.tablePtr(), *newNode, (boost::format("New node (depth = %d)") % newNode->depth()).str());
+		dumpNode(errorDump_, status.table(), *newNode, (boost::format("New node (depth = %d)") % newNode->depth()).str());
 	}
 	dumpStatus(errorDump_, status, "Status");
 	errorDump_ << "\n" << endl;

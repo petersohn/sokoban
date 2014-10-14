@@ -13,7 +13,7 @@
 
 class XDumper: public Dumper {
 	XDumper(const XDumper &);
-	FixedTable::Ptr table_;
+	const Table* table_;
 	typedef std::map<Node::Ptr, std::shared_ptr<xml::XMLElement> > MapType;
 	MapType elements_;
 	std::string filename_;

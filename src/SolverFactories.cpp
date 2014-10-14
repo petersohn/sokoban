@@ -56,7 +56,7 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 {
 	auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
-			BasicStoneCalculator{table_->get()});
+			BasicStoneCalculator{table_});
 	Solver::Ptr solver(new Solver(createPrioQueue,
 		[this, basicHeurCalculator]() {
 			return createExpander(
@@ -99,7 +99,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 	HeurCalculator::Ptr calculator =
 		options_.useAdvancedHeurCalculator() ?
 		createAdvancedHeurCalcularor() :
-		std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_->get()});
+		std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_});
 	HeurCalculator::Ptr experimentalCalculator;
 	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
 	if (options_.blockListStones() > 1) {

@@ -10,7 +10,7 @@
 
 class TextDumper: public Dumper {
 	std::ofstream file_;
-	FixedTable::Ptr table_;
+	const Table* table_;
 	mutable MutexType dumperMutex_;
 public:
 	TextDumper(const char *filename):

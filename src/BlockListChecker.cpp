@@ -2,7 +2,6 @@
 
 bool BlockListChecker::check(const Status& status, Point  p)
 {
-	assert(table_ == status.tablePtr());
 	return !blockList_.hasSubStatus(status, p);
 }
 

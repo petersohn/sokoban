@@ -17,8 +17,8 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 		Checker::Ptr checker, std::size_t numStones, std::size_t maxDistance,
 		std::size_t maxHeurListSize, std::size_t numThreads):
 	solver_(std::move(solver)),
-	calculator_(calculator),
-	checker_(checker),
+	calculator_(std::move(calculator)),
+	checker_(std::move(checker)),
 	numStones_(numStones),
 	maxDistance_(maxDistance),
 	maxHeurListSize_(maxHeurListSize),
@@ -64,9 +64,9 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 	}
 }
 
-void BlockListGenerator::init(const FixedTable::Ptr& table)
+void BlockListGenerator::init(const Table& table)
 {
-	table_ = table;
+	table_ = &table;
 	std::cerr << "Calculating block list..." << std::endl;
 	std::vector<Checker::Ptr> checkers{checker_, checker()};
 	Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
@@ -121,14 +121,14 @@ void BlockListGenerator::init(const FixedTable::Ptr& table)
 Checker::Ptr BlockListGenerator::checker()
 {
 	assert(table_);
-	return std::make_shared<BlockListChecker>(blockList_, table_);
+	return std::make_shared<BlockListChecker>(blockList_);
 }
 
 HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 {
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(
-			calculator_, table_,
+			calculator_,
 			BlockListHeurList{heurList_ | boost::adaptors::transformed(
 					IncrementInfo::getHeurInfo)});
 }
@@ -139,9 +139,9 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 {
 	assert(table_);
 	return std::make_shared<DecisionTreeHeurCalculator>(
-			calculator_, table_,
+			calculator_,
 			DecisionTreeHeurList{
-				table_,
+				*table_,
 				heurList_ | boost::adaptors::transformed(
 						IncrementInfo::getHeurInfo),
 				useChecker ? checker_ : Checker::Ptr(),

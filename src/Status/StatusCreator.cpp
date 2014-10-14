@@ -4,10 +4,11 @@
 #include <sstream>
 
 
-Status createStatus(int width, int height, const std::vector<std::string>& lines)
+std::pair<std::unique_ptr<Table>, Status>
+createStatus(int width, int height, const std::vector<std::string>& lines)
 {
-	Table t(width, height);
-	State st;
+	std::unique_ptr<Table> table{new Table(width, height)};
+	State state;
 	Point startPos;
 	bool startPosOK = false, destinationOK = false;
 	int stoneNum = 0;
@@ -20,27 +21,27 @@ Status createStatus(int width, int height, const std::vector<std::string>& lines
 			{
 			case 'X':
 			case 'x':
-				t.destination(p);
-				t.wall(p, false);
+				table->destination(p);
+				table->wall(p, false);
 				destinationOK = true;
 				break;
 			case 'Y':
 			case 'y':
 				startPos = p;
-				t.wall(p, false);
+				table->wall(p, false);
 				startPosOK = true;
 				break;
 			case '.':
-				t.wall(p, false);
+				table->wall(p, false);
 				break;
 			case 'o':
 			case 'O':
-				t.wall(p, false);
-				st.addStone(p);
+				table->wall(p, false);
+				state.addStone(p);
 				++stoneNum;
 				break;
 			default:
-				t.wall(p, true);
+				table->wall(p, true);
 			}
 		}
 		if (++p.y >= height)
@@ -48,13 +49,14 @@ Status createStatus(int width, int height, const std::vector<std::string>& lines
 	}
 	if (stoneNum == 0 || !startPosOK || !destinationOK)
 		throw SokobanException();
-	Status result(FixedTable::Ptr(new FixedTable(t)), st);
+	Status result(*table, state);
 	result.currentPos(startPos);
-	return result;
+	return {std::move(table), result};
 }
 
 
-Status loadStatusFromFile(const char *filename) {
+std::pair<std::unique_ptr<Table>, Status>
+loadStatusFromFile(const char *filename) {
 	using namespace std;
 	ifstream file(filename, ifstream::in);
 	stringstream ss;

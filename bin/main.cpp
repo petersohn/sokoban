@@ -34,11 +34,12 @@ int main(int argc, char** argv) {
 
 	Status::statusPoolSize(opts.statusPoolSize());
 
-	Status st(loadStatusFromFile(opts.filename().c_str()));
-	dumpStatus(std::cerr, st);
+	auto data(loadStatusFromFile(opts.filename().c_str()));
+	Status& status = data.second;
+	dumpStatus(std::cerr, status);
 
 	TimeMeter timeMeter;
-	OptionsBasedExpanderFactory expanderFactory(opts, st.tablePtr(), !opts.test());
+	OptionsBasedExpanderFactory expanderFactory(opts, status.table(), !opts.test());
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
 			createExpander,
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
 		util::ThreadPoolRunner runner(threadPool);
 		threadPool.setNumThreads(opts.getNumThreads());
 		TableIterator it(
-				st.tablePtr(),
+				status.table(),
 				calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
@@ -61,7 +62,7 @@ int main(int argc, char** argv) {
 				threadPool);
 		it.iterate(opts.test());
 	} else {
-		std::deque<Node::Ptr> solution = s.solve(st);
+		std::deque<Node::Ptr> solution = s.solve(status);
 		cerr << "Length of solution: " << solution.size() << endl;
 		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
 		cerr << "Real Time:" << timeMeter.realTime() << endl;
@@ -69,7 +70,7 @@ int main(int argc, char** argv) {
 			cerr << "No solution." << endl;
 		else
 		{
-			if (solutionChecker.checkResult(st, solution)) {
+			if (solutionChecker.checkResult(status, solution)) {
 				cerr << "Solution OK." << endl;
 			} else {
 				cerr << "Solution bad." << endl;
@@ -79,7 +80,7 @@ int main(int argc, char** argv) {
 			for (std::deque<Node::Ptr>::iterator it = solution.begin();
 					it != solution.end(); ++it)
 			{
-				dumpNode(dump, st.tablePtr(), **it);
+				dumpNode(dump, status.table(), **it);
 				Point from = (*it)->from();
 				Point p(from - (*it)->d());
 				std::string dir =

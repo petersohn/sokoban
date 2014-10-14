@@ -17,7 +17,7 @@ void AdvancedStoneCalculator::HeurDumper::open() {
 }
 
 void AdvancedStoneCalculator::HeurDumper::dumpPartition(
-		const FixedTable::Ptr& table, const Partition& partition)
+		const Table& table, const Partition& partition)
 {
 	open();
 	Status s(table);
@@ -38,13 +38,13 @@ void AdvancedStoneCalculator::HeurDumper::printText(const char *text)
 
 AdvancedStoneCalculator::HeurDumper AdvancedStoneCalculator::dumper;
 
-void AdvancedStoneCalculator::init(const FixedTable::Ptr& table)
+void AdvancedStoneCalculator::init(const Table& table)
 {
-	Array<std::string> dump(table->get().width(), table->get().height());
+	Array<std::string> dump(table.width(), table.height());
 	std::vector<Partition> dumpPartitions;
-	partitions_.reset(table->get().width(), table->get().height());
-	for (Point  p: arrayRange(table->get())) {
-		if (table->get().wall(p)) {
+	partitions_.reset(table.width(), table.height());
+	for (Point  p: arrayRange(table)) {
+		if (table.wall(p)) {
 			dump[p] = "*";
 			continue;
 		}
@@ -58,7 +58,7 @@ void AdvancedStoneCalculator::init(const FixedTable::Ptr& table)
 		dumper.printText("Heuristics table:");
 		dumper.dumpArray(dump);
 		dumper.printText("\nPartitions:");
-		for (Point  p: arrayRange(table->get())) {
+		for (Point  p: arrayRange(table)) {
 			if (partitions_[p].size() > 1) {
 				for (const Partition& partition: partitions_[p]) {
 					dumper.dumpPartition(table, partition);
@@ -68,17 +68,17 @@ void AdvancedStoneCalculator::init(const FixedTable::Ptr& table)
 	}
 }
 
-void AdvancedStoneCalculator::initPartitions(const FixedTable::Ptr& table, Point  p)
+void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
 {
 	State state;
 	state.addStone(p);
 	std::vector<Status> parts = getPartitions(table, state);
 	for (Status& status: parts) {
-		Partition partition(table->get().width(), table->get().height());
+		Partition partition(table.width(), table.height());
 		partition.pos = p;
 		partition.heur = -1;
 		partition.reachable = status.reachableArray();
-		if (p == table->get().destination())
+		if (p == table.destination())
 			partition.heur = 0;
 		else {
 			std::deque<Node::Ptr> res = solver_->solve(std::move(status));

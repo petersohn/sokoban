@@ -4,13 +4,13 @@
 #include "Status/Status.hpp"
 
 class PseudoStatus {
-	FixedTable::Ptr table_;
+	const Table* table_;
 	State state_;
 	Point currentPos_;
 	Array<bool> reachableArray_;
 public:
 	explicit PseudoStatus(const Status& status):
-		table_(status.tablePtr()),
+		table_(&status.table()),
 		state_(status.state()),
 		currentPos_(status.currentPos()),
 		reachableArray_(status.reachableArray())
@@ -18,8 +18,7 @@ public:
 
 	size_t width() const { return table().width(); }
 	size_t height() const { return table().height(); }
-	const Table& table() const { return table_->get(); }
-	const FixedTable::Ptr& tablePtr() const { return table_; }
+	const Table& table() const { return *table_; }
 	State& state() { return state_; }
 	const State& state() const { return state_; }
 	FieldType value(Point p) const {

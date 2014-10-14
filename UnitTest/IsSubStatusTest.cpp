@@ -12,31 +12,31 @@ BOOST_AUTO_TEST_CASE(equal)
 			createStatus(4, 2, {
 					"x.o.",
 					"..oy"
-				}),
+				}).second,
 			createStatus(4, 2, {
 					"x.o.",
 					"..oy"
-				})
+				}).second
 		));
 	BOOST_CHECK(isSubStatus(
 			createStatus(4, 2, {
 					"x.o.",
 					"..oy"
-				}),
+				}).second,
 			createStatus(4, 2, {
 					"x.oy",
 					"..o."
-				})
+				}).second
 		));
 	BOOST_CHECK(isSubStatus(
 			createStatus(4, 2, {
 					"x.o.",
 					"y.o."
-				}),
+				}).second,
 			createStatus(4, 2, {
 					"xyo.",
 					"..o."
-				})
+				}).second
 		));
 }
 
@@ -46,21 +46,21 @@ BOOST_AUTO_TEST_CASE(equalBadReachable)
 			createStatus(4, 2, {
 					"x.o.",
 					"..oy"
-				}),
+				}).second,
 			createStatus(4, 2, {
 					"x.o.",
 					"y.o."
-				})
+				}).second
 		));
 	BOOST_CHECK(!isSubStatus(
 			createStatus(4, 2, {
 					"x.o.",
 					"..oy"
-				}),
+				}).second,
 			createStatus(4, 2, {
 					"x.o.",
 					"y.o."
-				})
+				}).second
 		));
 }
 
@@ -70,21 +70,21 @@ BOOST_AUTO_TEST_CASE(subStatus)
 			createStatus(5, 2, {
 					"x.o..",
 					"..oy."
-				}),
+				}).second,
 			createStatus(5, 2, {
 					"x.o.o",
 					"..o.y"
-				})
+				}).second
 		));
 	BOOST_CHECK(isSubStatus(
 			createStatus(5, 2, {
 					"x.o..",
 					"..oy."
-				}),
+				}).second,
 			createStatus(5, 2, {
 					"x.o..",
 					"o.o.y"
-				})
+				}).second
 		));
 }
 
@@ -94,21 +94,21 @@ BOOST_AUTO_TEST_CASE(subStatusBadReachable)
 			createStatus(5, 2, {
 					"x.o..",
 					"..oy."
-				}),
+				}).second,
 			createStatus(5, 2, {
 					"x.o.o",
 					"y.o.."
-				})
+				}).second
 		));
 	BOOST_CHECK(!isSubStatus(
 			createStatus(5, 2, {
 					"x.o..",
 					".yo.."
-				}),
+				}).second,
 			createStatus(5, 2, {
 					"x.o..",
 					"o.o.y"
-				})
+				}).second
 		));
 }
 
@@ -118,21 +118,21 @@ BOOST_AUTO_TEST_CASE(notSubStatus)
 			createStatus(5, 2, {
 					"x.o.o",
 					"..oy."
-				}),
+				}).second,
 			createStatus(5, 2, {
 					"x.o..",
 					"..o.y"
-				})
+				}).second
 		));
 	BOOST_CHECK(!isSubStatus(
 			createStatus(5, 2, {
 					"x.o.o",
 					"..o.y"
-				}),
+				}).second,
 			createStatus(5, 2, {
 					"x.oo.",
 					"..o.y"
-				})
+				}).second
 		));
 }
 

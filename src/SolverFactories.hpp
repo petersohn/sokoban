@@ -13,16 +13,19 @@ Dumper::Ptr createDumperFromOptions(const Options &opts);
 
 
 class OptionsBasedExpanderFactory {
-	const Options &options_;
-	FixedTable::Ptr table_;
+	const Options& options_;
+	const Table& table_;
 	bool log_;
 public:
-	OptionsBasedExpanderFactory(const Options &opts, FixedTable::Ptr table, bool log = true):
+	OptionsBasedExpanderFactory(const Options &opts, const Table& table, bool log = true):
 		options_(opts),
 		table_(table),
 		log_(log)
 	{
 	}
+
+	OptionsBasedExpanderFactory(const OptionsBasedExpanderFactory&) = delete;
+	OptionsBasedExpanderFactory& operator=(const OptionsBasedExpanderFactory&) = delete;
 
 	HeurCalculator::Ptr createAdvancedHeurCalcularor();
 	Expander::Ptr createExpander(

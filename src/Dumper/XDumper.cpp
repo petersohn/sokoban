@@ -27,7 +27,7 @@ void XDumper::initialStatus(const Status &status) {
 	std::stringstream ss;
 	dumpStatus(ss, status);
 	elements_[Node::Ptr()]->children().push_back(createDumpElement(ss.str()));
-	table_ = status.tablePtr();
+	table_ = &status.table();
 }
 
 void  XDumper::addNode(Node::Ptr node)
@@ -42,7 +42,7 @@ XDumper::ElementPtr XDumper::doAddNode(Node::Ptr node)
 	ElementPtr elem(new xml::XMLElement());
 	elem->name("node");
 	std::stringstream ss;
-	dumpNode(ss, table_, *node);
+	dumpNode(ss, *table_, *node);
 	elem->children().push_back(createDumpElement(ss.str()));
 	elem->attributes().insert(make_pair("stone", pointStr(node->from())));
 	elem->attributes().insert(make_pair("d", direction(node->d())));

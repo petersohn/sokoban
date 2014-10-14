@@ -29,17 +29,6 @@ struct MinMax {
 	int minX, maxX, minY, maxY;
 };
 
-template<class T>
-class FixedObject {
-	T value_;
-public:
-	typedef std::shared_ptr<const FixedObject<T> > Ptr;
-	typedef T value_type;
-
-	FixedObject(const T &val): value_(val) {}
-	const T &get() const { return value_; }
-};
-
 enum FieldType { ftFloor, ftWall, ftStone };
 
 template<class T>

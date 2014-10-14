@@ -16,7 +16,7 @@ class Status {
 public:
 	typedef std::vector<Point> BorderType;
 private:
-	FixedTable::Ptr table_;
+	const Table* table_;
 	State state_;
 	Point currentPos_;
 	Array<FieldType> fields_;
@@ -48,9 +48,9 @@ public:
 	static std::size_t moveCount;
 	static std::size_t calculateReachableCount;
 
-	explicit Status(FixedTable::Ptr table);
-	explicit Status(FixedTable::Ptr table, const State &state);
-	explicit Status(FixedTable::Ptr table, const Node &node);
+	explicit Status(const Table& table);
+	explicit Status(const Table& table, const State &state);
+	explicit Status(const Table& table, const Node &node);
 	Status(const Status& other):
 		table_(other.table_),
 		state_(other.state_),
@@ -71,7 +71,7 @@ public:
 	}
 
 	Status(Status&& other) noexcept:
-		table_(std::move(other.table_)),
+		table_(other.table_),
 		state_(std::move(other.state_)),
 		currentPos_(std::move(other.currentPos_)),
 		fields_(std::move(other.fields_)),
@@ -80,7 +80,7 @@ public:
 		++moveCount;
 	}
 	Status& operator=(Status&& other) noexcept {
-		table_ = std::move(other.table_);
+		table_ = other.table_;
 		state_ = std::move(other.state_);
 		currentPos_ = std::move(other.currentPos_);
 		fields_ = std::move(other.fields_);
@@ -109,8 +109,7 @@ public:
 		}
 	}
 
-	const Table& table() const { return table_->get(); }
-	FixedTable::Ptr tablePtr() const { return table_; }
+	const Table& table() const { return *table_; }
 	std::size_t width() const { return table().width(); }
 	std::size_t height() const { return table().height(); }
 	const State& state() const { return state_; }

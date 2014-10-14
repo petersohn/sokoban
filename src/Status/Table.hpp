@@ -31,7 +31,4 @@ public:
 };
 
 
-typedef FixedObject<Table> FixedTable;
-
-
 #endif /* TABLE_H_ */

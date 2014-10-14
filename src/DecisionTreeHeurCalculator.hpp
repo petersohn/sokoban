@@ -17,11 +17,11 @@ class DecisionTreeHeurList {
 	const NodeType::ValueList* heurList_;
 	NodeType::ValueList::const_iterator iterator_;
 
-	static std::vector<Point> pointList(const FixedTable::Ptr& table);
+	static std::vector<Point> pointList(const Table& table);
 public:
 	template <class HeurListType>
 	DecisionTreeHeurList(
-			const FixedTable::Ptr& table,
+			const Table& table,
 			const HeurListType& heurList,
 			const Checker::Ptr& checker,
 			std::size_t maxDepth,

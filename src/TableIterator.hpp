@@ -14,7 +14,7 @@ class TableIterator {
 public:
 	typedef std::function<void(const Status&)> Action;
 private:
-	FixedTable::Ptr table_;
+	const Table* table_;
 	HeurCalculator::Ptr heurCalculator_;
 	Checker::Ptr checker_;
 	Action action_;
@@ -33,8 +33,8 @@ private:
 	void cleanWorkQueue();
 	void progress();
 	bool advancePoint(Point &p) {
-		if (p.x == static_cast<int>(table_->get().width()) - 1) {
-			if (p.y < static_cast<int>(table_->get().height()) - 1) {
+		if (p.x == static_cast<int>(table_->width()) - 1) {
+			if (p.y < static_cast<int>(table_->height()) - 1) {
 				++p.y;
 				p.x = 0;
 			} else {
@@ -47,13 +47,13 @@ private:
 	}
 public:
 	TableIterator(
-			const FixedTable::Ptr& table,
+			const Table& table,
 			const HeurCalculator::Ptr& heurCalculator,
 			const Checker::Ptr& checker,
 			const Action& action,
 			std::size_t maxDistance,
 			util::ThreadPool& threadPool):
-		table_(table),
+		table_(&table),
 		heurCalculator_(heurCalculator),
 		checker_(checker),
 		action_(action),

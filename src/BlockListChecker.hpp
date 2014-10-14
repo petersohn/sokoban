@@ -7,13 +7,9 @@
 class BlockListChecker: public Checker {
 private:
 	IndexedStatusList<int> blockList_;
-	FixedTable::Ptr table_;
 public:
-	BlockListChecker(
-			IndexedStatusList<int> blockList,
-			FixedTable::Ptr table):
-				blockList_(std::move(blockList)),
-				table_(table)
+	BlockListChecker(IndexedStatusList<int> blockList):
+			blockList_(std::move(blockList))
 	{
 	}
 

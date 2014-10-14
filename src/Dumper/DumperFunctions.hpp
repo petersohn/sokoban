@@ -17,7 +17,7 @@ template <class Status>
 void dumpStatus(std::ostream &file, const Status &status,
 		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
 
-void dumpNode(std::ostream &file, FixedTable::Ptr table, const Node &node,
+void dumpNode(std::ostream &file, const Table& table, const Node &node,
 		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
 
 
