@@ -1,4 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/petersohn/sokoban.png?label=ready&title=Ready)](https://waffle.io/petersohn/sokoban)
+[![Stories in Next](https://badge.waffle.io/petersohn/sokoban.png?label=next&title=Next)](https://waffle.io/petersohn/sokoban)
 
 A sokoban solver AI. It solves a simplified version of sokoban where each bix has to be pushed into one sink point, where it disappears. It is based on the sokoban levels of Nethack.
 
