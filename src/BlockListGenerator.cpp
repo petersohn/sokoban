@@ -68,9 +68,7 @@ void BlockListGenerator::init(const Table& table)
 {
 	table_ = &table;
 	std::cerr << "Calculating block list..." << std::endl;
-	std::vector<Checker::Ptr> checkers{checker_, checker()};
-	Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
-	TableIterator tableIterator(table, calculator_, checker,
+	TableIterator tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
 			maxDistance_, threadPool_);
 	blockList_.clear();
@@ -84,7 +82,9 @@ void BlockListGenerator::init(const Table& table)
 		std::cerr << "Stones = " << n << std::endl;
 		{
 			util::ThreadPoolRunner runner(threadPool_);
-			tableIterator.iterate(n);
+			tableIterator.iterate(n, calculator_,
+					std::make_shared<ComplexChecker>(std::vector<Checker::Ptr>{
+						checker_, checker()}));
 		}
 		for (const auto& calculationInfo: calculationInfos_) {
 			dump_ << calculationInfo->dump_.str();

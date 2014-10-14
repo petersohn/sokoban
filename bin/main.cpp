@@ -53,14 +53,11 @@ int main(int argc, char** argv) {
 		util::ThreadPool threadPool;
 		util::ThreadPoolRunner runner(threadPool);
 		threadPool.setNumThreads(opts.getNumThreads());
-		TableIterator it(
-				status.table(),
-				calculator,
-				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)),
+		TableIterator it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
-				0,
-				threadPool);
-		it.iterate(opts.test());
+				0, threadPool);
+		it.iterate(opts.test(), calculator,
+				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)));
 	} else {
 		std::deque<Node::Ptr> solution = s.solve(status);
 		cerr << "Length of solution: " << solution.size() << endl;

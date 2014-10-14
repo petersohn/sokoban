@@ -69,9 +69,13 @@ void TableIterator::doWork(const std::vector<Status>& statuses)
 	done_.notify_all();
 }
 
-void TableIterator::iterate(std::size_t numStones)
+void TableIterator::iterate(std::size_t numStones,
+			const HeurCalculator::Ptr& heurCalculator,
+			const Checker::Ptr& checker)
 {
 	assert(!working_);
+	heurCalculator_ = heurCalculator;
+	checker_ = checker;
 	TempValue<bool> working(working_, true);
 	TimeMeter timeMeter;
 	solved_ = iters_ = 0;

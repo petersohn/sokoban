@@ -48,14 +48,10 @@ private:
 public:
 	TableIterator(
 			const Table& table,
-			const HeurCalculator::Ptr& heurCalculator,
-			const Checker::Ptr& checker,
 			const Action& action,
 			std::size_t maxDistance,
 			util::ThreadPool& threadPool):
 		table_(&table),
-		heurCalculator_(heurCalculator),
-		checker_(checker),
 		action_(action),
 		maxDistance_(maxDistance),
 		iters_(0),
@@ -73,7 +69,9 @@ public:
 		assert(!working_);
 		action_ = action;
 	}
-	void iterate(std::size_t numStones);
+	void iterate(std::size_t numStones,
+			const HeurCalculator::Ptr& heurCalculator,
+			const Checker::Ptr& checker);
 };
 
 
