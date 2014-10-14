@@ -22,10 +22,10 @@ private:
 			heurInfo_(std::move(heurInfo)),
 			difference_(difference)
 		{}
-		IncrementInfo(const IncrementInfo& other) = default;
-		IncrementInfo(IncrementInfo&& other) = default;
-		IncrementInfo& operator=(const IncrementInfo& other) = default;
-		IncrementInfo& operator=(IncrementInfo&& other) = default;
+		IncrementInfo(const IncrementInfo& ) = default;
+		IncrementInfo(IncrementInfo&& ) = default;
+		IncrementInfo& operator=(const IncrementInfo& ) = default;
+		IncrementInfo& operator=(IncrementInfo&& ) = default;
 		static const HeurInfo& getHeurInfo(const IncrementInfo& incrementInfo) {
 			return incrementInfo.heurInfo_;
 		}

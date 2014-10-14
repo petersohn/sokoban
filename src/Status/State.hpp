@@ -20,10 +20,10 @@ public:
 	typedef ContainerType::const_iterator const_iterator;
 
 	State():stones_(new ContainerType) {}
-	State(const State& other) = default;
-	State& operator=(const State& other) = default;
-	State(State&& other) = default;
-	State& operator=(State&& other) = default;
+	State(const State& ) = default;
+	State& operator=(const State& ) = default;
+	State(State&& ) = default;
+	State& operator=(State&& ) = default;
 
 	State deepCopy() const {
 		State result{*this};

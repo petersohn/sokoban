@@ -33,10 +33,10 @@ public:
 	Array(std::size_t width, std::size_t height, const T& defValue = T()):
 		width_(width), height_(height), data_(width * height, defValue)
 	{}
-	Array(const Array& other) = default;
-	Array(Array&& other) = default;
-	Array& operator=(const Array& other) = default;
-	Array& operator=(Array&& other) = default;
+	Array(const Array& ) = default;
+	Array(Array&& ) = default;
+	Array& operator=(const Array& ) = default;
+	Array& operator=(Array&& ) = default;
 
 	reference operator[](std::size_t pos) {
 		return data_[pos];
