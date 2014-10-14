@@ -89,6 +89,13 @@ public:
 		return *this;
 	}
 
+	Status deepCopy() const {
+		Status result{*this};
+		result.state_ = result.state_.deepCopy();
+		result.calculatedData_.reset();
+		return result;
+	}
+
 	bool operator==(const Status& other) const
 	{
 		if (table_ != other.table_ || state_ != other.state_) {

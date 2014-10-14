@@ -27,7 +27,10 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 				continue;
 			}
 			if (stones == 0) {
-				workQueue_.push_back(std::move(status));
+				// This will be accessed from another thread. Make sure that no
+				// shared pointers that are potentially modified are shared
+				// between the threads.
+				workQueue_.push_back(status.deepCopy());
 				if (workQueue_.size() == workQueueLength) {
 					cleanWorkQueue();
 				}

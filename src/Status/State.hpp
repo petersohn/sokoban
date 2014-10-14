@@ -25,6 +25,12 @@ public:
 	State(State&& other) = default;
 	State& operator=(State&& other) = default;
 
+	State deepCopy() const {
+		State result{*this};
+		result.modify();
+		return result;
+	}
+
 	bool operator==(const State &other) const {
 		return stones_ == other.stones_ || *stones_ == *(other.stones_);
 	}
