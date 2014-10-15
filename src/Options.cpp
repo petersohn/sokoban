@@ -1,136 +1,156 @@
 #include "Options.hpp"
-#include "OptionsHelper.hpp"
 #include <iostream>
 #include <boost/program_options.hpp>
 #include <boost/format.hpp>
 #include <vector>
 #include <cstdlib>
 
+namespace po = boost::program_options;
 
-Options::Options(int argc, char **argv, const char *configFileName):
-		dumpStyle_(dsNone),
-		oldStyleOutput_(false),
-		useStonePusher_(true),
-		useMovableChecker_(true),
-		useCorridorChecker_(true),
-		useAdvancedHeurCalculator_(true),
-		statusPoolSize_(0),
-		blocklistHeurCalculatorType_(bhNone),
-		parallelOuterExpand_(false),
-		blockListStones_(0),
-		blockListDistance_(0),
-		maxHeurListSize_(0),
-		numThreads_(1),
-		test_(0),
-		maxDecisionTreeDepth_(10),
-		useCheckerForDecisionTree_(false)
+namespace {
+
+template <typename T>
+po::typed_value<T>* defaultValue(T* v)
 {
-	OptionsHelper oh;
-	bool help = false;
-	oh.addCommandLineFlag("help,h", &help, "Produce help message, then quit.");
-	oh.addCommandLineFlag("old-style-output", &oldStyleOutput_,
-			"Produce output messages of (x1, y1) --> (x2, y2)"
-			" instead of (x1, y1) --> direction");
-	oh.addPositionalParameter("filename", &filename_, "Input file name");
-	oh.addArgumentOption<std::size_t>("blocklist-number", &blockListStones_,
-			"The number of stones the blocklist contains. "
-			"The calculation time of the blocklist is exponential in this number.");
-	oh.addArgumentOption<std::size_t>("blocklist-distance", &blockListDistance_,
-			"The maximum distance between stones in the "
-			"blocklist. 0 means no limit.");
-	oh.addArgumentOption<std::size_t>("thread-num,t", &numThreads_,
-			"The maximum number of threads to use.");
-	oh.addBoolOption("parallel-outer-expand", &parallelOuterExpand_,
-			"Expand several nodes in parallel. Only if --thread-num > 1.");
-	oh.addArgumentOption<std::size_t>("test", &test_,
-			"Instead of solving a problem, solve each possible problem with the given number "
-			"of stones on the table.");
+	return po::value(v)->default_value(*v);
+}
 
-	IndexedArgument ds;
-	ds.addElement("none", dsNone);
-	ds.addElement("text", dsText);
-	ds.addElement("xml", dsXML);
-	int dumpStyle = 0;
-	oh.addIndexedOption("dump-style,d", &dumpStyle, ds,
+void parseConfigFile(po::variables_map& vm,
+		const po::options_description& optionsDescription,
+		const char* configFile)
+{
+	po::store(po::parse_config_file<char>(configFile, optionsDescription), vm);
+	po::notify(vm);
+}
+
+void printHelp(const char* name, const po::options_description& optionsDescription)
+{
+	std::cerr << "Usage: " << name << " [options] filename\n" <<
+		optionsDescription << std::endl;
+}
+
+}
+
+Options parseOptions(int argc, char **argv, const char *configFileName)
+{
+	bool help = false;
+	Options options;
+	po::options_description commandLineDesctiption("Command-line only options");
+
+	commandLineDesctiption.add_options()
+			("help,h", po::bool_switch(&help),
+			 "Produce help message, then quit.")
+			("test", defaultValue(&options.test_),
+			"Instead of solving a problem, solve each possible problem with the given number "
+			"of stones on the table.")
+			("filename", po::value(&options.filename_),
+			 "Input file name")
+		;
+
+	po::options_description generalDescription("General options");
+	generalDescription.add_options()
+			("old-style-output", defaultValue(&options.oldStyleOutput_),
+			"Produce output messages of (x1, y1) --> (x2, y2)"
+			" instead of (x1, y1) --> direction")
+			("blocklist-number", defaultValue(&options.blockListStones_),
+			"The number of stones the blocklist contains. "
+			"The calculation time of the blocklist is exponential in this number.")
+			("blocklist-distance", defaultValue(&options.blockListDistance_),
+			"The maximum distance between stones in the "
+			"blocklist. 0 means no limit.")
+			("thread-num,t", defaultValue(&options.numThreads_),
+			"The maximum number of threads to use.")
+			("parallel-outer-expand", defaultValue(&options.parallelOuterExpand_),
+			"Expand several nodes in parallel. Only if --thread-num > 1.")
+			("dump-style,d", defaultValue(&options.dumpStyle_),
 			"Generate dump file of the process. Dump generation slows down calculation.\n"
 			"Values can be:\n"
 			"    (n)one   \tDisable dumping.\n"
 			"    (t)ext   \tText dump format. Slows down dump generation moderately.\n"
 			"    (x)ml    \tXML dump format. Highly increases memory consumption"
-			" and calculation time.");
-	oh.addBoolOption("stone-pusher", &useStonePusher_,
-			"Enable/disable automatic pushing of stones into the destination point.\n");
-	oh.addBoolOption("movable-checker", &useMovableChecker_,
-			"Enable/disable checking if a stone is not stuck.\n");
-	oh.addBoolOption("corridor-checker", &useCorridorChecker_,
-			"Enable/disable checking for corridors.\n");
-	oh.addBoolOption("advanced-heur-calculator", &useAdvancedHeurCalculator_,
-			"Enable/disable advanced heur calculator.\n");
-	oh.addArgumentOption<std::size_t>("heur-list-size", &maxHeurListSize_,
-			"The maximum size for the heur list when blocklist-heur-calculator is enabled. 0 means no limitation.");
-	IndexedArgument bh;
-	bh.addElement("none", bhNone);
-	bh.addElement("vector", bhVector);
-	bh.addElement("decision-tree", bhDecisionTree);
-	int blocklistHeurCalculatorType;
-	oh.addIndexedOption("blocklist-heur-calculator", &blocklistHeurCalculatorType, bh,
+			" and calculation time.")
+			("stone-pusher", defaultValue(&options.useStonePusher_),
+			"Enable/disable automatic pushing of stones into the destination point.\n")
+			("movable-checker", defaultValue(&options.useMovableChecker_),
+			"Enable/disable checking if a stone is not stuck.\n")
+			("corridor-checker", defaultValue(&options.useCorridorChecker_),
+			"Enable/disable checking for corridors.\n")
+			("advanced-heur-calculator", defaultValue(&options.useAdvancedHeurCalculator_),
+			"Enable/disable advanced heur calculator.\n")
+			("heur-list-size", defaultValue(&options.maxHeurListSize_),
+			"The maximum size for the heur list when blocklist-heur-calculator is enabled. 0 means no limitation.")
+			("blocklist-heur-calculator", defaultValue(&options.blocklistHeurCalculatorType_),
 			"The type of the blocklist heur calculator. Only meaningful if --blocklist-number > 1. "
 			"Possible values:\n"
 			"    (n)one          \tDisable blocklist heur calculator.\n"
 			"    (v)ector        \tUse vector and linear search. More optimal, but slower than decision tree.\n"
-			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n");
-	oh.addArgumentOption<std::size_t>("max-decision-tree-depth", &maxDecisionTreeDepth_,
-			"The maximum depth of the decision tree.");
-	oh.addBoolOption("decision-tree-checker", &useCheckerForDecisionTree_,
-			"Enable/disable usage of checker in DecisionTree building.\n");
-	IndexedArgument cl;
-	cl.addElement("time", ctTime);
-	cl.addElement("heur", ctHeur);
-	cl.addElement("depth", ctDepth);
-	cl.allowMinus(true);
-	std::vector<int> compare;
-	oh.addIndexedListOption("compare,c", &compare, cl,
-			"The compare algorithm to use when choosing equal elements.");
-	oh.addArgumentOption<std::size_t>("status-pool", &statusPoolSize_,
-			"The size of Status pool to avoid many calculateReachable() calls. 0 means no pooling.");
+			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n")
+			("max-decision-tree-depth", defaultValue(&options.maxDecisionTreeDepth_),
+			"The maximum depth of the decision tree.")
+			("decision-tree-checker", defaultValue(&options.useCheckerForDecisionTree_),
+			"Enable/disable usage of checker in DecisionTree building.\n")
+			("compare,c", po::value(&options.compare_)->multitoken(),
+			"The compare algorithm to use when choosing equal elements.")
+			("status-pool", defaultValue(&options.statusPoolSize_),
+			"The size of Status pool to avoid many calculateReachable() calls. 0 means no pooling.")
+		;
 
+	po::positional_options_description positionalParameters;
+	positionalParameters.add("filename", 1);
+
+	po::options_description optionsDescription;
+	optionsDescription.add(commandLineDesctiption);
+	optionsDescription.add(generalDescription);
 
 	try {
+		po::variables_map vm;
+		po::store(po::command_line_parser(argc, argv).
+				options(optionsDescription).
+				positional(positionalParameters).
+				run(), vm);
+		po::notify(vm);
+
+		if (help) {
+			printHelp(argv[0], optionsDescription);
+			exit(0);
+		}
+		if (options.filename_.empty()) {
+			std::cerr << "No filename given." << std::endl;
+			printHelp(argv[0], optionsDescription);
+			exit(1);
+		}
+
+		parseConfigFile(vm, generalDescription, options.filename_.c_str());
 		try {
-			if (configFileName != NULL)
-				oh.parseConfigFile(configFileName);
+			if (configFileName) {
+				parseConfigFile(vm, generalDescription, configFileName);
+			}
 		} catch (boost::program_options::reading_file &e) {
 			// DON'T CARE
 		}
-		oh.parseCommandLine(argc, argv);
-		if (help) {
-			oh.print(argv[0]);
-			exit(0);
-		}
-		if (filename_.empty()) {
-			std::cerr << "No filename given." << std::endl;
-			oh.print(argv[0]);
-			exit(1);
-		}
-		oh.parseConfigFile(filename_.c_str());
-		oh.parseCommandLine(argc, argv);
-		dumpStyle_ = static_cast<DumpStyle>(dumpStyle);
-		blocklistHeurCalculatorType_ = static_cast<BlockListHeurType>(blocklistHeurCalculatorType);
-		for (std::vector<int>::iterator it = compare.begin();
-				it != compare.end(); ++it) {
-			compare_.push_back(Compare(
-					static_cast<CompareMethod>(std::abs(*it)), *it < 0));
-		}
-	} catch (BadOptions &e) {
-		std::cerr << "Invalid command line argument. " <<
-				e.what() << std::endl;
-		oh.print(argv[0]);
-		exit(1);
 	} catch (std::exception &e) {
 		std::cerr << "An error has happened while parsing the command line: " <<
 				e.what() << std::endl;
-		oh.print(argv[0]);
+		printHelp(argv[0], optionsDescription);
 		exit(1);
 	}
+
+	return options;
 }
 
+std::istream& operator>>(std::istream& is, Compare& value)
+{
+	std::string s;
+	is >> s;
+	value = compares().at(s);
+	return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const Compare& value)
+{
+	auto it = std::find_if(compares().begin(), compares().end(),
+			[&](const util::PrefixMap<Compare>::value_type& compare)
+			{ return compare.second == value; });
+	assert(it != compares().end());
+	return os << it->first;
+}

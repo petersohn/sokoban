@@ -6,61 +6,69 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include "util/LazyArgumentEnum.hpp"
 
-class Options {
-public:
-	enum DumpStyle {dsNone, dsText, dsXML};
-	enum CompareMethod {ctTime = 1, ctHeur, ctDepth};
-	enum BlockListHeurType {bhNone, bhVector, bhDecisionTree};
+LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, (none)(text)(xml))
+LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
+	(none)(vector)(decisionTree))
 
-	struct Compare {
-		CompareMethod type;
-		bool reverse;
-		Compare(CompareMethod type, bool reverse):
-			type(type), reverse(reverse)
-		{}
+enum class CompareMethod {time = 1, heur, depth};
+
+struct Compare {
+	CompareMethod type;
+	bool reverse;
+	Compare(): type(CompareMethod::time), reverse(false) {}
+	Compare(CompareMethod type, bool reverse):
+		type(type), reverse(reverse)
+	{}
+};
+
+inline
+bool operator==(const Compare& lhs, const Compare& rhs) {
+	return lhs.type == rhs.type && lhs.reverse == rhs.reverse;
+}
+inline
+bool operator!=(const Compare& lhs, const Compare& rhs) {
+	return !(lhs == rhs);
+}
+
+LAZY_ARGUMENT_PREFIX_MAP(Compare, compares) {
+	return {
+		{"+time", Compare{CompareMethod::time, false}},
+		{"-time", Compare{CompareMethod::time, true}},
+		{"+heur", Compare{CompareMethod::heur, false}},
+		{"-heur", Compare{CompareMethod::heur, true}},
+		{"+depth", Compare{CompareMethod::depth, false}},
+		{"-depth", Compare{CompareMethod::depth, true}},
 	};
+}
+
+std::istream& operator>>(std::istream& is, Compare& value);
+std::ostream& operator<<(std::ostream& os, const Compare& value);
+
+struct Options {
 	typedef std::vector<Compare> CompareList;
-private:
-	DumpStyle dumpStyle_;
-	bool oldStyleOutput_;
-	bool useStonePusher_;
-	bool useMovableChecker_;
-	bool useCorridorChecker_;
-	bool useAdvancedHeurCalculator_;
-	std::size_t statusPoolSize_;
-	BlockListHeurType blocklistHeurCalculatorType_;
-	bool parallelOuterExpand_;
-	std::size_t blockListStones_;
-	std::size_t blockListDistance_;
-	std::size_t maxHeurListSize_;
-	std::size_t numThreads_;
-	std::size_t test_;
-	std::size_t maxDecisionTreeDepth_;
-	bool useCheckerForDecisionTree_;
+
+	DumpStyle dumpStyle_ = DumpStyle::none;
+	bool oldStyleOutput_ = false;
+	bool useStonePusher_ = true;
+	bool useMovableChecker_ = true;
+	bool useCorridorChecker_ = true;
+	bool useAdvancedHeurCalculator_ = true;
+	std::size_t statusPoolSize_ = 0;
+	BlockListHeurType blocklistHeurCalculatorType_ = BlockListHeurType::none;
+	bool parallelOuterExpand_ = false;
+	std::size_t blockListStones_ = 0;
+	std::size_t blockListDistance_ = 0;
+	std::size_t maxHeurListSize_ = 0;
+	std::size_t numThreads_ = 1;
+	std::size_t test_ = 0;
+	std::size_t maxDecisionTreeDepth_ = 10;
+	bool useCheckerForDecisionTree_ = false;
 	CompareList compare_;
 	std::string filename_;
-public:
-	Options(int argc, char **argv, const char *configFileName = NULL);
-
-	DumpStyle dumpStyle() const { return dumpStyle_; }
-	bool oldStyleOutput() const { return oldStyleOutput_; }
-	bool useStonePusher() const { return useStonePusher_; }
-	bool useMovableChecker() const { return useMovableChecker_; }
-	bool useCorridorChecker() const { return useCorridorChecker_; }
-	bool useAdvancedHeurCalculator() const { return useAdvancedHeurCalculator_; }
-	std::size_t statusPoolSize() const { return statusPoolSize_; }
-	BlockListHeurType blocklistHeurCalculatorType() const { return blocklistHeurCalculatorType_; }
-	bool parallelOuterExpand() const { return parallelOuterExpand_; }
-	std::size_t blockListStones() const { return blockListStones_; }
-	std::size_t blockListDistance() const { return blockListDistance_; }
-	std::size_t maxHeurListSize() const { return maxHeurListSize_; }
-	std::size_t getNumThreads() const { return numThreads_; }
-	std::size_t test() const { return test_; }
-	std::size_t maxDecisionTreeDepth() const { return maxDecisionTreeDepth_; }
-	bool useCheckerForDecisionTree() const { return useCheckerForDecisionTree_; }
-	const std::string &filename() const { return filename_; }
-	const CompareList& compare() const { return compare_; }
 };
+
+Options parseOptions(int argc, char **argv, const char *configFileName);
 
 #endif /* OPTIONS_H_ */

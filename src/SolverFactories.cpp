@@ -38,16 +38,16 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
 	// always use costFgv as first choice
 	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
-	for (Options::CompareList::const_iterator it = opts.compare().begin();
-			it != opts.compare().end(); ++it) {
+	for (const auto& compareMethod: opts.compare_) {
 		CompareByMethodPtr<Node::Ptr>::Fun fun;
-		switch (it->type) {
-		case Options::ctHeur: fun = &Node::heur; break;
-		case Options::ctDepth: fun = &Node::depth; break;
-		case Options::ctTime: fun = &Node::time; break;
+		switch (compareMethod.type) {
+		case CompareMethod::heur: fun = &Node::heur; break;
+		case CompareMethod::depth: fun = &Node::depth; break;
+		case CompareMethod::time: fun = &Node::time; break;
 		}
 		if (fun)
-			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun, it->reverse));
+			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun,
+						compareMethod.reverse));
 	}
 	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(
 			funcs.begin(), funcs.end())));
@@ -71,9 +71,9 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
 {
 	std::vector<Checker::Ptr> checkers;
-	if (options_.useMovableChecker())
+	if (options_.useMovableChecker_)
 		checkers.push_back(Checker::Ptr(new MovableChecker(calculator)));
-	if (options_.useCorridorChecker())
+	if (options_.useCorridorChecker_)
 		checkers.push_back(Checker::Ptr(new CorridorChecker(calculator)));
 	return checkers;
 }
@@ -87,7 +87,7 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 	VisitedStateHolder::Ptr visitedStates(new VisitedStates());
 	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator, experimentalCalculator));
 	std::vector<Expander::Ptr> expanders;
-	if (options_.useStonePusher()) {
+	if (options_.useStonePusher_) {
 		expanders.push_back(Expander::Ptr(new StonePusher(visitedStates, calculator, nodeFactory)));
 	}
 	expanders.push_back(Expander::Ptr(new NormalExpander(visitedStates, calculator, checker, nodeFactory, log)));
@@ -97,12 +97,12 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 ExpanderFactory OptionsBasedExpanderFactory::factory()
 {
 	HeurCalculator::Ptr calculator =
-		options_.useAdvancedHeurCalculator() ?
+		options_.useAdvancedHeurCalculator_ ?
 		createAdvancedHeurCalcularor() :
 		std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_});
 	HeurCalculator::Ptr experimentalCalculator;
 	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
-	if (options_.blockListStones() > 1) {
+	if (options_.blockListStones_ > 1) {
 		Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
 		Solver::Ptr solver(new Solver(
 				std::bind(&createPrioQueueFromOptions, options_),
@@ -110,22 +110,22 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 					return createExpander(calculator, checker, false);
 				})) ;
 		BlockListGenerator blockListGenerator(
-				std::move(solver), calculator, checker, options_.blockListStones(),
-				options_.blockListDistance(), options_.maxHeurListSize(),
-				options_.getNumThreads());
+				std::move(solver), calculator, checker, options_.blockListStones_,
+				options_.blockListDistance_, options_.maxHeurListSize_,
+				options_.numThreads_);
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
-		switch (options_.blocklistHeurCalculatorType()) {
-		case Options::bhNone:
+		switch (options_.blocklistHeurCalculatorType_) {
+		case BlockListHeurType::none:
 			break;
-		case Options::bhVector:
+		case BlockListHeurType::vector:
 			calculator = blockListGenerator.vectorHeurCalculator();
 //			experimentalCalculator = blockListGenerator.vectorHeurCalculator2();
 			break;
-		case Options::bhDecisionTree:
+		case BlockListHeurType::decisionTree:
 			calculator = blockListGenerator.decisionTreeHeurCalculator(
-					options_.maxDecisionTreeDepth(),
-					options_.useCheckerForDecisionTree());
+					options_.maxDecisionTreeDepth_,
+					options_.useCheckerForDecisionTree_);
 			break;
 		}
 	}
@@ -139,10 +139,10 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 
 Dumper::Ptr createDumperFromOptions(const Options & opts)
 {
-	switch (opts.dumpStyle()) {
-	case Options::dsText:
+	switch (opts.dumpStyle_) {
+	case DumpStyle::text:
 		return Dumper::Ptr(new TextDumper("dump.dump"));
-	case Options::dsXML:
+	case DumpStyle::xml:
 		return Dumper::Ptr(new XDumper("dump.xml"));
 	default:
 		return Dumper::Ptr();

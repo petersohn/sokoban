@@ -30,33 +30,33 @@ void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, Status s
 }
 
 int main(int argc, char** argv) {
-	Options opts(argc, argv, "sokoban.cfg");
+	Options opts = parseOptions(argc, argv, "sokoban.cfg");
 
-	Status::statusPoolSize(opts.statusPoolSize());
+	Status::statusPoolSize(opts.statusPoolSize_);
 
-	auto data(loadStatusFromFile(opts.filename().c_str()));
+	auto data(loadStatusFromFile(opts.filename_.c_str()));
 	Status& status = data.second;
 	dumpStatus(std::cerr, status);
 
 	TimeMeter timeMeter;
-	OptionsBasedExpanderFactory expanderFactory(opts, status.table(), !opts.test());
+	OptionsBasedExpanderFactory expanderFactory(opts, status.table(), !opts.test_);
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
 			createExpander,
 			std::bind(createDumperFromOptions, opts),
-			opts.parallelOuterExpand() ? opts.getNumThreads() : 0);
+			opts.parallelOuterExpand_ ? opts.numThreads_ : 0);
 	std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	SolutionChecker solutionChecker(std::cerr, heurDump);
 	int returnCode = 0;
-	if (opts.test() > 0) {
+	if (opts.test_ > 0) {
 		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
 		util::ThreadPool threadPool;
 		util::ThreadPoolRunner runner(threadPool);
-		threadPool.setNumThreads(opts.getNumThreads());
+		threadPool.setNumThreads(opts.numThreads_);
 		TableIterator it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
 				0, threadPool);
-		it.iterate(opts.test(), calculator,
+		it.iterate(opts.test_, calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)));
 	} else {
 		std::deque<Node::Ptr> solution = s.solve(status);
@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 				Point from = (*it)->from();
 				Point p(from - (*it)->d());
 				std::string dir =
-						! opts.oldStyleOutput() ? direction((*it)->d()) :
+						! opts.oldStyleOutput_ ? direction((*it)->d()) :
 							(boost::format("(%2d, %2d)") %
 							p.x % p.y).str();
 				cout << boost::format("(%2d, %2d) --> %s") %
