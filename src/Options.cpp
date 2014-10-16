@@ -89,6 +89,10 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n")
 			("max-decision-tree-depth", defaultValue(&options.maxDecisionTreeDepth_),
 			"The maximum depth of the decision tree.")
+			("blocklist-decision-tree-depth", defaultValue(&options.blocklistDecisionTreeDepth_),
+			"The depth of the decision tree used for preprocessing. "
+			"0 means do not use decision tree for preprocessing. "
+			"It is only effective if --blocklist-heur-calculator=decision-tree is set.")
 			("decision-tree-checker", defaultValue(&options.useCheckerForDecisionTree_),
 			"Enable/disable usage of checker in DecisionTree building.\n")
 			("compare,c", po::value(&options.compare_)->multitoken(),

@@ -16,7 +16,7 @@
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
 		Checker::Ptr checker, std::size_t numStones, std::size_t maxDistance,
 		std::size_t maxHeurListSize, std::size_t workQueueLength,
-		std::size_t numThreads):
+		std::size_t decisionTreeDepth,  std::size_t numThreads):
 	solver_(std::move(solver)),
 	calculator_(std::move(calculator)),
 	checker_(std::move(checker)),
@@ -24,6 +24,7 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr c
 	maxDistance_(maxDistance),
 	maxHeurListSize_(maxHeurListSize),
 	workQueueLength_(workQueueLength),
+	decisionTreeDepth_(decisionTreeDepth),
 	dump_("blocklist.dump"),
 	threadPool_(),
 	numThreads_(numThreads)
@@ -75,9 +76,13 @@ void BlockListGenerator::init(const Table& table)
 			maxDistance_, workQueueLength_, threadPool_);
 	blockList_.clear();
 	heurList_.clear();
-	incrementalCalculator_ = calculator_;
 	calculationInfos_.resize(numThreads_);
 	for (std::size_t n = 2; n <= numStones_; ++n) {
+		incrementalCalculator_ = n == 2 ? 
+			calculator_ :
+			decisionTreeDepth_ > 0 ?
+				decisionTreeHeurCalculator(decisionTreeDepth_, false) :
+				vectorHeurCalculator();
 		for (auto& calculationInfo: calculationInfos_) {
 			calculationInfo.reset(new CalculationInfo);
 		}
@@ -111,7 +116,6 @@ void BlockListGenerator::init(const Table& table)
 						right.heurInfo_.first.state().size()
 						);
 			});
-		incrementalCalculator_ = vectorHeurCalculator();
 	}
 	if (maxHeurListSize_ > 0 && heurList_.size() > maxHeurListSize_) {
 		IncrementList(heurList_.begin(), heurList_.begin() + maxHeurListSize_).swap(heurList_);

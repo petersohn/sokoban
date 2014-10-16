@@ -109,10 +109,15 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 				[this, calculator, checker]() {
 					return createExpander(calculator, checker, false);
 				})) ;
+		std::size_t decisionTreeDepth =
+			options_.blocklistHeurCalculatorType_ == BlockListHeurType::decisionTree ?
+				options_.blocklistDecisionTreeDepth_ : 0;
 		BlockListGenerator blockListGenerator(
-				std::move(solver), calculator, checker, options_.blockListStones_,
+				std::move(solver), calculator, checker,
+				options_.blockListStones_,
 				options_.blockListDistance_, options_.maxHeurListSize_,
-				options_.workQueueLength_, options_.numThreads_);
+				options_.workQueueLength_, decisionTreeDepth,
+				options_.numThreads_);
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
 		switch (options_.blocklistHeurCalculatorType_) {

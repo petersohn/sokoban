@@ -65,6 +65,7 @@ struct Options {
 	std::size_t numThreads_ = 1;
 	std::size_t test_ = 0;
 	std::size_t maxDecisionTreeDepth_ = 10;
+	std::size_t blocklistDecisionTreeDepth_ = 0;
 	bool useCheckerForDecisionTree_ = false;
 	CompareList compare_;
 	std::string filename_;
