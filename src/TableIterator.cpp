@@ -6,7 +6,6 @@
 
 void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 {
-	const int workQueueLength = 100;
 	if (!state.empty()) {
 		if (maxDistance_ > 0) {
 			for (Point pp: state) {
@@ -31,7 +30,7 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 				// shared pointers that are potentially modified are shared
 				// between the threads.
 				workQueue_.push_back(status.deepCopy());
-				if (workQueue_.size() == workQueueLength) {
+				if (workQueue_.size() == workQueueLength_) {
 					cleanWorkQueue();
 				}
 			} else {

@@ -15,13 +15,15 @@
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
 		Checker::Ptr checker, std::size_t numStones, std::size_t maxDistance,
-		std::size_t maxHeurListSize, std::size_t numThreads):
+		std::size_t maxHeurListSize, std::size_t workQueueLength,
+		std::size_t numThreads):
 	solver_(std::move(solver)),
 	calculator_(std::move(calculator)),
 	checker_(std::move(checker)),
 	numStones_(numStones),
 	maxDistance_(maxDistance),
 	maxHeurListSize_(maxHeurListSize),
+	workQueueLength_(workQueueLength),
 	dump_("blocklist.dump"),
 	threadPool_(),
 	numThreads_(numThreads)
@@ -70,7 +72,7 @@ void BlockListGenerator::init(const Table& table)
 	std::cerr << "Calculating block list..." << std::endl;
 	TableIterator tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
-			maxDistance_, threadPool_);
+			maxDistance_, workQueueLength_, threadPool_);
 	blockList_.clear();
 	heurList_.clear();
 	incrementalCalculator_ = calculator_;

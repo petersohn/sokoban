@@ -21,6 +21,7 @@ private:
 	std::size_t maxDistance_;
 	std::size_t iters_, solved_;
 	std::size_t lastTicks_;
+	std::size_t workQueueLength_;
 	std::vector<Status> workQueue_;
 	bool working_;
 
@@ -50,6 +51,7 @@ public:
 			const Table& table,
 			const Action& action,
 			std::size_t maxDistance,
+			std::size_t workQueueLength,
 			util::ThreadPool& threadPool):
 		table_(&table),
 		action_(action),
@@ -57,6 +59,7 @@ public:
 		iters_(0),
 		solved_(0),
 		lastTicks_(-1),
+		workQueueLength_(workQueueLength),
 		working_(false),
 		MUTEX_DECL(iterMutex_),
 		ioService_(threadPool.getIoService())

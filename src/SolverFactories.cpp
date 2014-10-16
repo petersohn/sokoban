@@ -112,7 +112,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 		BlockListGenerator blockListGenerator(
 				std::move(solver), calculator, checker, options_.blockListStones_,
 				options_.blockListDistance_, options_.maxHeurListSize_,
-				options_.numThreads_);
+				options_.workQueueLength_, options_.numThreads_);
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
 		switch (options_.blocklistHeurCalculatorType_) {

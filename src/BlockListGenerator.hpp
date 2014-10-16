@@ -51,6 +51,7 @@ private:
 	std::size_t numStones_;
 	std::size_t maxDistance_;
 	std::size_t maxHeurListSize_;
+	std::size_t workQueueLength_;
 	std::vector<CalculationInfoPtr> calculationInfos_;
 	std::ofstream dump_;
 	util::ThreadPool threadPool_;
@@ -75,8 +76,10 @@ private:
 	}
 public:
 	BlockListGenerator(Solver::Ptr solver,
-			HeurCalculator::Ptr calculator, Checker::Ptr checker, std::size_t numStones,
-			std::size_t maxDistance, std::size_t maxHeurListSize, std::size_t numThreads);
+			HeurCalculator::Ptr calculator, 
+			Checker::Ptr checker, std::size_t numStones, 
+			std::size_t maxDistance, std::size_t maxHeurListSize, 
+			std::size_t workQueueLength, std::size_t numThreads);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
 	HeurCalculator::Ptr decisionTreeHeurCalculator(std::size_t maxDepth, bool useChecker);

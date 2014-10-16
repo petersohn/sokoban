@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 		threadPool.setNumThreads(opts.numThreads_);
 		TableIterator it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
-				0, threadPool);
+				0, opts.workQueueLength_, threadPool);
 		it.iterate(opts.test_, calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)));
 	} else {

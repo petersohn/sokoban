@@ -61,6 +61,7 @@ struct Options {
 	std::size_t blockListStones_ = 0;
 	std::size_t blockListDistance_ = 0;
 	std::size_t maxHeurListSize_ = 0;
+	std::size_t workQueueLength_ = 100;
 	std::size_t numThreads_ = 1;
 	std::size_t test_ = 0;
 	std::size_t maxDecisionTreeDepth_ = 10;

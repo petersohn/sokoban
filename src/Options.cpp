@@ -58,6 +58,8 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			("blocklist-distance", defaultValue(&options.blockListDistance_),
 			"The maximum distance between stones in the "
 			"blocklist. 0 means no limit.")
+			("work-queue-length", defaultValue(&options.workQueueLength_),
+			 "The granularity of scheduling during blocklist generation.")
 			("thread-num,t", defaultValue(&options.numThreads_),
 			"The maximum number of threads to use.")
 			("parallel-outer-expand", defaultValue(&options.parallelOuterExpand_),
