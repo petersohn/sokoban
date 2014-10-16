@@ -78,7 +78,7 @@ void BlockListGenerator::init(const Table& table)
 	heurList_.clear();
 	calculationInfos_.resize(numThreads_);
 	for (std::size_t n = 2; n <= numStones_; ++n) {
-		incrementalCalculator_ = n == 2 ? 
+		incrementalCalculator_ = n == 2 ?
 			calculator_ :
 			decisionTreeDepth_ > 0 ?
 				decisionTreeHeurCalculator(decisionTreeDepth_, false) :
@@ -136,7 +136,7 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 	return std::make_shared<BlocklistHeurCalculator>(
 			calculator_,
 			BlockListHeurList{heurList_ | boost::adaptors::transformed(
-					IncrementInfo::getHeurInfo)});
+					IncrementInfo::getHeurInfo) | boost::adaptors::reversed});
 }
 
 
@@ -149,7 +149,7 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 			DecisionTreeHeurList{
 				*table_,
 				heurList_ | boost::adaptors::transformed(
-						IncrementInfo::getHeurInfo),
+						IncrementInfo::getHeurInfo) | boost::adaptors::reversed,
 				useChecker ? checker_ : Checker::Ptr(),
 				maxDepth,
 				numThreads_});
