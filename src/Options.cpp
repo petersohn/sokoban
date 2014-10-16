@@ -85,8 +85,8 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			"The type of the blocklist heur calculator. Only meaningful if --blocklist-number > 1. "
 			"Possible values:\n"
 			"    (n)one          \tDisable blocklist heur calculator.\n"
-			"    (v)ector        \tUse vector and linear search. More optimal, but slower than decision tree.\n"
-			"    (d)ecision-tree \tUse decision tree. Faster but less optimal.\n")
+			"    (v)ector        \tUse vector and linear search. Slower than decision tree.\n"
+			"    (d)ecision-tree \tUse decision tree. Faster but requires preprocessing.\n")
 			("max-decision-tree-depth", defaultValue(&options.maxDecisionTreeDepth_),
 			"The maximum depth of the decision tree.")
 			("blocklist-decision-tree-depth", defaultValue(&options.blocklistDecisionTreeDepth_),
