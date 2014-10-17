@@ -56,7 +56,6 @@ void InternalExpander::expandNode(Point p, Point d)
 		if (dumper_)
 			dumper_->addNode(node);
 		{
-			boost::lock_guard<MutexType> lck(owner_.StatusMutex_);
 			owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
 			if (owner_.enableLog_ && ++owner_.expandedNodes_ % 10000 == 0)
 				std::cerr << boost::format(
@@ -99,8 +98,7 @@ NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr c
 		nodeFactory_(std::move(nodeFactory)),
 		maxDepth_(0),
 		enableLog_(enableLog),
-		expandedNodes_(0),
-		MUTEX_DECL(StatusMutex_)
+		expandedNodes_(0)
 {
 	assert(calculator_.get() != NULL);
 	assert(checker_.get() != NULL);

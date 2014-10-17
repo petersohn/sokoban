@@ -18,7 +18,6 @@ class NormalExpander: public Expander {
 	int maxDepth_;
 	bool enableLog_;
 	int expandedNodes_;
-	MutexType StatusMutex_;
 public:
 	NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
 			Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog = false);

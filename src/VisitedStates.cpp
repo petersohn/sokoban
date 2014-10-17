@@ -3,7 +3,6 @@
 
 bool VisitedStates::checkAndPush(const VisitedStateInput &elem)
 {
-	boost::lock_guard<MutexType> lck(visitedStatesMutex_);
 	const Status &status = elem.first;
 	int heur = elem.second;
 	VisitedStateInfo info(status);
@@ -20,6 +19,5 @@ bool VisitedStates::checkAndPush(const VisitedStateInput &elem)
 }
 
 size_t VisitedStates::size() const {
-	boost::lock_guard<MutexType> lck(visitedStatesMutex_);
 	return visitedStates_.size();
 }

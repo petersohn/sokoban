@@ -12,11 +12,8 @@
 class VisitedStates: public VisitedStateHolder {
 	typedef std::unordered_map<VisitedStateInfo, int, std::hash<VisitedStateInfo> > VisitedStateSet;
 	VisitedStateSet visitedStates_;
-	mutable MutexType visitedStatesMutex_;
 public:
-	VisitedStates():
-		MUTEX_DECL(visitedStatesMutex_)
-	{}
+	VisitedStates() = default;
 	virtual bool checkAndPush(const VisitedStateInput &elem);
 	virtual size_t size() const;
 };
