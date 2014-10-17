@@ -18,7 +18,7 @@ public:
 
 class Solver {
 public:
-	typedef std::unique_ptr<Solver> Ptr;
+	typedef std::unique_ptr<const Solver> Ptr;
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
@@ -31,7 +31,7 @@ public:
 		dumperFactory_(df)
 	{
 	}
-	std::deque<std::shared_ptr<Node>> solve(Status status);
+	std::deque<std::shared_ptr<Node>> solve(Status status) const;
 	~Solver() {}
 private:
 };

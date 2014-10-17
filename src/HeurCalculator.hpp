@@ -11,13 +11,13 @@ struct MoveDescriptor;
 
 class HeurCalculator: public boost::noncopyable {
 public:
-	typedef std::shared_ptr<HeurCalculator> Ptr;
+	typedef std::shared_ptr<const HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}
-	virtual int calculateStone(const Status& status, Point  p) = 0;
+	virtual int calculateStone(const Status& status, Point  p) const = 0;
 	virtual int calculateStatus(
 			const Status& status,
 			const MoveDescriptor* moveDescriptor = nullptr,
-			const std::shared_ptr<Node>& ancestor = std::shared_ptr<Node>()) = 0;
+			const std::shared_ptr<Node>& ancestor = std::shared_ptr<Node>()) const = 0;
 };
 
 #endif /* HEURCALCULATOR_H_ */

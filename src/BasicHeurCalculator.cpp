@@ -28,12 +28,13 @@ BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 	}
 }
 
-int BasicStoneCalculator::operator()(const Status& /*status*/, Point p)
+int BasicStoneCalculator::operator()(const Status& /*status*/, Point p) const
 {
 	return distances_[p];
 }
 
-bool BasicStoneCalculator::checkDistance(const Table& table, Point  p, Point  d, int dist)
+bool BasicStoneCalculator::checkDistance(const Table& table, Point  p, Point  d,
+		int dist)
 {
 	Point pd = p+d;
 	bool result =

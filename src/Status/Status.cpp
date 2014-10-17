@@ -2,9 +2,11 @@
 #include "Status/StatusUtils.hpp"
 #include "Node.hpp"
 
+#ifndef NO_UNSAFE_DIAGNOSTICS
 std::size_t Status::copyCount(0);
 std::size_t Status::moveCount(0);
 std::size_t Status::calculateReachableCount(0);
+#endif
 std::size_t Status::statusPoolSize_(0);
 std::unordered_map<State, std::shared_ptr<Array<Status::CalculatedDataPtr>>>
 		Status::statusPool_;
@@ -49,7 +51,9 @@ void Status::init() {
 
 void Status::calculateReachable() const
 {
+#ifndef NO_UNSAFE_DIAGNOSTICS
 	++calculateReachableCount;
+#endif
 	calculatedData_.reset(new CalculatedData(width(), height()));
 	floodFill(*this, currentPos_, calculatedData_->reachable_,
 			&calculatedData_->border_);

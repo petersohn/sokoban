@@ -18,7 +18,7 @@ public:
 	{
 	}
 
-	int calculateStone(const Status &status, Point p) override
+	int calculateStone(const Status &status, Point p) const override
 	{
 		return baseCalculator_->calculateStone(status, p);
 	}
@@ -26,7 +26,7 @@ public:
 	int calculateStatus(
 			const Status &status,
 			const MoveDescriptor* /*moveDescriptor*/,
-			const std::shared_ptr<Node>& ancestor) override
+			const std::shared_ptr<Node>& ancestor) const override
 	{
 		PseudoStatus pseudoStatus(status);
 		int result = 0;

@@ -87,9 +87,11 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
+#ifndef NO_UNSAFE_DIAGNOSTICS
 	cerr << "Status copied " << Status::copyCount << " times.\n" <<
 			"Status moved " << Status::moveCount << " times.\n" <<
 			"calculateReachable called " << Status::calculateReachableCount << " times.\n" <<
 			"Status pool size = " << Status::currentStatusPoolSize() << endl;
+#endif
 	return returnCode;
 }

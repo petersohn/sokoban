@@ -8,8 +8,8 @@ class Checker;
 void floodFill(const Status &table, Point p0, Array<bool> &result,
 			Status::BorderType *border = NULL, MinMax *minmax = NULL);
 std::vector<Status> getPartitions(const Table& table, const State &state);
-bool checkStatus(Checker& checker, const Status& status);
-bool checkState(Checker& checker, const Table& table, const State& state);
+bool checkStatus(const Checker& checker, const Status& status);
+bool checkState(const Checker& checker, const Table& table, const State& state);
 
 
 

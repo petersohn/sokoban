@@ -12,20 +12,20 @@
 class DecisionTreeHeurListFactory {
 	typedef decisionTree::Node<PseudoStatus, int> NodeType;
 
-	std::unique_ptr<NodeType> decisionTree_;
+	std::unique_ptr<const NodeType> decisionTree_;
 
 	static std::vector<Point> pointList(const Table& table);
 
 	friend class Next;
 	class Next {
-		DecisionTreeHeurListFactory* owner_ = nullptr;
+		const DecisionTreeHeurListFactory* owner_ = nullptr;
 		std::size_t lastSize_ = 0;
 		const NodeType::ValueList* heurList_ = nullptr;
 		NodeType::ValueList::const_iterator iterator_;
 
 	public:
 
-		explicit Next(DecisionTreeHeurListFactory* owner):
+		explicit Next(const DecisionTreeHeurListFactory* owner):
 			owner_(owner)
 		{}
 
@@ -77,7 +77,7 @@ public:
 				timeMeter.realTime() << std::endl;
 	}
 
-	Next operator()()
+	Next operator()() const
 	{
 		return Next{this};
 	}

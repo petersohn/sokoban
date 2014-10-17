@@ -10,10 +10,10 @@ class BlockListHeurListFactory {
 public:
 	friend class Next;
 	class Next {
-		BlockListHeurListFactory* owner_;
+		const BlockListHeurListFactory* owner_;
 		HeurList::const_iterator iterator_;
 	public:
-		explicit Next(BlockListHeurListFactory* owner):
+		explicit Next(const BlockListHeurListFactory* owner):
 			owner_(owner),
 			iterator_(owner->heurList_.begin())
 		{}
@@ -29,7 +29,7 @@ public:
 	explicit BlockListHeurListFactory(const HeurListType& heurList):
 		heurList_(std::begin(heurList), std::end(heurList)) {}
 
-	Next operator()()
+	Next operator()() const
 	{
 		return Next{this};
 	}

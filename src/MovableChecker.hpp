@@ -12,8 +12,8 @@ public:
 	MovableChecker(HeurCalculator::Ptr calculator):
 		calculator_(std::move(calculator))
 	{}
-	virtual bool check(const Status& status, Point p);
-	virtual const char* errorMessage();
+	bool check(const Status& status, Point p) const override;
+	const char* errorMessage() const override;
 };
 
 #endif /* MOVABLECHECKER_H_ */

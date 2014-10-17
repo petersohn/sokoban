@@ -44,9 +44,11 @@ private:
 	bool shiftIter(Point p);
 
 public:
+#ifndef NO_UNSAFE_DIAGNOSTICS
 	static std::size_t copyCount;
 	static std::size_t moveCount;
 	static std::size_t calculateReachableCount;
+#endif
 
 	explicit Status(const Table& table);
 	explicit Status(const Table& table, const State &state);
@@ -58,7 +60,9 @@ public:
 		fields_(other.fields_),
 		calculatedData_(other.calculatedData_)
 	{
+#ifndef NO_UNSAFE_DIAGNOSTICS
 		++copyCount;
+#endif
 	}
 	Status& operator=(const Status& other) {
 		table_ = other.table_;
@@ -66,7 +70,9 @@ public:
 		currentPos_ = other.currentPos_;
 		fields_ = other.fields_;
 		calculatedData_ = other.calculatedData_;
+#ifndef NO_UNSAFE_DIAGNOSTICS
 		++copyCount;
+#endif
 		return *this;
 	}
 
@@ -77,7 +83,9 @@ public:
 		fields_(std::move(other.fields_)),
 		calculatedData_(std::move(other.calculatedData_))
 	{
+#ifndef NO_UNSAFE_DIAGNOSTICS
 		++moveCount;
+#endif
 	}
 	Status& operator=(Status&& other) noexcept {
 		table_ = other.table_;
@@ -85,7 +93,9 @@ public:
 		currentPos_ = std::move(other.currentPos_);
 		fields_ = std::move(other.fields_);
 		calculatedData_ = std::move(other.calculatedData_);
+#ifndef NO_UNSAFE_DIAGNOSTICS
 		++moveCount;
+#endif
 		return *this;
 	}
 

@@ -12,12 +12,12 @@ public:
 	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
 private:
 	Node::Ptr node_;
-	HeurCalculator& calculator_;
+	const HeurCalculator& calculator_;
 	NodeFactory& nodeFactory_;
 	bool pushStone(const Status& status, Point p);
 	bool pushStoneIter(const Status& status, Point p, Point d);
 public:
-	InternalPusher(HeurCalculator& calculator, NodeFactory& nodeFactory):
+	InternalPusher(const HeurCalculator& calculator, NodeFactory& nodeFactory):
 		calculator_(calculator),
 		nodeFactory_(nodeFactory)
 	{}

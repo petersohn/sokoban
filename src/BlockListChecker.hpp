@@ -13,8 +13,8 @@ public:
 	{
 	}
 
-	virtual bool check(const Status& status, Point  p);
-	virtual const char* errorMessage();
+	bool check(const Status& status, Point  p) const override;
+	const char* errorMessage() const override;
 };
 
 

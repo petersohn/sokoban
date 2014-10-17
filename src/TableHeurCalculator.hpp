@@ -16,10 +16,10 @@ public:
 	TableHeurCalculator(StoneCalculator calculator):
 		calculator_(std::move(calculator))
 	{}
-	virtual int calculateStatus(
+	int calculateStatus(
 			const Status& status,
 			const MoveDescriptor*,
-			const std::shared_ptr<Node>&) override
+			const std::shared_ptr<Node>&) const override
 	{
 		int result = 0;
 		for (auto stone: status.state()) {
@@ -30,7 +30,7 @@ public:
 		}
 		return result;
 	}
-	virtual int calculateStone(const Status& status, Point p) override
+	int calculateStone(const Status& status, Point p) const override
 	{
 		return calculator_(status, p);
 	}

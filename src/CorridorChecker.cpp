@@ -3,7 +3,7 @@
 #include "Status/Status.hpp"
 #include "Status/StatusUtils.hpp"
 
-bool CorridorChecker::check(const Status& status, Point  p0)
+bool CorridorChecker::check(const Status& status, Point  p0) const
 {
 	Array<bool> unchecked(3, 3, true);
 	Point p1;
@@ -57,7 +57,7 @@ bool CorridorChecker::check(const Status& status, Point  p0)
 }
 
 bool CorridorChecker::checkCorridorEnding(const Status & status,
-			Point  p0, Point  side)
+			Point  p0, Point  side) const
 {
 	Point p1 = p0 + side;
 	Point pm1 = p0 - side;
@@ -67,7 +67,8 @@ bool CorridorChecker::checkCorridorEnding(const Status & status,
 			(calculator_->calculateStone(status, p1) || calculator_->calculateStone(status, pm1));
 }
 
-const char* CorridorChecker::errorMessage() {
+const char* CorridorChecker::errorMessage() const
+{
 	return "corridor found";
 }
 

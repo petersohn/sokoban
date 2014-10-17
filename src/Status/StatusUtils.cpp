@@ -76,7 +76,7 @@ std::vector<Status> getPartitions(const Table& table, const State &state)
 	return result;
 }
 
-bool checkStatus(Checker& checker, const Status& status)
+bool checkStatus(const Checker& checker, const Status& status)
 {
 	for (Point pp: status.state()) {
 		if (!checker.check(status, pp)) {
@@ -86,7 +86,7 @@ bool checkStatus(Checker& checker, const Status& status)
 	return true;
 }
 
-bool checkState(Checker& checker, const Table& table, const State& state)
+bool checkState(const Checker& checker, const Table& table, const State& state)
 {
 	std::vector<Status> partitions = getPartitions(table, state);
 	for (const Status& status: partitions) {

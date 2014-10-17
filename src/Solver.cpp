@@ -62,7 +62,7 @@ public:
 
 };
 
-std::deque<Node::Ptr> Solver::solve(Status status)
+std::deque<Node::Ptr> Solver::solve(Status status) const
 {
 	InternalSolver solver(
 			queueFactory_(),

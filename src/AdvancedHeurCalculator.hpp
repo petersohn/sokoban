@@ -45,7 +45,8 @@ class AdvancedStoneCalculator {
 
 	void initPartitions(const Table& table, Point p);
 public:
-	AdvancedStoneCalculator(const Table& table, Solver::Ptr solver, bool useDumper = true):
+	AdvancedStoneCalculator(const Table& table, Solver::Ptr solver,
+			bool useDumper = true):
 		solver_(std::move(solver)),
 		useDumper_(useDumper)
 	{
@@ -58,7 +59,7 @@ public:
 	AdvancedStoneCalculator(AdvancedStoneCalculator&&) = default;
 	AdvancedStoneCalculator& operator=(AdvancedStoneCalculator&&) = default;
 
-	int operator()(const Status& status, Point p);
+	int operator()(const Status& status, Point p) const;
 };
 
 using AdvancedHeurCalculator = TableHeurCalculator<AdvancedStoneCalculator>;

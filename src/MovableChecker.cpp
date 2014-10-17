@@ -2,12 +2,12 @@
 #include <unordered_set>
 
 class InternalChecker {
-	HeurCalculator& calculator_;
+	const HeurCalculator& calculator_;
 	std::unordered_set<Point> calculated_;
 	bool isMovable(const Status& status, Point  p,
 		int &count);
 public:
-	InternalChecker(HeurCalculator& calculator):
+	InternalChecker(const HeurCalculator& calculator):
 		calculator_(calculator)
 	{}
 	bool stoneMovable(const Status& status, Point p);
@@ -39,12 +39,12 @@ bool InternalChecker::isMovable(const Status& status, Point  p,
 
 
 
-bool MovableChecker::check(const Status& status, Point p) {
+bool MovableChecker::check(const Status& status, Point p) const {
 	InternalChecker ch(*calculator_);
 	return ch.stoneMovable(status, p);
 }
 
-const char* MovableChecker::errorMessage() {
+const char* MovableChecker::errorMessage() const {
 	return "not movable";
 }
 
