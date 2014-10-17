@@ -57,7 +57,6 @@ struct Options {
 	bool useAdvancedHeurCalculator_ = true;
 	std::size_t statusPoolSize_ = 0;
 	BlockListHeurType blocklistHeurCalculatorType_ = BlockListHeurType::none;
-	bool parallelOuterExpand_ = false;
 	std::size_t blockListStones_ = 0;
 	std::size_t blockListDistance_ = 0;
 	std::size_t maxHeurListSize_ = 0;

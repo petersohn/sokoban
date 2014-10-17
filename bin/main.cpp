@@ -42,9 +42,7 @@ int main(int argc, char** argv) {
 	OptionsBasedExpanderFactory expanderFactory(opts, status.table(), !opts.test_);
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
-			createExpander,
-			std::bind(createDumperFromOptions, opts),
-			opts.parallelOuterExpand_ ? opts.numThreads_ : 0);
+			createExpander, std::bind(createDumperFromOptions, opts));
 	std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
 	SolutionChecker solutionChecker(std::cerr, heurDump);
 	int returnCode = 0;

@@ -4,7 +4,6 @@
 #include "QueueInterfaces.hpp"
 #include "Expander.hpp"
 #include "Dumper/Dumper.hpp"
-#include "util/ThreadPool.hpp"
 #include <deque>
 #include <functional>
 #include <memory>
@@ -24,19 +23,13 @@ private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
 	DumperFactory dumperFactory_;
-	std::size_t numThreads_;
-	util::ThreadPool threadPool_;
 public:
-	Solver(QueueFactory qf, ExpanderFactory ef, DumperFactory df = NullDumperFactory(),
-			std::size_t numThreads = 0):
+	Solver(QueueFactory qf, ExpanderFactory ef,
+			DumperFactory df = NullDumperFactory()):
 		queueFactory_(qf),
 		expanderFactory_(ef),
-		dumperFactory_(df),
-		numThreads_(numThreads)
+		dumperFactory_(df)
 	{
-		if (numThreads > 0) {
-			threadPool_.setNumThreads(numThreads);
-		}
 	}
 	std::deque<std::shared_ptr<Node>> solve(Status status);
 	~Solver() {}
