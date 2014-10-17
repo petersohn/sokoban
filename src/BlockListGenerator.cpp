@@ -135,7 +135,7 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(
 			calculator_,
-			BlockListHeurList{heurList_ | boost::adaptors::transformed(
+			BlockListHeurListFactory{heurList_ | boost::adaptors::transformed(
 					IncrementInfo::getHeurInfo) | boost::adaptors::reversed});
 }
 
@@ -146,7 +146,7 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 	assert(table_);
 	return std::make_shared<DecisionTreeHeurCalculator>(
 			calculator_,
-			DecisionTreeHeurList{
+			DecisionTreeHeurListFactory{
 				*table_,
 				heurList_ | boost::adaptors::transformed(
 						IncrementInfo::getHeurInfo) | boost::adaptors::reversed,

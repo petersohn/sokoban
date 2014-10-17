@@ -9,18 +9,47 @@
 #include "Checker.hpp"
 #include "SubStatusHeurCalculator.hpp"
 
-class DecisionTreeHeurList {
+class DecisionTreeHeurListFactory {
 	typedef decisionTree::Node<PseudoStatus, int> NodeType;
 
 	std::unique_ptr<NodeType> decisionTree_;
-	std::size_t lastSize_;
-	const NodeType::ValueList* heurList_;
-	NodeType::ValueList::const_iterator iterator_;
 
 	static std::vector<Point> pointList(const Table& table);
+
+	friend class Next;
+	class Next {
+		DecisionTreeHeurListFactory* owner_ = nullptr;
+		std::size_t lastSize_ = 0;
+		const NodeType::ValueList* heurList_ = nullptr;
+		NodeType::ValueList::const_iterator iterator_;
+
+	public:
+
+		explicit Next(DecisionTreeHeurListFactory* owner):
+			owner_(owner)
+		{}
+
+		const NodeType::Value* operator()(const PseudoStatus& pseudoStatus)
+		{
+			if (pseudoStatus.state().size() == 0) {
+				return nullptr;
+			}
+
+			if (pseudoStatus.state().size() != lastSize_) {
+				lastSize_ = pseudoStatus.state().size();
+				heurList_ = &owner_->decisionTree_->get(pseudoStatus);
+				iterator_ = heurList_->begin();
+			}
+
+			return iterator_ == heurList_->end() ? nullptr :
+				(iterator_++)->get();
+		}
+
+	};
+
 public:
 	template <class HeurListType>
-	DecisionTreeHeurList(
+	DecisionTreeHeurListFactory(
 			const Table& table,
 			const HeurListType& heurList,
 			const Checker::Ptr& checker,
@@ -48,26 +77,14 @@ public:
 				timeMeter.realTime() << std::endl;
 	}
 
-	void start()
+	Next operator()()
 	{
-		lastSize_ = 0;
-	}
-
-	const NodeType::Value* operator()(const PseudoStatus& pseudoStatus)
-	{
-		if (pseudoStatus.state().size() != lastSize_) {
-			lastSize_ = pseudoStatus.state().size();
-			heurList_ = &decisionTree_->get(pseudoStatus);
-			iterator_ = heurList_->begin();
-		}
-
-		return iterator_ == heurList_->end() ? nullptr :
-			(iterator_++)->get();
+		return Next{this};
 	}
 
 };
 
-using DecisionTreeHeurCalculator = SubStatusHeurCalculator<DecisionTreeHeurList>;
+using DecisionTreeHeurCalculator = SubStatusHeurCalculator<DecisionTreeHeurListFactory>;
 
 
 #endif /* DECISIONTREEHEURCALCULATOR_H_ */

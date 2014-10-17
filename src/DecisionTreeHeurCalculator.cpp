@@ -10,7 +10,7 @@
 #include <iostream>
 
 std::vector<Point>
-DecisionTreeHeurList::pointList(const Table& table)
+DecisionTreeHeurListFactory::pointList(const Table& table)
 {
 	std::vector<Point> result;
 	for (Point  p: arrayRange(table)) {

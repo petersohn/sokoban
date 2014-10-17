@@ -4,25 +4,38 @@
 #include "HeurInfo.hpp"
 #include "SubStatusHeurCalculator.hpp"
 
-class BlockListHeurList {
+
+class BlockListHeurListFactory {
 	HeurList heurList_;
-	HeurList::const_iterator iterator_;
 public:
+	friend class Next;
+	class Next {
+		BlockListHeurListFactory* owner_;
+		HeurList::const_iterator iterator_;
+	public:
+		explicit Next(BlockListHeurListFactory* owner):
+			owner_(owner),
+			iterator_(owner->heurList_.begin())
+		{}
+
+		const HeurInfo* operator()(const PseudoStatus&)
+		{
+			return iterator_ == owner_->heurList_.end() ?
+					nullptr : &*(iterator_++);
+		}
+	};
+
 	template <typename HeurListType>
-	BlockListHeurList(const HeurListType& heurList):
+	explicit BlockListHeurListFactory(const HeurListType& heurList):
 		heurList_(std::begin(heurList), std::end(heurList)) {}
 
-	void start()
+	Next operator()()
 	{
-		iterator_ = heurList_.begin();
+		return Next{this};
 	}
 
-	const HeurInfo* operator()(const PseudoStatus&)
-	{
-		return iterator_ == heurList_.end() ? nullptr : &*(iterator_++);
-	}
 };
 
-using BlocklistHeurCalculator = SubStatusHeurCalculator<BlockListHeurList>;
+using BlocklistHeurCalculator = SubStatusHeurCalculator<BlockListHeurListFactory>;
 
 #endif /* BLOCKLISTHEURCALCULATOR_H_ */

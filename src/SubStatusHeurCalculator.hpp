@@ -5,16 +5,16 @@
 #include "HeurInfo.hpp"
 #include "Status/PseudoStatus.hpp"
 
-template <typename Next>
+template <typename NextFactory>
 class SubStatusHeurCalculator: public HeurCalculator {
 	HeurCalculator::Ptr baseCalculator_;
-	Next next_;
+	NextFactory nextFactory_;
 public:
 	SubStatusHeurCalculator(
 			const HeurCalculator::Ptr& baseCalculator,
-			Next next = Next{}):
+			NextFactory nextFactory = NextFactory{}):
 				baseCalculator_(std::move(baseCalculator)),
-				next_(std::move(next))
+				nextFactory_(std::move(nextFactory))
 	{
 	}
 
@@ -30,8 +30,8 @@ public:
 	{
 		PseudoStatus pseudoStatus(status);
 		int result = 0;
-		next_.start();
-		while (const auto& subset = next_(pseudoStatus)) {
+		auto next = nextFactory_();
+		while (const auto& subset = next(pseudoStatus)) {
 			if (isSubStatus(subset->first, pseudoStatus)) {
 				result += subset->second;
 				for (Point  p: subset->first.state()) {
