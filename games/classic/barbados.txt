@@ -12,6 +12,6 @@
 #**oo...*...*
 #**..********
 #**x*********
-blocklist-number=4
-blocklist-distance=4
+blocklist-number=5
+blocklist-distance=6
 blocklist-heur-calculator=d
