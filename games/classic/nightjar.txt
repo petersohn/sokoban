@@ -1,0 +1,15 @@
+#10
+#14
+#y.***...*..*..
+#..*..o..o.....
+#.....*.o.o*o*.
+#*....**o.o....
+#x....o.......*
+#.....***o**o**
+#*....o....*...
+#.....*..*o..o.
+#..*..o....o.o.
+#..*..*..*..*..
+blocklist-number=2
+blocklist-distance=2
+blocklist-heur-calculator=vector
