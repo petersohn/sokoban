@@ -8,6 +8,7 @@
 class Table {
 private:
 	Array<bool> walls_;
+	Point startingPoint_;
 	Point destination_;
 public:
 	Table() {}
@@ -19,6 +20,7 @@ public:
 		return arrayAt<bool>(walls_, p, true);
 	}
 	Point  destination() const { return destination_; }
+	Point  startingPoint() const { return startingPoint_; }
 
 	void wall(Point p, bool value) {
 		walls_[p] = value;
@@ -27,6 +29,11 @@ public:
 		assert(p.x >= 0 && p.x < static_cast<int>(width()) &&
 				p.y >= 0 && p.y < static_cast<int>(height()));
 		destination_ = p;
+	}
+	void startingPoint(Point  p) {
+		assert(p.x >= 0 && p.x < static_cast<int>(width()) &&
+				p.y >= 0 && p.y < static_cast<int>(height()));
+		startingPoint_ = p;
 	}
 };
 

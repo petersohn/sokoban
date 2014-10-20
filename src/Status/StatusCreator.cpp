@@ -9,7 +9,6 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
 {
 	std::unique_ptr<Table> table{new Table(width, height)};
 	State state;
-	Point startPos;
 	bool startPosOK = false, destinationOK = false;
 	int stoneNum = 0;
 	Point p;
@@ -27,7 +26,7 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
 				break;
 			case 'Y':
 			case 'y':
-				startPos = p;
+				table->startingPoint(p);
 				table->wall(p, false);
 				startPosOK = true;
 				break;
@@ -50,7 +49,7 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
 	if (stoneNum == 0 || !startPosOK || !destinationOK)
 		throw SokobanException();
 	Status result(*table, state);
-	result.currentPos(startPos);
+	result.currentPos(table->startingPoint());
 	return {std::move(table), result};
 }
 
