@@ -105,6 +105,10 @@ void BlockListGenerator::init(const Table& table)
 			std::move(calculationInfo->heurList_.begin(),
 					calculationInfo->heurList_.end(),
 					std::back_inserter(heurList_));
+			boost::sort(calculationInfo->heurList_,
+					[](const IncrementInfo& lhs, const IncrementInfo& rhs) {
+						return lhs.difference_ > rhs.difference_;
+					});
 		}
 		std::cerr << "Block list size = " << blockList_.size() << std::endl;
 		std::cerr << "Heur list size = " << heurList_.size() << std::endl;
@@ -149,7 +153,7 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 			DecisionTreeHeurListFactory{
 				*table_,
 				heurList_ | boost::adaptors::transformed(
-						IncrementInfo::getHeurInfo) | boost::adaptors::reversed,
+						IncrementInfo::getHeurInfo),
 				useChecker ? checker_ : Checker::Ptr(),
 				maxDepth,
 				numThreads_});
