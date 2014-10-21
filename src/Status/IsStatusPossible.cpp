@@ -69,6 +69,10 @@ public:
 
 bool isStatusPossible(const Status& status, std::size_t maxDepth)
 {
+	if (maxDepth == 0) {
+		return true;
+	}
+
 	return ReverseExpander{}.expand(status, maxDepth);
 }
 

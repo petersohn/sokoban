@@ -13,23 +13,17 @@
 #include <boost/range/algorithm.hpp>
 
 
-BlockListGenerator::BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
-		Checker::Ptr checker, std::size_t numStones, std::size_t maxDistance,
-		std::size_t maxHeurListSize, std::size_t workQueueLength,
-		std::size_t decisionTreeDepth,  std::size_t numThreads):
+BlockListGenerator::BlockListGenerator(Solver::Ptr solver,
+		HeurCalculator::Ptr calculator, Checker::Ptr checker,
+		const Options& options):
 	solver_(std::move(solver)),
 	calculator_(std::move(calculator)),
 	checker_(std::move(checker)),
-	numStones_(numStones),
-	maxDistance_(maxDistance),
-	maxHeurListSize_(maxHeurListSize),
-	workQueueLength_(workQueueLength),
-	decisionTreeDepth_(decisionTreeDepth),
+	options_(options),
 	dump_("blocklist.dump"),
-	threadPool_(),
-	numThreads_(numThreads)
+	threadPool_()
 {
-	threadPool_.setNumThreads(numThreads);
+	threadPool_.setNumThreads(options.numThreads_);
 }
 
 std::deque<Node::Ptr> BlockListGenerator::doCalculateBlockList(const Status& status)
@@ -70,18 +64,22 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 void BlockListGenerator::init(const Table& table)
 {
 	table_ = &table;
+	std::size_t decisionTreeDepth =
+		options_.blocklistHeurCalculatorType_ == BlockListHeurType::decisionTree ?
+			options_.blocklistDecisionTreeDepth_ : 0;
 	std::cerr << "Calculating block list..." << std::endl;
 	TableIterator tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
-			maxDistance_, workQueueLength_, threadPool_);
+			options_.blockListDistance_, options_.workQueueLength_,
+			options_.reverseSearchMaxDepth_, threadPool_);
 	blockList_.clear();
 	heurList_.clear();
-	calculationInfos_.resize(numThreads_);
-	for (std::size_t n = 2; n <= numStones_; ++n) {
+	calculationInfos_.resize(options_.numThreads_);
+	for (std::size_t n = 2; n <= options_.blockListStones_; ++n) {
 		incrementalCalculator_ = n == 2 ?
 			calculator_ :
-			decisionTreeDepth_ > 0 ?
-				decisionTreeHeurCalculator(decisionTreeDepth_, false) :
+				decisionTreeDepth > 0 ?
+				decisionTreeHeurCalculator(decisionTreeDepth, false) :
 				vectorHeurCalculator();
 		for (auto& calculationInfo: calculationInfos_) {
 			calculationInfo.reset(new CalculationInfo);
@@ -121,8 +119,10 @@ void BlockListGenerator::init(const Table& table)
 						);
 			});
 	}
-	if (maxHeurListSize_ > 0 && heurList_.size() > maxHeurListSize_) {
-		IncrementList(heurList_.begin(), heurList_.begin() + maxHeurListSize_).swap(heurList_);
+	if (options_.maxHeurListSize_ > 0 &&
+			heurList_.size() > options_.maxHeurListSize_) {
+		IncrementList(heurList_.begin(),
+				heurList_.begin() + options_.maxHeurListSize_).swap(heurList_);
 	}
 	std::cerr << "Heur list size = " << heurList_.size() << std::endl;
 	dump_.flush();
@@ -156,6 +156,6 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 						IncrementInfo::getHeurInfo),
 				useChecker ? checker_ : Checker::Ptr(),
 				maxDepth,
-				numThreads_});
+				options_.numThreads_});
 }
 

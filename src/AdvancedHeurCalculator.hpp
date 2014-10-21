@@ -40,14 +40,17 @@ class AdvancedStoneCalculator {
 
 	Array<std::vector<Partition>> partitions_;
 	Solver::Ptr solver_;
+	std::size_t reverseSearchMaxDepth_;
 	bool useDumper_;
 	void init(const Table& table);
 
 	void initPartitions(const Table& table, Point p);
 public:
 	AdvancedStoneCalculator(const Table& table, Solver::Ptr solver,
+			std::size_t reverseSearchMaxDepth,
 			bool useDumper = true):
 		solver_(std::move(solver)),
+		reverseSearchMaxDepth_(reverseSearchMaxDepth),
 		useDumper_(useDumper)
 	{
 		assert(solver_.get());

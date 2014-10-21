@@ -65,7 +65,7 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 					false);
 		}));
 	return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
-			table_, std::move(solver)});
+			table_, std::move(solver), options_.reverseSearchMaxDepth_});
 }
 
 std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
@@ -109,15 +109,8 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 				[this, calculator, checker]() {
 					return createExpander(calculator, checker, false);
 				})) ;
-		std::size_t decisionTreeDepth =
-			options_.blocklistHeurCalculatorType_ == BlockListHeurType::decisionTree ?
-				options_.blocklistDecisionTreeDepth_ : 0;
 		BlockListGenerator blockListGenerator(
-				std::move(solver), calculator, checker,
-				options_.blockListStones_,
-				options_.blockListDistance_, options_.maxHeurListSize_,
-				options_.workQueueLength_, decisionTreeDepth,
-				options_.numThreads_);
+				std::move(solver), calculator, checker, options_);
 		blockListGenerator.init(table_);
 		checkers.push_back(blockListGenerator.checker());
 		switch (options_.blocklistHeurCalculatorType_) {

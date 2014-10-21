@@ -7,6 +7,7 @@
 #include "util/ThreadPool.hpp"
 #include "Checker.hpp"
 #include "HeurInfo.hpp"
+#include "Options.hpp"
 #include <fstream>
 #include <memory>
 #include <boost/thread.hpp>
@@ -48,15 +49,11 @@ private:
 	IndexedStatusList<int> blockList_;
 	IncrementList heurList_;
 	const Table* table_;
-	std::size_t numStones_;
-	std::size_t maxDistance_;
-	std::size_t maxHeurListSize_;
-	std::size_t workQueueLength_;
-	std::size_t decisionTreeDepth_;
+	Options options_;
 	std::vector<CalculationInfoPtr> calculationInfos_;
 	std::ofstream dump_;
 	util::ThreadPool threadPool_;
-	std::size_t numThreads_;
+	//std::size_t numThreads_;
 
 	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
@@ -76,12 +73,8 @@ private:
 		}
 	}
 public:
-	BlockListGenerator(Solver::Ptr solver,
-			HeurCalculator::Ptr calculator,
-			Checker::Ptr checker, std::size_t numStones,
-			std::size_t maxDistance, std::size_t maxHeurListSize,
-			std::size_t workQueueLength, 
-			std::size_t decisionTreeDepth, std::size_t numThreads);
+	BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
+			Checker::Ptr checker, const Options& options);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
 	HeurCalculator::Ptr decisionTreeHeurCalculator(std::size_t maxDepth, bool useChecker);

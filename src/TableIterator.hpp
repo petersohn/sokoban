@@ -22,6 +22,7 @@ private:
 	std::size_t iters_, solved_;
 	std::size_t lastTicks_;
 	std::size_t workQueueLength_;
+	std::size_t reverseSearchMaxDepth_;
 	std::vector<Status> workQueue_;
 	bool working_;
 
@@ -52,6 +53,7 @@ public:
 			const Action& action,
 			std::size_t maxDistance,
 			std::size_t workQueueLength,
+			std::size_t reverseSearchMaxDepth,
 			util::ThreadPool& threadPool):
 		table_(&table),
 		action_(action),
@@ -60,6 +62,7 @@ public:
 		solved_(0),
 		lastTicks_(-1),
 		workQueueLength_(workQueueLength),
+		reverseSearchMaxDepth_(reverseSearchMaxDepth),
 		working_(false),
 		MUTEX_DECL(iterMutex_),
 		ioService_(threadPool.getIoService())

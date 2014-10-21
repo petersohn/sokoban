@@ -1,5 +1,6 @@
 #include "Status/StatusUtils.hpp"
 #include "Checker.hpp"
+#include "Status/IsStatusPossible.hpp"
 #include <stack>
 
 void floodFill(const Status &status, Point p0, Array<bool> &result,
@@ -41,37 +42,42 @@ void floodFill(const Status &status, Point p0, Array<bool> &result,
 	}
 }
 
-std::vector<Status> getPartitions(const Table& table, const State &state)
+std::vector<Status> getPartitions(const Table& table, const State &state,
+			std::size_t maxDepth)
 {
-	Array<bool> kell(table.width(), table.height(), false);
-	int kellNum = 0;
+	Array<bool> pointsToProcess(table.width(), table.height(), false);
+	int numberOfPoints = 0;
 	for (Point  p: arrayRange(table)) {
 		if (!table.wall(p) && !state[p])
 		{
-			kell[p] = true;
-			++kellNum;
+			pointsToProcess[p] = true;
+			++numberOfPoints;
 		} else
-			kell[p] = false;
+			pointsToProcess[p] = false;
 	}
 	std::vector<Status> result;
-	while (kellNum > 0) {
+	while (numberOfPoints > 0) {
 		Point foundPoint;
 		for (Point  p: arrayRange(table)) {
-			if (kell[p]) {
+			if (pointsToProcess[p]) {
 				foundPoint = p;
 				break;
 			}
 		}
 		Status status{table, state};
 		status.currentPos(foundPoint);
+
 		for (Point  p: arrayRange(table)) {
-			if (status.reachable(p) && kell[p])
+			if (status.reachable(p) && pointsToProcess[p])
 			{
-				kell[p] = false;
-				--kellNum;
+				pointsToProcess[p] = false;
+				--numberOfPoints;
 			}
 		}
-		result.push_back(std::move(status));
+
+		if (isStatusPossible(status, maxDepth)) {
+			result.push_back(std::move(status));
+		}
 	}
 	return result;
 }
@@ -88,7 +94,7 @@ bool checkStatus(const Checker& checker, const Status& status)
 
 bool checkState(const Checker& checker, const Table& table, const State& state)
 {
-	std::vector<Status> partitions = getPartitions(table, state);
+	std::vector<Status> partitions = getPartitions(table, state, 0);
 	for (const Status& status: partitions) {
 		if (checkStatus(checker, status)) {
 			return true;

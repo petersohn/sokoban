@@ -93,6 +93,8 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			"It is only effective if --blocklist-heur-calculator=decision-tree is set.")
 			("decision-tree-checker", defaultValue(&options.useCheckerForDecisionTree_),
 			"Enable/disable usage of checker in DecisionTree building.\n")
+			("reverse-search-max-depth", defaultValue(&options.reverseSearchMaxDepth_),
+			 "The maximum depth of the tree when checking that a state is possible during preprocessing.")
 			("compare,c", po::value(&options.compare_)->multitoken(),
 			"The compare algorithm to use when choosing equal elements.")
 			("status-pool", defaultValue(&options.statusPoolSize_),

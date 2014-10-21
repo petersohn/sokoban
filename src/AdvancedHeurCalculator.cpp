@@ -72,7 +72,8 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
 {
 	State state;
 	state.addStone(p);
-	std::vector<Status> parts = getPartitions(table, state);
+	std::vector<Status> parts = getPartitions(table, state, 
+			reverseSearchMaxDepth_);
 	for (Status& status: parts) {
 		Partition partition(table.width(), table.height());
 		partition.pos = p;
