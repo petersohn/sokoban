@@ -135,7 +135,7 @@ bool Status::currentPos(Point  p) {
 }
 
 bool Status::moveStone(Point from, Point to) {
-	if (value(from) != ftStone && value(to) != ftFloor)
+	if (value(from) != ftStone || value(to) != ftFloor)
 		return false;
 	fields_[from] = ftFloor;
 	currentPos_ = from;

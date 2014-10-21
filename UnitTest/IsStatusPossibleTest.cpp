@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(complex_impossible2)
 
 BOOST_AUTO_TEST_CASE(complex_impossible3)
 {
-	auto data = createStatus(3, 5, {
+	auto data = createStatus(5, 3, {
 			"x...*",
 			"..oo.",
 			"y*..."
