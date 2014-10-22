@@ -4,7 +4,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-BOOST_AUTO_TEST_SUITE(IsStatusPossible)
+BOOST_AUTO_TEST_SUITE(IsStatusPossibleTest)
 
 BOOST_AUTO_TEST_CASE(possible_when_point_is_near_destination)
 {

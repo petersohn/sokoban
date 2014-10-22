@@ -4,7 +4,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-BOOST_AUTO_TEST_SUITE(IsSubStatus)
+BOOST_AUTO_TEST_SUITE(IsSubStatusTest)
 
 BOOST_AUTO_TEST_CASE(equal)
 {

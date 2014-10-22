@@ -2,6 +2,7 @@
 include_rules
 
 LIBS += -lboost_unit_test_framework
+INCLUDE_DIRS += -I$(TURTLE_DIR)/include
 
 : foreach *.cpp |> !cxx |>
 : ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \

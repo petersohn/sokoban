@@ -19,6 +19,7 @@ DUMPER_DIR = $(SOURCE_DIR)/Dumper
 STATUS_DIR = $(SOURCE_DIR)/Status
 CPP_UTIL_DIR = $(TUP_CWD)/cpp-util
 CPP_UTIL_LIB = $(CPP_UTIL_DIR)/lib/libcpp-util.a
+TURTLE_DIR = $(TUP_CWD)/turtle
 
 INCLUDE_DIRS += -I$(SOURCE_DIR)
 INCLUDE_DIRS += -I$(CPP_UTIL_DIR)/include
