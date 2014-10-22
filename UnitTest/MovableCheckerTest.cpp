@@ -77,4 +77,133 @@ BOOST_AUTO_TEST_CASE(not_blocked_when_there_are_multiple_stones_in_the_middle_in
 	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{3, 3}));
 }
 
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_movable_stones)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"..o..",
+			".ooo.",
+			"..o..",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 1}));
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 3}));
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{1, 2}));
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{3, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_walls_vertically)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".*.*.",
+			".*o*.",
+			".*.*.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_walls_horizontally)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".***.",
+			"..o..",
+			".***.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_walls_vertically_and_movable_in_one_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".*.*.",
+			".*o*.",
+			".*.*.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{2, 1}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_walls_horizontally_and_movable_in_one_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".***.",
+			"..o..",
+			".***.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 2}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_walls_vertically_and_movable_in_another_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".*.*.",
+			".*o*.",
+			".*.*.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{2, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_there_is_a_stone_surrounded_by_walls_horizontally_and_movable_in_another_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".***.",
+			"..o..",
+			".***.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 2}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_there_is_a_stone_surrounded_by_walls_vertically_and_movable_in_neither_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".*.*.",
+			".*o*.",
+			".*.*.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{2, 1}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{2, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_there_is_a_stone_surrounded_by_walls_horizontally_and_movable_in_neither_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".***.",
+			"..o..",
+			".***.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 2}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 2}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
