@@ -206,4 +206,48 @@ BOOST_AUTO_TEST_CASE(blocked_when_there_is_a_stone_surrounded_by_walls_horizonta
 	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 2}));
 }
 
+BOOST_AUTO_TEST_CASE(blocked_when_there_are_multiple_stones_near_the_wall_vertically)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"..o*.",
+			"..o*.",
+			"...*.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 1}));
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_there_are_multiple_stones_near_the_wall_horizontally)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".***.",
+			".oo..",
+			".....",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{1, 2}));
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_the_stones_are_blocking_each_other)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".....",
+			"..oo.",
+			"..oo.",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 2}));
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{3, 2}));
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{2, 3}));
+	BOOST_CHECK(!movableCheckerUnderTest.check(data.second, Point{3, 3}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
