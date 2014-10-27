@@ -64,7 +64,8 @@ bool CorridorChecker::checkCorridorEnding(const Status & status,
 	return status.value(p0) != ftWall &&
 			status.value(p1) == ftFloor &&
 			status.value(pm1) == ftFloor &&
-			(calculator_->calculateStone(status, p1) || calculator_->calculateStone(status, pm1));
+			(calculator_->calculateStone(status, p1) >= 0 ||
+			 calculator_->calculateStone(status, pm1) >= 0);
 }
 
 const char* CorridorChecker::errorMessage() const

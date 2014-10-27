@@ -169,6 +169,53 @@ BOOST_AUTO_TEST_CASE(blocked_when_1x1_corridor_cannot_be_opened2)
 	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
 }
 
+BOOST_AUTO_TEST_CASE(not_blocked_when_openings_are_movable_from_one_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"..o..",
+			".o.o.",
+			"..o..",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 1}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_openings_are_movable_from_another_direction)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"..o..",
+			".o.o.",
+			"..o..",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 1}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_openings_are_not_movable)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"..o..",
+			".o.o.",
+			"..o..",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 1}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 1}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
+}
+
 BOOST_AUTO_TEST_CASE(not_blocked_when_horizontal_corridor_can_be_opened_from_all_directions)
 {
 	auto data = createStatus(5, 5, {
