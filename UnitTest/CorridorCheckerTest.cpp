@@ -351,6 +351,58 @@ BOOST_AUTO_TEST_CASE(not_blocked_when_corridor_can_be_opened_against_wall4)
 	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, true);
 }
 
+BOOST_AUTO_TEST_CASE(blocked_when_corridor_cannot_be_opened_against_wall1)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"..ooo",
+			"..o..",
+			"...oo",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_corridor_cannot_be_opened_against_wall2)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".....",
+			".oo..",
+			".o.o.",
+			"xo.o."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_corridor_cannot_be_opened_against_wall3)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"ooo..",
+			"..o..",
+			"oo...",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
+}
+
+BOOST_AUTO_TEST_CASE(blocked_when_corridor_cannot_be_opened_against_wall4)
+{
+	auto data = createStatus(5, 5, {
+			"yo.o.",
+			".o.o.",
+			"..oo.",
+			".....",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
+}
+
 
 
 BOOST_AUTO_TEST_SUITE_END()
