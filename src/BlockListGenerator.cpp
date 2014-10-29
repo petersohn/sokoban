@@ -71,7 +71,7 @@ void BlockListGenerator::init(const Table& table)
 	TableIterator tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
 			options_.blockListDistance_, options_.workQueueLength_,
-			options_.reverseSearchMaxDepth_, threadPool_);
+			options_.reverseSearchMaxDepth_, threadPool_.getIoService());
 	blockList_.clear();
 	heurList_.clear();
 	calculationInfos_.resize(options_.numThreads_);

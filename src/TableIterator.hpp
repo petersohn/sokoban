@@ -6,7 +6,7 @@
 #include "Status/Status.hpp"
 #include "Checker.hpp"
 #include "Mutexes.hpp"
-#include "util/ThreadPool.hpp"
+#include <boost/asio/io_service.hpp>
 #include <functional>
 
 
@@ -27,7 +27,7 @@ private:
 	bool working_;
 
 	MutexType iterMutex_;
-	boost::asio::io_service &ioService_;
+	boost::asio::io_service& ioService_;
 	ConditionVariableType done_;
 
 	void initIter(Point p, std::size_t stones, const State &state);
@@ -54,7 +54,7 @@ public:
 			std::size_t maxDistance,
 			std::size_t workQueueLength,
 			std::size_t reverseSearchMaxDepth,
-			util::ThreadPool& threadPool):
+			boost::asio::io_service& ioService):
 		table_(&table),
 		action_(action),
 		maxDistance_(maxDistance),
@@ -65,7 +65,7 @@ public:
 		reverseSearchMaxDepth_(reverseSearchMaxDepth),
 		working_(false),
 		MUTEX_DECL(iterMutex_),
-		ioService_(threadPool.getIoService())
+		ioService_(ioService)
 	{
 	}
 

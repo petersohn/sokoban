@@ -11,6 +11,7 @@
 #include "ComplexChecker.hpp"
 #include "TimeMeter.hpp"
 #include "Status/StatusCreator.hpp"
+#include "util/ThreadPool.hpp"
 #include <iostream>
 #include <fstream>
 #include <deque>
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
 		threadPool.setNumThreads(opts.numThreads_);
 		TableIterator it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
-				0, opts.workQueueLength_, 0, threadPool);
+				0, opts.workQueueLength_, 0, threadPool.getIoService());
 		it.iterate(opts.test_, calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)));
 	} else {
