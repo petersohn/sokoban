@@ -87,9 +87,10 @@ void BlockListGenerator::init(const Table& table)
 		std::cerr << "Stones = " << n << std::endl;
 		{
 			util::ThreadPoolRunner runner(threadPool_);
-			tableIterator.iterate(n, calculator_,
+			tableIterator.start(n, calculator_,
 					std::make_shared<ComplexChecker>(std::vector<Checker::Ptr>{
 						checker_, checker()}));
+			tableIterator.wait(true);
 		}
 		for (const auto& calculationInfo: calculationInfos_) {
 			dump_ << calculationInfo->dump_.str();

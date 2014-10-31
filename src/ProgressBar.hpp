@@ -1,16 +1,23 @@
 #ifndef PROGRESSBAR_H_
 #define PROGRESSBAR_H_
 
+#include <cstdint>
+
 class ProgressBar {
-	int lastTicks_;
-	int iters_;
+	std::size_t lastTicks_;
+	std::size_t iters_;
+
 public:
-	ProgressBar(int iters):
+	ProgressBar(std::size_t iters):
 		lastTicks_(0),
 		iters_(iters)
 	{}
 	~ProgressBar();
-	void draw(int solved);
+
+	ProgressBar(const ProgressBar&) = delete;
+	ProgressBar& operator=(const ProgressBar&) = delete;
+
+	void draw(std::size_t solved);
 };
 
 #endif /* PROGRESSBAR_H_ */

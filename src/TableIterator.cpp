@@ -1,7 +1,6 @@
 #include "TableIterator.hpp"
 #include "TempValue.hpp"
 #include "ProgressBar.hpp"
-#include "TimeMeter.hpp"
 #include "Status/StatusUtils.hpp"
 
 void TableIterator::initIter(Point p, std::size_t stones, const State &state)
@@ -65,34 +64,69 @@ void TableIterator::doWork(const std::vector<Status>& statuses)
 	}
 	boost::lock_guard<MutexType> lck(iterMutex_);
 	++solved_;
+
+	if (iterationState_ == IterationState::working && solved_ == iters_) {
+		iterationState_ = IterationState::done;
+	}
+
 	done_.notify_all();
 }
 
-void TableIterator::iterate(std::size_t numStones,
+void TableIterator::start(std::size_t numStones,
 			const HeurCalculator::Ptr& heurCalculator,
 			const Checker::Ptr& checker)
 {
-	assert(!working_);
+	assert(iterationState_ == IterationState::idle);
 	heurCalculator_ = heurCalculator;
 	checker_ = checker;
-	TempValue<bool> working(working_, true);
-	TimeMeter timeMeter;
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
+	iterationState_ = IterationState::filling;
 	initIter(Point(0, 0), numStones, State());
 	cleanWorkQueue();
+
 	{
-		ProgressBar progressBar(iters_);
-		boost::unique_lock<MutexType> lck(iterMutex_);
-		while (solved_ < iters_) {
-			done_.wait(lck);
-			lck.unlock();
-			progressBar.draw(solved_);
-			lck.lock();
+		boost::lock_guard<MutexType> lck(iterMutex_);
+
+		if (solved_ == iters_) {
+			iterationState_ = IterationState::done;
+		} else {
+			iterationState_ = IterationState::working;
 		}
 	}
-	std::cerr << "Iteration processor time: " <<
-			timeMeter.processorTime() <<
-			"\nIteration time: " <<
-			timeMeter.realTime() << std::endl;
 }
+
+void TableIterator::wait(bool print)
+{
+	if (iterationState_ == IterationState::idle) {
+		return;
+	}
+
+	{
+		std::unique_ptr<ProgressBar> progressBar;
+
+		boost::unique_lock<MutexType> lock(iterMutex_);
+		while (iterationState_ != IterationState::done) {
+			done_.wait(lock);
+			lock.unlock();
+
+			if (print && !progressBar &&
+					iterationState_ == IterationState::working) {
+				progressBar.reset(new ProgressBar{iters_});
+			}
+
+			progressBar->draw(solved_);
+			lock.lock();
+		}
+	}
+
+	iterationState_ = IterationState::idle;
+
+	if (print) {
+		std::cerr << "Iteration processor time: " <<
+				timeMeter_.processorTime() <<
+				"\nIteration time: " <<
+				timeMeter_.realTime() << std::endl;
+	}
+}
+

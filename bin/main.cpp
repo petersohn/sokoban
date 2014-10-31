@@ -55,8 +55,9 @@ int main(int argc, char** argv) {
 		TableIterator it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
 				0, opts.workQueueLength_, 0, threadPool.getIoService());
-		it.iterate(opts.test_, calculator,
+		it.start(opts.test_, calculator,
 				std::make_shared<ComplexChecker>(expanderFactory.createBasicCheckers(calculator)));
+		it.wait(true);
 	} else {
 		std::deque<Node::Ptr> solution = s.solve(status);
 		cerr << "Length of solution: " << solution.size() << endl;
