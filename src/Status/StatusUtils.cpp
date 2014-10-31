@@ -18,15 +18,19 @@ void floodFill(const Status &status, Point p0, Array<bool> &result,
 	pointsToVisit.reserve(status.width()*status.height());
 	pointsToVisit.push_back(p0);
 
+	Array<bool> visitedStones;
+	if (border) {
+		visitedStones = Array<bool>{status.width(), status.height(), false};
+	}
+
 	while (!pointsToVisit.empty()) {
 		Point p = pointsToVisit.back();
 		pointsToVisit.pop_back();
 
-		if (status.value(p) != ftFloor || result[p])
-		{
-			if (border != NULL && status.value(p) == ftStone)
-				border->push_back(p);
-		} else {
+		if (border && status.value(p) == ftStone && !visitedStones[p]) {
+			border->push_back(p);
+			visitedStones[p] = true;
+		} else if (status.value(p) == ftFloor && !result[p]) {
 			result[p] = true;
 			if (minmax != NULL) {
 				minmax->minX = std::min(minmax->minX, p.x);
