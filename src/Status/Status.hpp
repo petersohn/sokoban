@@ -11,6 +11,7 @@
 #include <vector>
 #include <deque>
 #include <unordered_map>
+#include <ostream>
 
 class Status {
 public:
@@ -160,5 +161,7 @@ inline bool operator!=(const Status& lhs, const Status& rhs)
 {
 	return !(lhs == rhs);
 }
+
+std::ostream& operator<<(std::ostream& os, const Status& status);
 
 #endif /* STATUS_H_ */

@@ -1,5 +1,6 @@
 #include "Status/Status.hpp"
 #include "Status/floodFill.hpp"
+#include "Dumper/DumperFunctions.hpp"
 #include "Node.hpp"
 
 #ifndef NO_UNSAFE_DIAGNOSTICS
@@ -178,3 +179,8 @@ void Status::shiftCurrentPos()
 		return;
 }
 
+std::ostream& operator<<(std::ostream& os, const Status& status)
+{
+	dumpStatus(os, status, " ");
+	return os;
+}
