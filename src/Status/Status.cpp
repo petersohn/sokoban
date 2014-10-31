@@ -1,5 +1,5 @@
 #include "Status/Status.hpp"
-#include "Status/StatusUtils.hpp"
+#include "Status/floodFill.hpp"
 #include "Node.hpp"
 
 #ifndef NO_UNSAFE_DIAGNOSTICS
@@ -56,7 +56,7 @@ void Status::calculateReachable() const
 #endif
 	calculatedData_.reset(new CalculatedData(width(), height()));
 	floodFill(*this, currentPos_, calculatedData_->reachable_,
-			&calculatedData_->border_);
+			calculatedData_->border_);
 }
 
 void Status::fillReachable() const

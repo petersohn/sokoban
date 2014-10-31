@@ -3,7 +3,7 @@
 #include "Status/Status.hpp"
 #include "Status/State.hpp"
 #include "VisitedStateInfo.hpp"
-#include "Status/StatusUtils.hpp"
+#include "Status/floodFill.hpp"
 #include <iostream>
 #include <memory>
 
@@ -33,7 +33,7 @@ Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
 	do {
 		touched = false;
 		Status::BorderType destBorder;
-		floodFill(status, status.table().destination(), destReachable, &destBorder);
+		floodFill(status, status.table().destination(), destReachable, destBorder);
 		Status::BorderType border = intersect(status.border(), destBorder);
 		for (Status::BorderType::const_iterator it = border.begin();
 				it != border.end(); ++it) {

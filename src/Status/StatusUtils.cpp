@@ -1,50 +1,6 @@
 #include "Status/StatusUtils.hpp"
 #include "Checker.hpp"
 #include "Status/IsStatusPossible.hpp"
-#include <stack>
-
-void floodFill(const Status &status, Point p0, Array<bool> &result,
-			Status::BorderType *border, MinMax *minmax)
-{
-	result.fill(false);
-	if (minmax != NULL) {
-		minmax->minX = status.width();
-		minmax->maxX = 0;
-		minmax->minY = status.height();
-		minmax->maxY = 0;
-	}
-
-	std::vector<Point> pointsToVisit;
-	pointsToVisit.reserve(status.width()*status.height());
-	pointsToVisit.push_back(p0);
-
-	Array<bool> visitedStones;
-	if (border) {
-		visitedStones = Array<bool>{status.width(), status.height(), false};
-	}
-
-	while (!pointsToVisit.empty()) {
-		Point p = pointsToVisit.back();
-		pointsToVisit.pop_back();
-
-		if (border && status.value(p) == ftStone && !visitedStones[p]) {
-			border->push_back(p);
-			visitedStones[p] = true;
-		} else if (status.value(p) == ftFloor && !result[p]) {
-			result[p] = true;
-			if (minmax != NULL) {
-				minmax->minX = std::min(minmax->minX, p.x);
-				minmax->maxX = std::max(minmax->maxX, p.x);
-				minmax->minY = std::min(minmax->minY, p.y);
-				minmax->maxY = std::max(minmax->maxY, p.y);
-			}
-			pointsToVisit.push_back(p+Point::p10);
-			pointsToVisit.push_back(p+Point::pm10);
-			pointsToVisit.push_back(p+Point::p01);
-			pointsToVisit.push_back(p+Point::p0m1);
-		}
-	}
-}
 
 std::vector<Status> getPartitions(const Table& table, const State &state,
 			std::size_t maxDepth)

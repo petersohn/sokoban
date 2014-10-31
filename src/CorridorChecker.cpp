@@ -1,7 +1,7 @@
 #include "CorridorChecker.hpp"
 #include "Array.hpp"
 #include "Status/Status.hpp"
-#include "Status/StatusUtils.hpp"
+#include "Status/floodFill.hpp"
 
 bool CorridorChecker::check(const Status& status, Point  p0) const
 {
@@ -14,7 +14,7 @@ bool CorridorChecker::check(const Status& status, Point  p0) const
 				continue;
 			Array<bool> reach(status.width(), status.height(), false);
 			MinMax minmax;
-			floodFill(status, p, reach, nullptr, &minmax);
+			floodFill(status, p, reach, minmax);
 			if (!reach[status.table().destination()]) {
 				if (minmax.minX == minmax.maxX && minmax.minY == minmax.maxY) {
 					if (!checkCorridorEnding(status,

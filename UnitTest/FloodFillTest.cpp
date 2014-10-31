@@ -1,4 +1,4 @@
-#include "Status/StatusUtils.hpp"
+#include "Status/floodFill.hpp"
 #include "Status/StatusCreator.hpp"
 #include <boost/test/unit_test.hpp>
 
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(single_stone_in_the_middle)
 		});
 
 	Status::BorderType border;
-	floodFill(data.second, Point{1, 0}, result, &border);
+	floodFill(data.second, Point{1, 0}, result, border);
 	BOOST_CHECK_EQUAL(border.size(), 1);
 	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
 
