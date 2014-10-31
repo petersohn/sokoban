@@ -146,6 +146,61 @@ BOOST_AUTO_TEST_CASE(single_stone_in_the_middle)
 
 }
 
+BOOST_AUTO_TEST_CASE(multiple_reachable_stones)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x...",
+			"y.o.",
+			".o.o"
+		});
+
+	Status::BorderType border;
+	floodFill(data.second, Point{1, 0}, result, border);
+	BOOST_CHECK_EQUAL(border.size(), 3);
+	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+	CHECK_BORDER_INCLUDES(border, (Point{1, 2}));
+	CHECK_BORDER_INCLUDES(border, (Point{3, 2}));
+}
+
+BOOST_AUTO_TEST_CASE(one_stone_is_blocked_by_other_stones)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x..o",
+			"y.o.",
+			".o.o"
+		});
+
+	Status::BorderType border;
+	floodFill(data.second, Point{1, 0}, result, border);
+	BOOST_CHECK_EQUAL(border.size(), 3);
+	CHECK_BORDER_INCLUDES(border, (Point{3, 0}));
+	CHECK_BORDER_INCLUDES(border, (Point{1, 2}));
+	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+}
+
+BOOST_AUTO_TEST_CASE(stones_are_blocked_by_walls_and_other_stones)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x.*o",
+			"y.o.",
+			"..*o"
+		});
+
+	Status::BorderType border;
+	floodFill(data.second, Point{1, 0}, result, border);
+	BOOST_CHECK_EQUAL(border.size(), 1);
+	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+}
+
 BOOST_AUTO_TEST_SUITE_END() // border
 
 BOOST_AUTO_TEST_SUITE_END() // MovableCheckerTest
