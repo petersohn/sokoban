@@ -89,7 +89,8 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 			calculator, checker, nodeFactory, log);
 
 	if (options_.useStonePusher_) {
-		expander = std::make_shared<StonePusher>(expander, calculator, nodeFactory);
+		expander = std::make_shared<StonePusher>(expander, visitedStates, 
+				calculator, nodeFactory);
 	}
 
 	return expander;

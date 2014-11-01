@@ -11,11 +11,12 @@ class State;
 
 class StonePusher: public Expander {
 	Expander::Ptr expander_;
+	VisitedStateHolder::Ptr visitedStates_;
 	HeurCalculator::Ptr calculator_;
 	NodeFactory::Ptr nodeFactory_;
 public:
-	StonePusher(Expander::Ptr expander, HeurCalculator::Ptr calculator,
-			NodeFactory::Ptr nodeFactory);
+	StonePusher(Expander::Ptr expander, VisitedStateHolder::Ptr visitedStates,
+			HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory);
 	virtual bool expand(const Status &status, std::shared_ptr<Node> base,
 			NodePusher& queue, Dumper::Ptr dumper);
 };
