@@ -8,15 +8,13 @@
 #include <deque>
 
 class State;
-class VisitedStateInfo;
-
 
 class StonePusher: public Expander {
-	VisitedStateHolder::Ptr visitedStates_;
+	Expander::Ptr expander_;
 	HeurCalculator::Ptr calculator_;
 	NodeFactory::Ptr nodeFactory_;
 public:
-	StonePusher(VisitedStateHolder::Ptr visitedStates, HeurCalculator::Ptr calculator,
+	StonePusher(Expander::Ptr expander, HeurCalculator::Ptr calculator,
 			NodeFactory::Ptr nodeFactory);
 	virtual bool expand(const Status &status, std::shared_ptr<Node> base,
 			NodePusher& queue, Dumper::Ptr dumper);

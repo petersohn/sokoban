@@ -1,7 +1,6 @@
 #include "SolverFactories.hpp"
 #include "Solver.hpp"
 #include "PrioNodeQueue.hpp"
-#include "ComplexExpander.hpp"
 #include "NormalExpander.hpp"
 #include "StonePusher.hpp"
 #include "ComplexStrategy.hpp"
@@ -86,12 +85,14 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 {
 	VisitedStateHolder::Ptr visitedStates(new VisitedStates());
 	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator, experimentalCalculator));
-	std::vector<Expander::Ptr> expanders;
+	Expander::Ptr expander = std::make_shared<NormalExpander>(visitedStates,
+			calculator, checker, nodeFactory, log);
+
 	if (options_.useStonePusher_) {
-		expanders.push_back(Expander::Ptr(new StonePusher(visitedStates, calculator, nodeFactory)));
+		expander = std::make_shared<StonePusher>(expander, calculator, nodeFactory);
 	}
-	expanders.push_back(Expander::Ptr(new NormalExpander(visitedStates, calculator, checker, nodeFactory, log)));
-	return Expander::Ptr(new ComplexExpander(expanders.begin(), expanders.end()));
+
+	return expander;
 }
 
 ExpanderFactory OptionsBasedExpanderFactory::factory()

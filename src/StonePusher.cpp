@@ -90,9 +90,9 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 }
 
 
-StonePusher::StonePusher(VisitedStateHolder::Ptr visitedStates,
+StonePusher::StonePusher(Expander::Ptr expander,
 		HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
-		visitedStates_(std::move(visitedStates)),
+		expander_(std::move(expander)),
 		calculator_(std::move(calculator)),
 		nodeFactory_(std::move(nodeFactory))
 
@@ -105,13 +105,11 @@ bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 {
 	InternalPusher sp(*calculator_, *nodeFactory_);
 	Node::Ptr node = sp.pushStones(status, base);
-	if (node.get() == NULL)
-		return false;
-	queue.push(node);
-	Status st(status.table(), *node);
-	if (visitedStates_) {
-		visitedStates_->checkAndPush(std::pair<const Status&, int>(st, node->costFgv()));
+
+	if (!node) {
+		return expander_->expand(status, std::move(base), queue, std::move(dumper));
 	}
+
 	if (dumper) {
 		std::deque<Node::Ptr> path = pathToBase(node, base);
 		for (std::deque<Node::Ptr>::iterator it = path.begin();
@@ -119,7 +117,14 @@ bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 			dumper->push(*it);
 		}
 	}
-	return true;
+
+	if (node->heur() == 0) {
+		queue.push(node);
+		return true;
+	}
+
+	Status st(status.table(), *node);
+	return expander_->expand(st, std::move(node), queue, std::move(dumper));
 }
 
 
