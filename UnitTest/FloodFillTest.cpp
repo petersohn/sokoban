@@ -1,5 +1,6 @@
 #include "Status/floodFill.hpp"
 #include "Status/StatusCreator.hpp"
+#include "ArrayIO.hpp"
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(MovableCheckerTest)
@@ -199,6 +200,24 @@ BOOST_AUTO_TEST_CASE(stones_are_blocked_by_walls_and_other_stones)
 	floodFill(data.second, Point{1, 0}, result, border);
 	BOOST_CHECK_EQUAL(border.size(), 1);
 	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+}
+
+BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_border)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> resultBorder{width, height};
+	Array<bool> resultNoBorder{width, height};
+	auto data = createStatus(width, height, {
+			"x.*o",
+			"y.o.",
+			"..*o"
+		});
+
+	Status::BorderType border;
+	floodFill(data.second, Point{1, 0}, resultBorder, border);
+	floodFill(data.second, Point{1, 0}, resultNoBorder);
+	BOOST_CHECK_EQUAL(resultBorder, resultNoBorder);
 }
 
 BOOST_AUTO_TEST_SUITE_END() // border

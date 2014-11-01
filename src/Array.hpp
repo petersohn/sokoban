@@ -20,7 +20,7 @@
 //	}
 //}
 
-template<class T>
+template<typename T>
 class Array {
 	std::size_t width_, height_;
 	std::vector<T> data_;
@@ -77,23 +77,35 @@ public:
 		width_ = 0;
 		height_ = 0;
 	}
+
+	bool operator==(const Array<T>& other) const
+	{
+		return data_ == other.data_;
+	}
 };
 
-template<class T>
-inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, Point p, const T& def) {
+template<typename T>
+inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, Point p, const T& def)
+{
 	if (p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(arr.width()) && p.y < static_cast<int>(arr.height()))
 			return arr[p];
 		return def;
 }
 
-template <class Array>
+template <typename Array>
 inline PointRange arrayRange(const Array& array)
 {
 	return PointRange(Point(0,0), Point(array.width(), array.height()));
 }
 
+template<typename T>
+inline bool operator!=(const Array<T>& lhs, const Array<T>& rhs)
+{
+	return !(lhs == rhs);
+}
+
 namespace std {
-template<class T>
+template<typename T>
 struct hash<Array<T>> {
 	size_t operator()(const Array<T>& arr) const
 	{
