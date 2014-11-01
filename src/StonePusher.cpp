@@ -108,15 +108,14 @@ bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 	if (node.get() == NULL)
 		return false;
 	queue.push(node);
-	Status st(status.table());
-	std::deque<Node::Ptr> path = pathToBase(node, base);
-	for (std::deque<Node::Ptr>::iterator it = path.begin();
-			it != path.end(); ++it) {
-		st.set(**it);
-		if (visitedStates_) {
-			visitedStates_->checkAndPush(std::pair<const Status&, int>(st, (*it)->costFgv()));
-		}
-		if (dumper) {
+	Status st(status.table(), *node);
+	if (visitedStates_) {
+		visitedStates_->checkAndPush(std::pair<const Status&, int>(st, node->costFgv()));
+	}
+	if (dumper) {
+		std::deque<Node::Ptr> path = pathToBase(node, base);
+		for (std::deque<Node::Ptr>::iterator it = path.begin();
+				it != path.end(); ++it) {
 			dumper->push(*it);
 		}
 	}
