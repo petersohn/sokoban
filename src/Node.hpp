@@ -42,6 +42,14 @@ public:
 inline
 bool operator<(const Node& lhs, const Node &rhs)
 {
+	if (lhs.heur() == 0 && rhs.heur() != 0) {
+		return false;
+	}
+
+	if (lhs.heur() != 0 && rhs.heur() == 0) {
+		return true;
+	}
+
 	if (lhs.costFgv() < rhs.costFgv()) {
 		return false;
 	}
