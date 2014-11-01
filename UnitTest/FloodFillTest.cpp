@@ -301,6 +301,25 @@ BOOST_AUTO_TEST_CASE(enclosed_bigger_area)
 	BOOST_CHECK_EQUAL(minmax.maxY, 2);
 }
 
+BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_minmax)
+{
+	std::size_t width = 4;
+	std::size_t height = 4;
+	Array<bool> resultMinmax{width, height};
+	Array<bool> resultNoMinmax{width, height};
+	auto data = createStatus(width, height, {
+			"x.o.",
+			"yo.o",
+			"o..o",
+			".oo."
+		});
+
+	MinMax minmax;
+	floodFill(data.second, Point{1, 0}, resultMinmax, minmax);
+	floodFill(data.second, Point{1, 0}, resultNoMinmax);
+	BOOST_CHECK_EQUAL(resultMinmax, resultNoMinmax);
+}
+
 BOOST_AUTO_TEST_SUITE_END() // minmax
 
 BOOST_AUTO_TEST_SUITE_END() // MovableCheckerTest
