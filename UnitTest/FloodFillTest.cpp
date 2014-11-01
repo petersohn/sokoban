@@ -203,5 +203,86 @@ BOOST_AUTO_TEST_CASE(stones_are_blocked_by_walls_and_other_stones)
 
 BOOST_AUTO_TEST_SUITE_END() // border
 
+BOOST_AUTO_TEST_SUITE(minmax)
+
+BOOST_AUTO_TEST_CASE(full_table)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x..o",
+			"yoo.",
+			"...."
+		});
+
+	MinMax minmax;
+	floodFill(data.second, Point{1, 0}, result, minmax);
+	BOOST_CHECK_EQUAL(minmax.minX, 0);
+	BOOST_CHECK_EQUAL(minmax.minY, 0);
+	BOOST_CHECK_EQUAL(minmax.maxX, width - 1);
+	BOOST_CHECK_EQUAL(minmax.maxY, height - 1);
+}
+
+BOOST_AUTO_TEST_CASE(one_corner)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x.o.",
+			"yo..",
+			"o..."
+		});
+
+	MinMax minmax;
+	floodFill(data.second, Point{1, 0}, result, minmax);
+	BOOST_CHECK_EQUAL(minmax.minX, 0);
+	BOOST_CHECK_EQUAL(minmax.minY, 0);
+	BOOST_CHECK_EQUAL(minmax.maxX, 1);
+	BOOST_CHECK_EQUAL(minmax.maxY, 1);
+}
+
+BOOST_AUTO_TEST_CASE(enclosed_1x1_area)
+{
+	std::size_t width = 4;
+	std::size_t height = 3;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x.o.",
+			"yo.o",
+			"..o."
+		});
+
+	MinMax minmax;
+	floodFill(data.second, Point{2, 1}, result, minmax);
+	BOOST_CHECK_EQUAL(minmax.minX, 2);
+	BOOST_CHECK_EQUAL(minmax.minY, 1);
+	BOOST_CHECK_EQUAL(minmax.maxX, 2);
+	BOOST_CHECK_EQUAL(minmax.maxY, 1);
+}
+
+BOOST_AUTO_TEST_CASE(enclosed_bigger_area)
+{
+	std::size_t width = 4;
+	std::size_t height = 4;
+	Array<bool> result{width, height};
+	auto data = createStatus(width, height, {
+			"x.o.",
+			"yo.o",
+			"o..o",
+			".oo."
+		});
+
+	MinMax minmax;
+	floodFill(data.second, Point{2, 1}, result, minmax);
+	BOOST_CHECK_EQUAL(minmax.minX, 1);
+	BOOST_CHECK_EQUAL(minmax.minY, 1);
+	BOOST_CHECK_EQUAL(minmax.maxX, 2);
+	BOOST_CHECK_EQUAL(minmax.maxY, 2);
+}
+
+BOOST_AUTO_TEST_SUITE_END() // minmax
+
 BOOST_AUTO_TEST_SUITE_END() // MovableCheckerTest
 
