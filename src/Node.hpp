@@ -37,15 +37,21 @@ public:
 	int time() const { return time_; }
 	int experimtntalHeur() const { return experimentalHeur_; }
 	int experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
-
-	bool operator<(const Node &other) const
-	{
-		return (costFgv() < other.costFgv() ? false : (costFgv() > other.costFgv() ? true :
-			(other.depth() - depth()) > 0));
-	}
-
 };
 
+inline
+bool operator<(const Node& lhs, const Node &rhs)
+{
+	if (lhs.costFgv() < rhs.costFgv()) {
+		return false;
+	}
+
+	if (lhs.costFgv() > rhs.costFgv()) {
+		return true;
+	}
+
+	return lhs.depth() > rhs.depth();
+}
 
 std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);
 
