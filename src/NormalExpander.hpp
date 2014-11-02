@@ -22,7 +22,8 @@ public:
 	NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
 			Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog = false);
 	~NormalExpander();
-	virtual bool expand(const Status &status, std::shared_ptr<Node> base, NodePusher& queue, Dumper::Ptr dumper);
+	void expand(const Status& status, std::shared_ptr<Node> base,
+			NodePusher& queue, Dumper::Ptr dumper) override;
 	int expandedNodes() const { return expandedNodes_; }
 };
 

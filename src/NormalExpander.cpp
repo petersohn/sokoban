@@ -110,11 +110,10 @@ NormalExpander::~NormalExpander()
 		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
 }
 
-bool NormalExpander::expand(const Status &status, std::shared_ptr<Node> base,
+void NormalExpander::expand(const Status& status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper) {
 	InternalExpander exp(status, std::move(base), queue, dumper.get(), *this);
 	exp.expand();
-	return true;
 }
 
 

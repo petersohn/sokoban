@@ -17,8 +17,8 @@ class StonePusher: public Expander {
 public:
 	StonePusher(Expander::Ptr expander, VisitedStateHolder::Ptr visitedStates,
 			HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory);
-	virtual bool expand(const Status &status, std::shared_ptr<Node> base,
-			NodePusher& queue, Dumper::Ptr dumper);
+	void expand(const Status& status, std::shared_ptr<Node> base,
+			NodePusher& queue, Dumper::Ptr dumper) override;
 };
 
 

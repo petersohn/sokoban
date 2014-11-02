@@ -102,22 +102,24 @@ StonePusher::StonePusher(Expander::Ptr expander,
 	assert(calculator_ != NULL);
 }
 
-bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
+void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
 		NodePusher& queue, Dumper::Ptr dumper)
 {
 	InternalPusher sp(*calculator_, *nodeFactory_);
 	Node::Ptr node = sp.pushStones(status, base);
 
 	if (!node) {
-		return expander_->expand(status, std::move(base), queue, std::move(dumper));
+		expander_->expand(status, std::move(base), queue, std::move(dumper));
+		return;
 	}
 
 	Status newStatus(status.table(), *node);
 	VisitedStateInput vsi(newStatus, node->costFgv());
 	if (visitedStates_ && !visitedStates_->checkAndPush(vsi)) {
-		if (dumper)
+		if (dumper) {
 			dumper->reject(node, "already visited");
-		return true;
+		}
+		return;
 	}
 
 	if (dumper) {
@@ -130,10 +132,10 @@ bool StonePusher::expand(const Status &status, std::shared_ptr<Node> base,
 
 	if (node->heur() == 0) {
 		queue.push(node);
-		return true;
+		return;
 	}
 
-	return expander_->expand(newStatus, std::move(node), queue, std::move(dumper));
+	expander_->expand(newStatus, std::move(node), queue, std::move(dumper));
 }
 
 
