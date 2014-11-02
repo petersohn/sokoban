@@ -218,14 +218,12 @@ This expander is always in use.
 
 ### Stone Pusher
 
-If enabled, this expander runs before the normal expander.
+This expander is decorated by another (normal) expander. If enabled, it tries to push stones to the destination, then calls the decorating expander.
 
 1. Find a stone that can be trivially pushed to the destination tile.
 2. Push the stone to the destination tile.
 3. Repeat the previous steps until no more trivial pushes are possible.
-4. If any stones are pushed:
- - Add a node with the new state to the processing queue (if new).
- - Stop processing the current node (skip normal expander)
+4. If any stones are pushed, call the decorating expander with the resulting node. Otherwise, call it with the original node.
 
 A stone can be trivially pushed if both of the following is true:
 - The stone can be moved to the destination tile without moving any other stones.
@@ -339,12 +337,6 @@ The following parameters control preprocessing:
 - `--blocklist-number`: Specifies *n*.
 - `--blocklist-distance`: Specifies *k*.
 - `--thread-num`: Specifies the number of working threads to use.
-
-## Parallelization
-
-Apart from parallel preprocessing, it is possible to use some parallelization for the main search. It can be done with the `--parallel-outer-expand` parameter. However, this usually does not yield good performance, so its usage is not recommended.
-
-The basic concept of parallel expansion is to pick more than one nodes from the queue in the main loop and expand them in parallel. To keep the invariants of the A\* algorithm intact, only expand nodes with the same *cost + heuristics* value parallelly.
 
 
 
