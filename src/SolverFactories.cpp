@@ -35,7 +35,18 @@ NodeQueue::Ptr createPrioQueue()
 NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 {
 	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
-	// always use costFgv as first choice
+	funcs.push_back([](const Node::Ptr& lhs, const Node::Ptr& rhs)
+			{
+				if (lhs->heur() == 0 && rhs->heur() != 0) {
+					return -1;
+				}
+
+				if (rhs->heur() == 0 && lhs->heur() != 0) {
+					return 1;
+				}
+
+				return 0;
+			});
 	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
 	for (const auto& compareMethod: opts.compare_) {
 		CompareByMethodPtr<Node::Ptr>::Fun fun;

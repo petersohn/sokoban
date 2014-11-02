@@ -39,28 +39,6 @@ public:
 	int experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
 };
 
-inline
-bool operator<(const Node& lhs, const Node &rhs)
-{
-	if (lhs.heur() == 0 && rhs.heur() != 0) {
-		return false;
-	}
-
-	if (lhs.heur() != 0 && rhs.heur() == 0) {
-		return true;
-	}
-
-	if (lhs.costFgv() < rhs.costFgv()) {
-		return false;
-	}
-
-	if (lhs.costFgv() > rhs.costFgv()) {
-		return true;
-	}
-
-	return lhs.depth() > rhs.depth();
-}
-
 std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);
 
 inline std::deque<Node::Ptr> pathToRoot(Node::Ptr node) {
