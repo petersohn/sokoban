@@ -5,7 +5,6 @@
 #include "Node.hpp"
 #include "Status/Table.hpp"
 #include "Dumper/Dumper.hpp"
-#include "Mutexes.hpp"
 #include <memory>
 #include <map>
 #include <memory>
@@ -17,7 +16,6 @@ class XDumper: public Dumper {
 	typedef std::map<Node::Ptr, std::shared_ptr<xml::XMLElement> > MapType;
 	MapType elements_;
 	std::string filename_;
-	mutable MutexType xdumperMutex_;
 
 	typedef std::shared_ptr<xml::XMLElement> ElementPtr;
 

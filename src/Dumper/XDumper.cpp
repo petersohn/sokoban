@@ -7,8 +7,7 @@
 
 
 XDumper::XDumper(const char *filename):
-		filename_(filename),
-		MUTEX_DECL(xdumperMutex_)
+		filename_(filename)
 {
 	clear();
 }
@@ -23,7 +22,6 @@ XDumper::ElementPtr XDumper::createDumpElement(const std::string &s) {
 }
 
 void XDumper::initialStatus(const Status &status) {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	std::stringstream ss;
 	dumpStatus(ss, status);
 	elements_[Node::Ptr()]->children().push_back(createDumpElement(ss.str()));
@@ -32,13 +30,11 @@ void XDumper::initialStatus(const Status &status) {
 
 void  XDumper::addNode(const Node::Ptr& node)
 {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	doAddNode(node);
 }
 
 XDumper::ElementPtr XDumper::doAddNode(const Node::Ptr& node)
 {
-	assert(node.get() != NULL);
 	ElementPtr elem(new xml::XMLElement());
 	elem->name("node");
 	std::stringstream ss;
@@ -63,32 +59,26 @@ XDumper::ElementPtr XDumper::getElement(const Node::Ptr& node)
 }
 
 void XDumper::addToSolution(const Node::Ptr& node) {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["part-of-solution"] = "yes";
 }
 
 void XDumper::expand(const Node::Ptr& node) {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["expanded"] = "normal";
 }
 
 void XDumper::startPushing(const Node::Ptr& node) {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["expanded"] = "pushed";
 }
 
 void XDumper::push(const Node::Ptr& node) {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["expanded"] = "push-node";
 }
 
 void XDumper::reject(const Node::Ptr& node, const char *text) {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["rejected"] = text;
 }
 
 void XDumper::clear() {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	elements_.clear();
 	std::shared_ptr<xml::XMLElement> root(new xml::XMLElement());
 	root->name("root-node");
@@ -96,7 +86,6 @@ void XDumper::clear() {
 }
 
 void XDumper::save() {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	std::cerr << elements_.size() << std::endl;
 	MapType::const_iterator it = elements_.find(Node::Ptr());
 	assert(it != elements_.end());
@@ -104,7 +93,6 @@ void XDumper::save() {
 }
 
 void XDumper::dump() const {
-	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	for (MapType::const_iterator it = elements_.begin(); it != elements_.end(); ++it) {
 		std::cerr << "Node" << std::endl;
 		std::cerr << it->second->toString() << std::endl << std::endl;
