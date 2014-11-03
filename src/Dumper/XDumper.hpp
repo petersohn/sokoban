@@ -22,18 +22,18 @@ class XDumper: public Dumper {
 	typedef std::shared_ptr<xml::XMLElement> ElementPtr;
 
 	ElementPtr createDumpElement(const std::string &s);
-	ElementPtr getElement(Node::Ptr node);
-	ElementPtr doAddNode(Node::Ptr node);
+	ElementPtr getElement(const Node::Ptr& node);
+	ElementPtr doAddNode(const Node::Ptr& node);
 public:
 	XDumper(const char *filename);
-	virtual void initialStatus(const Status &status);
-	virtual void addNode(Node::Ptr node);
-	virtual void addToSolution(Node::Ptr node);
-	virtual void expand(Node::Ptr node);
-	virtual void push(Node::Ptr node);
-	virtual void reject(Node::Ptr node, const char *text);
+	void initialStatus(const Status &status) override;
+	void addNode(const Node::Ptr& node) override;
+	void addToSolution(const Node::Ptr& node) override;
+	void expand(const Node::Ptr& node) override;
+	void push(const Node::Ptr& node) override;
+	void reject(const Node::Ptr& node, const char *text) override;
 	void clear();
-	virtual void save();
+	void save() override;
 	void dump() const;
 };
 

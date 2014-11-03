@@ -30,13 +30,13 @@ void XDumper::initialStatus(const Status &status) {
 	table_ = &status.table();
 }
 
-void  XDumper::addNode(Node::Ptr node)
+void  XDumper::addNode(const Node::Ptr& node)
 {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	doAddNode(node);
 }
 
-XDumper::ElementPtr XDumper::doAddNode(Node::Ptr node)
+XDumper::ElementPtr XDumper::doAddNode(const Node::Ptr& node)
 {
 	assert(node.get() != NULL);
 	ElementPtr elem(new xml::XMLElement());
@@ -54,7 +54,7 @@ XDumper::ElementPtr XDumper::doAddNode(Node::Ptr node)
 	return elem;
 }
 
-XDumper::ElementPtr XDumper::getElement(Node::Ptr node)
+XDumper::ElementPtr XDumper::getElement(const Node::Ptr& node)
 {
 	MapType::iterator it = elements_.find(node);
 	if (it == elements_.end())
@@ -62,22 +62,22 @@ XDumper::ElementPtr XDumper::getElement(Node::Ptr node)
 	return it->second;
 }
 
-void XDumper::addToSolution(Node::Ptr node) {
+void XDumper::addToSolution(const Node::Ptr& node) {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["part-of-solution"] = "yes";
 }
 
-void XDumper::expand(Node::Ptr node) {
+void XDumper::expand(const Node::Ptr& node) {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["expanded"] = "normal";
 }
 
-void XDumper::push(Node::Ptr node) {
+void XDumper::push(const Node::Ptr& node) {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["expanded"] = "pushed";
 }
 
-void XDumper::reject(Node::Ptr node, const char *text) {
+void XDumper::reject(const Node::Ptr& node, const char *text) {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["rejected"] = text;
 }
