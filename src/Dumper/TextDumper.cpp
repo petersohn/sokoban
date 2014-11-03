@@ -27,6 +27,11 @@ void TextDumper::expand(const Node::Ptr& node) {
 	dumpNode(file_, *table_, *node, "Expanded");
 }
 
+void TextDumper::startPushing(const Node::Ptr& node) {
+	boost::lock_guard<MutexType> lck(dumperMutex_);
+	dumpNode(file_, *table_, *node, "Pushing");
+}
+
 void TextDumper::push(const Node::Ptr& node) {
 	boost::lock_guard<MutexType> lck(dumperMutex_);
 	dumpNode(file_, *table_, *node, "Pushed out");

@@ -30,6 +30,7 @@ public:
 	void addNode(const Node::Ptr& node) override;
 	void addToSolution(const Node::Ptr& node) override;
 	void expand(const Node::Ptr& node) override;
+	void startPushing(const Node::Ptr& node) override;
 	void push(const Node::Ptr& node) override;
 	void reject(const Node::Ptr& node, const char *text) override;
 	void clear();

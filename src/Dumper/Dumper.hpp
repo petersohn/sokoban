@@ -15,6 +15,7 @@ public:
 	virtual void addNode(const Node::Ptr& node) = 0;
 	virtual void addToSolution(const Node::Ptr& node) = 0;
 	virtual void expand(const Node::Ptr& node) = 0;
+	virtual void startPushing(const Node::Ptr& node) = 0;
 	virtual void push(const Node::Ptr& node) = 0;
 	virtual void reject(const Node::Ptr& node, const char *text) = 0;
 	virtual void save() = 0;

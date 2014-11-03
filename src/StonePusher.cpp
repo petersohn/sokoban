@@ -123,6 +123,10 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
 	}
 
 	if (dumper) {
+		if (base) {
+			dumper->startPushing(base);
+		}
+
 		std::deque<Node::Ptr> path = pathToBase(node, base);
 		for (const auto& node: path) {
 			dumper->push(node);

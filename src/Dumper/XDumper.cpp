@@ -72,9 +72,14 @@ void XDumper::expand(const Node::Ptr& node) {
 	getElement(node)->attributes()["expanded"] = "normal";
 }
 
-void XDumper::push(const Node::Ptr& node) {
+void XDumper::startPushing(const Node::Ptr& node) {
 	boost::lock_guard<MutexType> lck(xdumperMutex_);
 	getElement(node)->attributes()["expanded"] = "pushed";
+}
+
+void XDumper::push(const Node::Ptr& node) {
+	boost::lock_guard<MutexType> lck(xdumperMutex_);
+	getElement(node)->attributes()["expanded"] = "push-node";
 }
 
 void XDumper::reject(const Node::Ptr& node, const char *text) {
