@@ -204,5 +204,71 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
 	tableIteratorUnderTest.wait(false);
 }
 
+BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
+{
+	auto data = createStatus(3, 2, {
+			"y.o",
+			"x..",
+		});
+	const auto& table = *data.first;
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
+	MOCK_EXPECT(checker->check).returns(true);
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oo.",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"o..",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oy.",
+					".o."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".oo",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".o.",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".o.",
+					".oy"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".o.",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".oy",
+					"..o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					".oy"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"...",
+					"yoo"
+				}));
+
+
+	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
+	tableIteratorUnderTest.start(2, heurCalculator, checker);
+	ioService.run();
+	tableIteratorUnderTest.wait(false);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
