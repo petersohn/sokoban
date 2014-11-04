@@ -53,7 +53,6 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
 	return {std::move(table), result};
 }
 
-
 std::pair<std::unique_ptr<Table>, Status>
 loadStatusFromFile(const char *filename) {
 	using namespace std;

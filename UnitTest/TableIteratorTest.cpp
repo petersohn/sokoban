@@ -3,6 +3,7 @@
 #include "MockHeurCalculator.hpp"
 #include "MockChecker.hpp"
 #include "Dumper/DumperFunctions.hpp"
+#include "CreateTestStatus.hpp"
 #include <boost/test/unit_test.hpp>
 #include <vector>
 
@@ -14,16 +15,6 @@ struct TableIteratorFixture {
 	boost::asio::io_service ioService;
 	MOCK_FUNCTOR(action, void(const Status&));
 
-	Status statusWithStones(const Table& table, Point currentPos,
-			const std::vector<Point>& stones)
-	{
-		Status status{table};
-		for (const auto& stone: stones) {
-			status.addStone(stone);
-		}
-		status.currentPos(currentPos);
-		return status;
-	}
 };
 
 BOOST_FIXTURE_TEST_SUITE(TableIteratorTest, TableIteratorFixture)
@@ -38,16 +29,26 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
 	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
 	MOCK_EXPECT(checker->check).returns(true);
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
-				{Point{0, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{2, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oy.",
+					"..."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"yo.",
+					"..."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"y.o",
+					"..."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"y..",
+					".o."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"y..",
+					"..o"
+				}));
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, checker);
@@ -65,12 +66,18 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
 	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
 	MOCK_EXPECT(checker->check).returns(true);
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
-				{Point{0, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oy*",
+					"..*"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"yo*",
+					"..*"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"y.*",
+					".o*"
+				}));
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, checker);
@@ -88,20 +95,34 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
 	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
 	MOCK_EXPECT(checker->check).returns(true);
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
-				{Point{0, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
-				{Point{0, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 0},
-				{Point{1, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{2, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 1},
-				{Point{2, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oy.",
+					".*."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"o..",
+					"y*."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"yo.",
+					".*."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".oy",
+					".*."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".yo",
+					".*."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					".*y"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"y..",
+					".*o"
+				}));
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, checker);
@@ -119,34 +140,62 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
 	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
 	MOCK_EXPECT(checker->check).returns(true);
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
-				{Point{0, 0}, Point{1, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
-				{Point{0, 0}, Point{2, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
-				{Point{0, 0}, Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
-				{Point{0, 0}, Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
-				{Point{0, 0}, Point{2, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 0}, Point{2, 0}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 0}, Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 0},
-				{Point{1, 0}, Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 0}, Point{2, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 0},
-				{Point{1, 0}, Point{2, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{2, 0}, Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 1},
-				{Point{2, 0}, Point{1, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{2, 0}, Point{2, 1}}));
-	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
-				{Point{1, 1}, Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oo.",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"o.o",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"o..",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"oy.",
+					".o."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"o..",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".oo",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".o.",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".o.",
+					".oy"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".o.",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					".oy",
+					"..o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					".oy"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"..o",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(table, {
+					"...",
+					"yoo"
+				}));
 
 
 	TableIterator tableIteratorUnderTest{table, action, 2, 1, 0, ioService};
