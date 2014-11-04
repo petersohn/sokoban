@@ -109,5 +109,51 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
 	tableIteratorUnderTest.wait(false);
 }
 
+BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
+{
+	auto data = createStatus(3, 2, {
+			"y.o",
+			"x..",
+		});
+	const auto& table = *data.first;
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
+	MOCK_EXPECT(checker->check).returns(true);
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
+				{Point{0, 0}, Point{1, 0}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
+				{Point{0, 0}, Point{2, 0}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 1},
+				{Point{0, 0}, Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
+				{Point{0, 0}, Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{1, 0},
+				{Point{0, 0}, Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
+				{Point{1, 0}, Point{2, 0}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
+				{Point{1, 0}, Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 0},
+				{Point{1, 0}, Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
+				{Point{1, 0}, Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 0},
+				{Point{1, 0}, Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
+				{Point{2, 0}, Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{2, 1},
+				{Point{2, 0}, Point{1, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
+				{Point{2, 0}, Point{2, 1}}));
+	MOCK_EXPECT(action).once().with(statusWithStones(table, Point{0, 0},
+				{Point{1, 1}, Point{2, 1}}));
+
+
+	TableIterator tableIteratorUnderTest{table, action, 2, 1, 0, ioService};
+	tableIteratorUnderTest.start(2, heurCalculator, checker);
+	ioService.run();
+	tableIteratorUnderTest.wait(false);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
