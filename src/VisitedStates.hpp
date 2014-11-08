@@ -5,7 +5,6 @@
 #include "Status/State.hpp"
 #include "VisitedStateInfo.hpp"
 #include "Status/Status.hpp"
-#include "Common.hpp"
 #include "Mutexes.hpp"
 #include <unordered_map>
 

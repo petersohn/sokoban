@@ -1,9 +1,9 @@
 #include "Dumper/XDumper.hpp"
 #include "Dumper/DumperFunctions.hpp"
-#include "Common.hpp"
 #include "Status/Status.hpp"
 #include <iostream>
 #include <sstream>
+#include <boost/lexical_cast.hpp>
 
 
 XDumper::XDumper(const char *filename):
@@ -42,9 +42,9 @@ XDumper::ElementPtr XDumper::doAddNode(const Node::Ptr& node)
 	elem->children().push_back(createDumpElement(ss.str()));
 	elem->attributes().insert(make_pair("stone", pointStr(node->from())));
 	elem->attributes().insert(make_pair("d", direction(node->d())));
-	elem->attributes().insert(make_pair("cost", toStr(node->cost())));
-	elem->attributes().insert(make_pair("heur", toStr(node->heur())));
-	elem->attributes().insert(make_pair("costFgv", toStr(node->costFgv())));
+	elem->attributes().insert(make_pair("cost", boost::lexical_cast<std::string>(node->cost())));
+	elem->attributes().insert(make_pair("heur", boost::lexical_cast<std::string>(node->heur())));
+	elem->attributes().insert(make_pair("costFgv", boost::lexical_cast<std::string>(node->costFgv())));
 	elements_[node] = elem;
 	elements_[node->ancestor()]->children().push_back(elem);
 	return elem;

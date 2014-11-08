@@ -3,7 +3,6 @@
 
 #include "QueueInterfaces.hpp"
 #include "Node.hpp"
-#include "Common.hpp"
 #include "Mutexes.hpp"
 #include <queue>
 #include <boost/thread/locks.hpp>

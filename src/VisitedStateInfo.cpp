@@ -2,7 +2,6 @@
 #include "Status/Status.hpp"
 #include "Dumper/DumperFunctions.hpp"
 
-
 VisitedStateInfo::VisitedStateInfo(const Status& status):
 	state_(status.state())
 {

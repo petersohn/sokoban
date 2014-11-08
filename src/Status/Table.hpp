@@ -1,7 +1,6 @@
 #ifndef TABLE_H_
 #define TABLE_H_
 
-#include "Common.hpp"
 #include "Array.hpp"
 #include <memory>
 

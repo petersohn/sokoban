@@ -1,7 +1,6 @@
 #ifndef DUMPERFUNCTIONS_H_
 #define DUMPERFUNCTIONS_H_
 
-#include "Common.hpp"
 #include "Array.hpp"
 #include "Status/Table.hpp"
 #include "Node.hpp"

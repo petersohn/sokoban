@@ -1,7 +1,6 @@
 #ifndef STATUS_H_
 #define STATUS_H_
 
-#include "Common.hpp"
 #include "Array.hpp"
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
@@ -13,6 +12,8 @@
 #include <deque>
 #include <unordered_map>
 #include <ostream>
+
+class Node;
 
 class Status {
 public:

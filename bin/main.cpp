@@ -1,4 +1,3 @@
-#include "Common.hpp"
 #include "Status/Status.hpp"
 #include "Options.hpp"
 #include "Node.hpp"

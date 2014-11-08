@@ -3,7 +3,6 @@
 
 #include "Dumper/Dumper.hpp"
 #include "Status/Table.hpp"
-#include "Common.hpp"
 #include <iostream>
 #include <fstream>
 

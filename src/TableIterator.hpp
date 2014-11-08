@@ -1,7 +1,6 @@
 #ifndef TABLEITERATOR_H_
 #define TABLEITERATOR_H_
 
-#include "Common.hpp"
 #include "Status/Table.hpp"
 #include "Status/Status.hpp"
 #include "Checker.hpp"
