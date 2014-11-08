@@ -5,6 +5,7 @@
 #include "Array.hpp"
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
+#include "FieldType.hpp"
 #include <boost/thread/mutex.hpp>
 #include <memory>
 #include <functional>
@@ -139,7 +140,7 @@ public:
 			fillReachable();
 		return calculatedData_->border_;
 	}
-	FieldType value(Point p) const { return arrayAt<FieldType>(fields_, p, ftWall); }
+	FieldType value(Point p) const { return arrayAt<FieldType>(fields_, p, FieldType::wall); }
 	Point currentPos() const { return currentPos_; }
 
 	bool currentPos(Point p);

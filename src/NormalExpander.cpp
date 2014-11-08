@@ -1,6 +1,7 @@
 #include "NormalExpander.hpp"
 #include "Status/Status.hpp"
 #include "Node.hpp"
+#include "FieldType.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 
@@ -30,7 +31,7 @@ void InternalExpander::expandNode(Point p, Point d)
 	Point pd = p+d, pmd = p-d;
 	if (pmd.x >= 0 && pmd.x < static_cast<int>(status_.width()) &&
 			pmd.y >= 0 && pmd.y < static_cast<int>(status_.height()) &&
-			status_.value(pd) == ftFloor && status_.reachable(pmd))
+			status_.value(pd) == FieldType::floor && status_.reachable(pmd))
 	{
 		Status status(status_);
 		status.currentPos(p);

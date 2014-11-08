@@ -5,6 +5,7 @@
 #include "VisitedStateInfo.hpp"
 #include "Status/floodFill.hpp"
 #include "intersect.hpp"
+#include "FieldType.hpp"
 #include <iostream>
 #include <memory>
 
@@ -66,7 +67,7 @@ bool InternalPusher::pushStone(const Status& status, Point p) {
 bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 	Point pd = p+d;
 	Point pmd = p-d;
-	if (status.value(pmd) != ftFloor || status.value(pd) != ftFloor || !status.reachable(pmd))
+	if (status.value(pmd) != FieldType::floor || status.value(pd) != FieldType::floor || !status.reachable(pmd))
 		return false;
 	Status newStatus(status);
 	if (newStatus.currentPos() == pd)

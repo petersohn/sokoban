@@ -2,6 +2,7 @@
 #define PSEUDOSTATUS_H_
 
 #include "Status/Status.hpp"
+#include "FieldType.hpp"
 
 class PseudoStatus {
 	const Table* table_;
@@ -22,8 +23,8 @@ public:
 	State& state() { return state_; }
 	const State& state() const { return state_; }
 	FieldType value(Point p) const {
-		return table().wall(p) ? ftWall :
-				(state()[p] ? ftStone : ftFloor);
+		return table().wall(p) ? FieldType::wall :
+				(state()[p] ? FieldType::stone : FieldType::floor);
 	}
 	Point& currentPos() { return currentPos_; }
 	Point  currentPos() const { return currentPos_; }

@@ -2,6 +2,7 @@
 #define STATUSUTILS_H_
 
 #include "Status.hpp"
+#include "FieldType.hpp"
 
 class Checker;
 
@@ -22,7 +23,7 @@ inline bool isSubStatus(const Status1& subStatus, const Status2& status)
 template <class Status>
 inline bool isStone(const Status& status, Point  p)
 {
-	return status.value(p) == ftStone;
+	return status.value(p) == FieldType::stone;
 }
 
 

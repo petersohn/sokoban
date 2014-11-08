@@ -17,8 +17,6 @@ class Status;
 class Node;
 class Table;
 
-enum FieldType { ftFloor, ftWall, ftStone };
-
 template<class T>
 inline std::string toStr(const T &t) {
 	return (boost::format("%1%") % t).str();

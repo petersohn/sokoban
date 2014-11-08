@@ -1,4 +1,5 @@
 #include "floodFill.hpp"
+#include "FieldType.hpp"
 #include <vector>
 
 template <typename Action>
@@ -18,7 +19,7 @@ void floodFillImpl(const Status &status, Point p0, Array<bool> &result,
 		if (!arrayAt(result, p, true)) {
 			action(p);
 
-			if (status.value(p) == ftFloor) {
+			if (status.value(p) == FieldType::floor) {
 				result[p] = true;
 				pointsToVisit.push_back(p+Point::p10);
 				pointsToVisit.push_back(p+Point::pm10);
@@ -43,7 +44,7 @@ void floodFill(const Status& status, Point p0, Array<bool>& result,
 
 	floodFillImpl(status, p0, result, [&](Point p)
 		{
-			if (status.value(p) == ftStone && !visitedStones[p]) {
+			if (status.value(p) == FieldType::stone && !visitedStones[p]) {
 				border.push_back(p);
 				visitedStones[p] = true;
 			}
@@ -60,7 +61,7 @@ void floodFill(const Status& status, Point p0, Array<bool>& result,
 
 	floodFillImpl(status, p0, result, [&](Point p)
 		{
-			if (status.value(p) == ftFloor) {
+			if (status.value(p) == FieldType::floor) {
 				minmax.minX = std::min(minmax.minX, p.x);
 				minmax.maxX = std::max(minmax.maxX, p.x);
 				minmax.minY = std::min(minmax.minY, p.y);

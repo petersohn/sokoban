@@ -2,6 +2,7 @@
 #include "Array.hpp"
 #include "Status/Status.hpp"
 #include "Status/floodFill.hpp"
+#include "FieldType.hpp"
 
 bool CorridorChecker::check(const Status& status, Point  p0) const
 {
@@ -10,7 +11,7 @@ bool CorridorChecker::check(const Status& status, Point  p0) const
 	for (p1.x = 0; p1.x < 3; p1.x++)
 		for (p1.y = 0; p1.y < 3; p1.y++) {
 			Point p = p0 + p1 + Point::pm1m1;
-			if (!unchecked[p1] || status.value(p) != ftFloor || status.reachable(p))
+			if (!unchecked[p1] || status.value(p) != FieldType::floor || status.reachable(p))
 				continue;
 			Array<bool> reach(status.width(), status.height(), false);
 			MinMax minmax;
@@ -61,9 +62,9 @@ bool CorridorChecker::checkCorridorEnding(const Status & status,
 {
 	Point p1 = p0 + side;
 	Point pm1 = p0 - side;
-	return status.value(p0) != ftWall &&
-			status.value(p1) == ftFloor &&
-			status.value(pm1) == ftFloor &&
+	return status.value(p0) != FieldType::wall &&
+			status.value(p1) == FieldType::floor &&
+			status.value(pm1) == FieldType::floor &&
 			(calculator_->calculateStone(status, p1) >= 0 ||
 			 calculator_->calculateStone(status, pm1) >= 0);
 }

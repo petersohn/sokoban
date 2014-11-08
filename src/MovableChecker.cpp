@@ -1,4 +1,5 @@
 #include "MovableChecker.hpp"
+#include "FieldType.hpp"
 #include <unordered_set>
 
 class InternalChecker {
@@ -26,11 +27,11 @@ bool InternalChecker::stoneMovable(const Status& status, Point p) {
 
 bool InternalChecker::isMovable(const Status& status, Point  p,
 		int &count) {
-	if (status.value(p) == ftWall)
+	if (status.value(p) == FieldType::wall)
 		return false;
 	if (calculator_.calculateStone(status, p) >= 0)
 			++count;
-	if (status.value(p) == ftFloor)
+	if (status.value(p) == FieldType::floor)
 		return true;
 	if (calculated_.count(p) != 0)
 		return false;

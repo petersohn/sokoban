@@ -43,10 +43,10 @@ void Status::init() {
 	Point p;
 	for (Point  p: arrayRange(table())) {
 		fields_[p] =
-				table().wall(p) ? ftWall : ftFloor;
+				table().wall(p) ? FieldType::wall : FieldType::floor;
 	}
 	for (State::const_iterator it = state_.begin(); it != state_.end(); ++it) {
-		fields_[*it] = ftStone;
+		fields_[*it] = FieldType::stone;
 	}
 }
 
@@ -104,18 +104,18 @@ void Status::fillReachable() const
 }
 
 bool Status::addStone(Point p) {
-	if (value(p) != ftFloor)
+	if (value(p) != FieldType::floor)
 		return false;
-	fields_[p] = ftStone;
+	fields_[p] = FieldType::stone;
 	state_.addStone(p);
 	calculatedData_.reset();
 	return true;
 }
 
 bool Status::removeStone(Point p) {
-	if (value(p) != ftStone)
+	if (value(p) != FieldType::stone)
 		return false;
-	fields_[p] = ftFloor;
+	fields_[p] = FieldType::floor;
 	state_.removeStone(p);
 	calculatedData_.reset();
 	return true;
@@ -136,14 +136,14 @@ bool Status::currentPos(Point  p) {
 }
 
 bool Status::moveStone(Point from, Point to) {
-	if (value(from) != ftStone || value(to) != ftFloor)
+	if (value(from) != FieldType::stone || value(to) != FieldType::floor)
 		return false;
-	fields_[from] = ftFloor;
+	fields_[from] = FieldType::floor;
 	currentPos_ = from;
 	state_.removeStone(from);
 	if (to != table().destination())
 	{
-		fields_[to] = ftStone;
+		fields_[to] = FieldType::stone;
 		state_.addStone(to);
 	}
 	calculatedData_.reset();
@@ -159,7 +159,7 @@ void Status::set(const Node &node) {
 
 bool Status::shiftIter(Point p)
 {
-	if (value(p) == ftFloor && reachable(p)) {
+	if (value(p) == FieldType::floor && reachable(p)) {
 		currentPos_ = p;
 		return true;
 	}

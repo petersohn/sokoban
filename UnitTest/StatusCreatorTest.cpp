@@ -1,6 +1,7 @@
 #include "Status/StatusCreator.hpp"
 #include "Status/Status.hpp"
 #include "Exception.hpp"
+#include "FieldType.hpp"
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(StatusCreatorTest)
@@ -22,7 +23,7 @@ BOOST_AUTO_TEST_CASE(simple_table)
 
 	BOOST_CHECK_EQUAL(&data.second.table(), data.first.get());
 	BOOST_CHECK_EQUAL(data.second.state().size(), 1);
-	BOOST_CHECK_EQUAL(data.second.value(Point{2, 0}), ftStone);
+	BOOST_CHECK_EQUAL(data.second.value(Point{2, 0}), FieldType::stone);
 	BOOST_CHECK_EQUAL(data.second.currentPos(), (Point{2, 1}));
 }
 
@@ -43,7 +44,7 @@ BOOST_AUTO_TEST_CASE(walls)
 
 	BOOST_CHECK_EQUAL(&data.second.table(), data.first.get());
 	BOOST_CHECK_EQUAL(data.second.state().size(), 1);
-	BOOST_CHECK_EQUAL(data.second.value(Point{2, 0}), ftStone);
+	BOOST_CHECK_EQUAL(data.second.value(Point{2, 0}), FieldType::stone);
 	BOOST_CHECK_EQUAL(data.second.currentPos(), (Point{1, 1}));
 }
 

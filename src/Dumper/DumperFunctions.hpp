@@ -5,6 +5,7 @@
 #include "Array.hpp"
 #include "Status/Table.hpp"
 #include "Node.hpp"
+#include "FieldType.hpp"
 #include <iostream>
 #include <string>
 #include <boost/format.hpp>
@@ -73,15 +74,15 @@ void dumpStatus(std::ostream &file, const Status &status,
 				output[p] = 'Y';
 			else if (status.table().destination() == p)
 				output[p] = 'X';
-			else if (status.value(p) == ftWall)
+			else if (status.value(p) == FieldType::wall)
 				output[p] = '*';
-			else if (status.value(p) == ftFloor)
+			else if (status.value(p) == FieldType::floor)
 			{
 				if (highlight != NULL && (*highlight)[p])
 					output[p] = '+';
 				else
 					output[p] = '.';
-			} else if (status.value(p) == ftStone)
+			} else if (status.value(p) == FieldType::stone)
 			{
 				if (highlight != NULL && (*highlight)[p])
 					output[p] = 'O';
