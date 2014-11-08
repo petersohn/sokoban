@@ -4,6 +4,7 @@
 #include "Status/State.hpp"
 #include "VisitedStateInfo.hpp"
 #include "Status/floodFill.hpp"
+#include "intersect.hpp"
 #include <iostream>
 #include <memory>
 
