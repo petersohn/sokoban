@@ -1,5 +1,6 @@
 #include "Status/StatusCreator.hpp"
 #include "Status/Status.hpp"
+#include "Exception.hpp"
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(StatusCreatorTest)

@@ -1,5 +1,6 @@
 #include "Status/StatusCreator.hpp"
 #include "Status/Status.hpp"
+#include "Exception.hpp"
 #include <fstream>
 #include <sstream>
 

@@ -1,4 +1,5 @@
 #include "CreateTestStatus.hpp"
+#include "Exception.hpp"
 
 Status createTestStatus(const Table& table, const std::vector<std::string>& lines)
 {

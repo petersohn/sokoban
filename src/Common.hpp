@@ -17,14 +17,6 @@ class Status;
 class Node;
 class Table;
 
-class SokobanException:public std::exception
-{
-	virtual const char* what() const throw()
-	{
-		return "Sokoban exception";
-	}
-};
-
 struct MinMax {
 	int minX, maxX, minY, maxY;
 };
