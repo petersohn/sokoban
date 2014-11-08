@@ -17,10 +17,6 @@ class Status;
 class Node;
 class Table;
 
-struct MinMax {
-	int minX, maxX, minY, maxY;
-};
-
 enum FieldType { ftFloor, ftWall, ftStone };
 
 template<class T>
