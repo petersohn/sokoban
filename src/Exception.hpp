@@ -1,14 +1,10 @@
 #ifndef SRC_EXCEPTION_HPP
 #define SRC_EXCEPTION_HPP
 
-#include <exception>
+#include <stdexcept>
 
-class SokobanException:public std::exception
-{
-	virtual const char* what() const throw()
-	{
-		return "Sokoban exception";
-	}
+struct SokobanException: public std::logic_error {
+	using std::logic_error::logic_error;
 };
 
 

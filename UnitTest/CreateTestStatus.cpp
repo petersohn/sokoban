@@ -27,7 +27,7 @@ Status createTestStatus(const Table& table, const std::vector<std::string>& line
 			break;
 	}
 	if (!currentPosOK)
-		throw SokobanException();
+		throw SokobanException("Current position not given");
 	return result;
 }
 

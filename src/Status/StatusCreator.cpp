@@ -47,8 +47,15 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
 		if (++p.y >= height)
 			break;
 	}
-	if (stoneNum == 0 || !startPosOK || !destinationOK)
-		throw SokobanException();
+	if (stoneNum == 0) {
+		throw SokobanException("No stones");
+	}
+	if (!startPosOK) {
+		throw SokobanException("Starting position not given");
+	}
+	if (!destinationOK) {
+		throw SokobanException("Destination not given");
+	}
 	Status result(*table, state);
 	result.currentPos(table->startingPoint());
 	return {std::move(table), result};
