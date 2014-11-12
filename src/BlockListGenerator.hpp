@@ -46,7 +46,7 @@ private:
 	HeurCalculator::Ptr calculator_;
 	HeurCalculator::Ptr incrementalCalculator_;
 	Checker::Ptr checker_;
-	IndexedStatusList<int> blockList_;
+	IndexedStatusList blockList_;
 	IncrementList heurList_;
 	const Table* table_;
 	Options options_;

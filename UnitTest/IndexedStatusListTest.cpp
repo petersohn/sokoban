@@ -4,7 +4,7 @@
 #include <boost/test/unit_test.hpp>
 
 struct IndexedStatusListTestFixture {
-	IndexedStatusList<int> indexedStatusListUnderTest;
+	IndexedStatusList indexedStatusListUnderTest;
 	std::unique_ptr<Table> table;
 
 	IndexedStatusListTestFixture()
@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_contains_one_status)
 			".o.",
 			"..o",
 			"y.."});
-	indexedStatusListUnderTest.add(Status{status}, 0);
+	indexedStatusListUnderTest.add(Status{status});
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{1, 0}));
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{2, 1}));
 }
@@ -54,9 +54,9 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_contains_more_statuses)
 			"...",
 			".o.",
 			"yoo"});
-	indexedStatusListUnderTest.add(Status{status1}, 0);
-	indexedStatusListUnderTest.add(Status{status2}, 0);
-	indexedStatusListUnderTest.add(Status{status3}, 0);
+	indexedStatusListUnderTest.add(Status{status1});
+	indexedStatusListUnderTest.add(Status{status2});
+	indexedStatusListUnderTest.add(Status{status3});
 
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status1, Point{1, 0}));
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status1, Point{2, 1}));
@@ -83,9 +83,9 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_mismatch)
 			"...",
 			".o.",
 			"yoo"});
-	indexedStatusListUnderTest.add(Status{status1}, 0);
-	indexedStatusListUnderTest.add(Status{status2}, 0);
-	indexedStatusListUnderTest.add(Status{status3}, 0);
+	indexedStatusListUnderTest.add(Status{status1});
+	indexedStatusListUnderTest.add(Status{status2});
+	indexedStatusListUnderTest.add(Status{status3});
 
 	auto notExistingStatus = createTestStatus(*table, {
 			".o.",
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_reachability)
 			".oy",
 			"..o",
 			"..."});
-	indexedStatusListUnderTest.add(Status{statusOk}, 0);
+	indexedStatusListUnderTest.add(Status{statusOk});
 
 	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(statusNok, Point{1, 0}));
 	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(statusNok, Point{2, 1}));

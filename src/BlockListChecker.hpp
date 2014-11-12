@@ -6,9 +6,9 @@
 
 class BlockListChecker: public Checker {
 private:
-	IndexedStatusList<int> blockList_;
+	IndexedStatusList blockList_;
 public:
-	BlockListChecker(IndexedStatusList<int> blockList):
+	BlockListChecker(IndexedStatusList blockList):
 			blockList_(std::move(blockList))
 	{
 	}

@@ -96,7 +96,7 @@ void BlockListGenerator::init(const Table& table)
 			dump_ << calculationInfo->dump_.str();
 
 			for (const auto& status: calculationInfo->blockList_) {
-				blockList_.add(status, 0);
+				blockList_.add(status);
 			}
 
 			heurList_.reserve(heurList_.size() +

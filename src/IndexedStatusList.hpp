@@ -11,10 +11,9 @@
 #include "Status/StatusUtils.hpp"
 #include "Status/State.hpp"
 
-template <class Value>
 class IndexedStatusList {
 private:
-	typedef std::unordered_multimap<Point, std::pair<Status, Value>> IndexType;
+	typedef std::unordered_multimap<Point, Status> IndexType;
 
 	IndexType index_;
 	size_t size_;
@@ -28,10 +27,10 @@ public:
 	IndexedStatusList(IndexedStatusList&&) = default;
 	IndexedStatusList& operator=(IndexedStatusList&&) = default;
 
-	void add(const Status& status, const Value& value)
+	void add(const Status& status)
 	{
 		for (Point  p: status.state()) {
-			index_.insert({p, {status, value}});
+			index_.insert({p, status});
 		}
 		++size_;
 	}
@@ -44,23 +43,11 @@ public:
 	{
 		RangeType range = index_.equal_range(p);
 		for (const auto& value: range) {
-			if (isSubStatus(value.second.first, status)) {
+			if (isSubStatus(value.second, status)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	std::vector<Value> getSubStatusValues(const Status& status, Point p) const
-	{
-		std::vector<Value> result;
-		RangeType range = index_.equal_range(p);
-		for (const auto& value: range) {
-			if (isSubStatus(value.second.first, status)) {
-				result.push_back(value.second.second);
-			}
-		}
-		return result;
 	}
 
 	size_t size() const { return size_; }
