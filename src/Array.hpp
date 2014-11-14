@@ -22,12 +22,15 @@
 
 template<typename T>
 class Array {
+	typedef std::vector<T> Data;
 	std::size_t width_, height_;
-	std::vector<T> data_;
+	Data data_;
 public:
 	typedef T valueType;
-	typedef typename std::vector<T>::reference reference;
-	typedef typename std::vector<T>::const_reference const_reference;
+	typedef typename Data::reference reference;
+	typedef typename Data::const_reference const_reference;
+	typedef typename Data::iterator iterator;
+	typedef typename Data::const_iterator const_iterator;
 
 	Array(): width_(0), height_(0) {}
 	Array(std::size_t width, std::size_t height, const T& defValue = T()):
@@ -82,6 +85,13 @@ public:
 	{
 		return data_ == other.data_;
 	}
+
+	iterator begin() { return data_.begin(); }
+	iterator end() { return data_.end(); }
+	const_iterator begin() const { return data_.begin(); }
+	const_iterator end() const { return data_.end(); }
+	const_iterator cbegin() const { return data_.cbegin(); }
+	const_iterator cend() const { return data_.cend(); }
 };
 
 template<typename T>

@@ -23,8 +23,8 @@ BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 				touched = true;
 		}
 	} while (touched);
-	for (Point  p: arrayRange(table)) {
-		distances_[p]--;
+	for (auto& distance: distances_) {
+		distance--;
 	}
 }
 
