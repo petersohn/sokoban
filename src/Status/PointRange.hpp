@@ -14,13 +14,11 @@ public:
 private:
 	Point begin_;
 	Point end_;
-	int dx() const
-	{
-		return end_.x > begin_.x ? 1 : -1;
-	}
-	int dy() const
-	{
-		return end_.y > begin_.y ? 1 : -1;
+	int width_, diffX_, diffY_;
+	std::size_t size_;
+
+	Point calculate(int n) const {
+		return Point{begin_.x + diffX_ * n % width_, begin_.y + diffY_ * n / width_};
 	}
 public:
 	typedef Point value_type;
@@ -28,7 +26,11 @@ public:
 
 	PointRange(Point  begin, Point  end):
 		begin_(begin),
-		end_(end)
+		end_(end),
+		width_(std::abs(end.x - begin.x)),
+		diffX_(end.x < begin.x ? -1 : 1),
+		diffY_(end.y < begin.y ? -1 : 1),
+		size_(std::abs((end.y - begin.y) * (end.x - begin.x)))
 	{}
 
 	iterator begin() const;
@@ -45,7 +47,7 @@ public:
 		if (begin_ == end_) {
 			BOOST_THROW_EXCEPTION(std::out_of_range("back() cannot be called on empty PointRange."));
 		}
-		return Point(end_.x - dx(), end_.y - dy());
+		return calculate(size_ - 1);
 	}
 }; // class PointRange
 
@@ -57,50 +59,43 @@ class PointRangeIterator: public boost::iterator_facade<
 
 
 	const PointRange& owner_;
-	Point p_;
+	int n_;
 
 	friend class PointRange;
 	friend class boost::iterator_core_access;
 
-	PointRangeIterator(const PointRange& owner, Point  p):
+	PointRangeIterator(const PointRange& owner, int n):
 		owner_(owner),
-		p_(p)
-	{}
-	Point  dereference() const { return p_; }
+		n_(n)
+	{
+	}
+
+	Point  dereference() const { return owner_.calculate(n_); }
 	void increment()
 	{
-		p_.x += owner_.dx();
-		if (p_.x == owner_.end_.x) {
-			p_.x = owner_.begin_.x;
-			p_.y += owner_.dy();
-		}
+		++n_;
 	}
 	void decrement()
 	{
-		if (p_.x == owner_.begin_.x) {
-			p_.x = owner_.end_.x - owner_.dx();
-			p_.y -= owner_.dy();
-		} else {
-			p_.x -= owner_.dx();
-		}
+		--n_;
 	}
 
 	bool equal(const PointRangeIterator& other) const
 	{
-		return p_ == other.p_;
+		return n_ == other.n_;
 	}
 }; // class PointRangeIterator
 
 inline
 PointRange::iterator PointRange::begin() const
 {
-	return iterator(*this, begin_);
+	return iterator(*this, 0);
 }
 
 inline
 PointRange::iterator PointRange::end() const
 {
-	return iterator(*this, Point(begin_.x, end_.y));
+	return iterator(*this, size_);
 }
 
 
