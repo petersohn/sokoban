@@ -8,7 +8,7 @@
 #include <iostream>
 #include "util/LazyArgumentEnum.hpp"
 
-LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, (none)(text)(xml))
+LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, (none)(text)(xml)(statistics))
 LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
 	(none)(vector)(decisionTree))
 

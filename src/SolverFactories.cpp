@@ -14,6 +14,7 @@
 #include "CompareQueue.hpp"
 #include "Dumper/TextDumper.hpp"
 #include "Dumper/XDumper.hpp"
+#include "Dumper/StatisticsDumper.hpp"
 #include "NodeFactory.hpp"
 #include <vector>
 #include <functional>
@@ -100,7 +101,7 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 			calculator, checker, nodeFactory, log);
 
 	if (options_.useStonePusher_) {
-		expander = std::make_shared<StonePusher>(expander, visitedStates, 
+		expander = std::make_shared<StonePusher>(expander, visitedStates,
 				calculator, nodeFactory);
 	}
 
@@ -155,6 +156,8 @@ Dumper::Ptr createDumperFromOptions(const Options & opts)
 		return Dumper::Ptr(new TextDumper("dump.dump"));
 	case DumpStyle::xml:
 		return Dumper::Ptr(new XDumper("dump.xml"));
+	case DumpStyle::statistics:
+		return Dumper::Ptr(new StatisticsDumper("dump.csv"));
 	default:
 		return Dumper::Ptr();
 	}
