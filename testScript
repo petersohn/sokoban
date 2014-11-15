@@ -5,7 +5,10 @@ output="$2"
 
 shift 2
 
-rm -f "$output"
+if [ -e "$output" ]; then
+	echo "Error: output file \"$output\" already exists" >&2
+	exit 1
+fi
 
 while read file; do
     if [ -z "$file" ]; then
