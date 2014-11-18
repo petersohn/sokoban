@@ -38,10 +38,6 @@ class Status;
 typedef Pusher<std::shared_ptr<Node> > NodePusher;
 typedef Queue<std::shared_ptr<Node> > NodeQueue;
 
-typedef std::pair<const Status&, int> VisitedStateInput;
-typedef Pusher<VisitedStateInput> VisitedStatePusher;
-typedef Holder<VisitedStateInput> VisitedStateHolder;
-
 typedef std::function<NodeQueue::Ptr()> QueueFactory;
 
 #endif /* INTERFACES_H_ */

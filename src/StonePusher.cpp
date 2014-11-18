@@ -3,6 +3,7 @@
 #include "Status/Status.hpp"
 #include "Status/State.hpp"
 #include "VisitedStateInfo.hpp"
+#include "VisitedStates.hpp"
 #include "Status/floodFill.hpp"
 #include "intersect.hpp"
 #include "FieldType.hpp"
@@ -93,7 +94,7 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 
 
 StonePusher::StonePusher(Expander::Ptr expander,
-		VisitedStateHolder::Ptr visitedStates,
+		std::shared_ptr<VisitedStates> visitedStates,
 		HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory):
 		expander_(std::move(expander)),
 		visitedStates_(visitedStates),
@@ -117,7 +118,7 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
 
 	Status newStatus(status.table(), *node);
 	VisitedStateInput vsi(newStatus, node->costFgv());
-	if (visitedStates_ && !visitedStates_->checkAndPush(vsi)) {
+	if (!visitedStates_->checkAndPush(vsi)) {
 		if (dumper) {
 			dumper->reject(node, "already visited");
 		}

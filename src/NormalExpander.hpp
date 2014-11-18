@@ -8,10 +8,12 @@
 #include "NodeFactory.hpp"
 #include "Mutexes.hpp"
 
+class VisitedStates;
+
 class NormalExpander: public Expander {
 	friend class InternalExpander;
 
-	VisitedStateHolder::Ptr visitedStates_;
+	std::shared_ptr<VisitedStates> visitedStates_;
 	HeurCalculator::Ptr calculator_;
 	Checker::Ptr checker_;
 	NodeFactory::Ptr nodeFactory_;
@@ -19,8 +21,10 @@ class NormalExpander: public Expander {
 	bool enableLog_;
 	int expandedNodes_;
 public:
-	NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
-			Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog = false);
+	NormalExpander(std::shared_ptr<VisitedStates> vs,
+			HeurCalculator::Ptr calculator,
+			Checker::Ptr ch, NodeFactory::Ptr nodeFactory,
+			bool enableLog = false);
 	~NormalExpander();
 	void expand(const Status& status, std::shared_ptr<Node> base,
 			NodePusher& queue, Dumper::Ptr dumper) override;

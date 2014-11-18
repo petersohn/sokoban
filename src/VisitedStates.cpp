@@ -18,6 +18,3 @@ bool VisitedStates::checkAndPush(const VisitedStateInput &elem)
 	return false;
 }
 
-size_t VisitedStates::size() const {
-	return visitedStates_.size();
-}

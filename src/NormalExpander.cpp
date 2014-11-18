@@ -2,6 +2,7 @@
 #include "Status/Status.hpp"
 #include "Node.hpp"
 #include "FieldType.hpp"
+#include "VisitedStates.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 
@@ -48,7 +49,7 @@ void InternalExpander::expandNode(Point p, Point d)
 			}
 		}
 		VisitedStateInput vsi(status, node->costFgv());
-		if (owner_.visitedStates_ && !owner_.visitedStates_->checkAndPush(vsi)) {
+		if (!owner_.visitedStates_->checkAndPush(vsi)) {
 			if (dumper_)
 				dumper_->reject(node, "already visited");
 			return;
@@ -91,7 +92,8 @@ void InternalExpander::expand()
 
 
 
-NormalExpander::NormalExpander(VisitedStateHolder::Ptr vs, HeurCalculator::Ptr calculator,
+NormalExpander::NormalExpander(
+		std::shared_ptr<VisitedStates> vs, HeurCalculator::Ptr calculator,
 		Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog):
 		visitedStates_(std::move(vs)),
 		calculator_(std::move(calculator)),

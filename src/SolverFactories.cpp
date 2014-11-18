@@ -95,7 +95,7 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 			bool log,
 			HeurCalculator::Ptr experimentalCalculator)
 {
-	VisitedStateHolder::Ptr visitedStates(new VisitedStates());
+	auto visitedStates = std::make_shared<VisitedStates>();
 	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator, experimentalCalculator));
 	Expander::Ptr expander = std::make_shared<NormalExpander>(visitedStates,
 			calculator, checker, nodeFactory, log);
