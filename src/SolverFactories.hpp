@@ -1,7 +1,6 @@
 #ifndef SOLVERFACTORIES_H_
 #define SOLVERFACTORIES_H_
 
-#include "QueueInterfaces.hpp"
 #include "Expander.hpp"
 #include "HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"

@@ -1,7 +1,6 @@
 #ifndef PRIONODEQUEUE_H_
 #define PRIONODEQUEUE_H_
 
-#include "QueueInterfaces.hpp"
 #include "Node.hpp"
 #include "Mutexes.hpp"
 #include "CompareQueue.hpp"

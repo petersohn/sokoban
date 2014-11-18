@@ -2,7 +2,6 @@
 #define EXPANDER_H_
 
 #include <memory>
-#include "QueueInterfaces.hpp"
 #include "Dumper/Dumper.hpp"
 
 class Status;

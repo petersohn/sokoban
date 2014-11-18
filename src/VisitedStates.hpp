@@ -1,7 +1,6 @@
 #ifndef VISITEDSTATES_H_
 #define VISITEDSTATES_H_
 
-#include "QueueInterfaces.hpp"
 #include "Status/State.hpp"
 #include "VisitedStateInfo.hpp"
 #include "Status/Status.hpp"

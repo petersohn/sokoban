@@ -1,7 +1,6 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
-#include "QueueInterfaces.hpp"
 #include "Expander.hpp"
 #include "Dumper/Dumper.hpp"
 #include "PrioNodeQueue.hpp"
