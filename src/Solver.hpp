@@ -4,6 +4,7 @@
 #include "QueueInterfaces.hpp"
 #include "Expander.hpp"
 #include "Dumper/Dumper.hpp"
+#include "PrioNodeQueue.hpp"
 #include <deque>
 #include <functional>
 #include <memory>

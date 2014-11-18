@@ -8,7 +8,9 @@
 #include "Options.hpp"
 #include "Checker.hpp"
 
-NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts);
+class PrioNodeQueue;
+
+std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts);
 Dumper::Ptr createDumperFromOptions(const Options &opts);
 
 

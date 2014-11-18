@@ -3,18 +3,19 @@
 #include "Node.hpp"
 #include "util/ThreadPool.hpp"
 #include "Dumper/DumperFunctions.hpp"
+#include "PrioNodeQueue.hpp"
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>
 
 class InternalSolver {
-	NodeQueue::Ptr queue_;
+	std::shared_ptr<PrioNodeQueue> queue_;
 	Expander::Ptr expander_;
 	Dumper::Ptr dumper_;
 	int costFgv_;
 	Node::Ptr currentNode_;
 public:
-	InternalSolver(NodeQueue::Ptr queue, Expander::Ptr expander,
+	InternalSolver(std::shared_ptr<PrioNodeQueue> queue, Expander::Ptr expander,
 			Dumper::Ptr dumper):
 		queue_(std::move(queue)),
 		expander_(std::move(expander)),

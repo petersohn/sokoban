@@ -3,18 +3,19 @@
 #include "Node.hpp"
 #include "FieldType.hpp"
 #include "VisitedStates.hpp"
+#include "PrioNodeQueue.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 
 class InternalExpander {
 	const Status &status_;
 	Node::Ptr base_;
-	NodePusher& queue_;
+	PrioNodeQueue& queue_;
 	Dumper* dumper_;
 	NormalExpander& owner_;
 public:
 	InternalExpander(const Status& status, std::shared_ptr<Node> base,
-			NodePusher& queue, Dumper* dumper, NormalExpander &owner):
+			PrioNodeQueue& queue, Dumper* dumper, NormalExpander &owner):
 				status_(status),
 				base_(std::move(base)),
 				queue_(queue),
@@ -114,7 +115,7 @@ NormalExpander::~NormalExpander()
 }
 
 void NormalExpander::expand(const Status& status, std::shared_ptr<Node> base,
-		NodePusher& queue, Dumper::Ptr dumper) {
+		PrioNodeQueue& queue, Dumper::Ptr dumper) {
 	InternalExpander exp(status, std::move(base), queue, dumper.get(), *this);
 	exp.expand();
 }

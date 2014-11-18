@@ -7,12 +7,13 @@
 
 class Status;
 class Node;
+class PrioNodeQueue;
 
 class Expander {
 public:
 	typedef std::shared_ptr<Expander> Ptr;
 	// returns true if no more expansions should be made
-	virtual void expand(const Status&, std::shared_ptr<Node>, NodePusher&,
+	virtual void expand(const Status&, std::shared_ptr<Node>, PrioNodeQueue&,
 			Dumper::Ptr) = 0;
 	virtual ~Expander() {}
 };

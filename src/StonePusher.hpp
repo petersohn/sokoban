@@ -8,6 +8,7 @@
 #include <deque>
 
 class State;
+class PrioNodeQueue;
 class VisitedStates;
 
 class StonePusher: public Expander {
@@ -20,7 +21,7 @@ public:
 			std::shared_ptr<VisitedStates> visitedStates,
 			HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory);
 	void expand(const Status& status, std::shared_ptr<Node> base,
-			NodePusher& queue, Dumper::Ptr dumper) override;
+			PrioNodeQueue& queue, Dumper::Ptr dumper) override;
 };
 
 

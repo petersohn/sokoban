@@ -7,6 +7,7 @@
 #include "Status/floodFill.hpp"
 #include "intersect.hpp"
 #include "FieldType.hpp"
+#include "PrioNodeQueue.hpp"
 #include <iostream>
 #include <memory>
 
@@ -106,7 +107,7 @@ StonePusher::StonePusher(Expander::Ptr expander,
 }
 
 void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
-		NodePusher& queue, Dumper::Ptr dumper)
+		PrioNodeQueue& queue, Dumper::Ptr dumper)
 {
 	InternalPusher sp(*calculator_, *nodeFactory_);
 	Node::Ptr node = sp.pushStones(status, base);

@@ -21,19 +21,19 @@
 
 namespace {
 
-NodeQueue::Ptr createPrioQueue()
+std::shared_ptr<PrioNodeQueue> createPrioQueue()
 {
 	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
 	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
 	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::depth, true));
-	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(
-			funcs.begin(), funcs.end())));
+	return std::make_shared<PrioNodeQueue>(
+			CompareQueue<Node::Ptr>{funcs.begin(), funcs.end()});
 }
 
 
 }
 
-NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
+std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts)
 {
 	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
 	funcs.push_back([](const Node::Ptr& lhs, const Node::Ptr& rhs)
@@ -60,8 +60,8 @@ NodeQueue::Ptr createPrioQueueFromOptions(const Options &opts)
 			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun,
 						compareMethod.reverse));
 	}
-	return NodeQueue::Ptr(new PrioNodeQueue<CompareQueue<Node::Ptr> >(CompareQueue<Node::Ptr>(
-			funcs.begin(), funcs.end())));
+	return std::make_shared<PrioNodeQueue>(
+			CompareQueue<Node::Ptr>{funcs.begin(), funcs.end()});
 }
 
 HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
