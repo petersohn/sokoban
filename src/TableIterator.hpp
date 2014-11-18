@@ -6,6 +6,7 @@
 #include "Checker.hpp"
 #include "Mutexes.hpp"
 #include "TimeMeter.hpp"
+#include "ComplexChecker.hpp"
 #include <boost/asio/io_service.hpp>
 #include <functional>
 
@@ -16,7 +17,7 @@ public:
 private:
 	const Table* table_;
 	HeurCalculator::Ptr heurCalculator_;
-	Checker::Ptr checker_;
+	ComplexChecker checker_;
 	Action action_;
 	std::size_t maxDistance_;
 	std::size_t iters_, solved_;
@@ -74,8 +75,8 @@ public:
 	}
 
 	void start(std::size_t numStones,
-			const HeurCalculator::Ptr& heurCalculator,
-			const Checker::Ptr& checker);
+			HeurCalculator::Ptr heurCalculator,
+			ComplexChecker checker);
 	void wait(bool print);
 };
 

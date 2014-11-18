@@ -10,13 +10,13 @@ std::unique_ptr<Node<Key, T>>
 buildNode(
 		const typename Node<Key, T>::ValueList& valueList,
 		const PointList& pointList,
-		const Checker::Ptr& checker,
+		boost::optional<ComplexChecker> checker,
 		int maxDepth,
 		int numThreads
 		)
 {
 	std::cerr << "Building decision tree\n";
-	return detail::NodeBuilder(maxDepth, checker, numThreads).buildNode<Key, T>(
+	return detail::NodeBuilder(maxDepth, std::move(checker), numThreads).buildNode<Key, T>(
 			valueList,
 			pointList);
 } // buildNode

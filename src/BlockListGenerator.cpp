@@ -14,7 +14,7 @@
 
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver,
-		HeurCalculator::Ptr calculator, Checker::Ptr checker,
+		HeurCalculator::Ptr calculator, ComplexChecker checker,
 		const Options& options):
 	solver_(std::move(solver)),
 	calculator_(std::move(calculator)),
@@ -87,9 +87,9 @@ void BlockListGenerator::init(const Table& table)
 		std::cerr << "Stones = " << n << std::endl;
 		{
 			util::ThreadPoolRunner runner(threadPool_);
-			tableIterator.start(n, calculator_,
-					std::make_shared<ComplexChecker>(std::vector<Checker::Ptr>{
-						checker_, checker()}));
+			ComplexChecker actualChecker{checker_};
+			actualChecker.append(checker());
+			tableIterator.start(n, calculator_, actualChecker);
 			tableIterator.wait(true);
 		}
 		for (const auto& calculationInfo: calculationInfos_) {
@@ -149,13 +149,17 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 		bool useChecker)
 {
 	assert(table_);
+	boost::optional<ComplexChecker> checker;
+	if (useChecker) {
+		checker = ComplexChecker{checker_};
+	}
 	return std::make_shared<DecisionTreeHeurCalculator>(
 			calculator_,
 			DecisionTreeHeurListFactory{
 				*table_,
 				heurList_ | boost::adaptors::transformed(
 						IncrementInfo::getHeurInfo),
-				useChecker ? checker_ : Checker::Ptr(),
+				checker,
 				maxDepth,
 				options_.numThreads_});
 }

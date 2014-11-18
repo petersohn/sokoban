@@ -6,6 +6,7 @@
 #include "Dumper/Dumper.hpp"
 #include "Options.hpp"
 #include "Checker.hpp"
+#include "ComplexChecker.hpp"
 
 class PrioNodeQueue;
 
@@ -31,7 +32,7 @@ public:
 	HeurCalculator::Ptr createAdvancedHeurCalcularor();
 	Expander::Ptr createExpander(
 			HeurCalculator::Ptr calculator,
-			Checker::Ptr checker,
+			ComplexChecker checker,
 			bool log,
 			HeurCalculator::Ptr experimentalCalculator = HeurCalculator::Ptr());
 	std::vector<Checker::Ptr> createBasicCheckers(const HeurCalculator::Ptr& calculator);

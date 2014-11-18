@@ -52,7 +52,7 @@ public:
 	DecisionTreeHeurListFactory(
 			const Table& table,
 			const HeurListType& heurList,
-			const Checker::Ptr& checker,
+			boost::optional<ComplexChecker> checker,
 			std::size_t maxDepth,
 			std::size_t numThreads)
 	{
@@ -68,7 +68,7 @@ public:
 		decisionTree_ = decisionTree::buildNode<PseudoStatus, int>(
 				convertedHeurList,
 				pointList(table),
-				checker,
+				std::move(checker),
 				maxDepth,
 				numThreads);
 		std::cerr << "Processor time: " <<

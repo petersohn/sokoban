@@ -4,7 +4,6 @@
 #include "NormalExpander.hpp"
 #include "StonePusher.hpp"
 #include "ComplexStrategy.hpp"
-#include "ComplexChecker.hpp"
 #include "MovableChecker.hpp"
 #include "CorridorChecker.hpp"
 #include "BlockListGenerator.hpp"
@@ -72,7 +71,7 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 		[this, basicHeurCalculator]() {
 			return createExpander(
 					basicHeurCalculator,
-					std::make_shared<ComplexChecker>(createBasicCheckers(basicHeurCalculator)),
+					ComplexChecker{createBasicCheckers(basicHeurCalculator)},
 					false);
 		}));
 	return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
@@ -91,14 +90,14 @@ std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const
 
 Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 			HeurCalculator::Ptr calculator,
-			Checker::Ptr checker,
+			ComplexChecker checker,
 			bool log,
 			HeurCalculator::Ptr experimentalCalculator)
 {
 	auto visitedStates = std::make_shared<VisitedStates>();
 	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator, experimentalCalculator));
 	Expander::Ptr expander = std::make_shared<NormalExpander>(visitedStates,
-			calculator, checker, nodeFactory, log);
+			calculator, std::move(checker), nodeFactory, log);
 
 	if (options_.useStonePusher_) {
 		expander = std::make_shared<StonePusher>(expander, visitedStates,
@@ -117,7 +116,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 	HeurCalculator::Ptr experimentalCalculator;
 	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
 	if (options_.blockListStones_ > 1) {
-		Checker::Ptr checker = std::make_shared<ComplexChecker>(checkers);
+		ComplexChecker checker{checkers};
 		Solver::Ptr solver(new Solver(
 				std::bind(&createPrioQueueFromOptions, options_),
 				[this, calculator, checker]() {
@@ -144,7 +143,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 //	experimentalCalculator = calculator;
 	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
 			calculator,
-			std::make_shared<ComplexChecker>(checkers),
+			ComplexChecker{checkers},
 			log_,
 			experimentalCalculator);
 }

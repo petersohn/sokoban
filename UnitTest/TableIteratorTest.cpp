@@ -2,6 +2,7 @@
 #include "Status/StatusCreator.hpp"
 #include "MockHeurCalculator.hpp"
 #include "MockChecker.hpp"
+#include "ComplexChecker.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "CreateTestStatus.hpp"
 #include <boost/test/unit_test.hpp>
@@ -51,7 +52,7 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
 				}));
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
-	tableIteratorUnderTest.start(1, heurCalculator, checker);
+	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
 }
@@ -80,7 +81,7 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
 				}));
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
-	tableIteratorUnderTest.start(1, heurCalculator, checker);
+	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
 }
@@ -125,7 +126,7 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
 				}));
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
-	tableIteratorUnderTest.start(1, heurCalculator, checker);
+	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
 }
@@ -199,7 +200,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
 
 
 	TableIterator tableIteratorUnderTest{table, action, 2, 1, 0, ioService};
-	tableIteratorUnderTest.start(2, heurCalculator, checker);
+	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
 }
@@ -265,7 +266,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
 
 
 	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
-	tableIteratorUnderTest.start(2, heurCalculator, checker);
+	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
 }

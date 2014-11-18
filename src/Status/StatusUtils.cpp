@@ -1,5 +1,5 @@
 #include "Status/StatusUtils.hpp"
-#include "Checker.hpp"
+#include "ComplexChecker.hpp"
 #include "Status/IsStatusPossible.hpp"
 
 std::vector<Status> getPartitions(const Table& table, const State &state,
@@ -42,7 +42,7 @@ std::vector<Status> getPartitions(const Table& table, const State &state,
 	return result;
 }
 
-bool checkStatus(const Checker& checker, const Status& status)
+bool checkStatus(const ComplexChecker& checker, const Status& status)
 {
 	for (Point pp: status.state()) {
 		if (!checker.check(status, pp)) {
@@ -52,7 +52,7 @@ bool checkStatus(const Checker& checker, const Status& status)
 	return true;
 }
 
-bool checkState(const Checker& checker, const Table& table, const State& state)
+bool checkState(const ComplexChecker& checker, const Table& table, const State& state)
 {
 	std::vector<Status> partitions = getPartitions(table, state, 0);
 	for (const Status& status: partitions) {

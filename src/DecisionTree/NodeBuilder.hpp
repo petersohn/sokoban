@@ -14,7 +14,7 @@
 #include "DecisionTree/SplittingValue.hpp"
 #include "Dumper/IndentedOutput.hpp"
 #include "Status/StatusUtils.hpp"
-#include "Checker.hpp"
+#include "ComplexChecker.hpp"
 #include "util/ThreadPool.hpp"
 #include "Mutexes.hpp"
 
@@ -78,7 +78,7 @@ namespace detail {
 		int maxDepth_;
 		ProgressBar progressBar_;
 		int progress_;
-		Checker::Ptr checker_;
+		boost::optional<ComplexChecker> checker_;
 		util::ThreadPool threadPool_;
 		int numThreads_;
 
@@ -290,11 +290,11 @@ namespace detail {
 
 		} // doBuildNode
 	public:
-		NodeBuilder(int maxDepth, const Checker::Ptr& checker, int numThreads):
+		NodeBuilder(int maxDepth, boost::optional<ComplexChecker> checker, int numThreads):
 			maxDepth_(maxDepth),
 			progressBar_(static_cast<int>(exp2(maxDepth))),
 			progress_(0),
-			checker_(checker),
+			checker_(std::move(checker)),
 			numThreads_(numThreads),
 			maxLength_(0),
 			minLength_(0),

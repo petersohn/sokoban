@@ -4,12 +4,12 @@
 #include "Status.hpp"
 #include "FieldType.hpp"
 
-class Checker;
+class ComplexChecker;
 
 std::vector<Status> getPartitions(const Table& table, const State &state,
 			std::size_t maxDepth);
-bool checkStatus(const Checker& checker, const Status& status);
-bool checkState(const Checker& checker, const Table& table, const State& state);
+bool checkStatus(const ComplexChecker& checker, const Status& status);
+bool checkState(const ComplexChecker& checker, const Table& table, const State& state);
 
 
 

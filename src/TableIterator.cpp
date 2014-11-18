@@ -21,7 +21,7 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 			if (heur < 0) {
 				continue;
 			}
-			if (!checkStatus(*checker_, status)) {
+			if (!checkStatus(checker_, status)) {
 				continue;
 			}
 			if (stones == 0) {
@@ -73,12 +73,12 @@ void TableIterator::doWork(const std::vector<Status>& statuses)
 }
 
 void TableIterator::start(std::size_t numStones,
-			const HeurCalculator::Ptr& heurCalculator,
-			const Checker::Ptr& checker)
+			HeurCalculator::Ptr heurCalculator,
+			ComplexChecker checker)
 {
 	assert(iterationState_ == IterationState::idle);
-	heurCalculator_ = heurCalculator;
-	checker_ = checker;
+	heurCalculator_ = std::move(heurCalculator);
+	checker_ = std::move(checker);
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
 	iterationState_ = IterationState::filling;

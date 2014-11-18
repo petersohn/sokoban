@@ -2,7 +2,7 @@
 #define NORMALEXPANDER_H_
 
 #include "Expander.hpp"
-#include "Checker.hpp"
+#include "ComplexChecker.hpp"
 #include "HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
@@ -15,7 +15,7 @@ class NormalExpander: public Expander {
 
 	std::shared_ptr<VisitedStates> visitedStates_;
 	HeurCalculator::Ptr calculator_;
-	Checker::Ptr checker_;
+	ComplexChecker checker_;
 	NodeFactory::Ptr nodeFactory_;
 	int maxDepth_;
 	bool enableLog_;
@@ -23,7 +23,7 @@ class NormalExpander: public Expander {
 public:
 	NormalExpander(std::shared_ptr<VisitedStates> vs,
 			HeurCalculator::Ptr calculator,
-			Checker::Ptr ch, NodeFactory::Ptr nodeFactory,
+			ComplexChecker ch, NodeFactory::Ptr nodeFactory,
 			bool enableLog = false);
 	~NormalExpander();
 	void expand(const Status& status, std::shared_ptr<Node> base,

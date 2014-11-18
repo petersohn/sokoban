@@ -43,9 +43,9 @@ void InternalExpander::expandNode(Point p, Point d)
 		Node::Ptr node =
 				owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
 		if (pd != status.table().destination()) {
-			if (owner_.checker_ && !owner_.checker_->check(status, pd)) {
+			if (!owner_.checker_.check(status, pd)) {
 				if (dumper_)
-					dumper_->reject(node, owner_.checker_->errorMessage());
+					dumper_->reject(node, owner_.checker_.errorMessage());
 				return;
 			}
 		}
@@ -95,7 +95,7 @@ void InternalExpander::expand()
 
 NormalExpander::NormalExpander(
 		std::shared_ptr<VisitedStates> vs, HeurCalculator::Ptr calculator,
-		Checker::Ptr ch, NodeFactory::Ptr nodeFactory, bool enableLog):
+		ComplexChecker ch, NodeFactory::Ptr nodeFactory, bool enableLog):
 		visitedStates_(std::move(vs)),
 		calculator_(std::move(calculator)),
 		checker_(std::move(ch)),
@@ -105,7 +105,6 @@ NormalExpander::NormalExpander(
 		expandedNodes_(0)
 {
 	assert(calculator_.get() != NULL);
-	assert(checker_.get() != NULL);
 }
 
 NormalExpander::~NormalExpander()

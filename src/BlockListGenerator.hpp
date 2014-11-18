@@ -6,6 +6,7 @@
 #include "Dumper/DumperFunctions.hpp"
 #include "util/ThreadPool.hpp"
 #include "Checker.hpp"
+#include "ComplexChecker.hpp"
 #include "HeurInfo.hpp"
 #include "Options.hpp"
 #include <fstream>
@@ -45,7 +46,7 @@ private:
 	Solver::Ptr solver_;
 	HeurCalculator::Ptr calculator_;
 	HeurCalculator::Ptr incrementalCalculator_;
-	Checker::Ptr checker_;
+	ComplexChecker checker_;
 	IndexedStatusList blockList_;
 	IncrementList heurList_;
 	const Table* table_;
@@ -74,7 +75,7 @@ private:
 	}
 public:
 	BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
-			Checker::Ptr checker, const Options& options);
+			ComplexChecker checker, const Options& options);
 	Checker::Ptr checker();
 	HeurCalculator::Ptr vectorHeurCalculator();
 	HeurCalculator::Ptr decisionTreeHeurCalculator(std::size_t maxDepth, bool useChecker);

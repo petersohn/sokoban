@@ -4,19 +4,58 @@
 #include "Checker.hpp"
 #include <vector>
 
-class ComplexChecker: public Checker {
+class ComplexChecker {
 	typedef std::vector<Checker::Ptr> ContainerType;
 	ContainerType funcs_;
 #ifndef NO_UNSAFE_DIAGNOSTICS
 	mutable const char *lastError_;
 #endif
 public:
+	ComplexChecker() = default;
+
 	template<class Range>
 	ComplexChecker(const Range& range):
 		funcs_(range.begin(), range.end())
 	{}
-	bool check(const Status &status, Point p0) const override;
-	const char* errorMessage() const override;
+	ComplexChecker(const std::initializer_list<Checker::Ptr>& range):
+		funcs_(range.begin(), range.end())
+	{}
+
+	ComplexChecker(const ComplexChecker&) = default;
+	ComplexChecker& operator=(const ComplexChecker&) = default;
+	ComplexChecker(ComplexChecker&&) = default;
+	ComplexChecker& operator=(ComplexChecker&&) = default;
+
+	void append(Checker::Ptr checker)
+	{
+		funcs_.push_back(std::move(checker));
+	}
+
+	bool check(const Status &status, Point p0) const
+	{
+#ifndef NO_UNSAFE_DIAGNOSTICS
+		lastError_ = "";
+#endif
+		for (const auto& func: funcs_) {
+			assert(func.get() != NULL);
+			if (!func->check(status, p0)) {
+#ifndef NO_UNSAFE_DIAGNOSTICS
+				lastError_ = func->errorMessage();
+#endif
+				return false;
+			}
+		}
+		return true;
+	}
+
+	const char* errorMessage() const
+	{
+#ifndef NO_UNSAFE_DIAGNOSTICS
+		return lastError_;
+#else
+		return "check failed";
+#endif
+	}
 };
 
 #endif /* COMPLEXCHECKER_H_ */
