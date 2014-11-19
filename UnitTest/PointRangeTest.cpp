@@ -36,9 +36,7 @@ BOOST_AUTO_TEST_CASE(SinglePointRange)
 	BOOST_CHECK(++it == range.end());
 }
 
-BOOST_AUTO_TEST_SUITE(InRange)
-
-BOOST_AUTO_TEST_CASE(ForwardForward)
+BOOST_AUTO_TEST_CASE(InRange)
 {
 	Point begin(2,2);
 	Point end(5,7);
@@ -55,13 +53,9 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	}
 }
 
-BOOST_AUTO_TEST_SUITE_END() // InRange
-
 BOOST_AUTO_TEST_SUITE(Iterators)
 
-BOOST_AUTO_TEST_SUITE(PrePlus)
-
-BOOST_AUTO_TEST_CASE(ForwardForward)
+BOOST_AUTO_TEST_CASE(PrePlus)
 {
 	Point begin(2,2);
 	Point end(4,5);
@@ -76,11 +70,7 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	BOOST_CHECK(++it == range.end());
 }
 
-BOOST_AUTO_TEST_SUITE_END() // PrePlus
-
-BOOST_AUTO_TEST_SUITE(PreMinus)
-
-BOOST_AUTO_TEST_CASE(ForwardForward)
+BOOST_AUTO_TEST_CASE(PreMinus)
 {
 	Point begin(2,2);
 	Point end(4,5);
@@ -95,11 +85,7 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	BOOST_CHECK_EQUAL(*--it, Point(2,2));
 }
 
-BOOST_AUTO_TEST_SUITE_END() // PreMinus
-
-BOOST_AUTO_TEST_SUITE(PostPlus)
-
-BOOST_AUTO_TEST_CASE(ForwardForward)
+BOOST_AUTO_TEST_CASE(PostPlus)
 {
 	Point begin(2,2);
 	Point end(4,5);
@@ -113,11 +99,8 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	BOOST_CHECK_EQUAL(*it++, Point(3,4));
 	BOOST_CHECK(it == range.end());
 }
-BOOST_AUTO_TEST_SUITE_END() // PostPlus
 
-BOOST_AUTO_TEST_SUITE(PostMinus)
-
-BOOST_AUTO_TEST_CASE(ForwardForward)
+BOOST_AUTO_TEST_CASE(PostMinus)
 {
 	Point begin(2,2);
 	Point end(4,5);
@@ -131,7 +114,6 @@ BOOST_AUTO_TEST_CASE(ForwardForward)
 	BOOST_CHECK_EQUAL(*it--, Point(3,2));
 	BOOST_CHECK_EQUAL(*it, Point(2,2));
 }
-BOOST_AUTO_TEST_SUITE_END() // PostMinus
 
 BOOST_AUTO_TEST_SUITE_END() // Iterators
 
