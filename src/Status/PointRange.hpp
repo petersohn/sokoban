@@ -14,11 +14,11 @@ public:
 private:
 	Point begin_;
 	Point end_;
-	int width_, diffX_, diffY_;
+	int width_;
 	std::size_t size_;
 
 	Point calculate(int n) const {
-		return Point{begin_.x + diffX_ * n % width_, begin_.y + diffY_ * n / width_};
+		return Point{begin_.x + n % width_, begin_.y + n / width_};
 	}
 public:
 	typedef Point value_type;
@@ -27,11 +27,12 @@ public:
 	PointRange(Point  begin, Point  end):
 		begin_(begin),
 		end_(end),
-		width_(std::abs(end.x - begin.x)),
-		diffX_(end.x < begin.x ? -1 : 1),
-		diffY_(end.y < begin.y ? -1 : 1),
-		size_(std::abs((end.y - begin.y) * (end.x - begin.x)))
-	{}
+		width_(end.x - begin.x),
+		size_((end.y - begin.y) * width_)
+	{
+		assert(end.x >= begin.x);
+		assert(end.y >= begin.y);
+	}
 
 	iterator begin() const;
 	iterator end() const;
