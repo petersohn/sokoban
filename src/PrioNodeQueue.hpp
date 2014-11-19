@@ -8,11 +8,10 @@
 #include <boost/thread/locks.hpp>
 
 class PrioNodeQueue {
-	using Compare = CompareQueue<Node::Ptr>;
-	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, Compare> queue_;
+	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, CompareQueue> queue_;
 public:
-	PrioNodeQueue(Compare compare):
-		queue_(compare)
+	PrioNodeQueue(CompareQueue queue):
+		queue_(std::move(queue))
 	{}
 
 	void push(const Node::Ptr &node) { queue_.push(node); }

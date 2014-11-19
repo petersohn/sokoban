@@ -7,21 +7,11 @@
 #include <unordered_map>
 #include <iostream>
 #include "util/LazyArgumentEnum.hpp"
+#include "Compare.hpp"
 
 LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, (none)(text)(xml)(statistics))
 LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
 	(none)(vector)(decisionTree))
-
-enum class CompareMethod {time = 1, heur, depth};
-
-struct Compare {
-	CompareMethod type;
-	bool reverse;
-	Compare(): type(CompareMethod::time), reverse(false) {}
-	Compare(CompareMethod type, bool reverse):
-		type(type), reverse(reverse)
-	{}
-};
 
 inline
 bool operator==(const Compare& lhs, const Compare& rhs) {

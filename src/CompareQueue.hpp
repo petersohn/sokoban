@@ -1,68 +1,70 @@
-#ifndef COMPAREQUEUE_H_
-#define COMPAREQUEUE_H_
+#ifndef SRC_COMPAREQUEUE_HPP
+#define SRC_COMPAREQUEUE_HPP
 
-#include "ComplexStrategy.hpp"
 #include <utility>
-#include <boost/lambda/lambda.hpp>
+#include "Node.hpp"
+#include "Compare.hpp"
 
-template<class T>
 class CompareQueue {
 public:
 private:
-	typedef ComplexStrategy<std::function<int(const T&, const T&)> > StrategyType;
-	StrategyType strategy_;
+	std::vector<Compare> compares;
 public:
-	typedef typename StrategyType::FuncType FuncType;
+	CompareQueue() = default;
 
-	template<class Iterator>
-	CompareQueue(Iterator first, Iterator last):
-			strategy_(first, last,
-					boost::lambda::_2,
-					boost::lambda::_1 != 0,
-					0)
+	CompareQueue(std::vector<Compare> compares):
+		compares(std::move(compares))
 	{
 	}
 
-	bool operator()(const T& first, const T& second) {
-		return strategy_.execute(first, second) > 0;
+	CompareQueue(const CompareQueue&) = default;
+	CompareQueue& operator=(const CompareQueue&) = default;
+	CompareQueue(CompareQueue&&) = default;
+	CompareQueue& operator=(CompareQueue&&) = default;
+
+	bool operator()(const std::shared_ptr<Node>& first,
+			const std::shared_ptr<Node>& second) {
+
+		if (first->heur() == 0 && second->heur() != 0) {
+			return false;
+		}
+
+		if (second->heur() == 0 && first->heur() != 0) {
+			return true;
+		}
+
+		int value = first->costFgv() - second->costFgv();
+		for (const auto& compare: compares) {
+			if (value != 0) {
+				break;
+			}
+
+			Node* lhs;
+			Node* rhs;
+
+			if (compare.reverse) {
+				lhs = second.get();
+				rhs = first.get();
+			} else {
+				lhs = first.get();
+				rhs = second.get();
+			}
+
+			switch (compare.type) {
+			case CompareMethod::heur:
+				value = lhs->heur() - rhs->heur();
+				break;
+			case CompareMethod::depth:
+				value = lhs->depth() - rhs->depth();
+				break;
+			case CompareMethod::time:
+				value = lhs->time() - rhs->time();
+				break;
+			}
+		}
+
+		return value > 0;
 	}
 };
 
-template<class T>
-class CompareByMethod {
-	typedef std::function<int(const T&)> Fun;
-
-	Fun method_; // ha-ha
-	bool backwards_;
-public:
-	CompareByMethod(Fun method, bool backwards = false):
-		method_(method),
-		backwards_(backwards)
-	{}
-	int operator()(const T &a, const T &b) {
-		return backwards_ ?
-				method_(b) - method_(a) :
-				method_(a) - method_(b);
-	}
-};
-
-template<class Ptr>
-class CompareByMethodPtr {
-public:
-	typedef std::function<int(const typename Ptr::element_type&)> Fun;
-private:
-	Fun method_; // ha-ha
-	bool backwards_;
-public:
-	CompareByMethodPtr(Fun method, bool backwards = false):
-		method_(method),
-		backwards_(backwards)
-	{}
-	int operator()(Ptr a, Ptr b) {
-		return backwards_ ?
-				method_(*b) - method_(*a) :
-				method_(*a) - method_(*b);
-	}
-};
-
-#endif /* COMPAREQUEUE_H_ */
+#endif /* SRC_COMPAREQUEUE_HPP */

@@ -3,7 +3,6 @@
 #include "PrioNodeQueue.hpp"
 #include "NormalExpander.hpp"
 #include "StonePusher.hpp"
-#include "ComplexStrategy.hpp"
 #include "MovableChecker.hpp"
 #include "CorridorChecker.hpp"
 #include "BlockListGenerator.hpp"
@@ -22,11 +21,8 @@ namespace {
 
 std::shared_ptr<PrioNodeQueue> createPrioQueue()
 {
-	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
-	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
-	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::depth, true));
-	return std::make_shared<PrioNodeQueue>(
-			CompareQueue<Node::Ptr>{funcs.begin(), funcs.end()});
+	std::vector<Compare> compares{{CompareMethod::depth, true}};
+	return std::make_shared<PrioNodeQueue>(CompareQueue{std::move(compares)});
 }
 
 
@@ -34,33 +30,7 @@ std::shared_ptr<PrioNodeQueue> createPrioQueue()
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts)
 {
-	std::vector<CompareQueue<Node::Ptr>::FuncType> funcs;
-	funcs.push_back([](const Node::Ptr& lhs, const Node::Ptr& rhs)
-			{
-				if (lhs->heur() == 0 && rhs->heur() != 0) {
-					return -1;
-				}
-
-				if (rhs->heur() == 0 && lhs->heur() != 0) {
-					return 1;
-				}
-
-				return 0;
-			});
-	funcs.push_back(CompareByMethodPtr<Node::Ptr>(&Node::costFgv, false));
-	for (const auto& compareMethod: opts.compare_) {
-		CompareByMethodPtr<Node::Ptr>::Fun fun;
-		switch (compareMethod.type) {
-		case CompareMethod::heur: fun = &Node::heur; break;
-		case CompareMethod::depth: fun = &Node::depth; break;
-		case CompareMethod::time: fun = &Node::time; break;
-		}
-		if (fun)
-			funcs.push_back(CompareByMethodPtr<Node::Ptr>(fun,
-						compareMethod.reverse));
-	}
-	return std::make_shared<PrioNodeQueue>(
-			CompareQueue<Node::Ptr>{funcs.begin(), funcs.end()});
+	return std::make_shared<PrioNodeQueue>(CompareQueue{opts.compare_});
 }
 
 HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
