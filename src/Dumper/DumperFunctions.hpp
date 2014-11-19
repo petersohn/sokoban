@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 
 template<class T>
 void dumpArray(std::ostream &file, const Array<T> table,
@@ -33,7 +34,7 @@ void dumpArray(std::ostream &file, const Array<T> table,
 	Array<std::string> txts(table.width(), table.height());
 	size_t maxlen = 0;
 	for (Point  p: arrayRange(table)) {
-		txts[p] = (boost::format("%1%") % table[p]).str();
+		txts[p] = boost::lexical_cast<std::string>(table[p]);
 		maxlen = std::max(maxlen, txts[p].size());
 	}
 	// leave a space between characters

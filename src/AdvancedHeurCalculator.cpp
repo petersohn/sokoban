@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 #include <string>
 #include <algorithm>
 
@@ -52,7 +53,7 @@ void AdvancedStoneCalculator::init(const Table& table)
 		dump[p] =
 				partitions_[p].empty() ? "#" :
 				partitions_[p].size() > 1 ? "?" :
-				(boost::format("%d") % partitions_[p][0].heur).str();
+				boost::lexical_cast<std::string>(partitions_[p][0].heur);
 	}
 	if (useDumper_) {
 		dumper.printText("Heuristics table:");
@@ -72,7 +73,7 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
 {
 	State state;
 	state.addStone(p);
-	std::vector<Status> parts = getPartitions(table, state, 
+	std::vector<Status> parts = getPartitions(table, state,
 			reverseSearchMaxDepth_);
 	for (Status& status: parts) {
 		Partition partition(table.width(), table.height());

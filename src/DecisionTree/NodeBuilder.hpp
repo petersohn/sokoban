@@ -3,7 +3,6 @@
 
 #include <boost/range/algorithm.hpp>
 #include <boost/range/adaptors.hpp>
-#include <boost/format.hpp>
 #include <boost/optional.hpp>
 #include <boost/thread.hpp>
 #include <cstdlib>
