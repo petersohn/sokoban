@@ -3,46 +3,46 @@
 #include <unordered_set>
 
 class InternalChecker {
+	const Status& status_;
 	const HeurCalculator& calculator_;
 	std::unordered_set<Point> calculated_;
-	bool isMovable(const Status& status, Point  p,
-		int &count);
+	bool isMovable(Point p, int &count);
 public:
-	InternalChecker(const HeurCalculator& calculator):
+	InternalChecker(const Status& status, const HeurCalculator& calculator):
+		status_(status),
 		calculator_(calculator)
 	{}
-	bool stoneMovable(const Status& status, Point p);
+	bool stoneMovable(Point p);
 };
 
-bool InternalChecker::stoneMovable(const Status& status, Point p) {
+bool InternalChecker::stoneMovable(Point p) {
 	calculated_.insert(p);
 	int count = 0;
-	if (isMovable(status, p+Point::p10, count) &&
-			isMovable(status, p+Point::pm10, count) && count > 0)
+	if (isMovable(p+Point::p10, count) &&
+			isMovable(p+Point::pm10, count) && count > 0)
 		return true;
 	count = 0;
-	return (isMovable(status, p+Point::p01, count) &&
-			isMovable(status, p+Point::p0m1, count) && count > 0);
+	return (isMovable(p+Point::p01, count) &&
+			isMovable(p+Point::p0m1, count) && count > 0);
 }
 
-bool InternalChecker::isMovable(const Status& status, Point  p,
-		int &count) {
-	if (status.value(p) == FieldType::wall)
+bool InternalChecker::isMovable(Point p, int &count) {
+	if (status_.value(p) == FieldType::wall)
 		return false;
-	if (calculator_.calculateStone(status, p) >= 0)
+	if (calculator_.calculateStone(status_, p) >= 0)
 			++count;
-	if (status.value(p) == FieldType::floor)
+	if (status_.value(p) == FieldType::floor)
 		return true;
 	if (calculated_.count(p) != 0)
 		return false;
-	return stoneMovable(status, p);
+	return stoneMovable(p);
 }
 
 
 
 bool MovableChecker::check(const Status& status, Point p) const {
-	InternalChecker ch(*calculator_);
-	return ch.stoneMovable(status, p);
+	InternalChecker ch(status, *calculator_);
+	return ch.stoneMovable(p);
 }
 
 const char* MovableChecker::errorMessage() const {
