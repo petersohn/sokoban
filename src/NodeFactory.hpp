@@ -23,13 +23,13 @@ public:
 	Node::Ptr createNode(
 			const Status & status,
 			const MoveDescriptor& moveDescriptor,
-			const Node::Ptr& ans)
+			const Node::Ptr& ancestor)
 	{
 		return std::make_shared<Node>(
-				status.state(), moveDescriptor, ans, 1,
-				calculator_->calculateStatus(status, &moveDescriptor, ans),
+				status.state(), moveDescriptor, ancestor, 1,
+				calculator_->calculateStatus(status, &moveDescriptor, ancestor),
 				experimentalCalculator_ ?
-						experimentalCalculator_->calculateStatus(status, &moveDescriptor, ans) :
+						experimentalCalculator_->calculateStatus(status, &moveDescriptor, ancestor) :
 						0,
 				++numNodes_);
 	}

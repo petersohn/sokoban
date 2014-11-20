@@ -6,23 +6,23 @@ using namespace std;
 //{
 //}
 
-Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ans,
+Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancestor,
 		int c, int heur, int experimentalHeur, int time):
-	ancestor_(ans),
+	ancestor_(ancestor),
 	state_(stones),
 	heur_(heur),
 	experimentalHeur_(experimentalHeur),
 	moveDescriptor_(moveDescriptor),
 	time_(time)
 {
-	if (ans.get() == NULL)
+	if (ancestor.get() == NULL)
 	{
 		depth_ = 0;
 		cost_ = c;
 	} else
 	{
-		depth_ = ans->depth_ + 1;
-		cost_ = ans->cost_ + c;
+		depth_ = ancestor->depth_ + 1;
+		cost_ = ancestor->cost_ + c;
 	}
 }
 

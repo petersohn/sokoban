@@ -22,7 +22,7 @@ private:
 	int time_;
 public:
 //	Node();
-	Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ans,
+	Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancestor,
 			int c, int heur, int experimentalHeur, int time);
 	int heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
