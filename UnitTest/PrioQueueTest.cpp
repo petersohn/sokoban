@@ -44,6 +44,25 @@ BOOST_AUTO_TEST_CASE(add_and_pop_one_value)
 	BOOST_CHECK_EQUAL(queueUnderTest.size(), 0);
 }
 
+BOOST_AUTO_TEST_CASE(add_and_pop_more_values)
+{
+	std::vector<std::shared_ptr<int>> values = {
+		std::make_shared<int>(1),
+		std::make_shared<int>(5),
+		std::make_shared<int>(-5),
+		std::make_shared<int>(2)};
+
+	for (const auto& value: values) {
+		queueUnderTest.push(value);
+	}
+
+	BOOST_CHECK_EQUAL(queueUnderTest.pop().get(), values[2].get());
+	BOOST_CHECK_EQUAL(queueUnderTest.pop().get(), values[0].get());
+	BOOST_CHECK_EQUAL(queueUnderTest.pop().get(), values[3].get());
+	BOOST_CHECK_EQUAL(queueUnderTest.pop().get(), values[1].get());
+	BOOST_CHECK_EQUAL(queueUnderTest.pop().get(), (int*)nullptr);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
