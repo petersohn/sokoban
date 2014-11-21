@@ -32,6 +32,21 @@ BOOST_AUTO_TEST_CASE(zero_heur_always_comes_first)
 	CHECK_NODE_LESS(zeroHeurNode, nonZeroHeurNode);
 }
 
+BOOST_AUTO_TEST_CASE(less_heur_plus_cost_nodes_come_first)
+{
+	auto rootNode1 = nodeFactory.createNode({}, 5); // 5
+	auto rootNode2 = nodeFactory.createNode({}, 10); // 10
+	auto node1 = nodeFactory.createNode(rootNode1, 3); // 4
+	auto node2 = nodeFactory.createNode(node1, 7); // 9
+
+	CHECK_NODE_LESS(node1, rootNode1);
+	CHECK_NODE_LESS(node1, rootNode2);
+	CHECK_NODE_LESS(node1, node2);
+	CHECK_NODE_LESS(rootNode1, node2);
+	CHECK_NODE_LESS(rootNode1, rootNode2);
+	CHECK_NODE_LESS(node2, rootNode2);
+}
+
 BOOST_AUTO_TEST_SUITE_END() // EmptyQueue
 
 BOOST_AUTO_TEST_SUITE_END() // CompareQueueTest
