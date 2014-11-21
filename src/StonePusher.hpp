@@ -6,9 +6,9 @@
 #include "Expander.hpp"
 #include "NodeFactory.hpp"
 #include <deque>
+#include "PrioNodeQueueFwd.hpp"
 
 class State;
-class PrioNodeQueue;
 class VisitedStates;
 
 class StonePusher: public Expander {

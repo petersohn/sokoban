@@ -6,7 +6,6 @@
 #include "Compare.hpp"
 
 class CompareQueue {
-public:
 private:
 	std::vector<Compare> compares;
 public:

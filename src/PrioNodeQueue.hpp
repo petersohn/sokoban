@@ -1,41 +1,9 @@
-#ifndef PRIONODEQUEUE_H_
-#define PRIONODEQUEUE_H_
+#ifndef SRC_PRIONODEQUEUE_HPP
+#define SRC_PRIONODEQUEUE_HPP
 
 #include "Node.hpp"
-#include "Mutexes.hpp"
 #include "CompareQueue.hpp"
-#include <queue>
-#include <boost/thread/locks.hpp>
+#include "PrioQueue.hpp"
+#include "PrioNodeQueueFwd.hpp"
 
-class PrioNodeQueue {
-	std::priority_queue<Node::Ptr, std::vector<Node::Ptr>, CompareQueue> queue_;
-public:
-	PrioNodeQueue(CompareQueue queue):
-		queue_(std::move(queue))
-	{}
-
-	void push(const Node::Ptr &node) { queue_.push(node); }
-
-	Node::Ptr pop()
-	{
-		if (queue_.empty())
-			return Node::Ptr();
-		Node::Ptr result = queue_.top();
-		queue_.pop();
-		return result;
-	}
-
-	Node::Ptr peek() const
-	{
-		if (queue_.empty())
-			return Node::Ptr();
-		Node::Ptr result = queue_.top();
-		return result;
-	}
-
-	size_t size() const { return queue_.size(); }
-};
-
-typedef std::function<std::shared_ptr<PrioNodeQueue>()> QueueFactory;
-
-#endif /* PRIONODEQUEUE_H_ */
+#endif /* SRC_PRIONODEQUEUE_HPP */

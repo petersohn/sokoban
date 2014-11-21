@@ -7,8 +7,7 @@
 #include "Options.hpp"
 #include "Checker.hpp"
 #include "ComplexChecker.hpp"
-
-class PrioNodeQueue;
+#include "PrioNodeQueueFwd.hpp"
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts);
 Dumper::Ptr createDumperFromOptions(const Options &opts);

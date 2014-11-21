@@ -3,10 +3,10 @@
 
 #include <memory>
 #include "Dumper/Dumper.hpp"
+#include "PrioNodeQueueFwd.hpp"
 
 class Status;
 class Node;
-class PrioNodeQueue;
 
 class Expander {
 public:
