@@ -2,7 +2,6 @@
 #define UNITTEST_FAKENODEFACTORY_HPP
 
 #include "Node.hpp"
-#include "Status/Status.hpp"
 #include <memory>
 
 class FakeNodeFactory {
@@ -10,14 +9,10 @@ class FakeNodeFactory {
 public:
 	FakeNodeFactory() = default;
 
-	Node::Ptr createNode(
-			const Status& status,
-			const MoveDescriptor& moveDescriptor,
-			const Node::Ptr& ancestor,
-			int heur)
+	Node::Ptr createNode( const Node::Ptr& ancestor, int heur)
 	{
 		return std::make_shared<Node>(
-				status.state(), moveDescriptor, ancestor, 1,
+				State{}, MoveDescriptor{Point{0, 0}, Point{0, 0}}, ancestor, 1,
 				heur, 0, ++numNodes_);
 	}
 };
