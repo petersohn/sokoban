@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(earlier_nodes_come_first_when_costFgv_is_equal)
 		auto rootNode1 = nodeFactory.createNode({}, 3);
 		auto node1 = nodeFactory.createNode(rootNode1, 2);
 		auto rootNode2 = nodeFactory.createNode({}, 3);
-		auto node2 = nodeFactory.createNode(node1, 2);
+		auto node2 = nodeFactory.createNode(node1, 1);
 
 		CHECK_NODE_LESS(rootNode1, node1);
 		CHECK_NODE_LESS(rootNode1, rootNode2);
@@ -101,7 +101,51 @@ BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_time)
 		CHECK_NODE_LESS(rootNode1, node1);
 }
 
-BOOST_AUTO_TEST_SUITE_END() // EmptyQueue
+BOOST_AUTO_TEST_SUITE_END() // ForwardTime
+
+struct BackwardTimeFixture: CompareQueueTestFixture {
+	CompareQueue compareQueueUnderTest{{{CompareMethod::time, true}}};
+};
+
+BOOST_FIXTURE_TEST_SUITE(BackwardTime, BackwardTimeFixture)
+
+BOOST_AUTO_TEST_CASE(zero_heur_always_comes_first)
+{
+	zeroHeurAlwaysComesFirst(compareQueueUnderTest);
+}
+
+BOOST_AUTO_TEST_CASE(less_heur_plus_cost_nodes_come_first)
+{
+	lessHeurPlusCostNodesComeFirst(compareQueueUnderTest);
+}
+
+BOOST_AUTO_TEST_CASE(later_nodes_come_first_when_costFgv_is_equal)
+{
+		auto rootNode1 = nodeFactory.createNode({}, 3);
+		auto node1 = nodeFactory.createNode(rootNode1, 2);
+		auto rootNode2 = nodeFactory.createNode({}, 3);
+		auto node2 = nodeFactory.createNode(node1, 1);
+
+		CHECK_NODE_LESS(node2, rootNode1);
+		CHECK_NODE_LESS(node2, node1);
+		CHECK_NODE_LESS(node2, rootNode2);
+		CHECK_NODE_LESS(rootNode2, rootNode1);
+		CHECK_NODE_LESS(rootNode2, node1);
+		CHECK_NODE_LESS(node1, rootNode1);
+}
+
+BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_time)
+{
+		auto rootNode1 = nodeFactory.createNode({}, 3);
+		auto node1 = nodeFactory.createNode(rootNode1, 2);
+		auto rootNode2 = nodeFactory.createNode({}, 1);
+
+		CHECK_NODE_LESS(rootNode2, rootNode1);
+		CHECK_NODE_LESS(rootNode2, node1);
+		CHECK_NODE_LESS(node1, rootNode1);
+}
+
+BOOST_AUTO_TEST_SUITE_END() // BackwardTime
 
 BOOST_AUTO_TEST_SUITE_END() // CompareQueueTest
 
