@@ -1,11 +1,26 @@
 #include "CompareQueue.hpp"
 #include "FakeNodeFactory.hpp"
 #include <boost/test/unit_test.hpp>
+#include <boost/preprocessor/seq/seq.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/seq/for_each_i.hpp>
+#include <boost/preprocessor/seq/rest_n.hpp>
+
 
 #define CHECK_NODE_LESS(less, more) do {\
-	BOOST_CHECK_EQUAL(compareQueueUnderTest((less), (more)), false);\
-	BOOST_CHECK_EQUAL(compareQueueUnderTest((more), (less)), true);\
+	BOOST_CHECK(!compareQueueUnderTest((less), (more))); \
+	BOOST_CHECK(compareQueueUnderTest((more), (less))); \
 } while (false)
+
+#define CHECK_NODE_ORDER_ELEMENT(r, elem1, elem2) CHECK_NODE_LESS(elem1, elem2);
+
+#define CHECK_NODE_ORDER_INNER_LOOP(r, list, i, elem) \
+	BOOST_PP_SEQ_FOR_EACH(CHECK_NODE_ORDER_ELEMENT, elem, \
+			BOOST_PP_SEQ_REST_N(i, list))
+
+#define CHECK_NODE_ORDER(nodes) \
+	BOOST_PP_SEQ_FOR_EACH_I(CHECK_NODE_ORDER_INNER_LOOP, \
+			BOOST_PP_SEQ_TAIL(nodes), nodes)
 
 struct CompareQueueTestFixture {
 	FakeNodeFactory nodeFactory;
@@ -29,12 +44,7 @@ struct CompareQueueTestFixture {
 		auto node1 = nodeFactory.createNode(rootNode1, 3); // 5
 		auto node2 = nodeFactory.createNode(node1, 7); // 10
 
-		CHECK_NODE_LESS(node1, rootNode1);
-		CHECK_NODE_LESS(node1, rootNode2);
-		CHECK_NODE_LESS(node1, node2);
-		CHECK_NODE_LESS(rootNode1, node2);
-		CHECK_NODE_LESS(rootNode1, rootNode2);
-		CHECK_NODE_LESS(node2, rootNode2);
+		CHECK_NODE_ORDER((node1)(rootNode1)(node2)(rootNode2));
 	}
 
 };
