@@ -92,12 +92,7 @@ BOOST_AUTO_TEST_CASE(earlier_nodes_come_first_when_costFgv_is_equal)
 		auto rootNode2 = nodeFactory.createNode({}, 3);
 		auto node2 = nodeFactory.createNode(node1, 1);
 
-		CHECK_NODE_LESS(rootNode1, node1);
-		CHECK_NODE_LESS(rootNode1, rootNode2);
-		CHECK_NODE_LESS(rootNode1, node2);
-		CHECK_NODE_LESS(node1, rootNode2);
-		CHECK_NODE_LESS(node1, node2);
-		CHECK_NODE_LESS(rootNode2, node2);
+		CHECK_NODE_ORDER((rootNode1)(node1)(rootNode2)(node2));
 }
 
 BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_time)
@@ -106,9 +101,7 @@ BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_time)
 		auto node1 = nodeFactory.createNode(rootNode1, 2);
 		auto rootNode2 = nodeFactory.createNode({}, 1);
 
-		CHECK_NODE_LESS(rootNode2, rootNode1);
-		CHECK_NODE_LESS(rootNode2, node1);
-		CHECK_NODE_LESS(rootNode1, node1);
+		CHECK_NODE_ORDER((rootNode2)(rootNode1)(node1));
 }
 
 BOOST_AUTO_TEST_SUITE_END() // ForwardTime
@@ -136,12 +129,7 @@ BOOST_AUTO_TEST_CASE(later_nodes_come_first_when_costFgv_is_equal)
 		auto rootNode2 = nodeFactory.createNode({}, 3);
 		auto node2 = nodeFactory.createNode(node1, 1);
 
-		CHECK_NODE_LESS(node2, rootNode1);
-		CHECK_NODE_LESS(node2, node1);
-		CHECK_NODE_LESS(node2, rootNode2);
-		CHECK_NODE_LESS(rootNode2, rootNode1);
-		CHECK_NODE_LESS(rootNode2, node1);
-		CHECK_NODE_LESS(node1, rootNode1);
+		CHECK_NODE_ORDER((node2)(rootNode2)(node1)(rootNode1));
 }
 
 BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_time)
@@ -150,9 +138,7 @@ BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_time)
 		auto node1 = nodeFactory.createNode(rootNode1, 2);
 		auto rootNode2 = nodeFactory.createNode({}, 1);
 
-		CHECK_NODE_LESS(rootNode2, rootNode1);
-		CHECK_NODE_LESS(rootNode2, node1);
-		CHECK_NODE_LESS(node1, rootNode1);
+		CHECK_NODE_ORDER((rootNode2)(node1)(rootNode1));
 }
 
 BOOST_AUTO_TEST_SUITE_END() // BackwardTime
@@ -181,16 +167,7 @@ BOOST_AUTO_TEST_CASE(less_heur_nodes_come_first_when_costFgv_is_equal)
 		auto node2 = nodeFactory.createNode(node1, 1); // 4
 		auto node3 = nodeFactory.createNode(node2, 1); // 5
 
-		CHECK_NODE_LESS(node2, rootNode1);
-		CHECK_NODE_LESS(node2, node1);
-		CHECK_NODE_LESS(node2, rootNode2);
-		CHECK_NODE_LESS(node2, node3);
-		CHECK_NODE_LESS(node1, rootNode1);
-		CHECK_NODE_LESS(node1, rootNode2);
-		CHECK_NODE_LESS(node1, node3);
-		CHECK_NODE_LESS(rootNode1, rootNode2);
-		CHECK_NODE_LESS(rootNode1, node3);
-		CHECK_NODE_LESS(node3, rootNode2);
+		CHECK_NODE_ORDER((node2)(node1)(rootNode1)(node3)(rootNode2));
 }
 
 BOOST_AUTO_TEST_SUITE_END() // ForwardHeur
@@ -219,16 +196,7 @@ BOOST_AUTO_TEST_CASE(more_heur_nodes_come_first_when_costFgv_is_equal)
 		auto node3 = nodeFactory.createNode(node2, 1); // 5
 		auto rootNode2 = nodeFactory.createNode({}, 4); // 5
 
-		CHECK_NODE_LESS(rootNode1, node1);
-		CHECK_NODE_LESS(rootNode1, rootNode2);
-		CHECK_NODE_LESS(rootNode1, node2);
-		CHECK_NODE_LESS(rootNode1, node3);
-		CHECK_NODE_LESS(node1, rootNode2);
-		CHECK_NODE_LESS(node1, node2);
-		CHECK_NODE_LESS(node1, node3);
-		CHECK_NODE_LESS(node2, rootNode2);
-		CHECK_NODE_LESS(node2, node3);
-		CHECK_NODE_LESS(rootNode2, node3);
+		CHECK_NODE_ORDER((rootNode1)(node1)(node2)(rootNode2)(node3));
 }
 
 BOOST_AUTO_TEST_SUITE_END() // BackwardHeur
