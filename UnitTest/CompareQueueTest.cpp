@@ -201,6 +201,80 @@ BOOST_AUTO_TEST_CASE(more_heur_nodes_come_first_when_costFgv_is_equal)
 
 BOOST_AUTO_TEST_SUITE_END() // BackwardHeur
 
+struct ForwardDepthFixture: CompareQueueTestFixture {
+	CompareQueue compareQueueUnderTest{{{CompareMethod::depth, false}}};
+};
+
+BOOST_FIXTURE_TEST_SUITE(ForwardDepth, ForwardDepthFixture)
+
+BOOST_AUTO_TEST_CASE(zero_heur_always_comes_first)
+{
+	zeroHeurAlwaysComesFirst(compareQueueUnderTest);
+}
+
+BOOST_AUTO_TEST_CASE(less_heur_plus_cost_nodes_come_first)
+{
+	lessHeurPlusCostNodesComeFirst(compareQueueUnderTest);
+}
+
+BOOST_AUTO_TEST_CASE(less_deep_nodes_come_first_when_costFgv_is_equal)
+{
+		auto rootNode1 = nodeFactory.createNode({}, 5);
+		auto node1 = nodeFactory.createNode(rootNode1, 4);
+		auto node2 = nodeFactory.createNode(node1, 3);
+		auto node3 = nodeFactory.createNode(node2, 2);
+
+		CHECK_NODE_ORDER((rootNode1)(node1)(node2)(node3));
+}
+
+BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_depth)
+{
+		auto rootNode1 = nodeFactory.createNode({}, 3);
+		auto node1 = nodeFactory.createNode(rootNode1, 2);
+		auto rootNode2 = nodeFactory.createNode({}, 5);
+
+		CHECK_NODE_ORDER((rootNode1)(node1)(rootNode2));
+}
+
+BOOST_AUTO_TEST_SUITE_END() // ForwardDepth
+
+struct BackwardDepthFixture: CompareQueueTestFixture {
+	CompareQueue compareQueueUnderTest{{{CompareMethod::depth, true}}};
+};
+
+BOOST_FIXTURE_TEST_SUITE(BackwardDepth, BackwardDepthFixture)
+
+BOOST_AUTO_TEST_CASE(zero_heur_always_comes_first)
+{
+	zeroHeurAlwaysComesFirst(compareQueueUnderTest);
+}
+
+BOOST_AUTO_TEST_CASE(less_heur_plus_cost_nodes_come_first)
+{
+	lessHeurPlusCostNodesComeFirst(compareQueueUnderTest);
+}
+
+BOOST_AUTO_TEST_CASE(deeper_nodes_come_first_when_costFgv_is_equal)
+{
+		auto rootNode1 = nodeFactory.createNode({}, 5);
+		auto node1 = nodeFactory.createNode(rootNode1, 4);
+		auto node2 = nodeFactory.createNode(node1, 3);
+		auto node3 = nodeFactory.createNode(node2, 2);
+
+		CHECK_NODE_ORDER((node3)(node2)(node1)(rootNode1));
+}
+
+BOOST_AUTO_TEST_CASE(costFgv_has_priority_over_depth)
+{
+		auto rootNode1 = nodeFactory.createNode({}, 3);
+		auto node1 = nodeFactory.createNode(rootNode1, 2);
+		auto rootNode2 = nodeFactory.createNode({}, 5);
+
+		CHECK_NODE_ORDER((node1)(rootNode1)(rootNode2));
+}
+
+BOOST_AUTO_TEST_SUITE_END() // BackwardTime
+
 BOOST_AUTO_TEST_SUITE_END() // CompareQueueTest
 
 
