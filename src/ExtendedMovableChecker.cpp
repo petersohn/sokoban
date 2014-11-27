@@ -2,6 +2,8 @@
 #include "FieldType.hpp"
 #include <unordered_set>
 
+namespace {
+
 class InternalChecker {
 	const Status& status_;
 	const HeurCalculator& calculator_;
@@ -52,6 +54,8 @@ public:
 	}
 
 };
+
+}
 
 bool ExtendedMovableChecker::check(const Status& status, Point p) const {
 	InternalChecker ch(status, *calculator_);

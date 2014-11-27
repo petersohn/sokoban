@@ -2,6 +2,8 @@
 #include "FieldType.hpp"
 #include <unordered_set>
 
+namespace {
+
 class InternalChecker {
 	const Status& status_;
 	const HeurCalculator& calculator_;
@@ -38,7 +40,7 @@ bool InternalChecker::isMovable(Point p, int &count) {
 	return stoneMovable(p);
 }
 
-
+}
 
 bool MovableChecker::check(const Status& status, Point p) const {
 	InternalChecker ch(status, *calculator_);
