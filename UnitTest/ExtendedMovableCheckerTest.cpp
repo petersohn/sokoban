@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE(blocked_when_the_stones_are_blocking_each_other)
 	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, false);
 }
 
-BOOST_AUTO_TEST_CASE(not_movable_when_source_point_not_reachable)
+BOOST_AUTO_TEST_CASE(not_movable_when_source_point_not_reachable_vertically)
 {
 	auto data = createStatus(5, 5, {
 			"y....",
@@ -336,6 +336,20 @@ BOOST_AUTO_TEST_CASE(not_movable_when_source_point_not_reachable)
 			"x.*.."
 		});
 	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 4}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, false);
+}
+
+BOOST_AUTO_TEST_CASE(not_movable_when_source_point_not_reachable_horizontally)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".....",
+			"...o*",
+			"...o.",
+			"x..*."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{4, 3}).returns(-1);
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
 	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, false);
 }
