@@ -11,5 +11,5 @@
 #******..**ooy
 #******......*
 blocklist-number=3
-blocklist-distance=3
+blocklist-distance=4
 blocklist-heur-calculator=d
