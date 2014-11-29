@@ -354,4 +354,18 @@ BOOST_AUTO_TEST_CASE(not_movable_when_source_point_not_reachable_horizontally)
 	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, false);
 }
 
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_movable_indirectly)
+{
+	auto data = createStatus(5, 5, {
+			"y.*..",
+			"..o..",
+			"..*..",
+			"..oo.",
+			"x.*.."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{4, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
