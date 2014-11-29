@@ -12,6 +12,8 @@
 LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, (none)(text)(xml)(statistics))
 LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
 	(none)(vector)(decisionTree))
+LAZY_ARGUMENT_ENUM(MovableCheckerType, movableCheckerTypes,
+		(none)(simple)(extended))
 
 inline
 bool operator==(const Compare& lhs, const Compare& rhs) {
@@ -42,7 +44,7 @@ struct Options {
 	DumpStyle dumpStyle_ = DumpStyle::none;
 	bool oldStyleOutput_ = false;
 	bool useStonePusher_ = true;
-	bool useMovableChecker_ = true;
+	MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;
 	bool useCorridorChecker_ = true;
 	bool useAdvancedHeurCalculator_ = true;
 	std::size_t statusPoolSize_ = 0;

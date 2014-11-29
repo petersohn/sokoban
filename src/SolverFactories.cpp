@@ -4,6 +4,7 @@
 #include "NormalExpander.hpp"
 #include "StonePusher.hpp"
 #include "MovableChecker.hpp"
+#include "ExtendedMovableChecker.hpp"
 #include "CorridorChecker.hpp"
 #include "BlockListGenerator.hpp"
 #include "BasicHeurCalculator.hpp"
@@ -51,10 +52,20 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
 {
 	std::vector<Checker::Ptr> checkers;
-	if (options_.useMovableChecker_)
+	switch (options_.movableCheckerType_) {
+	case MovableCheckerType::none:
+		break;
+	case MovableCheckerType::simple:
 		checkers.push_back(Checker::Ptr(new MovableChecker(calculator)));
+		break;
+	case MovableCheckerType::extended:
+		checkers.push_back(Checker::Ptr(new ExtendedMovableChecker(calculator)));
+		break;
+	}
+
 	if (options_.useCorridorChecker_)
 		checkers.push_back(Checker::Ptr(new CorridorChecker(calculator)));
+
 	return checkers;
 }
 

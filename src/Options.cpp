@@ -71,8 +71,9 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			" and calculation time.")
 			("stone-pusher", defaultValue(&options.useStonePusher_),
 			"Enable/disable automatic pushing of stones into the destination point.\n")
-			("movable-checker", defaultValue(&options.useMovableChecker_),
-			"Enable/disable checking if a stone is not stuck.\n")
+			("movable-checker", defaultValue(&options.movableCheckerType_),
+			"Check if a stone is not stuck. The extended checker does a more thorough "
+			"checking but is slower.\n")
 			("corridor-checker", defaultValue(&options.useCorridorChecker_),
 			"Enable/disable checking for corridors.\n")
 			("advanced-heur-calculator", defaultValue(&options.useAdvancedHeurCalculator_),
