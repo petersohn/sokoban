@@ -123,7 +123,6 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 		}
 		if (options.filename_.empty()) {
 			std::cerr << "No filename given." << std::endl;
-			printHelp(argv[0], optionsDescription);
 			exit(1);
 		}
 
@@ -138,7 +137,6 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 	} catch (std::exception &e) {
 		std::cerr << "An error has happened while parsing the command line: " <<
 				e.what() << std::endl;
-		printHelp(argv[0], optionsDescription);
 		exit(1);
 	}
 
