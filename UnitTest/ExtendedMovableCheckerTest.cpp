@@ -354,7 +354,7 @@ BOOST_AUTO_TEST_CASE(not_movable_when_source_point_not_reachable_horizontally)
 	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, false);
 }
 
-BOOST_AUTO_TEST_CASE(movable_when_stone_is_movable_indirectly_vertically)
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_reachable_indirectly_vertically)
 {
 	auto data = createStatus(5, 5, {
 			"y.*..",
@@ -368,7 +368,7 @@ BOOST_AUTO_TEST_CASE(movable_when_stone_is_movable_indirectly_vertically)
 	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
 }
 
-BOOST_AUTO_TEST_CASE(movable_when_stone_is_movable_indirectly_horizontally)
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_reachable_indirectly_horizontally)
 {
 	auto data = createStatus(5, 5, {
 			"y....",
@@ -378,6 +378,58 @@ BOOST_AUTO_TEST_CASE(movable_when_stone_is_movable_indirectly_horizontally)
 			"x...."
 		});
 	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 4}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_reachable_from_one_direction_horizontally1)
+{
+	auto data = createStatus(5, 5, {
+			"..*.y",
+			"..*..",
+			"..*..",
+			"..o..",
+			"x.o.."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_reachable_from_one_direction_horizontally2)
+{
+	auto data = createStatus(5, 5, {
+			"y.*..",
+			"..*..",
+			"..*..",
+			"..o..",
+			"..o.x"
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_reachable_from_one_direction_vertically1)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			".....",
+			"oo***",
+			".....",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(movable_when_stone_is_reachable_from_one_direction_vertically2)
+{
+	auto data = createStatus(5, 5, {
+			"x....",
+			".....",
+			"oo***",
+			".....",
+			"y...."
+		});
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
 	CHECK_CHECKER_RESULT(movableCheckerUnderTest, data.second, true);
 }
