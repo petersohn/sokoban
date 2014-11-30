@@ -7,18 +7,18 @@ namespace {
 
 class InternalChecker {
 	const Status& status_;
+	boost::optional<Status> simpleStatus_;
 	const HeurCalculator& calculator_;
 	std::unordered_set<Point> calculated_;
-	std::vector<std::vector<Point>> reachableChecks;
 
-	bool isMovableTo(Point from, Point to, std::vector<Point>& reachableCheck)
+	bool isMovableTo(Point from, Point to)
 	{
 		if (calculator_.calculateStone(status_, to) < 0) {
 			return false;
 		}
 
 		if (status_.value(from) == FieldType::floor) {
-			reachableCheck.push_back(from);
+			return simpleStatus_ ? simpleStatus_->reachable(from) : true;
 		}
 
 		return true;
@@ -39,17 +39,12 @@ class InternalChecker {
 		}
 
 		std::vector<Point> reachableCheck;
-		bool movable1 = isMovableTo(pd, pmd, reachableCheck);
-		bool movable2 = isMovableTo(pmd, pd, reachableCheck);
-		if (!movable1 && !movable2) {
+		if (!isMovableTo(pmd, pd) && !isMovableTo(pd, pmd)) {
 			return false;
 		}
 
 		if (!isValid(pd) || !isValid(pmd)) {
 			return false;
-		}
-		if (!reachableCheck.empty()) {
-			reachableChecks.push_back(std::move(reachableCheck));
 		}
 
 		return true;
@@ -71,27 +66,18 @@ public:
 		return isMovable(p, Point::p10) || isMovable(p, Point::p01);
 	}
 
-	bool checkReachability()
+	bool checkReachability(Point startingPoint)
 	{
-		Status simpleStatus{status_.table()};
+		simpleStatus_ = Status{status_.table()};
 
 		for (Point p: calculated_) {
-			simpleStatus.addStone(p);
+			simpleStatus_->addStone(p);
 		}
 
-		simpleStatus.currentPos(status_.currentPos());
+		simpleStatus_->currentPos(status_.currentPos());
 
-		auto result = std::all_of(reachableChecks.begin(), reachableChecks.end(),
-				[&](const std::vector<Point>& v)
-				{
-					auto result = std::any_of(v.begin(), v.end(),
-						[&](Point p) {
-							auto result = simpleStatus.reachable(p);
-							return result;
-						});
-					return result;
-				});
-		return result;
+		calculated_.clear();
+		return stoneMovable(startingPoint);
 	}
 };
 
@@ -99,7 +85,7 @@ public:
 
 bool ExtendedMovableChecker::check(const Status& status, Point p) const {
 	InternalChecker ch(status, *calculator_);
-	return ch.stoneMovable(p) && ch.checkReachability();
+	return ch.stoneMovable(p) && ch.checkReachability(p);
 }
 
 const char* ExtendedMovableChecker::errorMessage() const {
