@@ -9,16 +9,16 @@ class InternalChecker {
 	const Status& status_;
 	const HeurCalculator& calculator_;
 	std::unordered_set<Point> calculated_;
-	std::vector<Point> reachableChecks;
+	std::vector<std::vector<Point>> reachableChecks;
 
-	bool isMovableTo(Point from, Point to)
+	bool isMovableTo(Point from, Point to, std::vector<Point>& reachableCheck)
 	{
 		if (calculator_.calculateStone(status_, to) < 0) {
 			return false;
 		}
 
 		if (status_.value(from) == FieldType::floor) {
-			reachableChecks.push_back(from);
+			reachableCheck.push_back(from);
 		}
 
 		return true;
@@ -38,11 +38,21 @@ class InternalChecker {
 			return false;
 		}
 
-		if (!isMovableTo(pd, pmd) && !isMovableTo(pmd, pd)) {
+		std::vector<Point> reachableCheck;
+		bool movable1 = isMovableTo(pd, pmd, reachableCheck);
+		bool movable2 = isMovableTo(pmd, pd, reachableCheck);
+		if (!movable1 && !movable2) {
 			return false;
 		}
 
-		return isValid(pd) && isValid(pmd);
+		if (!isValid(pd) || !isValid(pmd)) {
+			return false;
+		}
+		if (!reachableCheck.empty()) {
+			reachableChecks.push_back(std::move(reachableCheck));
+		}
+
+		return true;
 	}
 
 public:
@@ -71,8 +81,17 @@ public:
 
 		simpleStatus.currentPos(status_.currentPos());
 
-		return std::all_of(reachableChecks.begin(), reachableChecks.end(),
-				[&](Point p) { return simpleStatus.reachable(p); });
+		auto result = std::all_of(reachableChecks.begin(), reachableChecks.end(),
+				[&](const std::vector<Point>& v)
+				{
+					auto result = std::any_of(v.begin(), v.end(),
+						[&](Point p) {
+							auto result = simpleStatus.reachable(p);
+							return result;
+						});
+					return result;
+				});
+		return result;
 	}
 };
 
