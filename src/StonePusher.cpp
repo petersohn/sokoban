@@ -38,7 +38,8 @@ Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
 		touched = false;
 		Status::BorderType destBorder;
 		floodFill(status, status.table().destination(), destReachable, destBorder);
-		Status::BorderType border = intersect(status.border(), destBorder);
+		Status::BorderType border = intersect(status.border(), 
+				std::move(destBorder));
 		for (Status::BorderType::const_iterator it = border.begin();
 				it != border.end(); ++it) {
 			if (pushStone(status, *it)) {
