@@ -1,5 +1,5 @@
-#ifndef INDEXEDTUPLES_H_
-#define INDEXEDTUPLES_H_
+#ifndef SRC_INDEXEDSTATUSLIST_HPP
+#define SRC_INDEXEDSTATUSLIST_HPP
 
 #include <memory>
 #include <unordered_map>
@@ -13,14 +13,10 @@
 
 class IndexedStatusList {
 private:
-	typedef std::unordered_multimap<Point, Status> IndexType;
-
-	IndexType index_;
+	Array<std::vector<Status>> index_;
 	size_t size_;
 
 public:
-	typedef boost::iterator_range<typename IndexType::const_iterator> RangeType;
-
 	IndexedStatusList():size_(0) {}
 	IndexedStatusList(const IndexedStatusList&) = default;
 	IndexedStatusList& operator=(const IndexedStatusList&) = default;
@@ -29,21 +25,29 @@ public:
 
 	void add(const Status& status)
 	{
+		if (!index_.width()) {
+			index_.reset(status.width(), status.height());
+		}
+
 		for (Point  p: status.state()) {
-			index_.insert({p, status});
+			index_[p].push_back(status);
 		}
 		++size_;
 	}
 
 	void clear() {
-		index_.clear();
+		index_.reset(0, 0);
+		size_ = 0;
 	}
 
 	bool hasSubStatus(const Status& status, Point p) const
 	{
-		RangeType range = index_.equal_range(p);
-		for (const auto& value: range) {
-			if (isSubStatus(value.second, status)) {
+		if (!index_.width()) {
+			return false;
+		}
+
+		for (const auto& value: index_[p]) {
+			if (isSubStatus(value, status)) {
 				return true;
 			}
 		}
@@ -53,4 +57,4 @@ public:
 	size_t size() const { return size_; }
 };
 
-#endif /* INDEXEDTUPLES_H_ */
+#endif /* SRC_INDEXEDSTATUSLIST_HPP */
