@@ -115,6 +115,46 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_reachability)
 	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(statusNok, Point{2, 1}));
 }
 
+BOOST_AUTO_TEST_CASE(clear_clears)
+{
+	auto status = createTestStatus(*table, {
+			".o.",
+			"..o",
+			"y.."});
+	indexedStatusListUnderTest.add(Status{status});
+
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 1);
+	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{1, 0}));
+	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{2, 1}));
+
+	indexedStatusListUnderTest.clear();
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 0);
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{1, 0}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{2, 1}));
+
+}
+
+BOOST_AUTO_TEST_CASE(add_works_after_clear)
+{
+	auto status1 = createTestStatus(*table, {
+			".o.",
+			"..o",
+			"y.."});
+	auto status2 = createTestStatus(*table, {
+			".o.",
+			"o..",
+			"y.."});
+	indexedStatusListUnderTest.add(Status{status1});
+	indexedStatusListUnderTest.clear();
+	indexedStatusListUnderTest.add(Status{status2});
+
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 1);
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status1, Point{1, 0}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status1, Point{2, 1}));
+	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status2, Point{1, 0}));
+	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status2, Point{0, 1}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
