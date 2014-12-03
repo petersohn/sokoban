@@ -25,6 +25,7 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_empty_list)
 			".o.",
 			"..o",
 			"y.."});
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 0);
 	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{1, 0}));
 	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{2, 1}));
 }
@@ -36,6 +37,7 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_contains_one_status)
 			"..o",
 			"y.."});
 	indexedStatusListUnderTest.add(Status{status});
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 1);
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{1, 0}));
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{2, 1}));
 }
@@ -58,6 +60,7 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_contains_more_statuses)
 	indexedStatusListUnderTest.add(Status{status2});
 	indexedStatusListUnderTest.add(Status{status3});
 
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 3);
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status1, Point{1, 0}));
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status1, Point{2, 1}));
 
