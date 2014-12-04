@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <functional>
 #include <boost/range/algorithm.hpp>
+#include <algorithm>
+#include <iterator>
 
 class State {
 	typedef std::unordered_set<Point> ContainerType;
@@ -24,6 +26,12 @@ public:
 	State& operator=(const State& ) = default;
 	State(State&& ) = default;
 	State& operator=(State&& ) = default;
+
+	explicit State(std::initializer_list<Point> range):stones_(new ContainerType)
+	{
+		std::move(std::begin(range), std::end(range),
+				std::inserter(*stones_, stones_->begin()));
+	}
 
 	State deepCopy() const {
 		State result{*this};
