@@ -27,11 +27,31 @@ struct SolutionCheckerTestFixture {
 		BOOST_MESSAGE(stream.str());
 	}
 
+
 	std::shared_ptr<Node> createNode(State state, MoveDescriptor moveDescriptor,
 			std::shared_ptr<Node> ancestor)
 	{
 		return std::make_shared<Node>(state, moveDescriptor, ancestor,
 				1, 0, 0, 1);
+	}
+
+	struct NodeData {
+		State state;
+		MoveDescriptor moveDescriptor;
+	};
+
+	std::deque<std::shared_ptr<Node>> createNodes(
+			const std::vector<NodeData>& nodeDatas)
+	{
+		std::deque<std::shared_ptr<Node>> result;
+		std::shared_ptr<Node> previousNode;
+		for (const auto& nodeData: nodeDatas) {
+			result.push_back(createNode(
+					nodeData.state, nodeData.moveDescriptor, previousNode));
+			previousNode = result.back();
+		}
+
+		return result;
 	}
 };
 
@@ -46,27 +66,24 @@ BOOST_AUTO_TEST_CASE(good_solution)
 				".....",
 				"y.*.."});
 
-	auto node1 = createNode(
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
 			State{Point{2, 1}},
 			MoveDescriptor{Point{2, 2}, Point{0, -1}},
-			std::shared_ptr<Node>{}
-		);
-	auto node2 = createNode(
+		},
+		NodeData{
 			State{Point{2, 0}},
 			MoveDescriptor{Point{2, 1}, Point{0, -1}},
-			node1
-		);
-	auto node3 = createNode(
+		},
+		NodeData{
 			State{Point{1, 0}},
 			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
-			node2
-		);
-	auto node4 = createNode(
+		},
+		NodeData{
 			State{},
 			MoveDescriptor{Point{1, 0}, Point{-1, 0}},
-			node3
-		);
-	std::deque<std::shared_ptr<Node>> nodes{node1, node2, node3, node4};
+		}
+		})};
 	BOOST_CHECK(solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
