@@ -238,6 +238,92 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable
 	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_indirectly_vertically, Checker, checkerTypes)
+{
+	MovableCheckerFixture<Checker> fixture;
+	auto data = createStatus(5, 5, {
+			"y.*..",
+			"..o..",
+			"..*..",
+			"..oo.",
+			"x.*.."
+		});
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).with(mock::any, Point{4, 3}).returns(-1);
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_indirectly_horizontally, Checker, checkerTypes)
+{
+	MovableCheckerFixture<Checker> fixture;
+	auto data = createStatus(5, 5, {
+			"y....",
+			".....",
+			"*o*o*",
+			"...o.",
+			"x...."
+		});
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).with(mock::any, Point{3, 4}).returns(-1);
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_horizontally1, Checker, checkerTypes)
+{
+	MovableCheckerFixture<Checker> fixture;
+	auto data = createStatus(5, 5, {
+			"..*.y",
+			"..*..",
+			".o*..",
+			"xo...",
+			".*..."
+		});
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_horizontally2, Checker, checkerTypes)
+{
+	MovableCheckerFixture<Checker> fixture;
+	auto data = createStatus(5, 5, {
+			"y.*..",
+			"..*..",
+			"..*o.",
+			"...ox",
+			"..*.."
+		});
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_vertically1, Checker, checkerTypes)
+{
+	MovableCheckerFixture<Checker> fixture;
+	auto data = createStatus(5, 5, {
+			"y....",
+			".....",
+			"..***",
+			"*oo..",
+			".x..."
+		});
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_vertically2, Checker, checkerTypes)
+{
+	MovableCheckerFixture<Checker> fixture;
+	auto data = createStatus(5, 5, {
+			".x...",
+			"*oo..",
+			"..***",
+			".....",
+			"y...."
+		});
+	MOCK_EXPECT(fixture.heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(fixture.movableCheckerUnderTest, data.second, true);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE_END()
