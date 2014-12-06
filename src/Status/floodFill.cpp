@@ -37,36 +37,67 @@ void floodFill(const Status& status, Point p0, Array<bool>& result)
 	floodFillImpl(status, p0, result, [](Point){});
 }
 
+namespace {
+
+class BorderAction {
+	const Status& status;
+	Status::BorderType& border;
+	Array<bool> visitedStones;
+
+public:
+
+	BorderAction(const Status& status, Status::BorderType& border):
+		status(status), border(border),
+		visitedStones{status.width(), status.height(), false}
+	{}
+
+	void operator()(Point p)
+	{
+		if (status.value(p) == FieldType::stone && !visitedStones[p]) {
+			border.push_back(p);
+			visitedStones[p] = true;
+		}
+	}
+};
+
+class MinmaxAction {
+	const Status& status;
+	MinMax& minmax;
+
+public:
+
+	MinmaxAction(const Status& status, MinMax& minmax):
+		status(status), minmax(minmax)
+	{
+		minmax.minX = status.width();
+		minmax.maxX = 0;
+		minmax.minY = status.height();
+		minmax.maxY = 0;
+	}
+
+	void operator()(Point p)
+	{
+		if (status.value(p) == FieldType::floor) {
+			minmax.minX = std::min(minmax.minX, p.x);
+			minmax.maxX = std::max(minmax.maxX, p.x);
+			minmax.minY = std::min(minmax.minY, p.y);
+			minmax.maxY = std::max(minmax.maxY, p.y);
+		}
+	}
+};
+
+}
+
 void floodFill(const Status& status, Point p0, Array<bool>& result,
 			Status::BorderType& border)
 {
-	Array<bool> visitedStones{status.width(), status.height(), false};
 
-	floodFillImpl(status, p0, result, [&](Point p)
-		{
-			if (status.value(p) == FieldType::stone && !visitedStones[p]) {
-				border.push_back(p);
-				visitedStones[p] = true;
-			}
-		});
+	floodFillImpl(status, p0, result, BorderAction{status, border});
 }
 
 void floodFill(const Status& status, Point p0, Array<bool>& result,
 			MinMax& minmax)
 {
-	minmax.minX = status.width();
-	minmax.maxX = 0;
-	minmax.minY = status.height();
-	minmax.maxY = 0;
-
-	floodFillImpl(status, p0, result, [&](Point p)
-		{
-			if (status.value(p) == FieldType::floor) {
-				minmax.minX = std::min(minmax.minX, p.x);
-				minmax.maxX = std::max(minmax.maxX, p.x);
-				minmax.minY = std::min(minmax.minY, p.y);
-				minmax.maxY = std::max(minmax.maxY, p.y);
-			}
-		});
+	floodFillImpl(status, p0, result, MinmaxAction{status, minmax});
 }
 
