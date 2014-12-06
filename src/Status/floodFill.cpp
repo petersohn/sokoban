@@ -106,3 +106,16 @@ std::ostream& operator<<(std::ostream& os, const MinMax& minmax)
 	return os << '(' << minmax.minX << "->" << minmax.maxX << ", " <<
 		minmax.minY << "->" << minmax.maxY << ')';
 }
+void floodFill(const Status& status, Point p0, Array<bool>& result,
+			MinMax& minmax, Status::BorderType& border)
+{
+	BorderAction borderAction{status, border};
+	MinmaxAction minmaxAction{status, minmax};
+
+	floodFillImpl(status, p0, result, [&](Point p)
+			{
+				borderAction(p);
+				minmaxAction(p);
+			});
+}
+

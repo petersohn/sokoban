@@ -13,6 +13,8 @@ void floodFill(const Status& status, Point p0, Array<bool>& result,
 			Status::BorderType& border);
 void floodFill(const Status& status, Point p0, Array<bool>& result,
 			MinMax& minmax);
+void floodFill(const Status& status, Point p0, Array<bool>& result,
+			MinMax& minmax, Status::BorderType& border);
 
 inline
 bool operator==(const MinMax& lhs, const MinMax& rhs)
