@@ -54,7 +54,7 @@ public:
 #endif
 
 	explicit Status(const Table& table);
-	explicit Status(const Table& table, const State &state);
+	explicit Status(const Table& table, const State &state, Point currentPos);
 	explicit Status(const Table& table, const Node &node);
 	Status(const Status& other):
 		table_(other.table_),

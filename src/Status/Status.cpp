@@ -22,9 +22,10 @@ Status::Status(const Table& table):
 }
 
 
-Status::Status(const Table& table, const State &state):
+Status::Status(const Table& table, const State &state, Point currentPos):
 	table_(&table),
 	state_(state),
+	currentPos_(currentPos),
 	fields_(table.width(), table.height())
 {
 	init();

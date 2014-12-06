@@ -24,8 +24,7 @@ std::vector<Status> getPartitions(const Table& table, const State &state,
 				break;
 			}
 		}
-		Status status{table, state};
-		status.currentPos(foundPoint);
+		Status status{table, state, foundPoint};
 
 		for (Point  p: arrayRange(table)) {
 			if (status.reachable(p) && pointsToProcess[p])

@@ -56,8 +56,7 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
 	if (!destinationOK) {
 		throw SokobanException("Destination not given");
 	}
-	Status result(*table, state);
-	result.currentPos(table->startingPoint());
+	Status result(*table, state, table->startingPoint());
 	return {std::move(table), result};
 }
 
