@@ -33,6 +33,13 @@ public:
 				std::inserter(*stones_, stones_->begin()));
 	}
 
+	template <typename Range>
+	explicit State(Range range):stones_(new ContainerType)
+	{
+		std::move(std::begin(range), std::end(range),
+				std::inserter(*stones_, stones_->begin()));
+	}
+
 	explicit State(ContainerType range):
 		stones_{new ContainerType(std::move(range))}
 	{
