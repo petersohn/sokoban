@@ -33,6 +33,12 @@ public:
 				std::inserter(*stones_, stones_->begin()));
 	}
 
+	explicit State(ContainerType range):
+		stones_{new ContainerType(std::move(range))}
+	{
+	}
+
+
 	State deepCopy() const {
 		State result{*this};
 		result.modify();

@@ -68,14 +68,8 @@ public:
 
 	bool checkReachability(Point startingPoint)
 	{
-		simpleStatus_ = Status{status_.table()};
-
-		for (Point p: calculated_) {
-			simpleStatus_->addStone(p);
-		}
-
-		simpleStatus_->currentPos(status_.currentPos());
-
+		simpleStatus_ = Status{status_.table(),
+			State(std::move(calculated_)), status_.currentPos()};
 		calculated_.clear();
 		return stoneMovable(startingPoint);
 	}
