@@ -1,6 +1,7 @@
 #include "Status/floodFill.hpp"
 #include "Status/StatusCreator.hpp"
 #include "ArrayIO.hpp"
+#include "BorderTypeIO.hpp"
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(MovableCheckerTest)
@@ -125,10 +126,6 @@ BOOST_AUTO_TEST_SUITE_END() // reachability
 
 BOOST_AUTO_TEST_SUITE(border)
 
-#define CHECK_BORDER_INCLUDES(border, stone) \
-		BOOST_CHECK(::std::find((border).begin(), (border).end(), (stone)) != \
-				(border).end())
-
 BOOST_AUTO_TEST_CASE(single_stone_in_the_middle)
 {
 	std::size_t width = 4;
@@ -142,8 +139,7 @@ BOOST_AUTO_TEST_CASE(single_stone_in_the_middle)
 
 	Status::BorderType border;
 	floodFill(data.second, Point{1, 0}, result, border);
-	BOOST_CHECK_EQUAL(border.size(), 1);
-	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+	BOOST_CHECK_EQUAL(border, (Status::BorderType{Point{2, 1}}));
 
 }
 
@@ -160,10 +156,8 @@ BOOST_AUTO_TEST_CASE(multiple_reachable_stones)
 
 	Status::BorderType border;
 	floodFill(data.second, Point{1, 0}, result, border);
-	BOOST_CHECK_EQUAL(border.size(), 3);
-	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
-	CHECK_BORDER_INCLUDES(border, (Point{1, 2}));
-	CHECK_BORDER_INCLUDES(border, (Point{3, 2}));
+	BOOST_CHECK_EQUAL(border, (Status::BorderType{
+				Point{2, 1}, Point{1, 2}, Point{3, 2}}));
 }
 
 BOOST_AUTO_TEST_CASE(one_stone_is_blocked_by_other_stones)
@@ -179,10 +173,8 @@ BOOST_AUTO_TEST_CASE(one_stone_is_blocked_by_other_stones)
 
 	Status::BorderType border;
 	floodFill(data.second, Point{1, 0}, result, border);
-	BOOST_CHECK_EQUAL(border.size(), 3);
-	CHECK_BORDER_INCLUDES(border, (Point{3, 0}));
-	CHECK_BORDER_INCLUDES(border, (Point{1, 2}));
-	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+	BOOST_CHECK_EQUAL(border, (Status::BorderType{
+				Point{3, 0}, Point{1, 2}, Point{2, 1}}));
 }
 
 BOOST_AUTO_TEST_CASE(stones_are_blocked_by_walls_and_other_stones)
@@ -199,7 +191,7 @@ BOOST_AUTO_TEST_CASE(stones_are_blocked_by_walls_and_other_stones)
 	Status::BorderType border;
 	floodFill(data.second, Point{1, 0}, result, border);
 	BOOST_CHECK_EQUAL(border.size(), 1);
-	CHECK_BORDER_INCLUDES(border, (Point{2, 1}));
+	BOOST_CHECK_EQUAL(border, (Status::BorderType{Point{2, 1}}));
 }
 
 BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_border)
@@ -237,10 +229,7 @@ BOOST_AUTO_TEST_CASE(full_table)
 
 	MinMax minmax;
 	floodFill(data.second, Point{1, 0}, result, minmax);
-	BOOST_CHECK_EQUAL(minmax.minX, 0);
-	BOOST_CHECK_EQUAL(minmax.minY, 0);
-	BOOST_CHECK_EQUAL(minmax.maxX, width - 1);
-	BOOST_CHECK_EQUAL(minmax.maxY, height - 1);
+	BOOST_CHECK_EQUAL(minmax, (MinMax{0, 3, 0, 2}));
 }
 
 BOOST_AUTO_TEST_CASE(one_corner)
@@ -256,10 +245,7 @@ BOOST_AUTO_TEST_CASE(one_corner)
 
 	MinMax minmax;
 	floodFill(data.second, Point{1, 0}, result, minmax);
-	BOOST_CHECK_EQUAL(minmax.minX, 0);
-	BOOST_CHECK_EQUAL(minmax.minY, 0);
-	BOOST_CHECK_EQUAL(minmax.maxX, 1);
-	BOOST_CHECK_EQUAL(minmax.maxY, 1);
+	BOOST_CHECK_EQUAL(minmax, (MinMax{0, 1, 0, 1}));
 }
 
 BOOST_AUTO_TEST_CASE(enclosed_1x1_area)
@@ -275,10 +261,7 @@ BOOST_AUTO_TEST_CASE(enclosed_1x1_area)
 
 	MinMax minmax;
 	floodFill(data.second, Point{2, 1}, result, minmax);
-	BOOST_CHECK_EQUAL(minmax.minX, 2);
-	BOOST_CHECK_EQUAL(minmax.minY, 1);
-	BOOST_CHECK_EQUAL(minmax.maxX, 2);
-	BOOST_CHECK_EQUAL(minmax.maxY, 1);
+	BOOST_CHECK_EQUAL(minmax, (MinMax{2, 2, 1, 1}));
 }
 
 BOOST_AUTO_TEST_CASE(enclosed_bigger_area)
@@ -295,10 +278,7 @@ BOOST_AUTO_TEST_CASE(enclosed_bigger_area)
 
 	MinMax minmax;
 	floodFill(data.second, Point{2, 1}, result, minmax);
-	BOOST_CHECK_EQUAL(minmax.minX, 1);
-	BOOST_CHECK_EQUAL(minmax.minY, 1);
-	BOOST_CHECK_EQUAL(minmax.maxX, 2);
-	BOOST_CHECK_EQUAL(minmax.maxY, 2);
+	BOOST_CHECK_EQUAL(minmax, (MinMax{1, 2, 1, 2}));
 }
 
 BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_minmax)

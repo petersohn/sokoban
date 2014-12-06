@@ -101,3 +101,8 @@ void floodFill(const Status& status, Point p0, Array<bool>& result,
 	floodFillImpl(status, p0, result, MinmaxAction{status, minmax});
 }
 
+std::ostream& operator<<(std::ostream& os, const MinMax& minmax)
+{
+	return os << '(' << minmax.minX << "->" << minmax.maxX << ", " <<
+		minmax.minY << "->" << minmax.maxY << ')';
+}
