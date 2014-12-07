@@ -28,8 +28,7 @@ void TextDumper::addToSolution(const Node::Ptr& /*node*/) {
 }
 
 void TextDumper::expand(const Node::Ptr& node) {
-	file_ << std::endl << std::endl;
-	dump(*node, "Expanded");
+	dump(*node, "\nExpanded");
 }
 
 void TextDumper::startPushing(const Node::Ptr& node) {
