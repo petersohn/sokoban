@@ -1,0 +1,90 @@
+#!/bin/bash
+
+function printFloor
+{
+	local n=$1
+	local i
+	for ((i=0; i < $n; ++i)); do
+		echo -n .
+	done
+}
+
+function printVerticalOverhang
+{
+	local overhang=$1
+	local width=$2
+	local i
+	for ((i=0; i < $overhang; ++i)); do
+		echo -n "#"
+		printFloor $width
+		echo
+	done
+}
+
+function printLine
+{
+	local str="$1"
+	local overhang=$2
+
+	echo -n "#"
+	printFloor $overhang
+	echo -n "$str"
+	printFloor $overhang
+	echo
+}
+
+function printLineBeginning
+{
+	local str="$1"
+	local width=$2
+
+	echo -n "#$str"
+	printFloor $((width - ${#str}))
+	echo
+}
+
+function createLevel
+{
+	local filename=$1
+	local n=$2
+	local top="$3"
+	local bottom="$4"
+	local middle="$5"
+
+	local overhang=4
+	local verticalEmptyOverhang=$((overhang - 1))
+	local width=$((2*overhang + ${#middle}))
+	local height=$((2*overhang + n + 2))
+
+	echo "#$height" >$filename
+	echo "#$width" >>$filename
+
+	printLineBeginning y $width >>$filename
+	printVerticalOverhang $verticalEmptyOverhang $width >>$filename
+	printLine "$top" $overhang >>$filename
+
+	local i
+	for ((i=0; i < $n; ++i)); do
+		printLine "$middle" $overhang >>$filename
+	done
+
+	printLine "$bottom" $overhang >>$filename
+	printVerticalOverhang $overhang $width >>$filename
+	printLineBeginning x $width >>$filename
+}
+
+if [ $# -ne 3 ]; then
+	echo "Usage: $0 min max" >&2
+	exit 1
+fi
+
+min=$1
+max=$2
+prefix="$3"
+
+for ((index=$min; index <= $max; ++index)); do
+	createLevel "${prefix}${index}_D.txt" $index oo. oo. o.o
+	createLevel "${prefix}${index}_O.txt" $index oo. .oo o.o
+done
+
+
