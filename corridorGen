@@ -71,6 +71,8 @@ function createLevel
 	printLine "$bottom" $overhang >>$filename
 	printVerticalOverhang $overhang $width >>$filename
 	printLineBeginning x $width >>$filename
+
+	echo "$(basename "$filename")"
 }
 
 if [ $# -ne 3 ]; then
