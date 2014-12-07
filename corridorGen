@@ -69,7 +69,7 @@ function createLevel
 	done
 
 	printLine "$bottom" $overhang >>$filename
-	printVerticalOverhang $overhang $width >>$filename
+	printVerticalOverhang $verticalEmptyOverhang $width >>$filename
 	printLineBeginning x $width >>$filename
 
 	echo "$(basename "$filename")"
