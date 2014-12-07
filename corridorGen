@@ -87,6 +87,7 @@ prefix="$3"
 for ((index=$min; index <= $max; ++index)); do
 	createLevel "${prefix}${index}_D.txt" $index oo. oo. o.o
 	createLevel "${prefix}${index}_O.txt" $index oo. .oo o.o
+	createLevel "${prefix}${index}_Q.txt" $index ooo oo. o.o
 done
 
 
