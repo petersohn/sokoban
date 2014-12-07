@@ -132,8 +132,15 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 Dumper::Ptr createDumperFromOptions(const Options & opts)
 {
 	switch (opts.dumpStyle_) {
-	case DumpStyle::text:
-		return Dumper::Ptr(new TextDumper("dump.dump"));
+	case DumpStyle::text: {
+		boost::optional<std::string> dumpFilter;
+
+		if (!opts.dumpFilter_.empty()) {
+			dumpFilter = opts.dumpFilter_;
+		}
+
+		return Dumper::Ptr(new TextDumper("dump.dump", dumpFilter));
+	}
 	case DumpStyle::xml:
 		return Dumper::Ptr(new XDumper("dump.xml"));
 	case DumpStyle::statistics:

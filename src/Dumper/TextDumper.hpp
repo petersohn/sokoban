@@ -5,13 +5,18 @@
 #include "Status/Table.hpp"
 #include <iostream>
 #include <fstream>
+#include <boost/optional.hpp>
 
 class TextDumper: public Dumper {
 	std::ofstream file_;
 	const Table* table_;
+	boost::optional<std::string> filter_;
+
+	void dump(const Node& node, const std::string& text);
 public:
-	TextDumper(const char *filename):
-		file_(filename, std::ios::out | std::ios::trunc)
+	TextDumper(const char *filename, const boost::optional<std::string>& filter):
+		file_(filename, std::ios::out | std::ios::trunc),
+		filter_(filter)
 	{}
 	void initialStatus(const Status &status) override;
 	void addNode(const Node::Ptr& node) override;

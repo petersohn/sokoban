@@ -4,6 +4,14 @@
 #include "Dumper/DumperFunctions.hpp"
 #include <string>
 
+void TextDumper::dump(const Node& node, const std::string& text)
+{
+	if (filter_ && text.find(*filter_) == std::string::npos) {
+		return;
+	}
+
+	dumpNode(file_, *table_, node, text);
+}
 
 void TextDumper::initialStatus(const Status &status) {
 	std::cerr << "Initial status" << std::endl;
@@ -12,7 +20,7 @@ void TextDumper::initialStatus(const Status &status) {
 }
 
 void TextDumper::addNode(const Node::Ptr& node) {
-	dumpNode(file_, *table_, *node, "Added");
+	dump(*node, "Added");
 }
 
 void TextDumper::addToSolution(const Node::Ptr& /*node*/) {
@@ -21,19 +29,19 @@ void TextDumper::addToSolution(const Node::Ptr& /*node*/) {
 
 void TextDumper::expand(const Node::Ptr& node) {
 	file_ << std::endl << std::endl;
-	dumpNode(file_, *table_, *node, "Expanded");
+	dump(*node, "Expanded");
 }
 
 void TextDumper::startPushing(const Node::Ptr& node) {
-	dumpNode(file_, *table_, *node, "Pushing");
+	dump(*node, "Pushing");
 }
 
 void TextDumper::push(const Node::Ptr& node) {
-	dumpNode(file_, *table_, *node, "Pushed out");
+	dump(*node, "Pushed out");
 }
 
 void TextDumper::reject(const Node::Ptr& node, const char *text) {
-	dumpNode(file_, *table_, *node, "Rejected: " + std::string(text));
+	dump(*node, "Rejected: " + std::string(text));
 }
 
 void TextDumper::save() {

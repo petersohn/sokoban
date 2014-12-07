@@ -42,6 +42,7 @@ struct Options {
 	typedef std::vector<Compare> CompareList;
 
 	DumpStyle dumpStyle_ = DumpStyle::none;
+	std::string dumpFilter_;
 	bool oldStyleOutput_ = false;
 	bool useStonePusher_ = true;
 	MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;

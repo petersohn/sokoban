@@ -69,6 +69,9 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			"    (t)ext   \tText dump format. Slows down dump generation moderately.\n"
 			"    (x)ml    \tXML dump format. Highly increases memory consumption"
 			" and calculation time.")
+			("dump-filter", defaultValue(&options.dumpFilter_),
+			 "Only dump nodes which match this filter (exact text match). "
+			 "Only works with text dumper.")
 			("stone-pusher", defaultValue(&options.useStonePusher_),
 			"Enable/disable automatic pushing of stones into the destination point.\n")
 			("movable-checker", defaultValue(&options.movableCheckerType_),
