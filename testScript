@@ -20,7 +20,7 @@ while read file; do
     echo "$file" >>$"$output"
 	filePath="$(dirname $input)/$file"
     echo "----------------------------------" >>"$output"
-    "$@" "$filePath" 2>&1 | tee >(egrep '^(Expanded nodes:|Length of solution:|Processor Time:|Iteration.*time:|^Status|calculateReachable called|[sS]olution)|list size' >>"$output")
+    "$@" "$filePath" 2>&1 | tee >(egrep '^(Expanded nodes:|Processor Time:|Iteration.*time:|^Status|calculateReachable called|.*[sS]olution)|list size' >>"$output")
 	echo "Return code: $?" >>"$output"
     echo "----------------------------------" >>"$output"
     echo >>"$output"
