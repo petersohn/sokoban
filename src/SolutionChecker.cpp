@@ -52,9 +52,9 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 	int resultLength = solution.back()->cost();
 	for(std::shared_ptr<Node> node: solution) {
 		Point to(node->from() + node->d());
-		if (std::abs(node->d().x) + std::abs(node->d().y) > 1) {
+		if (std::abs(node->d().x) + std::abs(node->d().y) != 1) {
 			result = false;
-			printError(oldNode, node, status, "Move is too big.");
+			printError(oldNode, node, status, "Invalid move.");
 		}
 		if (to != status.table().destination() && !node->state()[to]) {
 			result = false;
