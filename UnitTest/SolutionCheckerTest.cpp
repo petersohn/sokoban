@@ -58,7 +58,9 @@ struct SolutionCheckerTestFixture {
 
 BOOST_FIXTURE_TEST_SUITE(SolutionCheckerTest, SolutionCheckerTestFixture)
 
-BOOST_AUTO_TEST_CASE(good_solution)
+BOOST_AUTO_TEST_SUITE(good_solutions)
+
+BOOST_AUTO_TEST_CASE(one_stone)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
@@ -89,7 +91,7 @@ BOOST_AUTO_TEST_CASE(good_solution)
 	BOOST_CHECK(solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
-BOOST_AUTO_TEST_CASE(good_solution_with_multiple_stones)
+BOOST_AUTO_TEST_CASE(two_stones)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
@@ -148,7 +150,11 @@ BOOST_AUTO_TEST_CASE(good_solution_with_multiple_stones)
 	BOOST_CHECK(solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
-BOOST_AUTO_TEST_CASE(bad_solution_stone_is_moved_in_too_much)
+BOOST_AUTO_TEST_SUITE_END() // good_solutions
+
+BOOST_AUTO_TEST_SUITE(invalid_moves)
+
+BOOST_AUTO_TEST_CASE(stone_is_moved_in_too_much)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
@@ -175,7 +181,11 @@ BOOST_AUTO_TEST_CASE(bad_solution_stone_is_moved_in_too_much)
 	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
-BOOST_AUTO_TEST_CASE(bad_solution_wrong_move_descriptor_source_point)
+BOOST_AUTO_TEST_SUITE_END() // good_solutions
+
+BOOST_AUTO_TEST_SUITE(inconsistent_nodes)
+
+BOOST_AUTO_TEST_CASE(wrong_move_descriptor_source_point)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
@@ -206,7 +216,7 @@ BOOST_AUTO_TEST_CASE(bad_solution_wrong_move_descriptor_source_point)
 	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
-BOOST_AUTO_TEST_CASE(bad_solution_wrong_move_descriptor_destination_point)
+BOOST_AUTO_TEST_CASE(wrong_move_descriptor_destination_point)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
@@ -237,6 +247,8 @@ BOOST_AUTO_TEST_CASE(bad_solution_wrong_move_descriptor_destination_point)
 	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // inconsistent_nodes
+
+BOOST_AUTO_TEST_SUITE_END() // SolutionCheckerTest
 
 
