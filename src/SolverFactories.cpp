@@ -6,6 +6,7 @@
 #include "MovableChecker.hpp"
 #include "ExtendedMovableChecker.hpp"
 #include "CorridorChecker.hpp"
+#include "ExtendedCorridorChecker.hpp"
 #include "BlockListGenerator.hpp"
 #include "BasicHeurCalculator.hpp"
 #include "AdvancedHeurCalculator.hpp"
@@ -63,8 +64,16 @@ std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const
 		break;
 	}
 
-	if (options_.useCorridorChecker_)
+	switch (options_.corridorCheckerType_) {
+	case CorridorCheckerType::none:
+		break;
+	case CorridorCheckerType::simple:
 		checkers.push_back(Checker::Ptr(new CorridorChecker(calculator)));
+		break;
+	case CorridorCheckerType::extended:
+		checkers.push_back(Checker::Ptr(new ExtendedCorridorChecker(calculator)));
+		break;
+	}
 
 	return checkers;
 }

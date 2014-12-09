@@ -14,6 +14,8 @@ LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
 	(none)(vector)(decisionTree))
 LAZY_ARGUMENT_ENUM(MovableCheckerType, movableCheckerTypes,
 		(none)(simple)(extended))
+LAZY_ARGUMENT_ENUM(CorridorCheckerType, corridorCheckerTypes,
+		(none)(simple)(extended))
 
 inline
 bool operator==(const Compare& lhs, const Compare& rhs) {
@@ -46,7 +48,7 @@ struct Options {
 	bool oldStyleOutput_ = false;
 	bool useStonePusher_ = true;
 	MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;
-	bool useCorridorChecker_ = true;
+	CorridorCheckerType corridorCheckerType_ = CorridorCheckerType::simple;
 	bool useAdvancedHeurCalculator_ = true;
 	std::size_t statusPoolSize_ = 0;
 	BlockListHeurType blocklistHeurCalculatorType_ = BlockListHeurType::none;

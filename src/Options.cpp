@@ -77,8 +77,8 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			("movable-checker", defaultValue(&options.movableCheckerType_),
 			"Check if a stone is not stuck. The extended checker does a more thorough "
 			"checking but is slower.\n")
-			("corridor-checker", defaultValue(&options.useCorridorChecker_),
-			"Enable/disable checking for corridors.\n")
+			("corridor-checker", defaultValue(&options.corridorCheckerType_),
+			"Type of corridor checking.\n")
 			("advanced-heur-calculator", defaultValue(&options.useAdvancedHeurCalculator_),
 			"Enable/disable advanced heur calculator.\n")
 			("heur-list-size", defaultValue(&options.maxHeurListSize_),
