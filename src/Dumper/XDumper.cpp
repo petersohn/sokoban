@@ -6,7 +6,7 @@
 #include <boost/lexical_cast.hpp>
 
 
-XDumper::XDumper(const char *filename):
+XDumper::XDumper(const std::string& filename):
 		filename_(filename)
 {
 	clear();

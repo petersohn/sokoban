@@ -45,6 +45,7 @@ struct Options {
 
 	DumpStyle dumpStyle_ = DumpStyle::none;
 	std::string dumpFilter_;
+	std::string dumpFilename_;
 	bool oldStyleOutput_ = false;
 	bool useStonePusher_ = true;
 	MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;

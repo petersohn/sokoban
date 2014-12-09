@@ -23,7 +23,7 @@ class XDumper: public Dumper {
 	ElementPtr getElement(const Node::Ptr& node);
 	ElementPtr doAddNode(const Node::Ptr& node);
 public:
-	XDumper(const char *filename);
+	XDumper(const std::string& filename);
 	void initialStatus(const Status &status) override;
 	void addNode(const Node::Ptr& node) override;
 	void addToSolution(const Node::Ptr& node) override;

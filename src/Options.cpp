@@ -72,6 +72,8 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			("dump-filter", defaultValue(&options.dumpFilter_),
 			 "Only dump nodes which match this filter (exact text match). "
 			 "Only works with text dumper.")
+			("dump-filename", defaultValue(&options.dumpFilename_),
+			 "The file to save dumps to. The default depends on the dump style.")
 			("stone-pusher", defaultValue(&options.useStonePusher_),
 			"Enable/disable automatic pushing of stones into the destination point.\n")
 			("movable-checker", defaultValue(&options.movableCheckerType_),

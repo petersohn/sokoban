@@ -14,7 +14,7 @@ class TextDumper: public Dumper {
 
 	void dump(const Node& node, const std::string& text);
 public:
-	TextDumper(const char *filename, const boost::optional<std::string>& filter):
+	TextDumper(const std::string& filename, const boost::optional<std::string>& filter):
 		file_(filename, std::ios::out | std::ios::trunc),
 		filter_(filter)
 	{}

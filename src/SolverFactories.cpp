@@ -138,6 +138,15 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 			experimentalCalculator);
 }
 
+namespace {
+
+std::string getDumpFilename(const Options& options, const std::string& defaultValue)
+{
+	return options.dumpFilename_.empty() ? defaultValue : options.dumpFilename_;
+}
+
+}
+
 Dumper::Ptr createDumperFromOptions(const Options & opts)
 {
 	switch (opts.dumpStyle_) {
@@ -148,12 +157,12 @@ Dumper::Ptr createDumperFromOptions(const Options & opts)
 			dumpFilter = opts.dumpFilter_;
 		}
 
-		return Dumper::Ptr(new TextDumper("dump.dump", dumpFilter));
+		return Dumper::Ptr(new TextDumper(getDumpFilename(opts, "dump.dump"), dumpFilter));
 	}
 	case DumpStyle::xml:
-		return Dumper::Ptr(new XDumper("dump.xml"));
+		return Dumper::Ptr(new XDumper(getDumpFilename(opts, "dump.xml")));
 	case DumpStyle::statistics:
-		return Dumper::Ptr(new StatisticsDumper("dump.csv"));
+		return Dumper::Ptr(new StatisticsDumper(getDumpFilename(opts, "dump.csv")));
 	default:
 		return Dumper::Ptr();
 	}
