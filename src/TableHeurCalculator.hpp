@@ -16,21 +16,21 @@ public:
 	TableHeurCalculator(StoneCalculator calculator):
 		calculator_(std::move(calculator))
 	{}
-	int calculateStatus(
+	float calculateStatus(
 			const Status& status,
 			const MoveDescriptor*,
 			const std::shared_ptr<Node>&) const override
 	{
-		int result = 0;
+		float result = 0;
 		for (auto stone: status.state()) {
-			int val = calculator_(status, stone);
+			float val = calculator_(status, stone);
 			if (val < 0)
 				return -1;
 			result += val;
 		}
 		return result;
 	}
-	int calculateStone(const Status& status, Point p) const override
+	float calculateStone(const Status& status, Point p) const override
 	{
 		return calculator_(status, p);
 	}

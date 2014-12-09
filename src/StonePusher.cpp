@@ -75,9 +75,9 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 	Status newStatus(status);
 	if (newStatus.currentPos() == pd)
 		newStatus.shiftCurrentPos();
-	int heur1 = calculator_.calculateStone(newStatus, p);
+	float heur1 = calculator_.calculateStone(newStatus, p);
 	newStatus.currentPos(p);
-	int heur2 = calculator_.calculateStone(newStatus, pd);
+	float heur2 = calculator_.calculateStone(newStatus, pd);
 	if ((heur2 < 0 && (pd != newStatus.table().destination())) || heur2 >= heur1)
 	{
 		return false;

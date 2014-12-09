@@ -13,7 +13,7 @@ class AdvancedStoneCalculator {
 	{
 		Point pos;
 		Array<bool> reachable;
-		int heur;
+		float heur;
 		Partition(size_t width, size_t height):
 			reachable(width, height, false),
 			heur(0)
@@ -62,7 +62,7 @@ public:
 	AdvancedStoneCalculator(AdvancedStoneCalculator&&) = default;
 	AdvancedStoneCalculator& operator=(AdvancedStoneCalculator&&) = default;
 
-	int operator()(const Status& status, Point p) const;
+	float operator()(const Status& status, Point p) const;
 };
 
 using AdvancedHeurCalculator = TableHeurCalculator<AdvancedStoneCalculator>;

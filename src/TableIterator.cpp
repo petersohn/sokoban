@@ -17,7 +17,7 @@ void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 		auto parts = getPartitions(*table_, state, reverseSearchMaxDepth_);
 		bool ok = false;
 		for (auto& status: parts) {
-			int heur = heurCalculator_->calculateStatus(status);
+			float heur = heurCalculator_->calculateStatus(status);
 			if (heur < 0) {
 				continue;
 			}

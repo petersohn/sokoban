@@ -4,7 +4,7 @@
 BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 {
 	distances_.reset(table.width(), table.height(), 0);
-	distances_[table.destination()] = 1;
+	distances_[table.destination()] = 1.0f;
 	bool touched;
 	Point p;
 	do {
@@ -12,7 +12,7 @@ BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 		for (Point  p: arrayRange(table)) {
 			if (distances_[p] == 0)
 				continue;
-			int newDist = distances_[p]+1;
+			float newDist = distances_[p]+1.0f;
 			if (checkDistance(table, p, Point::p10, newDist))
 				touched = true;
 			if (checkDistance(table, p, Point::pm10, newDist))
@@ -24,11 +24,11 @@ BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 		}
 	} while (touched);
 	for (auto& distance: distances_) {
-		distance--;
+		distance -= 1.0f;
 	}
 }
 
-int BasicStoneCalculator::operator()(const Status& /*status*/, Point p) const
+float BasicStoneCalculator::operator()(const Status& /*status*/, Point p) const
 {
 	return distances_[p];
 }

@@ -46,9 +46,9 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 {
 	std::deque<Node::Ptr> result = doCalculateBlockList(status);
 	if (!result.empty()) {
-		int heur = incrementalCalculator_->calculateStatus(status);
-		int cost = result.back()->cost();
-		int difference = cost - heur;
+		float heur = incrementalCalculator_->calculateStatus(status);
+		float cost = result.back()->cost();
+		float difference = cost - heur;
 		if (difference > 0) {
 			auto threadId = *util::ThreadPool::getCurrentThreadId();
 			calculationInfos_[threadId]->dump_ <<

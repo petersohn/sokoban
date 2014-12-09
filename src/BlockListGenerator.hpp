@@ -19,8 +19,8 @@ class BlockListGenerator {
 private:
 	struct IncrementInfo {
 		HeurInfo heurInfo_;
-		int	difference_;
-		IncrementInfo(HeurInfo heurInfo, int difference):
+		float difference_;
+		IncrementInfo(HeurInfo heurInfo, float difference):
 			heurInfo_(std::move(heurInfo)),
 			difference_(difference)
 		{}

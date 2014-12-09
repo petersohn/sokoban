@@ -7,7 +7,7 @@ using namespace std;
 //}
 
 Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancestor,
-		int c, int heur, int experimentalHeur, int time):
+		float c, float heur, float experimentalHeur, int time):
 	ancestor_(ancestor),
 	state_(stones),
 	heur_(heur),

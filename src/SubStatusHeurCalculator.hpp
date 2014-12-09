@@ -4,6 +4,7 @@
 #include "HeurCalculator.hpp"
 #include "HeurInfo.hpp"
 #include "Status/PseudoStatus.hpp"
+#include "Node.hpp"
 
 template <typename NextFactory>
 class SubStatusHeurCalculator: public HeurCalculator {
@@ -18,18 +19,18 @@ public:
 	{
 	}
 
-	int calculateStone(const Status &status, Point p) const override
+	float calculateStone(const Status &status, Point p) const override
 	{
 		return baseCalculator_->calculateStone(status, p);
 	}
 
-	int calculateStatus(
+	float calculateStatus(
 			const Status &status,
 			const MoveDescriptor* /*moveDescriptor*/,
 			const std::shared_ptr<Node>& ancestor) const override
 	{
 		PseudoStatus pseudoStatus(status);
-		int result = 0;
+		float result = 0;
 		auto next = nextFactory_();
 		while (const auto& subset = next(pseudoStatus)) {
 			if (isSubStatus(subset->first, pseudoStatus)) {
@@ -43,7 +44,7 @@ public:
 			result += baseCalculator_->calculateStone(status, p);
 		}
 		if (ancestor) {
-			return std::max(result, ancestor->heur() - 1);
+			return std::max(result, ancestor->heur() - 1.0f);
 		}
 		return result;
 	}

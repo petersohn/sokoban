@@ -10,7 +10,7 @@
 #include "SubStatusHeurCalculator.hpp"
 
 class DecisionTreeHeurListFactory {
-	typedef decisionTree::Node<PseudoStatus, int> NodeType;
+	typedef decisionTree::Node<PseudoStatus, float> NodeType;
 
 	std::unique_ptr<const NodeType> decisionTree_;
 
@@ -62,10 +62,10 @@ public:
 		boost::transform(heurList, std::back_inserter(convertedHeurList),
 				[](const HeurInfo& heurInfo)
 				{
-					return std::make_shared<std::pair<PseudoStatus, int>>
+					return std::make_shared<std::pair<PseudoStatus, float>>
 							(PseudoStatus(heurInfo.first), heurInfo.second);
 				});
-		decisionTree_ = decisionTree::buildNode<PseudoStatus, int>(
+		decisionTree_ = decisionTree::buildNode<PseudoStatus, float>(
 				convertedHeurList,
 				pointList(table),
 				std::move(checker),

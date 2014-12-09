@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-typedef std::pair<Status, int> HeurInfo;
+typedef std::pair<Status, float> HeurInfo;
 typedef std::vector<HeurInfo> HeurList;
 
 

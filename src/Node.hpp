@@ -14,29 +14,29 @@ public:
 private:
 	Ptr ancestor_;
 	State state_;
-	int heur_;
-	int experimentalHeur_;
+	float heur_;
+	float experimentalHeur_;
 	MoveDescriptor moveDescriptor_;
 	int depth_;
-	int cost_;
+	float cost_;
 	int time_;
 public:
 //	Node();
 	Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancestor,
-			int c, int heur, int experimentalHeur, int time);
-	int heur() const { return heur_; }
+			float c, float heur, float experimentalHeur, int time);
+	float heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
 	const Ptr& ancestor() const { return ancestor_; }
 	const State &state() const { return state_; }
 	int depth() const { return depth_; }
-	int cost() const { return cost_; }
-	int costFgv() const { return cost_ + heur_; }
+	float cost() const { return cost_; }
+	float costFgv() const { return cost_ + heur_; }
 	Point from() const { return moveDescriptor_.from_; }
 	Point  d() const { return moveDescriptor_.d_; }
 	const MoveDescriptor& moveDescriptor() const { return moveDescriptor_; }
 	int time() const { return time_; }
-	int experimtntalHeur() const { return experimentalHeur_; }
-	int experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
+	float experimtntalHeur() const { return experimentalHeur_; }
+	float experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
 };
 
 std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);

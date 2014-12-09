@@ -5,7 +5,7 @@
 #include "Array.hpp"
 
 class BasicStoneCalculator {
-	Array<int> distances_;
+	Array<float> distances_;
 	bool checkDistance(const Table& table, Point  p, Point  d, int dist);
 public:
 	BasicStoneCalculator(const Table& table);
@@ -15,7 +15,7 @@ public:
 	BasicStoneCalculator(BasicStoneCalculator&&) = default;
 	BasicStoneCalculator& operator=(BasicStoneCalculator&&) = default;
 
-	int operator()(const Status &status, Point p) const;
+	float operator()(const Status &status, Point p) const;
 };
 
 using BasicHeurCalculator = TableHeurCalculator<BasicStoneCalculator>;
