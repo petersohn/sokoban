@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <boost/optional.hpp>
 
 class AdvancedStoneCalculator {
 	struct Partition
@@ -24,9 +25,11 @@ class AdvancedStoneCalculator {
 		Partition& operator=(Partition&&) = default;
 	};
 	class HeurDumper {
+		std::string filename_;
 		std::ofstream file_;
 		void open();
 	public:
+		HeurDumper(std::string filename): filename_(std::move(filename)) {}
 		void dumpPartition(const Table& table, const Partition& partition);
 		template<class T>
 		void dumpArray(const Array<T>& arr)
@@ -36,22 +39,20 @@ class AdvancedStoneCalculator {
 		void printText(const char* text);
 	};
 
-	static HeurDumper dumper;
-
 	Array<std::vector<Partition>> partitions_;
 	Solver::Ptr solver_;
 	std::size_t reverseSearchMaxDepth_;
-	bool useDumper_;
+	boost::optional<std::string> filename_;
 	void init(const Table& table);
 
 	void initPartitions(const Table& table, Point p);
 public:
 	AdvancedStoneCalculator(const Table& table, Solver::Ptr solver,
 			std::size_t reverseSearchMaxDepth,
-			bool useDumper = true):
+			const boost::optional<std::string>& filename):
 		solver_(std::move(solver)),
 		reverseSearchMaxDepth_(reverseSearchMaxDepth),
-		useDumper_(useDumper)
+		filename_(filename)
 	{
 		assert(solver_.get());
 		init(table);

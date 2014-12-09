@@ -14,7 +14,7 @@
 
 void AdvancedStoneCalculator::HeurDumper::open() {
 	if (!file_.is_open())
-		file_.open("partitions.dump", std::ofstream::out | std::ofstream::trunc);
+		file_.open(filename_, std::ofstream::out | std::ofstream::trunc);
 }
 
 void AdvancedStoneCalculator::HeurDumper::dumpPartition(
@@ -37,8 +37,6 @@ void AdvancedStoneCalculator::HeurDumper::printText(const char *text)
 
 /* AdvancedStoneCalculator */
 
-AdvancedStoneCalculator::HeurDumper AdvancedStoneCalculator::dumper;
-
 void AdvancedStoneCalculator::init(const Table& table)
 {
 	Array<std::string> dump(table.width(), table.height());
@@ -55,7 +53,8 @@ void AdvancedStoneCalculator::init(const Table& table)
 				partitions_[p].size() > 1 ? "?" :
 				boost::lexical_cast<std::string>(partitions_[p][0].heur);
 	}
-	if (useDumper_) {
+	if (filename_) {
+		HeurDumper dumper{*filename_};
 		dumper.printText("Heuristics table:");
 		dumper.dumpArray(dump);
 		dumper.printText("\nPartitions:");

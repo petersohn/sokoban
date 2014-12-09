@@ -47,7 +47,8 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor()
 					false);
 		}));
 	return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
-			table_, std::move(solver), options_.reverseSearchMaxDepth_});
+			table_, std::move(solver), options_.reverseSearchMaxDepth_, 
+			options_.partitionsDumpFilename_});
 }
 
 std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
