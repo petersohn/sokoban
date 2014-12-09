@@ -47,6 +47,7 @@ struct Options {
 	std::string dumpFilter_;
 	std::string dumpFilename_;
 	std::string partitionsDumpFilename_ = "partitions.dump";
+	std::string solutionDumpFilename_ = "solution.dump";
 	bool oldStyleOutput_ = false;
 	bool useStonePusher_ = true;
 	MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;

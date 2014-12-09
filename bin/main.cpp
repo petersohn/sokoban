@@ -72,7 +72,8 @@ int main(int argc, char** argv) {
 				cerr << "Solution bad." << endl;
 				returnCode = 1;
 			}
-			std::ofstream dump("solution.dump", std::ios::out | std::ios::trunc);
+			std::ofstream dump(opts.solutionDumpFilename_, 
+					std::ios::out | std::ios::trunc);
 			for (std::deque<Node::Ptr>::iterator it = solution.begin();
 					it != solution.end(); ++it)
 			{
