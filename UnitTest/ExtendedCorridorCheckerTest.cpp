@@ -640,6 +640,34 @@ BOOST_AUTO_TEST_CASE(blocked_when_opening_source_points_are_not_reachable_vertic
 	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, false);
 }
 
+BOOST_AUTO_TEST_CASE(not_blocked_when_opening_source_points_are_reachable_indirectly_horizontally)
+{
+	auto data = createStatus(5, 5, {
+			"y....",
+			"o....",
+			".o*o*",
+			"o....",
+			"x...."
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{1, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, true);
+}
+
+BOOST_AUTO_TEST_CASE(not_blocked_when_opening_source_points_are_reachable_indirectly_vertically)
+{
+	auto data = createStatus(5, 5, {
+			"y.*..",
+			"..o..",
+			"..*..",
+			"..o..",
+			".o.ox"
+		});
+	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{3, 3}).returns(-1);
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	CHECK_CHECKER_RESULT(corridorCheckerUnderTest, data.second, true);
+}
+
 
 
 BOOST_AUTO_TEST_SUITE_END()
