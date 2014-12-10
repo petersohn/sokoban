@@ -16,6 +16,7 @@ LAZY_ARGUMENT_ENUM(MovableCheckerType, movableCheckerTypes,
 		(none)(simple)(extended))
 LAZY_ARGUMENT_ENUM(CorridorCheckerType, corridorCheckerTypes,
 		(none)(simple)(extended))
+LAZY_ARGUMENT_ENUM(DumpFilterType, dumpFilterTypes, (none)(text)(regex))
 
 inline
 bool operator==(const Compare& lhs, const Compare& rhs) {
@@ -44,6 +45,7 @@ struct Options {
 	typedef std::vector<Compare> CompareList;
 
 	DumpStyle dumpStyle_ = DumpStyle::none;
+	DumpFilterType dumpFilterType_ = DumpFilterType::none;
 	std::string dumpFilter_;
 	std::string dumpFilename_;
 	std::string partitionsDumpFilename_ = "partitions.dump";

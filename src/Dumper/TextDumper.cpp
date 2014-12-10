@@ -4,13 +4,32 @@
 #include "Dumper/DumperFunctions.hpp"
 #include <string>
 
+class FilterVisitor {
+	const std::string& text;
+public:
+	using result_type = bool;
+
+	FilterVisitor(const std::string& text):text(text) {}
+
+	result_type operator()(TextDumper::NoFilter) const
+	{
+		return true;
+	}
+	result_type operator()(const std::string& filter) const
+	{
+		return text.find(filter) != std::string::npos;
+	}
+	result_type operator()(const std::regex& filter) const
+	{
+		return std::regex_search(text, filter);
+	}
+};
+
 void TextDumper::dump(const Node& node, const std::string& text)
 {
-	if (filter_ && text.find(*filter_) == std::string::npos) {
-		return;
+	if (boost::apply_visitor(FilterVisitor{text}, filter_)) {
+		dumpNode(file_, *table_, node, text);
 	}
-
-	dumpNode(file_, *table_, node, text);
 }
 
 void TextDumper::initialStatus(const Status &status) {

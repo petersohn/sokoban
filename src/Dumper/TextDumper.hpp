@@ -5,16 +5,23 @@
 #include "Status/Table.hpp"
 #include <iostream>
 #include <fstream>
-#include <boost/optional.hpp>
+#include <regex>
+#include <boost/variant.hpp>
 
 class TextDumper: public Dumper {
+public:
+	struct NoFilter {};
+	using FilterType = boost::variant<NoFilter, std::string, std::regex>;
+private:
+
 	std::ofstream file_;
 	const Table* table_;
-	boost::optional<std::string> filter_;
+
+	FilterType filter_;
 
 	void dump(const Node& node, const std::string& text);
 public:
-	TextDumper(const std::string& filename, const boost::optional<std::string>& filter):
+	TextDumper(const std::string& filename, const FilterType& filter):
 		file_(filename, std::ios::out | std::ios::trunc),
 		filter_(filter)
 	{}

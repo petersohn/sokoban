@@ -154,10 +154,18 @@ Dumper::Ptr createDumperFromOptions(const Options & opts)
 {
 	switch (opts.dumpStyle_) {
 	case DumpStyle::text: {
-		boost::optional<std::string> dumpFilter;
+		TextDumper::FilterType dumpFilter;
 
-		if (!opts.dumpFilter_.empty()) {
+		switch (opts.dumpFilterType_) {
+		case DumpFilterType::none:
+			dumpFilter = TextDumper::NoFilter{};
+			break;
+		case DumpFilterType::text:
 			dumpFilter = opts.dumpFilter_;
+			break;
+		case DumpFilterType::regex:
+			dumpFilter = std::regex{opts.dumpFilter_};
+			break;
 		}
 
 		return Dumper::Ptr(new TextDumper(getDumpFilename(opts, "dump.dump"), dumpFilter));
