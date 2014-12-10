@@ -8,14 +8,14 @@
 
 class CorridorCheckerStrategy {
 	const HeurCalculator* calculator_;
+	const Status& status;
 public:
-	CorridorCheckerStrategy(const HeurCalculator* calculator):
-		calculator_(calculator)
+	CorridorCheckerStrategy(const HeurCalculator* calculator,
+			const Status& status):
+		calculator_(calculator), status(status)
 	{}
-	bool checkCorridorEnding(const Status &status,
-		Point p0, Point side) const;
-	void floodFill(const Status& status, Point p0, Array<bool>& result,
-				MinMax& minmax);
+	bool checkCorridorEnding(Point p0, Point side) const;
+	void floodFill(Point p0, Array<bool>& result, MinMax& minmax);
 };
 
 class CorridorCheckerStrategyFactory {
@@ -26,9 +26,9 @@ public:
 		calculator_(std::move(heurCalculator))
 	{}
 
-	CorridorCheckerStrategy operator()() const
+	CorridorCheckerStrategy operator()(const Status& status) const
 	{
-		return CorridorCheckerStrategy{calculator_.get()};
+		return CorridorCheckerStrategy{calculator_.get(), status};
 	}
 };
 

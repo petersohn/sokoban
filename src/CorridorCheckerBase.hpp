@@ -8,12 +8,12 @@ template <typename StrategyFactory>
 class CorridorCheckerBase: public Checker {
 	StrategyFactory strategyFactory;
 public:
-	CorridorCheckerBase(StrategyFactory strategyFactory = StrategyFactory{}): 
+	CorridorCheckerBase(StrategyFactory strategyFactory = StrategyFactory{}):
 			strategyFactory(std::move(strategyFactory)) {}
 
 	bool check(const Status& status, Point p0) const override
 	{
-		auto strategy = strategyFactory();
+		auto strategy = strategyFactory(status);
 		Array<bool> unchecked(3, 3, true);
 		Point p1;
 		for (p1.x = 0; p1.x < 3; p1.x++)
@@ -23,33 +23,33 @@ public:
 					continue;
 				Array<bool> reach(status.width(), status.height(), false);
 				MinMax minmax;
-				strategy.floodFill(status, p, reach, minmax);
+				strategy.floodFill(p, reach, minmax);
 				if (!reach[status.table().destination()]) {
 					if (minmax.minX == minmax.maxX && minmax.minY == minmax.maxY) {
-						if (!strategy.checkCorridorEnding(status,
-									Point(minmax.minX, minmax.minY - 1), Point::p10) &&
-							!strategy.checkCorridorEnding(status,
-									Point(minmax.minX, minmax.maxY + 1), Point::p10) &&
-							!strategy.checkCorridorEnding(status,
-									Point(minmax.minX - 1, minmax.minY), Point::p01) &&
-							!strategy.checkCorridorEnding(status,
-									Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
+						if (!strategy.checkCorridorEnding(Point(
+										minmax.minX, minmax.minY - 1), Point::p10) &&
+							!strategy.checkCorridorEnding(Point(
+									minmax.minX, minmax.maxY + 1), Point::p10) &&
+							!strategy.checkCorridorEnding(Point(
+									minmax.minX - 1, minmax.minY), Point::p01) &&
+							!strategy.checkCorridorEnding(Point(
+									minmax.maxX + 1, minmax.minY), Point::p01)) {
 							return false;
 						}
 					} else
 					if (minmax.minX == minmax.maxX) {
-						if (!strategy.checkCorridorEnding(status,
-									Point(minmax.minX, minmax.minY - 1), Point::p10) &&
-							!strategy.checkCorridorEnding(status,
-									Point(minmax.minX, minmax.maxY + 1), Point::p10)) {
+						if (!strategy.checkCorridorEnding(Point(
+										minmax.minX, minmax.minY - 1), Point::p10) &&
+							!strategy.checkCorridorEnding(Point(
+									minmax.minX, minmax.maxY + 1), Point::p10)) {
 							return false;
 						}
 					} else
 					if (minmax.minY == minmax.maxY) {
-						if (!strategy.checkCorridorEnding(status,
-									Point(minmax.minX - 1, minmax.minY), Point::p01) &&
-							!strategy.checkCorridorEnding(status,
-									Point(minmax.maxX + 1, minmax.minY), Point::p01)) {
+						if (!strategy.checkCorridorEnding(Point(
+										minmax.minX - 1, minmax.minY), Point::p01) &&
+							!strategy.checkCorridorEnding(Point(
+									minmax.maxX + 1, minmax.minY), Point::p01)) {
 							return false;
 						}
 					}

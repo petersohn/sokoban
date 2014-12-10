@@ -4,7 +4,7 @@
 #include "Status/floodFill.hpp"
 #include "FieldType.hpp"
 
-void ExtendedCorridorCheckerStrategy::floodFill(const Status& status,
+void ExtendedCorridorCheckerStrategy::floodFill(
 		Point p0, Array<bool>& result, MinMax& minmax)
 {
 	Status::BorderType border;
@@ -13,7 +13,7 @@ void ExtendedCorridorCheckerStrategy::floodFill(const Status& status,
 		State{std::move(std::move(border))}, status.currentPos()});
 }
 
-bool ExtendedCorridorCheckerStrategy::checkCorridorEnding(const Status & status,
+bool ExtendedCorridorCheckerStrategy::checkCorridorEnding(
 		Point  p0, Point  side) const
 {
 	Point p1 = p0 + side;
@@ -21,6 +21,6 @@ bool ExtendedCorridorCheckerStrategy::checkCorridorEnding(const Status & status,
 	return status.value(p0) != FieldType::wall &&
 			status.value(p1) == FieldType::floor &&
 			status.value(pm1) == FieldType::floor &&
-			(isMovableTo(status, p1, pm1) || isMovableTo(status, pm1, p1));
+			(isMovableTo(p1, pm1) || isMovableTo(pm1, p1));
 }
 

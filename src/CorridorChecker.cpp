@@ -4,8 +4,7 @@
 #include "Status/floodFill.hpp"
 #include "FieldType.hpp"
 
-bool CorridorCheckerStrategy::checkCorridorEnding(const Status & status,
-			Point  p0, Point  side) const
+bool CorridorCheckerStrategy::checkCorridorEnding(Point  p0, Point  side) const
 {
 	Point p1 = p0 + side;
 	Point pm1 = p0 - side;
@@ -16,8 +15,8 @@ bool CorridorCheckerStrategy::checkCorridorEnding(const Status & status,
 			 calculator_->calculateStone(status, pm1) >= 0);
 }
 
-void CorridorCheckerStrategy::floodFill(const Status& status,
-		Point p0, Array<bool>& result, MinMax& minmax)
+void CorridorCheckerStrategy::floodFill(Point p0, Array<bool>& result, 
+		MinMax& minmax)
 {
 	::floodFill(status, p0, result, minmax);
 }

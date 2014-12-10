@@ -9,19 +9,20 @@
 
 class ExtendedCorridorCheckerStrategy {
 	const HeurCalculator* calculator_;
+	const Status& status;
 	std::unique_ptr<Status> simpleStatus;
-	bool isMovableTo(const Status& status, Point from, Point to) const
+	bool isMovableTo(Point from, Point to) const
 	{
 		return simpleStatus->reachable(from) &&
 			calculator_->calculateStone(status, to) > 0;
 	}
 public:
-	ExtendedCorridorCheckerStrategy(const HeurCalculator* calculator):
-		calculator_(calculator)
+	ExtendedCorridorCheckerStrategy(const HeurCalculator* calculator,
+			const Status& status):
+		calculator_(calculator), status(status)
 	{}
-	bool checkCorridorEnding(const Status &status, Point p0, Point side) const;
-	void floodFill(const Status& status, Point p0, Array<bool>& result,
-				MinMax& minmax);
+	bool checkCorridorEnding(Point p0, Point side) const;
+	void floodFill(Point p0, Array<bool>& result, MinMax& minmax);
 };
 
 class ExtendedCorridorCheckerStrategyFactory {
@@ -32,9 +33,9 @@ public:
 		calculator_(std::move(heurCalculator))
 	{}
 
-	ExtendedCorridorCheckerStrategy operator()() const
+	ExtendedCorridorCheckerStrategy operator()(const Status& status) const
 	{
-		return ExtendedCorridorCheckerStrategy{calculator_.get()};
+		return ExtendedCorridorCheckerStrategy{calculator_.get(), status};
 	}
 };
 
