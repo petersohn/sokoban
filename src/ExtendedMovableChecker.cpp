@@ -1,8 +1,5 @@
 #include "ExtendedMovableChecker.hpp"
-#include "FieldType.hpp"
 #include "MovableCheckerImpl.hpp"
-#include <unordered_set>
-#include <algorithm>
 
 bool ExtendedMovableChecker::check(const Status& status, Point p) const {
 	MovableCheckerImpl ch(status, *calculator_);
