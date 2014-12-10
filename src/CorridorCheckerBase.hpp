@@ -8,6 +8,9 @@ template <typename StrategyFactory>
 class CorridorCheckerBase: public Checker {
 	StrategyFactory strategyFactory;
 public:
+
+	using StrategyFactoryType = StrategyFactory;
+
 	CorridorCheckerBase(StrategyFactory strategyFactory = StrategyFactory{}):
 			strategyFactory(std::move(strategyFactory)) {}
 
