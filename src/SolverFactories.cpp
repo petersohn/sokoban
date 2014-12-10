@@ -69,7 +69,8 @@ std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const
 	case CorridorCheckerType::none:
 		break;
 	case CorridorCheckerType::simple:
-		checkers.push_back(Checker::Ptr(new CorridorChecker(calculator)));
+		checkers.push_back(Checker::Ptr(new CorridorChecker(
+						CorridorCheckerStrategyFactory{calculator})));
 		break;
 	case CorridorCheckerType::extended:
 		checkers.push_back(Checker::Ptr(new ExtendedCorridorChecker(calculator)));

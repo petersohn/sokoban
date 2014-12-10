@@ -8,7 +8,8 @@
 struct CorridorCheckerFixture {
 	std::shared_ptr<MockHeurCalculator> heurCalculator =
 		std::make_shared<MockHeurCalculator>();
-	CorridorChecker corridorCheckerUnderTest{heurCalculator};
+	CorridorChecker corridorCheckerUnderTest{
+		CorridorCheckerStrategyFactory{heurCalculator}};
 };
 
 BOOST_FIXTURE_TEST_SUITE(CorridorCheckerTest, CorridorCheckerFixture)
