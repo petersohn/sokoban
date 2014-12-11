@@ -271,6 +271,87 @@ BOOST_AUTO_TEST_CASE(stone_is_not_moved)
 	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
+BOOST_AUTO_TEST_CASE(step_is_missing_from_the_end)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"x....",
+				"....*",
+				"**o**",
+				".....",
+				".....",
+				"y.*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
+			State{Point{2, 1}},
+			MoveDescriptor{Point{2, 2}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 0}},
+			MoveDescriptor{Point{2, 1}, Point{0, -1}},
+		},
+		NodeData{
+			State{},
+			MoveDescriptor{Point{1, 0}, Point{-1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
+BOOST_AUTO_TEST_CASE(step_is_missing_from_the_middle)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"x....",
+				"....*",
+				"**o**",
+				".....",
+				".....",
+				"y.*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
+			State{Point{2, 1}},
+			MoveDescriptor{Point{2, 2}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{1, 0}},
+			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
+		},
+		NodeData{
+			State{},
+			MoveDescriptor{Point{1, 0}, Point{-1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
+BOOST_AUTO_TEST_CASE(the_finishing_state_is_not_empty)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"x....",
+				"....*",
+				"**o**",
+				".....",
+				".....",
+				"y.*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
+			State{Point{2, 1}},
+			MoveDescriptor{Point{2, 2}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 0}},
+			MoveDescriptor{Point{2, 1}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{1, 0}},
+			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
 BOOST_AUTO_TEST_SUITE_END() // invalid_moves
 
 BOOST_AUTO_TEST_SUITE(inconsistent_nodes)
