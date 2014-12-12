@@ -15,7 +15,7 @@ struct SolutionCheckerTestFixture {
 	{
 		auto data = createStatus(5, 6, {
 				"xo...",
-				"....*",
+				".....",
 				"**.**",
 				".....",
 				".....",
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(one_stone)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(one_stone_more_complicated_moves)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x.y..",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(two_stones)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				"..o..",
 				".....",
@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(stone_is_moved_in_too_much)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE(stone_is_not_moved)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -275,7 +275,7 @@ BOOST_AUTO_TEST_CASE(step_is_missing_from_the_end)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -302,7 +302,7 @@ BOOST_AUTO_TEST_CASE(step_is_missing_from_the_middle)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE(the_finishing_state_is_not_empty)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -356,7 +356,7 @@ BOOST_AUTO_TEST_CASE(stone_is_moved_in_invalid_direction)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				".o..*",
+				".o...",
 				"**.**",
 				".....",
 				".....",
@@ -383,7 +383,7 @@ BOOST_AUTO_TEST_CASE(wrong_move_descriptor_source_point)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
@@ -414,7 +414,7 @@ BOOST_AUTO_TEST_CASE(wrong_move_descriptor_destination_point)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
-				"....*",
+				".....",
 				"**o**",
 				".....",
 				".....",
