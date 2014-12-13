@@ -44,6 +44,11 @@ void SolutionChecker::printError(const Node::Ptr& oldNode, const Node::Ptr& newN
 	errorDump_ << "\n" << endl;
 }
 
+#define ERROR(msg) do { \
+	result = false; \
+	printError(oldNode, node, status, (msg)); \
+} while (false)
+
 bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<Node> >& solution)
 {
 	Status status(initialStatus);
@@ -53,40 +58,31 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 	for(std::shared_ptr<Node> node: solution) {
 		Point to(node->from() + node->d());
 		if (std::abs(node->d().x) + std::abs(node->d().y) != 1) {
-			result = false;
-			printError(oldNode, node, status, "Invalid move.");
+			ERROR("Invalid move.");
 		}
 		if (status.table().wall(to)) {
-			result = false;
-			printError(oldNode, node, status, "Wall found at 'to' point.");
+			ERROR("Wall found at 'to' point.");
 		}
 		if (status.table().wall(node->from())) {
-			result = false;
-			printError(oldNode, node, status, "Wall found at 'from' point.");
+			ERROR("Wall found at 'from' point.");
 		}
 		if (to != status.table().destination() && !node->state()[to]) {
-			result = false;
-			printError(oldNode, node, status, "Stone not found at 'to' point.");
+			ERROR("Stone not found at 'to' point.");
 		}
 		if (node->state()[node->from()]) {
-			result = false;
-			printError(oldNode, node, status, "Stone found at 'from' point.");
+			ERROR("Stone found at 'from' point.");
 		}
 		if (oldNode && node->depth() != oldNode->depth() + 1) {
-			result = false;
-			printError(oldNode, node, status, "Error in node depth");
+			ERROR("Error in node depth");
 		}
 		if (node->ancestor() != oldNode) {
-			result = false;
-			printError(oldNode, node, status, "Ancestor link error");
+			ERROR("Ancestor link error");
 		}
 		if (!isSuccessor(status, *node)) {
-			result = false;
-			printError(oldNode, node, status, "Not a successor");
+			ERROR("Not a successor");
 		}
 		if (node->costFgv() > resultLength) {
-			result = false;
-			printError(oldNode, node, status, "Invalid heuristic");
+			ERROR("Invalid heuristic");
 		}
 		if (node->experimtntalCostFgv() != node->costFgv()) {
 			heurDump_ << "Found plus heur: " <<
