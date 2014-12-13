@@ -56,6 +56,14 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 			result = false;
 			printError(oldNode, node, status, "Invalid move.");
 		}
+		if (status.table().wall(to)) {
+			result = false;
+			printError(oldNode, node, status, "Wall found at 'to' point.");
+		}
+		if (status.table().wall(node->from())) {
+			result = false;
+			printError(oldNode, node, status, "Wall found at 'from' point.");
+		}
 		if (to != status.table().destination() && !node->state()[to]) {
 			result = false;
 			printError(oldNode, node, status, "Stone not found at 'to' point.");
