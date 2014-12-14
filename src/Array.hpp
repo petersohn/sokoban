@@ -20,6 +20,12 @@
 //	}
 //}
 
+template <typename Array>
+inline bool isInsideArray(const Array& array, Point p)
+{
+	return p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(array.width()) && p.y < static_cast<int>(array.height());
+}
+
 template<typename T>
 class Array {
 	typedef std::vector<T> Data;
@@ -49,15 +55,11 @@ public:
 		return data_[pos];
 	}
 	reference operator[](Point p) {
-		assert(p.x >= 0 && p.y >= 0
-				&& p.x < static_cast<int>(width_) &&
-				p.y < static_cast<int>(height_));
+		assert(isInsideArray(*this, p));
 		return data_[p.y*width_ + p.x];
 	}
 	const_reference operator[](Point p) const {
-		assert(p.x >= 0 && p.y >= 0
-				&& p.x < static_cast<int>(width_) &&
-				p.y < static_cast<int>(height_));
+		assert(isInsideArray(*this, p));
 		return data_[p.y*width_ + p.x];
 	}
 	std::size_t size() const { return data_.size(); }
@@ -97,9 +99,7 @@ public:
 template<typename T>
 inline const typename Array<T>::const_reference arrayAt(const Array<T> &arr, Point p, const T& def)
 {
-	if (p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(arr.width()) && p.y < static_cast<int>(arr.height()))
-			return arr[p];
-		return def;
+	return isInsideArray(arr, p) ? arr[p] : def;
 }
 
 template <typename Array>

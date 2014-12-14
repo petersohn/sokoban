@@ -31,8 +31,7 @@ public:
 void InternalExpander::expandNode(Point p, Point d)
 {
 	Point pd = p+d, pmd = p-d;
-	if (pmd.x >= 0 && pmd.x < static_cast<int>(status_.width()) &&
-			pmd.y >= 0 && pmd.y < static_cast<int>(status_.height()) &&
+	if (isInsideArray(status_, pmd) &&
 			status_.value(pd) == FieldType::floor && status_.reachable(pmd))
 	{
 		Status status(status_);

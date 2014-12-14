@@ -25,13 +25,11 @@ public:
 		walls_[p] = value;
 	}
 	void destination(Point  p) {
-		assert(p.x >= 0 && p.x < static_cast<int>(width()) &&
-				p.y >= 0 && p.y < static_cast<int>(height()));
+		assert(isInsideArray(walls_, p));
 		destination_ = p;
 	}
 	void startingPoint(Point  p) {
-		assert(p.x >= 0 && p.x < static_cast<int>(width()) &&
-				p.y >= 0 && p.y < static_cast<int>(height()));
+		assert(isInsideArray(walls_, p));
 		startingPoint_ = p;
 	}
 };

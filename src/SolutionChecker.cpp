@@ -60,13 +60,11 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 		if (std::abs(node->d().x) + std::abs(node->d().y) != 1) {
 			ERROR("Invalid move.");
 		}
-		if (node->from().x < 0 || node->from().x >= static_cast<int>(status.width()) ||
-				node->from().y < 0 || node->from().y >= static_cast<int>(status.height())) {
+		if (!isInsideArray(status, node->from())) {
 			printError({}, {}, status, "'from' point outside table.");
 			return false;
 		}
-		if (to.x < 0 || to.x >= static_cast<int>(status.width()) ||
-				to.y < 0 || to.y >= static_cast<int>(status.height())) {
+		if (!isInsideArray(status, to)) {
 			printError({}, {}, status, "'to' point outside table.");
 			return false;
 		}
