@@ -79,8 +79,8 @@ void BlockListGenerator::init(const Table& table)
 		incrementalCalculator_ = n == 2 ?
 			calculator_ :
 				decisionTreeDepth > 0 ?
-				decisionTreeHeurCalculator(decisionTreeDepth, false) :
-				vectorHeurCalculator();
+				decisionTreeHeurCalculator(decisionTreeDepth, false, 1.0f) :
+				vectorHeurCalculator(1.0f);
 		for (auto& calculationInfo: calculationInfos_) {
 			calculationInfo.reset(new CalculationInfo);
 		}
@@ -135,18 +135,18 @@ Checker::Ptr BlockListGenerator::checker()
 	return std::make_shared<BlockListChecker>(blockList_);
 }
 
-HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator()
+HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
 {
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(
-			calculator_,
+			heurMultiplier, calculator_,
 			BlockListHeurListFactory{heurList_ | boost::adaptors::transformed(
 					IncrementInfo::getHeurInfo) | boost::adaptors::reversed});
 }
 
 
-HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t maxDepth,
-		bool useChecker)
+HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(
+		std::size_t maxDepth, bool useChecker, float heurMultiplier)
 {
 	assert(table_);
 	boost::optional<ComplexChecker> checker;
@@ -154,7 +154,7 @@ HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(std::size_t m
 		checker = ComplexChecker{checker_};
 	}
 	return std::make_shared<DecisionTreeHeurCalculator>(
-			calculator_,
+			heurMultiplier, calculator_,
 			DecisionTreeHeurListFactory{
 				*table_,
 				heurList_ | boost::adaptors::transformed(

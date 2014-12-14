@@ -8,12 +8,15 @@
 
 template <typename NextFactory>
 class SubStatusHeurCalculator: public HeurCalculator {
+	float heurMultiplier_;
 	HeurCalculator::Ptr baseCalculator_;
 	NextFactory nextFactory_;
 public:
 	SubStatusHeurCalculator(
+			float heurMultiplier,
 			const HeurCalculator::Ptr& baseCalculator,
 			NextFactory nextFactory = NextFactory{}):
+				heurMultiplier_(heurMultiplier),
 				baseCalculator_(std::move(baseCalculator)),
 				nextFactory_(std::move(nextFactory))
 	{
@@ -21,7 +24,7 @@ public:
 
 	float calculateStone(const Status &status, Point p) const override
 	{
-		return baseCalculator_->calculateStone(status, p);
+		return baseCalculator_->calculateStone(status, p) * heurMultiplier_;
 	}
 
 	float calculateStatus(
@@ -44,9 +47,9 @@ public:
 			result += baseCalculator_->calculateStone(status, p);
 		}
 		if (ancestor) {
-			return std::max(result, ancestor->heur() - 1.0f);
+			result = std::max(result, ancestor->heur() / heurMultiplier_ - 1.0f);
 		}
-		return result;
+		return result * heurMultiplier_;
 	}
 
 };

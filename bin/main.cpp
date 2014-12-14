@@ -47,7 +47,8 @@ int main(int argc, char** argv) {
 	SolutionChecker solutionChecker(std::cerr, heurDump);
 	int returnCode = 0;
 	if (opts.test_ > 0) {
-		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor();
+		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor(
+				1.0);
 		util::ThreadPool threadPool;
 		util::ThreadPoolRunner runner(threadPool);
 		threadPool.setNumThreads(opts.numThreads_);
@@ -72,7 +73,7 @@ int main(int argc, char** argv) {
 				cerr << "Solution bad." << endl;
 				returnCode = 1;
 			}
-			std::ofstream dump(opts.solutionDumpFilename_, 
+			std::ofstream dump(opts.solutionDumpFilename_,
 					std::ios::out | std::ios::trunc);
 			for (std::deque<Node::Ptr>::iterator it = solution.begin();
 					it != solution.end(); ++it)

@@ -18,7 +18,7 @@ class OptionsBasedExpanderFactory {
 	const Table& table_;
 	bool log_;
 public:
-	OptionsBasedExpanderFactory(const Options &opts, const Table& table, bool log = true):
+	OptionsBasedExpanderFactory(const Options &opts, const Table& table, bool log):
 		options_(opts),
 		table_(table),
 		log_(log)
@@ -28,7 +28,7 @@ public:
 	OptionsBasedExpanderFactory(const OptionsBasedExpanderFactory&) = delete;
 	OptionsBasedExpanderFactory& operator=(const OptionsBasedExpanderFactory&) = delete;
 
-	HeurCalculator::Ptr createAdvancedHeurCalcularor();
+	HeurCalculator::Ptr createAdvancedHeurCalcularor(float heurMultiplier);
 	Expander::Ptr createExpander(
 			HeurCalculator::Ptr calculator,
 			ComplexChecker checker,

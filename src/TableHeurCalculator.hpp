@@ -12,9 +12,11 @@
 template <typename StoneCalculator>
 class TableHeurCalculator: public HeurCalculator {
 	StoneCalculator calculator_;
+	float heurMultiplier_;
 public:
-	TableHeurCalculator(StoneCalculator calculator):
-		calculator_(std::move(calculator))
+	TableHeurCalculator(StoneCalculator calculator, float heurMultiplier):
+		calculator_(std::move(calculator)),
+		heurMultiplier_(heurMultiplier)
 	{}
 	float calculateStatus(
 			const Status& status,
@@ -23,7 +25,7 @@ public:
 	{
 		float result = 0;
 		for (auto stone: status.state()) {
-			float val = calculator_(status, stone);
+			float val = calculator_(status, stone) * heurMultiplier_;
 			if (val < 0)
 				return -1;
 			result += val;
@@ -32,7 +34,7 @@ public:
 	}
 	float calculateStone(const Status& status, Point p) const override
 	{
-		return calculator_(status, p);
+		return calculator_(status, p) * heurMultiplier_;
 	}
 
 };

@@ -89,9 +89,9 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 		if (!isSuccessor(status, *node)) {
 			ERROR("Not a successor");
 		}
-		if (node->costFgv() > resultLength) {
-			ERROR("Invalid heuristic");
-		}
+		//if (node->costFgv() > resultLength) {
+			//ERROR("Invalid heuristic");
+		//}
 		if (node->experimtntalCostFgv() != node->costFgv()) {
 			heurDump_ << "Found plus heur: " <<
 					node->costFgv() << " --> " <<
