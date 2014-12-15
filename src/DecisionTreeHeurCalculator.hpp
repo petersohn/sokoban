@@ -1,12 +1,10 @@
 #ifndef DECISIONTREEHEURCALCULATOR_H_
 #define DECISIONTREEHEURCALCULATOR_H_
 
-#include "HeurCalculator.hpp"
 #include "HeurInfo.hpp"
 #include "Status/PseudoStatus.hpp"
 #include "DecisionTree/DecisionTree.hpp"
 #include "TimeMeter.hpp"
-#include "Checker.hpp"
 #include "SubStatusHeurCalculator.hpp"
 
 class DecisionTreeHeurListFactory {
