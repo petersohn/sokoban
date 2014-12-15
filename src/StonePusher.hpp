@@ -1,7 +1,6 @@
 #ifndef STONEPUSHER_H_
 #define STONEPUSHER_H_
 
-#include "Node.hpp"
 #include "HeurCalculator.hpp"
 #include "Expander.hpp"
 #include "NodeFactory.hpp"
@@ -9,6 +8,7 @@
 #include "PrioNodeQueueFwd.hpp"
 
 class State;
+class Node;
 class VisitedStates;
 
 class StonePusher: public Expander {

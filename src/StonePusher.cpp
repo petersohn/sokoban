@@ -1,19 +1,17 @@
 #include "StonePusher.hpp"
 #include "Array.hpp"
 #include "Status/Status.hpp"
-#include "Status/State.hpp"
-#include "VisitedStateInfo.hpp"
 #include "VisitedStates.hpp"
 #include "Status/floodFill.hpp"
 #include "intersect.hpp"
 #include "FieldType.hpp"
 #include "PrioNodeQueue.hpp"
+#include "Node.hpp"
 #include <iostream>
 #include <memory>
 
 class InternalPusher {
 public:
-	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
 private:
 	std::shared_ptr<Node> node_;
 	const HeurCalculator& calculator_;
@@ -38,7 +36,7 @@ std::shared_ptr<Node> InternalPusher::pushStones(Status status, std::shared_ptr<
 		touched = false;
 		Status::BorderType destBorder;
 		floodFill(status, status.table().destination(), destReachable, destBorder);
-		Status::BorderType border = intersect(status.border(), 
+		Status::BorderType border = intersect(status.border(),
 				std::move(destBorder));
 		for (Status::BorderType::const_iterator it = border.begin();
 				it != border.end(); ++it) {
