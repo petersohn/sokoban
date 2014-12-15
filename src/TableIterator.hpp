@@ -1,9 +1,6 @@
 #ifndef TABLEITERATOR_H_
 #define TABLEITERATOR_H_
 
-#include "Status/Table.hpp"
-#include "Status/State.hpp"
-#include "Checker.hpp"
 #include "Mutexes.hpp"
 #include "TimeMeter.hpp"
 #include "ComplexChecker.hpp"
@@ -11,6 +8,7 @@
 #include <boost/asio/io_service.hpp>
 #include <functional>
 
+class State;
 class Status;
 
 class TableIterator {
@@ -39,20 +37,7 @@ private:
 	void cleanWorkQueue();
 	void progress();
 
-	bool advancePoint(Point &p)
-	{
-		if (p.x == static_cast<int>(table_->width()) - 1) {
-			if (p.y < static_cast<int>(table_->height()) - 1) {
-				++p.y;
-				p.x = 0;
-			} else {
-				return false;
-			}
-		} else {
-			++p.x;
-		}
-		return true;
-	}
+	bool advancePoint(Point& p);
 
 public:
 	TableIterator(

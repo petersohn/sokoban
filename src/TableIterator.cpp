@@ -1,7 +1,23 @@
 #include "TableIterator.hpp"
-#include "TempValue.hpp"
 #include "ProgressBar.hpp"
 #include "Status/StatusUtils.hpp"
+#include "Status/Table.hpp"
+#include "Status/State.hpp"
+
+bool TableIterator::advancePoint(Point& p)
+{
+	if (p.x == static_cast<int>(table_->width()) - 1) {
+		if (p.y < static_cast<int>(table_->height()) - 1) {
+			++p.y;
+			p.x = 0;
+		} else {
+			return false;
+		}
+	} else {
+		++p.x;
+	}
+	return true;
+}
 
 void TableIterator::initIter(Point p, std::size_t stones, const State &state)
 {
