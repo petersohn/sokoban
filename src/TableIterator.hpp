@@ -2,10 +2,12 @@
 #define TABLEITERATOR_H_
 
 #include "Status/Table.hpp"
+#include "Status/State.hpp"
 #include "Checker.hpp"
 #include "Mutexes.hpp"
 #include "TimeMeter.hpp"
 #include "ComplexChecker.hpp"
+#include "HeurCalculator.hpp"
 #include <boost/asio/io_service.hpp>
 #include <functional>
 

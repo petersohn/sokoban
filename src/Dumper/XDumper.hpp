@@ -2,8 +2,6 @@
 #define XDUMPER_H_
 
 #include "Dumper/XML.hpp"
-#include "Node.hpp"
-#include "Status/Table.hpp"
 #include "Dumper/Dumper.hpp"
 #include <memory>
 #include <map>

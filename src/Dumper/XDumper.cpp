@@ -1,6 +1,8 @@
 #include "Dumper/XDumper.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "Status/Status.hpp"
+#include "Status/Table.hpp"
+#include "Node.hpp"
 #include <iostream>
 #include <sstream>
 #include <boost/lexical_cast.hpp>

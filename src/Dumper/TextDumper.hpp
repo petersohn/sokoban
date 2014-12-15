@@ -2,11 +2,11 @@
 #define TEXTDUMPER_H_
 
 #include "Dumper/Dumper.hpp"
-#include "Status/Table.hpp"
-#include <iostream>
 #include <fstream>
 #include <regex>
 #include <boost/variant.hpp>
+
+class Table;
 
 class TextDumper: public Dumper {
 public:

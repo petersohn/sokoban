@@ -3,9 +3,9 @@
 
 #include "Status/Table.hpp"
 #include <memory>
-#include "Node.hpp"
 
 class Status;
+class Node;
 
 class Dumper {
 public:
