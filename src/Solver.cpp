@@ -13,7 +13,7 @@ class InternalSolver {
 	Expander::Ptr expander_;
 	Dumper::Ptr dumper_;
 	int costFgv_;
-	Node::Ptr currentNode_;
+	std::shared_ptr<Node> currentNode_;
 public:
 	InternalSolver(std::shared_ptr<PrioNodeQueue> queue, Expander::Ptr expander,
 			Dumper::Ptr dumper):
@@ -37,7 +37,7 @@ public:
 		return true;
 	}
 
-	std::deque<Node::Ptr> solve(Status& status) {
+	std::deque<std::shared_ptr<Node>> solve(Status& status) {
 		costFgv_ = -1;
 		currentNode_.reset();
 		if (dumper_)
@@ -48,12 +48,12 @@ public:
 				break;
 			}
 		} while (currentNode_->heur() > 0);
-		std::deque<Node::Ptr> result;
+		std::deque<std::shared_ptr<Node>> result;
 		if (currentNode_ && currentNode_->heur() == 0) {
 			result = pathToRoot(currentNode_);
 		}
 		if (dumper_) {
-			BOOST_FOREACH(Node::Ptr node, result) {
+			BOOST_FOREACH(std::shared_ptr<Node> node, result) {
 				dumper_->addToSolution(node);
 			}
 			dumper_->save();
@@ -63,7 +63,7 @@ public:
 
 };
 
-std::deque<Node::Ptr> Solver::solve(Status status) const
+std::deque<std::shared_ptr<Node>> Solver::solve(Status status) const
 {
 	InternalSolver solver(
 			queueFactory_(),

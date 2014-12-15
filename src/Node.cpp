@@ -6,7 +6,8 @@ using namespace std;
 //{
 //}
 
-Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancestor,
+Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, 
+		std::shared_ptr<Node> ancestor,
 		float c, float heur, float experimentalHeur, int time):
 	ancestor_(ancestor),
 	state_(stones),
@@ -26,9 +27,9 @@ Node::Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancest
 	}
 }
 
-deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base)
+deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::shared_ptr<Node> base)
 {
-	deque<Node::Ptr> result;
+	deque<std::shared_ptr<Node>> result;
 	while (node.get() != NULL && node != base)
 	{
 		result.push_front(node);

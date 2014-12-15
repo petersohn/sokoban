@@ -26,12 +26,12 @@ public:
 		filter_(filter)
 	{}
 	void initialStatus(const Status &status) override;
-	void addNode(const Node::Ptr& node) override;
-	void addToSolution(const Node::Ptr& node) override;
-	void expand(const Node::Ptr& node) override;
-	void startPushing(const Node::Ptr& node) override;
-	void push(const Node::Ptr& node) override;
-	void reject(const Node::Ptr& node, const char *text) override;
+	void addNode(const std::shared_ptr<Node>& node) override;
+	void addToSolution(const std::shared_ptr<Node>& node) override;
+	void expand(const std::shared_ptr<Node>& node) override;
+	void startPushing(const std::shared_ptr<Node>& node) override;
+	void push(const std::shared_ptr<Node>& node) override;
+	void reject(const std::shared_ptr<Node>& node, const char *text) override;
 	void save() override;
 };
 

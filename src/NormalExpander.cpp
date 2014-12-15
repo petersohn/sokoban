@@ -9,7 +9,7 @@
 
 class InternalExpander {
 	const Status &status_;
-	Node::Ptr base_;
+	std::shared_ptr<Node> base_;
 	PrioNodeQueue& queue_;
 	Dumper* dumper_;
 	NormalExpander& owner_;
@@ -38,7 +38,7 @@ void InternalExpander::expandNode(Point p, Point d)
 		if (owner_.calculator_->calculateStone(status, pd) < 0 || !status.moveStone(p, pd)) {
 			return;
 		}
-		Node::Ptr node =
+		std::shared_ptr<Node> node =
 				owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
 		if (pd != status.table().destination()) {
 			if (!owner_.checker_.check(status, pd)) {

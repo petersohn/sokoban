@@ -20,10 +20,10 @@ public:
 		calculator_(calculator),
 		experimentalCalculator_(experimentalCalculator)
 	{}
-	Node::Ptr createNode(
+	std::shared_ptr<Node> createNode(
 			const Status & status,
 			const MoveDescriptor& moveDescriptor,
-			const Node::Ptr& ancestor)
+			const std::shared_ptr<Node>& ancestor)
 	{
 		return std::make_shared<Node>(
 				status.state(), moveDescriptor, ancestor, 1,

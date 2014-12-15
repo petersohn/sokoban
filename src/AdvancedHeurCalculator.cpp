@@ -82,7 +82,7 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
 		if (p == table.destination())
 			partition.heur = 0;
 		else {
-			std::deque<Node::Ptr> res = solver_->solve(std::move(status));
+			std::deque<std::shared_ptr<Node>> res = solver_->solve(std::move(status));
 			if (!res.empty())
 				partition.heur = res.back()->cost();
 		}

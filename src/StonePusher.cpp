@@ -15,7 +15,7 @@ class InternalPusher {
 public:
 	typedef std::deque<std::pair<State, VisitedStateInfo> > PushListType;
 private:
-	Node::Ptr node_;
+	std::shared_ptr<Node> node_;
 	const HeurCalculator& calculator_;
 	NodeFactory& nodeFactory_;
 	bool pushStone(const Status& status, Point p);
@@ -25,10 +25,10 @@ public:
 		calculator_(calculator),
 		nodeFactory_(nodeFactory)
 	{}
-	Node::Ptr pushStones(Status status, Node::Ptr base);
+	std::shared_ptr<Node> pushStones(Status status, std::shared_ptr<Node> base);
 };
 
-Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
+std::shared_ptr<Node> InternalPusher::pushStones(Status status, std::shared_ptr<Node> base) {
 	node_ = std::move(base);
 	Array<bool> destReachable(status.width(), status.height(), false);
 	bool touched;
@@ -50,7 +50,7 @@ Node::Ptr InternalPusher::pushStones(Status status, Node::Ptr base) {
 		if (touched)
 			touched2 = true;
 	} while (touched);
-	return touched2 ? node_ : Node::Ptr();
+	return touched2 ? node_ : std::shared_ptr<Node>();
 }
 
 bool InternalPusher::pushStone(const Status& status, Point p) {
@@ -111,7 +111,7 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
 		PrioNodeQueue& queue, Dumper::Ptr dumper)
 {
 	InternalPusher sp(*calculator_, *nodeFactory_);
-	Node::Ptr node = sp.pushStones(status, base);
+	std::shared_ptr<Node> node = sp.pushStones(status, base);
 
 	if (!node) {
 		expander_->expand(status, std::move(base), queue, std::move(dumper));
@@ -132,7 +132,7 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
 			dumper->startPushing(base);
 		}
 
-		std::deque<Node::Ptr> path = pathToBase(node, base);
+		std::deque<std::shared_ptr<Node>> path = pathToBase(node, base);
 		for (const auto& node: path) {
 			dumper->push(node);
 		}

@@ -56,7 +56,7 @@ private:
 	util::ThreadPool threadPool_;
 	//std::size_t numThreads_;
 
-	std::deque<Node::Ptr> doCalculateBlockList(const Status& status);
+	std::deque<std::shared_ptr<Node>> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
 	void calculateHeurList(const Status& status);
 	void dumpStatus(const Status &status, const Point *p, const std::string &title) {

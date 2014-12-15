@@ -9,10 +9,8 @@
 #include "MoveDescriptor.hpp"
 
 class Node: public boost::noncopyable {
-public:
-	typedef std::shared_ptr<Node> Ptr;
 private:
-	Ptr ancestor_;
+	std::shared_ptr<Node> ancestor_;
 	State state_;
 	float heur_;
 	float experimentalHeur_;
@@ -22,11 +20,11 @@ private:
 	int time_;
 public:
 //	Node();
-	Node(const State &stones, const MoveDescriptor& moveDescriptor, Ptr ancestor,
+	Node(const State &stones, const MoveDescriptor& moveDescriptor, std::shared_ptr<Node> ancestor,
 			float c, float heur, float experimentalHeur, int time);
 	float heur() const { return heur_; }
 	bool operator==(const Node &other) const { return state_ == other.state_; }
-	const Ptr& ancestor() const { return ancestor_; }
+	const std::shared_ptr<Node>& ancestor() const { return ancestor_; }
 	const State &state() const { return state_; }
 	int depth() const { return depth_; }
 	float cost() const { return cost_; }
@@ -39,10 +37,10 @@ public:
 	float experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
 };
 
-std::deque<Node::Ptr> pathToBase(Node::Ptr node, Node::Ptr base);
+std::deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::shared_ptr<Node> base);
 
-inline std::deque<Node::Ptr> pathToRoot(Node::Ptr node) {
-	return pathToBase(node, Node::Ptr());
+inline std::deque<std::shared_ptr<Node>> pathToRoot(std::shared_ptr<Node> node) {
+	return pathToBase(node, std::shared_ptr<Node>());
 }
 
 #endif /* NODE_H_ */

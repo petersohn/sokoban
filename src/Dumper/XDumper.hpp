@@ -13,24 +13,24 @@
 class XDumper: public Dumper {
 	XDumper(const XDumper &);
 	const Table* table_;
-	typedef std::map<Node::Ptr, std::shared_ptr<xml::XMLElement> > MapType;
+	typedef std::map<std::shared_ptr<Node>, std::shared_ptr<xml::XMLElement> > MapType;
 	MapType elements_;
 	std::string filename_;
 
 	typedef std::shared_ptr<xml::XMLElement> ElementPtr;
 
 	ElementPtr createDumpElement(const std::string &s);
-	ElementPtr getElement(const Node::Ptr& node);
-	ElementPtr doAddNode(const Node::Ptr& node);
+	ElementPtr getElement(const std::shared_ptr<Node>& node);
+	ElementPtr doAddNode(const std::shared_ptr<Node>& node);
 public:
 	XDumper(const std::string& filename);
 	void initialStatus(const Status &status) override;
-	void addNode(const Node::Ptr& node) override;
-	void addToSolution(const Node::Ptr& node) override;
-	void expand(const Node::Ptr& node) override;
-	void startPushing(const Node::Ptr& node) override;
-	void push(const Node::Ptr& node) override;
-	void reject(const Node::Ptr& node, const char *text) override;
+	void addNode(const std::shared_ptr<Node>& node) override;
+	void addToSolution(const std::shared_ptr<Node>& node) override;
+	void expand(const std::shared_ptr<Node>& node) override;
+	void startPushing(const std::shared_ptr<Node>& node) override;
+	void push(const std::shared_ptr<Node>& node) override;
+	void reject(const std::shared_ptr<Node>& node, const char *text) override;
 	void clear();
 	void save() override;
 	void dump() const;

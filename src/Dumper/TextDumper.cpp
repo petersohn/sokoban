@@ -38,27 +38,27 @@ void TextDumper::initialStatus(const Status &status) {
 	dumpStatus(file_, status, "Initial status");
 }
 
-void TextDumper::addNode(const Node::Ptr& node) {
+void TextDumper::addNode(const std::shared_ptr<Node>& node) {
 	dump(*node, "Added");
 }
 
-void TextDumper::addToSolution(const Node::Ptr& /*node*/) {
+void TextDumper::addToSolution(const std::shared_ptr<Node>& /*node*/) {
 // nothing to be done here
 }
 
-void TextDumper::expand(const Node::Ptr& node) {
+void TextDumper::expand(const std::shared_ptr<Node>& node) {
 	dump(*node, "\nExpanded");
 }
 
-void TextDumper::startPushing(const Node::Ptr& node) {
+void TextDumper::startPushing(const std::shared_ptr<Node>& node) {
 	dump(*node, "Pushing");
 }
 
-void TextDumper::push(const Node::Ptr& node) {
+void TextDumper::push(const std::shared_ptr<Node>& node) {
 	dump(*node, "Pushed out");
 }
 
-void TextDumper::reject(const Node::Ptr& node, const char *text) {
+void TextDumper::reject(const std::shared_ptr<Node>& node, const char *text) {
 	dump(*node, "Rejected: " + std::string(text));
 }
 

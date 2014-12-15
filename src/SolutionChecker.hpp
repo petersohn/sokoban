@@ -14,7 +14,7 @@ class SolutionChecker {
 	std::ostream& heurDump_;
 
 	bool isSuccessor(const Status& oldStatus, const Node& node);
-	void printError(const Node::Ptr& oldNode, const Node::Ptr& newNode, const Status& status, const char* errorMessage);
+	void printError(const std::shared_ptr<Node>& oldNode, const std::shared_ptr<Node>& newNode, const Status& status, const char* errorMessage);
 public:
 	SolutionChecker(
 			std::ostream& errorDump,

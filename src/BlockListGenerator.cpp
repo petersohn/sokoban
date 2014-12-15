@@ -26,9 +26,9 @@ BlockListGenerator::BlockListGenerator(Solver::Ptr solver,
 	threadPool_.setNumThreads(options.numThreads_);
 }
 
-std::deque<Node::Ptr> BlockListGenerator::doCalculateBlockList(const Status& status)
+std::deque<std::shared_ptr<Node>> BlockListGenerator::doCalculateBlockList(const Status& status)
 {
-	std::deque<Node::Ptr> result = solver_->solve(status);
+	std::deque<std::shared_ptr<Node>> result = solver_->solve(status);
 	if (result.empty()) {
 		auto threadId = *util::ThreadPool::getCurrentThreadId();
 		calculationInfos_[threadId]->blockList_.push_back(status);
@@ -44,7 +44,7 @@ void BlockListGenerator::calculateBlockList(const Status& status)
 
 void BlockListGenerator::calculateHeurList(const Status& status)
 {
-	std::deque<Node::Ptr> result = doCalculateBlockList(status);
+	std::deque<std::shared_ptr<Node>> result = doCalculateBlockList(status);
 	if (!result.empty()) {
 		float heur = incrementalCalculator_->calculateStatus(status);
 		float cost = result.back()->cost();

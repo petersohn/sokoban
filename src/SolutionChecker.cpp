@@ -31,7 +31,7 @@ bool SolutionChecker::isSuccessor(const Status& oldStatus, const Node& node)
 	return true;
 }
 
-void SolutionChecker::printError(const Node::Ptr& oldNode, const Node::Ptr& newNode, const Status& status, const char* errorMessage)
+void SolutionChecker::printError(const std::shared_ptr<Node>& oldNode, const std::shared_ptr<Node>& newNode, const Status& status, const char* errorMessage)
 {
 	errorDump_ << errorMessage << "\n";
 	if (oldNode) {
@@ -53,7 +53,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 {
 	Status status(initialStatus);
 	bool result = true;
-	Node::Ptr oldNode;
+	std::shared_ptr<Node> oldNode;
 	int resultLength = solution.back()->cost();
 	for(std::shared_ptr<Node> node: solution) {
 		Point to(node->from() + node->d());
@@ -105,11 +105,11 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
 		oldNode = node;
 	}
 	if (oldNode && oldNode->heur() != 0) {
-		printError(Node::Ptr(), oldNode, status, "Last heur is not 0.");
+		printError(std::shared_ptr<Node>(), oldNode, status, "Last heur is not 0.");
 		result = false;
 	}
 	if (!status.state().empty()) {
-		printError(Node::Ptr(), Node::Ptr(), status, "Last status contains stones.");
+		printError(std::shared_ptr<Node>(), std::shared_ptr<Node>(), status, "Last status contains stones.");
 		result = false;
 	}
 	return result;

@@ -9,7 +9,7 @@ class FakeNodeFactory {
 public:
 	FakeNodeFactory() = default;
 
-	Node::Ptr createNode( const Node::Ptr& ancestor, int heur)
+	std::shared_ptr<Node> createNode( const std::shared_ptr<Node>& ancestor, int heur)
 	{
 		return std::make_shared<Node>(
 				State{}, MoveDescriptor{Point{0, 0}, Point{0, 0}}, ancestor, 1,

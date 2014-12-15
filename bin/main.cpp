@@ -23,7 +23,7 @@ namespace pt = boost::posix_time;
 
 void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, Status status)
 {
-	std::deque<Node::Ptr> solution = solver.solve(std::move(status));
+	std::deque<std::shared_ptr<Node>> solution = solver.solve(std::move(status));
 	if (!solution.empty()) {
 		solutionChecker.checkResult(status, solution);
 	}
@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
 				ComplexChecker{expanderFactory.createBasicCheckers(calculator)});
 		it.wait(true);
 	} else {
-		std::deque<Node::Ptr> solution = s.solve(status);
+		std::deque<std::shared_ptr<Node>> solution = s.solve(status);
 		cerr << "Length of solution: " << solution.size() << endl;
 		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
 		cerr << "Real Time:" << timeMeter.realTime() << endl;
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 			}
 			std::ofstream dump(opts.solutionDumpFilename_,
 					std::ios::out | std::ios::trunc);
-			for (std::deque<Node::Ptr>::iterator it = solution.begin();
+			for (std::deque<std::shared_ptr<Node>>::iterator it = solution.begin();
 					it != solution.end(); ++it)
 			{
 				dumpNode(dump, status.table(), **it);
