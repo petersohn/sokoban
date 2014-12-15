@@ -2,9 +2,10 @@
 #define SRC_EXTENDEDMOVABLECHECKER_HPP
 
 #include "Checker.hpp"
-#include "Status/Status.hpp"
 #include "Status/Point.hpp"
 #include "HeurCalculator.hpp"
+
+class Status;
 
 class ExtendedMovableChecker: public Checker {
 	HeurCalculator::Ptr calculator_;

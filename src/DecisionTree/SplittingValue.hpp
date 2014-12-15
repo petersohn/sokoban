@@ -1,8 +1,6 @@
 #ifndef SPLITTINGVALUE_H_
 #define SPLITTINGVALUE_H_
 
-#include "Status/Status.hpp"
-
 namespace decisionTree {
 
 template <class Arg>

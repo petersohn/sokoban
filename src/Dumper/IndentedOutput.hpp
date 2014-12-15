@@ -2,9 +2,10 @@
 #define INDENTEDOUTPUT_H_
 
 #include <ostream>
-#include "Status/Status.hpp"
-#include "Status/PseudoStatus.hpp"
 #include "Dumper/DumperFunctions.hpp"
+
+class Status;
+class PseudoStatus;
 
 template <class T>
 inline

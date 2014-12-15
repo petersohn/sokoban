@@ -2,9 +2,10 @@
 #define MOVABLECHECKER_H_
 
 #include "Checker.hpp"
-#include "Status/Status.hpp"
 #include "Status/Point.hpp"
 #include "HeurCalculator.hpp"
+
+class Status;
 
 class MovableChecker: public Checker {
 	HeurCalculator::Ptr calculator_;

@@ -3,9 +3,10 @@
 
 #include "Status/State.hpp"
 #include "VisitedStateInfo.hpp"
-#include "Status/Status.hpp"
 #include "Mutexes.hpp"
 #include <unordered_map>
+
+class Status;
 
 typedef std::pair<const Status&, int> VisitedStateInput;
 
