@@ -2,31 +2,22 @@
 #define DUMPERFUNCTIONS_H_
 
 #include "Array.hpp"
-#include "Status/Table.hpp"
-#include "Node.hpp"
 #include "FieldType.hpp"
+#include "Status/State.hpp"
 #include <iostream>
 #include <string>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 
-template<class T>
-void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title = "", int indent = 0);
-
-template <class Status>
-void dumpStatus(std::ostream &file, const Status &status,
-		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
+class Table;
+class Node;
 
 void dumpNode(std::ostream &file, const Table& table, const Node &node,
 		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
 
-
-
-
 template<class T>
 void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title, int indent) {
+		const std::string &title = "", int indent = 0) {
 	std::string indentString(indent, ' ');
 	if (!title.empty()) {
 		file << indentString << title << std::endl;
@@ -52,8 +43,8 @@ void dumpArray(std::ostream &file, const Array<T> table,
 }
 
 template <class Status>
-void dumpStatus(std::ostream &file, const Status &status,
-		std::string title , const Array<bool> *highlight, int indent)
+void dumpStatus(std::ostream &file, const Status &status, std::string title = "",
+		const Array<bool> *highlight = nullptr, int indent = 0)
 {
 	if (!title.empty()) {
 		title += "\n";
