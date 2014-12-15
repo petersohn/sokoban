@@ -4,7 +4,6 @@
 #include <queue>
 #include <memory>
 #include <ostream>
-#include "Node.hpp"
 
 class Status;
 class Node;

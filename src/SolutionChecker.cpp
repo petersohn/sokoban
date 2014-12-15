@@ -1,8 +1,7 @@
 #include "SolutionChecker.hpp"
 #include "Status/Status.hpp"
 #include "Dumper/DumperFunctions.hpp"
-#include <fstream>
-#include <boost/foreach.hpp>
+#include "Node.hpp"
 #include <boost/format.hpp>
 
 using std::endl;
