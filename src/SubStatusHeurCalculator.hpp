@@ -2,7 +2,6 @@
 #define SRC_SUBSTATUSHEURCALCULATOR_HPP
 
 #include "HeurCalculator.hpp"
-#include "HeurInfo.hpp"
 #include "Status/PseudoStatus.hpp"
 #include "Node.hpp"
 
