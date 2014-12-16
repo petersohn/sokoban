@@ -3,7 +3,6 @@
 
 #include "IndexedStatusList.hpp"
 #include "util/ThreadPool.hpp"
-#include "Checker.hpp"
 #include "ComplexChecker.hpp"
 #include "Options.hpp"
 #include <fstream>
@@ -14,6 +13,7 @@
 
 class HeurCalculator;
 class Solver;
+class Checker;
 struct IncrementInfo;
 
 class BlockListGenerator {
