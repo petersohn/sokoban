@@ -3,11 +3,12 @@
 
 #include "TableHeurCalculator.hpp"
 #include "Dumper/DumperFunctions.hpp"
-#include "Solver.hpp"
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <boost/optional.hpp>
+
+class Solver;
 
 class AdvancedStoneCalculator {
 	struct Partition

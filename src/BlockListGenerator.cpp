@@ -9,11 +9,28 @@
 #include "HeurCalculator.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "Solver.hpp"
+#include "HeurInfo.hpp"
 #include <algorithm>
 #include <functional>
 #include <iostream>
 #include <cstdlib>
 #include <boost/range/algorithm.hpp>
+
+struct IncrementInfo {
+	HeurInfo heurInfo_;
+	float difference_;
+	IncrementInfo(HeurInfo heurInfo, float difference):
+		heurInfo_(std::move(heurInfo)),
+		difference_(difference)
+	{}
+	IncrementInfo(const IncrementInfo& ) = default;
+	IncrementInfo(IncrementInfo&& ) = default;
+	IncrementInfo& operator=(const IncrementInfo& ) = default;
+	IncrementInfo& operator=(IncrementInfo&& ) = default;
+	static const HeurInfo& getHeurInfo(const IncrementInfo& incrementInfo) {
+		return incrementInfo.heurInfo_;
+	}
+};
 
 
 BlockListGenerator::BlockListGenerator(std::unique_ptr<const Solver> solver,
@@ -28,6 +45,9 @@ BlockListGenerator::BlockListGenerator(std::unique_ptr<const Solver> solver,
 {
 	threadPool_.setNumThreads(options.numThreads_);
 }
+
+BlockListGenerator::~BlockListGenerator()
+{}
 
 std::deque<std::shared_ptr<Node>> BlockListGenerator::doCalculateBlockList(const Status& status)
 {
