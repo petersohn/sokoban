@@ -15,6 +15,8 @@
 #include <boost/asio.hpp>
 #include <boost/date_time.hpp>
 
+class HeurCalculator;
+
 class BlockListGenerator {
 private:
 	struct IncrementInfo {

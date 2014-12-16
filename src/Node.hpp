@@ -5,7 +5,6 @@
 #include <boost/noncopyable.hpp>
 #include <deque>
 #include "Status/State.hpp"
-#include "HeurCalculator.hpp"
 #include "MoveDescriptor.hpp"
 
 class Node: public boost::noncopyable {

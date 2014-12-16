@@ -6,6 +6,7 @@
 #include "TableIterator.hpp"
 #include "TableHeurCalculator.hpp"
 #include "Checker.hpp"
+#include "HeurCalculator.hpp"
 #include <algorithm>
 #include <functional>
 #include <iostream>
