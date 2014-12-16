@@ -14,7 +14,7 @@ class NormalExpander: public Expander {
 	friend class InternalExpander;
 
 	std::shared_ptr<VisitedStates> visitedStates_;
-	HeurCalculator::Ptr calculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
 	ComplexChecker checker_;
 	NodeFactory::Ptr nodeFactory_;
 	int maxDepth_;
@@ -22,7 +22,7 @@ class NormalExpander: public Expander {
 	int expandedNodes_;
 public:
 	NormalExpander(std::shared_ptr<VisitedStates> vs,
-			HeurCalculator::Ptr calculator,
+			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker ch, NodeFactory::Ptr nodeFactory,
 			bool enableLog = false);
 	~NormalExpander();

@@ -92,7 +92,7 @@ void InternalExpander::expand()
 
 
 NormalExpander::NormalExpander(
-		std::shared_ptr<VisitedStates> vs, HeurCalculator::Ptr calculator,
+		std::shared_ptr<VisitedStates> vs, std::shared_ptr<const HeurCalculator> calculator,
 		ComplexChecker ch, NodeFactory::Ptr nodeFactory, bool enableLog):
 		visitedStates_(std::move(vs)),
 		calculator_(std::move(calculator)),

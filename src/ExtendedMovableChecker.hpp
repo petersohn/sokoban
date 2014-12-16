@@ -8,9 +8,9 @@
 class Status;
 
 class ExtendedMovableChecker: public Checker {
-	HeurCalculator::Ptr calculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
 public:
-	ExtendedMovableChecker(HeurCalculator::Ptr calculator):
+	ExtendedMovableChecker(std::shared_ptr<const HeurCalculator> calculator):
 		calculator_(std::move(calculator))
 	{}
 	bool check(const Status& status, Point p) const override;

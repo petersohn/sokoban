@@ -14,7 +14,7 @@
 
 
 BlockListGenerator::BlockListGenerator(Solver::Ptr solver,
-		HeurCalculator::Ptr calculator, ComplexChecker checker,
+		std::shared_ptr<const HeurCalculator> calculator, ComplexChecker checker,
 		const Options& options):
 	solver_(std::move(solver)),
 	calculator_(std::move(calculator)),
@@ -135,7 +135,7 @@ Checker::Ptr BlockListGenerator::checker()
 	return std::make_shared<BlockListChecker>(blockList_);
 }
 
-HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
+std::shared_ptr<const HeurCalculator> BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
 {
 	assert(table_);
 	return std::make_shared<BlocklistHeurCalculator>(
@@ -145,7 +145,7 @@ HeurCalculator::Ptr BlockListGenerator::vectorHeurCalculator(float heurMultiplie
 }
 
 
-HeurCalculator::Ptr BlockListGenerator::decisionTreeHeurCalculator(
+std::shared_ptr<const HeurCalculator> BlockListGenerator::decisionTreeHeurCalculator(
 		std::size_t maxDepth, bool useChecker, float heurMultiplier)
 {
 	assert(table_);

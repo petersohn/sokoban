@@ -11,7 +11,6 @@ struct MoveDescriptor;
 
 class HeurCalculator: public boost::noncopyable {
 public:
-	typedef std::shared_ptr<const HeurCalculator> Ptr;
 	virtual ~HeurCalculator() {}
 	virtual float calculateStone(const Status& status, Point  p) const = 0;
 	virtual float calculateStatus(

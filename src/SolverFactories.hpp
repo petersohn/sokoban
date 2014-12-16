@@ -28,13 +28,13 @@ public:
 	OptionsBasedExpanderFactory(const OptionsBasedExpanderFactory&) = delete;
 	OptionsBasedExpanderFactory& operator=(const OptionsBasedExpanderFactory&) = delete;
 
-	HeurCalculator::Ptr createAdvancedHeurCalcularor(float heurMultiplier);
+	std::shared_ptr<const HeurCalculator> createAdvancedHeurCalcularor(float heurMultiplier);
 	Expander::Ptr createExpander(
-			HeurCalculator::Ptr calculator,
+			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker,
 			bool log,
-			HeurCalculator::Ptr experimentalCalculator = HeurCalculator::Ptr());
-	std::vector<Checker::Ptr> createBasicCheckers(const HeurCalculator::Ptr& calculator);
+			std::shared_ptr<const HeurCalculator> experimentalCalculator = std::shared_ptr<const HeurCalculator>());
+	std::vector<Checker::Ptr> createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator);
 
 	ExpanderFactory factory();
 };

@@ -89,7 +89,7 @@ void TableIterator::doWork(const std::vector<Status>& statuses)
 }
 
 void TableIterator::start(std::size_t numStones,
-			HeurCalculator::Ptr heurCalculator,
+			std::shared_ptr<const HeurCalculator> heurCalculator,
 			ComplexChecker checker)
 {
 	assert(iterationState_ == IterationState::idle);

@@ -16,7 +16,7 @@ public:
 	typedef std::function<void(const Status&)> Action;
 private:
 	const Table* table_;
-	HeurCalculator::Ptr heurCalculator_;
+	std::shared_ptr<const HeurCalculator> heurCalculator_;
 	ComplexChecker checker_;
 	Action action_;
 	std::size_t maxDistance_;
@@ -62,7 +62,7 @@ public:
 	}
 
 	void start(std::size_t numStones,
-			HeurCalculator::Ptr heurCalculator,
+			std::shared_ptr<const HeurCalculator> heurCalculator,
 			ComplexChecker checker);
 	void wait(bool print);
 };

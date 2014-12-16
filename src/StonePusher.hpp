@@ -14,12 +14,12 @@ class VisitedStates;
 class StonePusher: public Expander {
 	Expander::Ptr expander_;
 	std::shared_ptr<VisitedStates> visitedStates_;
-	HeurCalculator::Ptr calculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
 	NodeFactory::Ptr nodeFactory_;
 public:
 	StonePusher(Expander::Ptr expander,
 			std::shared_ptr<VisitedStates> visitedStates,
-			HeurCalculator::Ptr calculator, NodeFactory::Ptr nodeFactory);
+			std::shared_ptr<const HeurCalculator> calculator, NodeFactory::Ptr nodeFactory);
 	void expand(const Status& status, std::shared_ptr<Node> base,
 			PrioNodeQueue& queue, Dumper::Ptr dumper) override;
 };

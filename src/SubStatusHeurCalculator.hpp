@@ -8,12 +8,12 @@
 template <typename NextFactory>
 class SubStatusHeurCalculator: public HeurCalculator {
 	float heurMultiplier_;
-	HeurCalculator::Ptr baseCalculator_;
+	std::shared_ptr<const HeurCalculator> baseCalculator_;
 	NextFactory nextFactory_;
 public:
 	SubStatusHeurCalculator(
 			float heurMultiplier,
-			const HeurCalculator::Ptr& baseCalculator,
+			const std::shared_ptr<const HeurCalculator>& baseCalculator,
 			NextFactory nextFactory = NextFactory{}):
 				heurMultiplier_(heurMultiplier),
 				baseCalculator_(std::move(baseCalculator)),

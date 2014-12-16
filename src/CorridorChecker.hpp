@@ -33,7 +33,7 @@ public:
 };
 
 class CorridorCheckerStrategyFactory {
-	HeurCalculator::Ptr calculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
 
 public:
 	CorridorCheckerStrategyFactory(std::shared_ptr<const HeurCalculator> heurCalculator):

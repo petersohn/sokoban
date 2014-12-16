@@ -35,7 +35,7 @@ std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts)
 	return std::make_shared<PrioNodeQueue>(CompareQueue{opts.compare_});
 }
 
-HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
+std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
 		float heurMultiplier)
 {
 	auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
@@ -52,7 +52,7 @@ HeurCalculator::Ptr OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
 			options_.partitionsDumpFilename_}, heurMultiplier);
 }
 
-std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const HeurCalculator::Ptr& calculator)
+std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator)
 {
 	std::vector<Checker::Ptr> checkers;
 	switch (options_.movableCheckerType_) {
@@ -83,10 +83,10 @@ std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const
 }
 
 Expander::Ptr OptionsBasedExpanderFactory::createExpander(
-			HeurCalculator::Ptr calculator,
+			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker,
 			bool log,
-			HeurCalculator::Ptr experimentalCalculator)
+			std::shared_ptr<const HeurCalculator> experimentalCalculator)
 {
 	auto visitedStates = std::make_shared<VisitedStates>();
 	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator,
@@ -104,16 +104,16 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 
 ExpanderFactory OptionsBasedExpanderFactory::factory()
 {
-	HeurCalculator::Ptr calculator =
+	std::shared_ptr<const HeurCalculator> calculator =
 		options_.useAdvancedHeurCalculator_ ?
 		createAdvancedHeurCalcularor(options_.heurMultiplier_) :
 		std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_},
 				options_.heurMultiplier_);
-	HeurCalculator::Ptr experimentalCalculator;
+	std::shared_ptr<const HeurCalculator> experimentalCalculator;
 	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
 	if (options_.blockListStones_ > 1) {
 		ComplexChecker checker{checkers};
-		HeurCalculator::Ptr preprocessingCalculator =
+		std::shared_ptr<const HeurCalculator> preprocessingCalculator =
 				options_.useAdvancedHeurCalculator_ ?
 				createAdvancedHeurCalcularor(1.0f) :
 				std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);

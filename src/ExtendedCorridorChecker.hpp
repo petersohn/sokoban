@@ -44,7 +44,7 @@ public:
 };
 
 class ExtendedCorridorCheckerStrategyFactory {
-	HeurCalculator::Ptr calculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
 
 public:
 	ExtendedCorridorCheckerStrategyFactory(std::shared_ptr<const HeurCalculator> heurCalculator):

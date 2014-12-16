@@ -8,14 +8,14 @@
 
 class NodeFactory {
 	int numNodes_;
-	HeurCalculator::Ptr calculator_;
-	HeurCalculator::Ptr experimentalCalculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
+	std::shared_ptr<const HeurCalculator> experimentalCalculator_;
 public:
 	typedef std::shared_ptr<NodeFactory> Ptr;
 
 	NodeFactory(
-			const HeurCalculator::Ptr& calculator,
-			const HeurCalculator::Ptr& experimentalCalculator = HeurCalculator::Ptr()):
+			const std::shared_ptr<const HeurCalculator>& calculator,
+			const std::shared_ptr<const HeurCalculator>& experimentalCalculator = std::shared_ptr<const HeurCalculator>()):
 		numNodes_(0),
 		calculator_(calculator),
 		experimentalCalculator_(experimentalCalculator)

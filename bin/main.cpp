@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 	SolutionChecker solutionChecker(std::cerr, heurDump);
 	int returnCode = 0;
 	if (opts.test_ > 0) {
-		HeurCalculator::Ptr calculator = expanderFactory.createAdvancedHeurCalcularor(
+		std::shared_ptr<const HeurCalculator> calculator = expanderFactory.createAdvancedHeurCalcularor(
 				1.0);
 		util::ThreadPool threadPool;
 		util::ThreadPoolRunner runner(threadPool);

@@ -44,8 +44,8 @@ private:
 	typedef std::unique_ptr<CalculationInfo> CalculationInfoPtr;
 
 	Solver::Ptr solver_;
-	HeurCalculator::Ptr calculator_;
-	HeurCalculator::Ptr incrementalCalculator_;
+	std::shared_ptr<const HeurCalculator> calculator_;
+	std::shared_ptr<const HeurCalculator> incrementalCalculator_;
 	ComplexChecker checker_;
 	IndexedStatusList blockList_;
 	IncrementList heurList_;
@@ -74,11 +74,11 @@ private:
 		}
 	}
 public:
-	BlockListGenerator(Solver::Ptr solver, HeurCalculator::Ptr calculator,
+	BlockListGenerator(Solver::Ptr solver, std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker, const Options& options);
 	Checker::Ptr checker();
-	HeurCalculator::Ptr vectorHeurCalculator(float heurMultiplier);
-	HeurCalculator::Ptr decisionTreeHeurCalculator(std::size_t maxDepth, 
+	std::shared_ptr<const HeurCalculator> vectorHeurCalculator(float heurMultiplier);
+	std::shared_ptr<const HeurCalculator> decisionTreeHeurCalculator(std::size_t maxDepth, 
 			bool useChecker, float heurMultiplier);
 	void init(const Table& table);
 };
