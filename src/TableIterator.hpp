@@ -4,12 +4,13 @@
 #include "Mutexes.hpp"
 #include "TimeMeter.hpp"
 #include "ComplexChecker.hpp"
-#include "HeurCalculator.hpp"
 #include <boost/asio/io_service.hpp>
 #include <functional>
 
 class State;
 class Status;
+class HeurCalculator;
+class Table;
 
 class TableIterator {
 public:

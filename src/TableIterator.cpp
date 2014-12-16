@@ -3,6 +3,7 @@
 #include "Status/StatusUtils.hpp"
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
+#include "HeurCalculator.hpp"
 
 bool TableIterator::advancePoint(Point& p)
 {
