@@ -1,9 +1,7 @@
 #ifndef BLOCKLISTGENERATOR_H
 #define BLOCKLISTGENERATOR_H
 
-#include "Solver.hpp"
 #include "IndexedStatusList.hpp"
-#include "Dumper/DumperFunctions.hpp"
 #include "util/ThreadPool.hpp"
 #include "Checker.hpp"
 #include "ComplexChecker.hpp"
@@ -16,6 +14,7 @@
 #include <boost/date_time.hpp>
 
 class HeurCalculator;
+class Solver;
 
 class BlockListGenerator {
 private:
@@ -56,31 +55,17 @@ private:
 	std::vector<CalculationInfoPtr> calculationInfos_;
 	std::ofstream dump_;
 	util::ThreadPool threadPool_;
-	//std::size_t numThreads_;
 
 	std::deque<std::shared_ptr<Node>> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
 	void calculateHeurList(const Status& status);
-	void dumpStatus(const Status &status, const Point *p, const std::string &title) {
-		const std::size_t* threadId = util::ThreadPool::getCurrentThreadId();
-		std::ostream* dump = &dump_;
-		if (threadId) {
-			dump = &calculationInfos_[*threadId]->dump_;
-		}
-		if (p) {
-			Array<bool> hl = status.reachableArray();
-			hl[*p] = true;
-			::dumpStatus(*dump, status, title, &hl);
-		} else {
-			::dumpStatus(*dump, status, title, &status.reachableArray());
-		}
-	}
+	void dumpStatus(const Status &status, const Point *p, const std::string &title);
 public:
 	BlockListGenerator(std::unique_ptr<const Solver> solver, std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker, const Options& options);
 	Checker::Ptr checker();
 	std::shared_ptr<const HeurCalculator> vectorHeurCalculator(float heurMultiplier);
-	std::shared_ptr<const HeurCalculator> decisionTreeHeurCalculator(std::size_t maxDepth, 
+	std::shared_ptr<const HeurCalculator> decisionTreeHeurCalculator(std::size_t maxDepth,
 			bool useChecker, float heurMultiplier);
 	void init(const Table& table);
 };

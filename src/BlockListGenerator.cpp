@@ -7,6 +7,8 @@
 #include "TableHeurCalculator.hpp"
 #include "Checker.hpp"
 #include "HeurCalculator.hpp"
+#include "Dumper/DumperFunctions.hpp"
+#include "Solver.hpp"
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -165,3 +167,18 @@ std::shared_ptr<const HeurCalculator> BlockListGenerator::decisionTreeHeurCalcul
 				options_.numThreads_});
 }
 
+void BlockListGenerator::dumpStatus(const Status &status, const Point *p, const std::string &title)
+{
+	const std::size_t* threadId = util::ThreadPool::getCurrentThreadId();
+	std::ostream* dump = &dump_;
+	if (threadId) {
+		dump = &calculationInfos_[*threadId]->dump_;
+	}
+	if (p) {
+		Array<bool> hl = status.reachableArray();
+		hl[*p] = true;
+		::dumpStatus(*dump, status, title, &hl);
+	} else {
+		::dumpStatus(*dump, status, title, &status.reachableArray());
+	}
+}
