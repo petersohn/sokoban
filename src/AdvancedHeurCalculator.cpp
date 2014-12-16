@@ -2,6 +2,7 @@
 #include "Status/Status.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Node.hpp"
+#include "Solver.hpp"
 #include <vector>
 #include <algorithm>
 #include <boost/format.hpp>
