@@ -3,11 +3,11 @@
 
 #include "Expander.hpp"
 #include "ComplexChecker.hpp"
-#include "NodeFactory.hpp"
 #include "Mutexes.hpp"
 
 class VisitedStates;
 class HeurCalculator;
+class NodeFactory;
 
 class NormalExpander: public Expander {
 	friend class InternalExpander;

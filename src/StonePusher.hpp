@@ -2,13 +2,13 @@
 #define STONEPUSHER_H_
 
 #include "Expander.hpp"
-#include "NodeFactory.hpp"
 #include "PrioNodeQueueFwd.hpp"
 
 class State;
 class Node;
 class VisitedStates;
 class HeurCalculator;
+class NodeFactory;
 
 class StonePusher: public Expander {
 	std::shared_ptr<Expander> expander_;
