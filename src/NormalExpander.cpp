@@ -4,6 +4,7 @@
 #include "FieldType.hpp"
 #include "VisitedStates.hpp"
 #include "PrioNodeQueue.hpp"
+#include "HeurCalculator.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 
