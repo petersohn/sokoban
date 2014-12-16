@@ -8,6 +8,7 @@
 #include "PrioNodeQueue.hpp"
 #include "Node.hpp"
 #include "HeurCalculator.hpp"
+#include "Dumper/Dumper.hpp"
 #include <iostream>
 #include <memory>
 

@@ -2,11 +2,11 @@
 #define EXPANDER_H_
 
 #include <memory>
-#include "Dumper/Dumper.hpp"
 #include "PrioNodeQueueFwd.hpp"
 
 class Status;
 class Node;
+class Dumper;
 
 class Expander {
 public:

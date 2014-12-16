@@ -5,6 +5,7 @@
 #include "VisitedStates.hpp"
 #include "PrioNodeQueue.hpp"
 #include "HeurCalculator.hpp"
+#include "Dumper/Dumper.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 

@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include "Dumper/Dumper.hpp"
 #include "Status/Table.hpp"
 
 class Status;

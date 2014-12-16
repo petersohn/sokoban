@@ -3,7 +3,6 @@
 
 #include "Expander.hpp"
 #include "ComplexChecker.hpp"
-#include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
 #include "Mutexes.hpp"
 
