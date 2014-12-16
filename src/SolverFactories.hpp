@@ -2,12 +2,13 @@
 #define SOLVERFACTORIES_H_
 
 #include "Expander.hpp"
-#include "HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"
-#include "Options.hpp"
 #include "Checker.hpp"
-#include "ComplexChecker.hpp"
 #include "PrioNodeQueueFwd.hpp"
+
+class HeurCalculator;
+class ComplexChecker;
+struct Options;
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts);
 Dumper::Ptr createDumperFromOptions(const Options &opts);

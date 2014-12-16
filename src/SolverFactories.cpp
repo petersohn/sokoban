@@ -16,6 +16,8 @@
 #include "Dumper/XDumper.hpp"
 #include "Dumper/StatisticsDumper.hpp"
 #include "NodeFactory.hpp"
+#include "HeurCalculator.hpp"
+#include "ComplexChecker.hpp"
 #include <vector>
 #include <functional>
 
