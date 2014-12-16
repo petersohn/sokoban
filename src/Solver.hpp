@@ -1,7 +1,7 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
-#include "Dumper/Dumper.hpp"
+#include "Dumper/DumperFactory.hpp"
 #include "PrioNodeQueueFwd.hpp"
 #include "ExpanderFactory.hpp"
 #include <deque>
@@ -13,7 +13,7 @@ class Node;
 
 class NullDumperFactory {
 public:
-	Dumper::Ptr operator()() { return Dumper::Ptr(); }
+	std::shared_ptr<Dumper> operator()() { return std::shared_ptr<Dumper>(); }
 };
 
 class Solver {

@@ -3,6 +3,7 @@
 #include "Node.hpp"
 #include "util/ThreadPool.hpp"
 #include "Dumper/DumperFunctions.hpp"
+#include "Dumper/Dumper.hpp"
 #include "PrioNodeQueue.hpp"
 #include "Expander.hpp"
 #include <boost/foreach.hpp>
@@ -12,12 +13,12 @@
 class InternalSolver {
 	std::shared_ptr<PrioNodeQueue> queue_;
 	std::shared_ptr<Expander> expander_;
-	Dumper::Ptr dumper_;
+	std::shared_ptr<Dumper> dumper_;
 	int costFgv_;
 	std::shared_ptr<Node> currentNode_;
 public:
 	InternalSolver(std::shared_ptr<PrioNodeQueue> queue, std::shared_ptr<Expander> expander,
-			Dumper::Ptr dumper):
+			std::shared_ptr<Dumper> dumper):
 		queue_(std::move(queue)),
 		expander_(std::move(expander)),
 		dumper_(dumper),

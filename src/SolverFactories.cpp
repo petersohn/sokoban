@@ -157,7 +157,7 @@ std::string getDumpFilename(const Options& options, const std::string& defaultVa
 
 }
 
-Dumper::Ptr createDumperFromOptions(const Options & opts)
+std::shared_ptr<Dumper> createDumperFromOptions(const Options & opts)
 {
 	switch (opts.dumpStyle_) {
 	case DumpStyle::text: {
@@ -175,14 +175,14 @@ Dumper::Ptr createDumperFromOptions(const Options & opts)
 			break;
 		}
 
-		return Dumper::Ptr(new TextDumper(getDumpFilename(opts, "dump.dump"), dumpFilter));
+		return std::shared_ptr<Dumper>(new TextDumper(getDumpFilename(opts, "dump.dump"), dumpFilter));
 	}
 	case DumpStyle::xml:
-		return Dumper::Ptr(new XDumper(getDumpFilename(opts, "dump.xml")));
+		return std::shared_ptr<Dumper>(new XDumper(getDumpFilename(opts, "dump.xml")));
 	case DumpStyle::statistics:
-		return Dumper::Ptr(new StatisticsDumper(getDumpFilename(opts, "dump.csv")));
+		return std::shared_ptr<Dumper>(new StatisticsDumper(getDumpFilename(opts, "dump.csv")));
 	default:
-		return Dumper::Ptr();
+		return std::shared_ptr<Dumper>();
 	}
 }
 

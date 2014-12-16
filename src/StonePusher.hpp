@@ -20,7 +20,7 @@ public:
 			std::shared_ptr<VisitedStates> visitedStates,
 			std::shared_ptr<const HeurCalculator> calculator, NodeFactory::Ptr nodeFactory);
 	void expand(const Status& status, std::shared_ptr<Node> base,
-			PrioNodeQueue& queue, Dumper::Ptr dumper) override;
+			PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) override;
 };
 
 

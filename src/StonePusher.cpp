@@ -107,7 +107,7 @@ StonePusher::StonePusher(std::shared_ptr<Expander> expander,
 }
 
 void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
-		PrioNodeQueue& queue, Dumper::Ptr dumper)
+		PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper)
 {
 	InternalPusher sp(*calculator_, *nodeFactory_);
 	std::shared_ptr<Node> node = sp.pushStones(status, base);

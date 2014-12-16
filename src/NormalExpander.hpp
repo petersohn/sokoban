@@ -27,7 +27,7 @@ public:
 			bool enableLog = false);
 	~NormalExpander();
 	void expand(const Status& status, std::shared_ptr<Node> base,
-			PrioNodeQueue& queue, Dumper::Ptr dumper) override;
+			PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) override;
 	int expandedNodes() const { return expandedNodes_; }
 };
 

@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 
+class Table;
 
 class XDumper: public Dumper {
 	XDumper(const XDumper &);

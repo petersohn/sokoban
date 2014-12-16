@@ -11,7 +11,7 @@ class ComplexChecker;
 struct Options;
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts);
-Dumper::Ptr createDumperFromOptions(const Options &opts);
+std::shared_ptr<Dumper> createDumperFromOptions(const Options &opts);
 
 
 class OptionsBasedExpanderFactory {

@@ -113,7 +113,7 @@ NormalExpander::~NormalExpander()
 }
 
 void NormalExpander::expand(const Status& status, std::shared_ptr<Node> base,
-		PrioNodeQueue& queue, Dumper::Ptr dumper) {
+		PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) {
 	InternalExpander exp(status, std::move(base), queue, dumper.get(), *this);
 	exp.expand();
 }
