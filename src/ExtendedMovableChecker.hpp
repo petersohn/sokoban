@@ -2,10 +2,10 @@
 #define SRC_EXTENDEDMOVABLECHECKER_HPP
 
 #include "Checker.hpp"
-#include "Status/Point.hpp"
-#include "HeurCalculator.hpp"
 
 class Status;
+class HeurCalculator;
+class Point;
 
 class ExtendedMovableChecker: public Checker {
 	std::shared_ptr<const HeurCalculator> calculator_;
