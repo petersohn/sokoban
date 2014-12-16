@@ -152,7 +152,7 @@ void BlockListGenerator::init(const Table& table)
 	dump_.flush();
 }
 
-Checker::Ptr BlockListGenerator::checker()
+std::shared_ptr<const Checker> BlockListGenerator::checker()
 {
 	assert(table_);
 	return std::make_shared<BlockListChecker>(blockList_);

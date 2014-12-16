@@ -35,7 +35,7 @@ public:
 			ComplexChecker checker,
 			bool log,
 			std::shared_ptr<const HeurCalculator> experimentalCalculator = std::shared_ptr<const HeurCalculator>());
-	std::vector<Checker::Ptr> createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator);
+	std::vector<std::shared_ptr<const Checker>> createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator);
 
 	ExpanderFactory factory();
 };

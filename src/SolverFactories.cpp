@@ -54,17 +54,17 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
 			options_.partitionsDumpFilename_}, heurMultiplier);
 }
 
-std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator)
+std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator)
 {
-	std::vector<Checker::Ptr> checkers;
+	std::vector<std::shared_ptr<const Checker>> checkers;
 	switch (options_.movableCheckerType_) {
 	case MovableCheckerType::none:
 		break;
 	case MovableCheckerType::simple:
-		checkers.push_back(Checker::Ptr(new MovableChecker(calculator)));
+		checkers.push_back(std::shared_ptr<const Checker>(new MovableChecker(calculator)));
 		break;
 	case MovableCheckerType::extended:
-		checkers.push_back(Checker::Ptr(new ExtendedMovableChecker(calculator)));
+		checkers.push_back(std::shared_ptr<const Checker>(new ExtendedMovableChecker(calculator)));
 		break;
 	}
 
@@ -72,11 +72,11 @@ std::vector<Checker::Ptr> OptionsBasedExpanderFactory::createBasicCheckers(const
 	case CorridorCheckerType::none:
 		break;
 	case CorridorCheckerType::simple:
-		checkers.push_back(Checker::Ptr(new CorridorChecker(
+		checkers.push_back(std::shared_ptr<const Checker>(new CorridorChecker(
 						CorridorCheckerStrategyFactory{calculator})));
 		break;
 	case CorridorCheckerType::extended:
-		checkers.push_back(Checker::Ptr(new ExtendedCorridorChecker(
+		checkers.push_back(std::shared_ptr<const Checker>(new ExtendedCorridorChecker(
 						ExtendedCorridorCheckerStrategyFactory{calculator})));
 		break;
 	}
@@ -112,7 +112,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 		std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_},
 				options_.heurMultiplier_);
 	std::shared_ptr<const HeurCalculator> experimentalCalculator;
-	std::vector<Checker::Ptr> checkers = createBasicCheckers(calculator);
+	std::vector<std::shared_ptr<const Checker>> checkers = createBasicCheckers(calculator);
 	if (options_.blockListStones_ > 1) {
 		ComplexChecker checker{checkers};
 		std::shared_ptr<const HeurCalculator> preprocessingCalculator =

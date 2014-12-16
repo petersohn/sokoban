@@ -5,7 +5,7 @@
 #include <vector>
 
 class ComplexChecker {
-	typedef std::vector<Checker::Ptr> ContainerType;
+	typedef std::vector<std::shared_ptr<const Checker>> ContainerType;
 	ContainerType funcs_;
 #ifndef NO_UNSAFE_DIAGNOSTICS
 	mutable const char *lastError_;
@@ -17,7 +17,7 @@ public:
 	ComplexChecker(const Range& range):
 		funcs_(range.begin(), range.end())
 	{}
-	ComplexChecker(const std::initializer_list<Checker::Ptr>& range):
+	ComplexChecker(const std::initializer_list<std::shared_ptr<const Checker>>& range):
 		funcs_(range.begin(), range.end())
 	{}
 
@@ -26,7 +26,7 @@ public:
 	ComplexChecker(ComplexChecker&&) = default;
 	ComplexChecker& operator=(ComplexChecker&&) = default;
 
-	void append(Checker::Ptr checker)
+	void append(std::shared_ptr<const Checker> checker)
 	{
 		funcs_.push_back(std::move(checker));
 	}
