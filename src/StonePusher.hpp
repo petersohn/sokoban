@@ -11,12 +11,12 @@ class VisitedStates;
 class HeurCalculator;
 
 class StonePusher: public Expander {
-	Expander::Ptr expander_;
+	std::shared_ptr<Expander> expander_;
 	std::shared_ptr<VisitedStates> visitedStates_;
 	std::shared_ptr<const HeurCalculator> calculator_;
 	NodeFactory::Ptr nodeFactory_;
 public:
-	StonePusher(Expander::Ptr expander,
+	StonePusher(std::shared_ptr<Expander> expander,
 			std::shared_ptr<VisitedStates> visitedStates,
 			std::shared_ptr<const HeurCalculator> calculator, NodeFactory::Ptr nodeFactory);
 	void expand(const Status& status, std::shared_ptr<Node> base,

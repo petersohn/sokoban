@@ -30,7 +30,7 @@ public:
 	OptionsBasedExpanderFactory& operator=(const OptionsBasedExpanderFactory&) = delete;
 
 	std::shared_ptr<const HeurCalculator> createAdvancedHeurCalcularor(float heurMultiplier);
-	Expander::Ptr createExpander(
+	std::shared_ptr<Expander> createExpander(
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker,
 			bool log,

@@ -84,7 +84,7 @@ std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createB
 	return checkers;
 }
 
-Expander::Ptr OptionsBasedExpanderFactory::createExpander(
+std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker,
 			bool log,
@@ -93,7 +93,7 @@ Expander::Ptr OptionsBasedExpanderFactory::createExpander(
 	auto visitedStates = std::make_shared<VisitedStates>();
 	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator,
 				experimentalCalculator));
-	Expander::Ptr expander = std::make_shared<NormalExpander>(visitedStates,
+	std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(visitedStates,
 			calculator, std::move(checker), nodeFactory, log);
 
 	if (options_.useStonePusher_) {

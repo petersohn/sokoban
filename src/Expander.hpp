@@ -10,13 +10,12 @@ class Node;
 
 class Expander {
 public:
-	typedef std::shared_ptr<Expander> Ptr;
 	// returns true if no more expansions should be made
 	virtual void expand(const Status&, std::shared_ptr<Node>, PrioNodeQueue&,
 			Dumper::Ptr) = 0;
 	virtual ~Expander() {}
 };
 
-typedef std::function<Expander::Ptr()> ExpanderFactory;
+typedef std::function<std::shared_ptr<Expander>()> ExpanderFactory;
 
 #endif /* EXPANDER_H_ */
