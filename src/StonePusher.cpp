@@ -7,6 +7,7 @@
 #include "FieldType.hpp"
 #include "PrioNodeQueue.hpp"
 #include "Node.hpp"
+#include "HeurCalculator.hpp"
 #include <iostream>
 #include <memory>
 

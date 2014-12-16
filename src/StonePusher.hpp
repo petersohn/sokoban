@@ -1,15 +1,14 @@
 #ifndef STONEPUSHER_H_
 #define STONEPUSHER_H_
 
-#include "HeurCalculator.hpp"
 #include "Expander.hpp"
 #include "NodeFactory.hpp"
-#include <deque>
 #include "PrioNodeQueueFwd.hpp"
 
 class State;
 class Node;
 class VisitedStates;
+class HeurCalculator;
 
 class StonePusher: public Expander {
 	Expander::Ptr expander_;
