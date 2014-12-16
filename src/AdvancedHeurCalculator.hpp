@@ -40,14 +40,14 @@ class AdvancedStoneCalculator {
 	};
 
 	Array<std::vector<Partition>> partitions_;
-	Solver::Ptr solver_;
+	std::unique_ptr<const Solver> solver_;
 	std::size_t reverseSearchMaxDepth_;
 	boost::optional<std::string> filename_;
 	void init(const Table& table);
 
 	void initPartitions(const Table& table, Point p);
 public:
-	AdvancedStoneCalculator(const Table& table, Solver::Ptr solver,
+	AdvancedStoneCalculator(const Table& table, std::unique_ptr<const Solver> solver,
 			std::size_t reverseSearchMaxDepth,
 			const boost::optional<std::string>& filename):
 		solver_(std::move(solver)),

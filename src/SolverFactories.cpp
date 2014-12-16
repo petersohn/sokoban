@@ -42,7 +42,7 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
 {
 	auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
 			BasicStoneCalculator{table_}, 1.0f);
-	Solver::Ptr solver(new Solver(createPrioQueue,
+	std::unique_ptr<const Solver> solver(new Solver(createPrioQueue,
 		[this, basicHeurCalculator]() {
 			return createExpander(
 					basicHeurCalculator,
@@ -119,7 +119,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 				options_.useAdvancedHeurCalculator_ ?
 				createAdvancedHeurCalcularor(1.0f) :
 				std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);
-		Solver::Ptr solver(new Solver(
+		std::unique_ptr<const Solver> solver(new Solver(
 				std::bind(&createPrioQueueFromOptions, options_),
 				[this, preprocessingCalculator, checker]() {
 					return createExpander(preprocessingCalculator, checker, false);

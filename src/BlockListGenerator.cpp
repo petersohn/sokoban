@@ -14,7 +14,7 @@
 #include <boost/range/algorithm.hpp>
 
 
-BlockListGenerator::BlockListGenerator(Solver::Ptr solver,
+BlockListGenerator::BlockListGenerator(std::unique_ptr<const Solver> solver,
 		std::shared_ptr<const HeurCalculator> calculator, ComplexChecker checker,
 		const Options& options):
 	solver_(std::move(solver)),
