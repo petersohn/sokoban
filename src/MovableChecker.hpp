@@ -2,10 +2,10 @@
 #define MOVABLECHECKER_H_
 
 #include "Checker.hpp"
-#include "Status/Point.hpp"
-#include "HeurCalculator.hpp"
 
 class Status;
+class HeurCalculator;
+class Point;
 
 class MovableChecker: public Checker {
 	std::shared_ptr<const HeurCalculator> calculator_;
