@@ -97,7 +97,7 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 
 StonePusher::StonePusher(std::shared_ptr<Expander> expander,
 		std::shared_ptr<VisitedStates> visitedStates,
-		std::shared_ptr<const HeurCalculator> calculator, NodeFactory::Ptr nodeFactory):
+		std::shared_ptr<const HeurCalculator> calculator, std::shared_ptr<NodeFactory> nodeFactory):
 		expander_(std::move(expander)),
 		visitedStates_(visitedStates),
 		calculator_(std::move(calculator)),

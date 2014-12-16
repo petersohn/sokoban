@@ -11,7 +11,6 @@ class NodeFactory {
 	std::shared_ptr<const HeurCalculator> calculator_;
 	std::shared_ptr<const HeurCalculator> experimentalCalculator_;
 public:
-	typedef std::shared_ptr<NodeFactory> Ptr;
 
 	NodeFactory(
 			const std::shared_ptr<const HeurCalculator>& calculator,

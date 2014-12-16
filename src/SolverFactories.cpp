@@ -91,7 +91,7 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
 			std::shared_ptr<const HeurCalculator> experimentalCalculator)
 {
 	auto visitedStates = std::make_shared<VisitedStates>();
-	NodeFactory::Ptr nodeFactory(new NodeFactory(calculator,
+	std::shared_ptr<NodeFactory> nodeFactory(new NodeFactory(calculator,
 				experimentalCalculator));
 	std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(visitedStates,
 			calculator, std::move(checker), nodeFactory, log);

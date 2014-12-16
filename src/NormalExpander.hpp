@@ -15,14 +15,14 @@ class NormalExpander: public Expander {
 	std::shared_ptr<VisitedStates> visitedStates_;
 	std::shared_ptr<const HeurCalculator> calculator_;
 	ComplexChecker checker_;
-	NodeFactory::Ptr nodeFactory_;
+	std::shared_ptr<NodeFactory> nodeFactory_;
 	int maxDepth_;
 	bool enableLog_;
 	int expandedNodes_;
 public:
 	NormalExpander(std::shared_ptr<VisitedStates> vs,
 			std::shared_ptr<const HeurCalculator> calculator,
-			ComplexChecker ch, NodeFactory::Ptr nodeFactory,
+			ComplexChecker ch, std::shared_ptr<NodeFactory> nodeFactory,
 			bool enableLog = false);
 	~NormalExpander();
 	void expand(const Status& status, std::shared_ptr<Node> base,
