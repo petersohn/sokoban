@@ -1,9 +1,9 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
-#include "Expander.hpp"
 #include "Dumper/Dumper.hpp"
-#include "PrioNodeQueue.hpp"
+#include "PrioNodeQueueFwd.hpp"
+#include "ExpanderFactory.hpp"
 #include <deque>
 #include <functional>
 #include <memory>

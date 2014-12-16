@@ -1,7 +1,7 @@
 #ifndef SOLVERFACTORIES_H_
 #define SOLVERFACTORIES_H_
 
-#include "Expander.hpp"
+#include "ExpanderFactory.hpp"
 #include "Dumper/Dumper.hpp"
 #include "Checker.hpp"
 #include "PrioNodeQueueFwd.hpp"

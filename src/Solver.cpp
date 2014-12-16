@@ -4,6 +4,7 @@
 #include "util/ThreadPool.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "PrioNodeQueue.hpp"
+#include "Expander.hpp"
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 #include <boost/lexical_cast.hpp>

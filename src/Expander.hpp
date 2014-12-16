@@ -16,6 +16,5 @@ public:
 	virtual ~Expander() {}
 };
 
-typedef std::function<std::shared_ptr<Expander>()> ExpanderFactory;
 
 #endif /* EXPANDER_H_ */
