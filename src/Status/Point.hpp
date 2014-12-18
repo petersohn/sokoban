@@ -15,7 +15,7 @@ public:
 	constexpr Point(const Point& ) = default;
 	Point& operator=(const Point& ) = default;
 
-	constexpr Point &operator+=(Point other)
+	Point &operator+=(Point other)
 	{
 		x += other.x;
 		y += other.y;
@@ -40,31 +40,31 @@ public:
 constexpr Point p10{1, 0}, pm10{-1, 0}, p01{0, 1}, p0m1{0, -1},
 		p11{1, 1}, pm1m1{-1, -1};
 
-inline bool operator==(Point p1, Point p2) {
+inline constexpr bool operator==(Point p1, Point p2) {
 	return p1.x == p2.x && p1.y == p2.y;
 }
 
-inline bool operator!=(Point p1, Point p2) {
+inline constexpr bool operator!=(Point p1, Point p2) {
 	return !(p1 == p2);
 }
 
-inline Point operator+(Point p1, Point p2) {
+inline constexpr Point operator+(Point p1, Point p2) {
 	return Point(p1.x+p2.x, p1.y+p2.y);
 }
 
-inline Point operator-(Point p1, Point p2) {
+inline constexpr Point operator-(Point p1, Point p2) {
 	return Point(p1.x-p2.x, p1.y-p2.y);
 }
 
-inline Point operator*(Point p, int n) {
+inline constexpr Point operator*(Point p, int n) {
 	return Point(p.x*n, p.y*n);
 }
 
-inline Point operator-(Point p) {
+inline constexpr Point operator-(Point p) {
 	return p * -1;
 }
 
-inline bool operator<(Point p1, Point p2) {
+inline constexpr bool operator<(Point p1, Point p2) {
 	return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
 }
 
