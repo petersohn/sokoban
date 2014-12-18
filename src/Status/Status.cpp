@@ -170,13 +170,13 @@ bool Status::shiftIter(Point p)
 void Status::shiftCurrentPos()
 {
 	Point p = currentPos();
-	if (shiftIter(p+Point::p01))
+	if (shiftIter(p+p01))
 		return;
-	if (shiftIter(p+Point::p0m1))
+	if (shiftIter(p+p0m1))
 		return;
-	if (shiftIter(p+Point::p10))
+	if (shiftIter(p+p10))
 		return;
-	if (shiftIter(p+Point::pm10))
+	if (shiftIter(p+pm10))
 		return;
 }
 

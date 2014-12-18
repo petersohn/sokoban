@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_CASE(Endpoints)
 	Point end(3,4);
 	PointRange range(begin, end);
 	BOOST_CHECK_EQUAL(range.front(), begin);
-	BOOST_CHECK_EQUAL(range.back(), end + Point::pm1m1);
+	BOOST_CHECK_EQUAL(range.back(), end + pm1m1);
 }
 
 BOOST_AUTO_TEST_CASE(EmptyRange)
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(EmptyRange)
 BOOST_AUTO_TEST_CASE(SinglePointRange)
 {
 	Point p(1,10);
-	PointRange range(p, p+Point::p11);
+	PointRange range(p, p+p11);
 	BOOST_CHECK_EQUAL(range.front(), p);
 	BOOST_CHECK_EQUAL(range.back(), p);
 	PointRange::iterator it = range.begin();

@@ -13,13 +13,13 @@ BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 			if (distances_[p] == 0)
 				continue;
 			float newDist = distances_[p]+1.0f;
-			if (checkDistance(table, p, Point::p10, newDist))
+			if (checkDistance(table, p, p10, newDist))
 				touched = true;
-			if (checkDistance(table, p, Point::pm10, newDist))
+			if (checkDistance(table, p, pm10, newDist))
 				touched = true;
-			if (checkDistance(table, p, Point::p01, newDist))
+			if (checkDistance(table, p, p01, newDist))
 				touched = true;
-			if (checkDistance(table, p, Point::p0m1, newDist))
+			if (checkDistance(table, p, p0m1, newDist))
 				touched = true;
 		}
 	} while (touched);

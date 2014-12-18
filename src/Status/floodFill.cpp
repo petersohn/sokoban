@@ -21,10 +21,10 @@ void floodFillImpl(const Status &status, Point p0, Array<bool> &result,
 
 			if (status.value(p) == FieldType::floor) {
 				result[p] = true;
-				pointsToVisit.push_back(p+Point::p10);
-				pointsToVisit.push_back(p+Point::pm10);
-				pointsToVisit.push_back(p+Point::p01);
-				pointsToVisit.push_back(p+Point::p0m1);
+				pointsToVisit.push_back(p+p10);
+				pointsToVisit.push_back(p+pm10);
+				pointsToVisit.push_back(p+p01);
+				pointsToVisit.push_back(p+p0m1);
 			}
 		} else {
 		}

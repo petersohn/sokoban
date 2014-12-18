@@ -57,13 +57,13 @@ std::shared_ptr<Node> InternalPusher::pushStones(Status status, std::shared_ptr<
 bool InternalPusher::pushStone(const Status& status, Point p) {
 	if (p == status.table().destination())
 		return true;
-	if (pushStoneIter(status, p, Point::p10))
+	if (pushStoneIter(status, p, p10))
 		return true;
-	if (pushStoneIter(status, p, Point::pm10))
+	if (pushStoneIter(status, p, pm10))
 		return true;
-	if (pushStoneIter(status, p, Point::p01))
+	if (pushStoneIter(status, p, p01))
 		return true;
-	if (pushStoneIter(status, p, Point::p0m1))
+	if (pushStoneIter(status, p, p0m1))
 		return true;
 	return false;
 }

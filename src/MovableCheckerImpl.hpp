@@ -66,7 +66,7 @@ public:
 		}
 
 		calculated_.insert(p);
-		return isMovable(p, Point::p10) || isMovable(p, Point::p01);
+		return isMovable(p, p10) || isMovable(p, p01);
 	}
 
 	bool checkReachability(Point startingPoint)

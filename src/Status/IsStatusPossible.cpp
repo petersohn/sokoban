@@ -24,10 +24,10 @@ class ReverseExpander {
 	{
 		for (const auto& stone: status.state())
 		{
-			expandNode(status, stone, Point::p10);
-			expandNode(status, stone, Point::pm10);
-			expandNode(status, stone, Point::p01);
-			expandNode(status, stone, Point::p0m1);
+			expandNode(status, stone, p10);
+			expandNode(status, stone, pm10);
+			expandNode(status, stone, p01);
+			expandNode(status, stone, p0m1);
 		}
 	}
 
