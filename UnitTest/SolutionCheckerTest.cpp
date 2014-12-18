@@ -516,6 +516,33 @@ BOOST_AUTO_TEST_CASE(stone_is_moved_out_of_the_table_up)
 	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
 }
 
+BOOST_AUTO_TEST_CASE(stone_is_moved_out_of_the_table_left)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"x....",
+				"o...y",
+				"**.**",
+				".....",
+				".....",
+				"..*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
+			State{Point{-1, 1}},
+			MoveDescriptor{Point{0, 1}, Point{-1, 0}},
+		},
+		NodeData{
+			State{Point{-1, 0}},
+			MoveDescriptor{Point{-1, 1}, Point{0, -1}},
+		},
+		NodeData{
+			State{},
+			MoveDescriptor{Point{-1, 0}, Point{1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
 BOOST_AUTO_TEST_SUITE_END() // invalid_moves
 
 BOOST_AUTO_TEST_SUITE(inconsistent_nodes)
