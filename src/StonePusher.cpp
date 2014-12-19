@@ -59,11 +59,11 @@ bool InternalPusher::pushStone(const Status& status, Point p) {
 		return true;
 	if (pushStoneIter(status, p, p10))
 		return true;
-	if (pushStoneIter(status, p, pm10))
+	if (pushStoneIter(status, p, -p10))
 		return true;
 	if (pushStoneIter(status, p, p01))
 		return true;
-	if (pushStoneIter(status, p, p0m1))
+	if (pushStoneIter(status, p, -p01))
 		return true;
 	return false;
 }

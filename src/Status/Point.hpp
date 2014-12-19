@@ -37,8 +37,7 @@ public:
 
 };
 
-constexpr Point p10{1, 0}, pm10{-1, 0}, p01{0, 1}, p0m1{0, -1},
-		p11{1, 1}, pm1m1{-1, -1};
+constexpr Point p10{1, 0}, p01{0, 1}, p11{1, 1};
 
 inline constexpr bool operator==(Point p1, Point p2) {
 	return p1.x == p2.x && p1.y == p2.y;

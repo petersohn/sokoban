@@ -172,11 +172,11 @@ void Status::shiftCurrentPos()
 	Point p = currentPos();
 	if (shiftIter(p+p01))
 		return;
-	if (shiftIter(p+p0m1))
+	if (shiftIter(p-p01))
 		return;
 	if (shiftIter(p+p10))
 		return;
-	if (shiftIter(p+pm10))
+	if (shiftIter(p-p10))
 		return;
 }
 

@@ -86,9 +86,9 @@ void InternalExpander::expand()
 		if (state == status_.table().destination())
 			continue;
 		expandNode(state, p10);
-		expandNode(state, pm10);
+		expandNode(state, -p10);
 		expandNode(state, p01);
-		expandNode(state, p0m1);
+		expandNode(state, -p01);
 	}
 }
 

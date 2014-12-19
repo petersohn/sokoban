@@ -25,9 +25,9 @@ class ReverseExpander {
 		for (const auto& stone: status.state())
 		{
 			expandNode(status, stone, p10);
-			expandNode(status, stone, pm10);
+			expandNode(status, stone, -p10);
 			expandNode(status, stone, p01);
-			expandNode(status, stone, p0m1);
+			expandNode(status, stone, -p01);
 		}
 	}
 

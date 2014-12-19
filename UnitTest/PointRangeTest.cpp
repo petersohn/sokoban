@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_CASE(Endpoints)
 	Point end(3,4);
 	PointRange range(begin, end);
 	BOOST_CHECK_EQUAL(range.front(), begin);
-	BOOST_CHECK_EQUAL(range.back(), end + pm1m1);
+	BOOST_CHECK_EQUAL(range.back(), end - p11);
 }
 
 BOOST_AUTO_TEST_CASE(EmptyRange)

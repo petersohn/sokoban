@@ -21,7 +21,7 @@ public:
 		Point p1;
 		for (p1.x = 0; p1.x < 3; p1.x++)
 			for (p1.y = 0; p1.y < 3; p1.y++) {
-				Point p = p0 + p1 + pm1m1;
+				Point p = p0 + p1 - p11;
 				if (!unchecked[p1] || status.value(p) != FieldType::floor || status.reachable(p))
 					continue;
 				Array<bool> reach(status.width(), status.height(), false);
@@ -60,7 +60,7 @@ public:
 				Point p2;
 				for (p2.x = 0; p2.x < 3; p2.x++)
 					for (p2.y = 0; p2.y < 3; p2.y++) {
-						Point pp = p0 + p2 + pm1m1;
+						Point pp = p0 + p2 - p11;
 						if (arrayAt<bool>(reach, pp, false))
 							unchecked[p2] = false;
 					}
