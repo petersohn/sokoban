@@ -25,10 +25,10 @@ std::vector<Status> getPartitions(const Table& table, const State& state,
 		}
 		Status status{table, state, *searchIterator};
 
-		for (Point  p: arrayRange(table)) {
-			if (pointsToProcess[p] && status.reachable(p))
+		for (auto it = searchIterator; it != searchRange.end(); ++it) {
+			if (pointsToProcess[*it] && status.reachable(*it))
 			{
-				pointsToProcess[p] = false;
+				pointsToProcess[*it] = false;
 				--numberOfPoints;
 			}
 		}
