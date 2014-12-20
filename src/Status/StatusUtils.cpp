@@ -16,18 +16,17 @@ std::vector<Status> getPartitions(const Table& table, const State& state,
 			pointsToProcess[p] = false;
 	}
 	std::vector<Status> result;
+	auto searchRange = arrayRange(table);
+	auto searchIterator = searchRange.begin();
 	while (numberOfPoints > 0) {
-		Point foundPoint;
-		for (Point  p: arrayRange(table)) {
-			if (pointsToProcess[p]) {
-				foundPoint = p;
-				break;
-			}
+		while (!pointsToProcess[*searchIterator]) {
+			++searchIterator;
+			assert(searchIterator != searchRange.end());
 		}
-		Status status{table, state, foundPoint};
+		Status status{table, state, *searchIterator};
 
 		for (Point  p: arrayRange(table)) {
-			if (status.reachable(p) && pointsToProcess[p])
+			if (pointsToProcess[p] && status.reachable(p))
 			{
 				pointsToProcess[p] = false;
 				--numberOfPoints;
