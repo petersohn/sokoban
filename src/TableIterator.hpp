@@ -4,6 +4,7 @@
 #include "Mutexes.hpp"
 #include "TimeMeter.hpp"
 #include "ComplexChecker.hpp"
+#include "util/ExplicitType.hpp"
 #include <boost/asio/io_service.hpp>
 #include <functional>
 
@@ -41,21 +42,26 @@ private:
 	bool advancePoint(Point& p);
 
 public:
+
+	using MaxDistance = util::ExplicitType<struct tag_MaxDistance, std::size_t>;
+	using WorkQueueLength = util::ExplicitType<struct tag_WorkQueueLength, std::size_t>;
+	using ReverseSearchMaxDepth = util::ExplicitType<struct tag_ReverseSearchMaxDepth, std::size_t>;
+
 	TableIterator(
 			const Table& table,
 			const Action& action,
-			std::size_t maxDistance,
-			std::size_t workQueueLength,
-			std::size_t reverseSearchMaxDepth,
+			MaxDistance maxDistance,
+			WorkQueueLength workQueueLength,
+			ReverseSearchMaxDepth reverseSearchMaxDepth,
 			boost::asio::io_service& ioService):
 		table_(&table),
 		action_(action),
-		maxDistance_(maxDistance),
+		maxDistance_(maxDistance.value()),
 		iters_(0),
 		solved_(0),
 		lastTicks_(-1),
-		workQueueLength_(workQueueLength),
-		reverseSearchMaxDepth_(reverseSearchMaxDepth),
+		workQueueLength_(workQueueLength.value()),
+		reverseSearchMaxDepth_(reverseSearchMaxDepth.value()),
 		iterationState_(IterationState::idle),
 		MUTEX_DECL(iterMutex_),
 		ioService_(ioService)

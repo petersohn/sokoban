@@ -53,8 +53,12 @@ int main(int argc, char** argv) {
 		util::ThreadPoolRunner runner(threadPool);
 		threadPool.setNumThreads(opts.numThreads_);
 		TableIterator it(status.table(),
-				std::bind(solveTestProblem, std::ref(solutionChecker), std::ref(s), std::placeholders::_1),
-				0, opts.workQueueLength_, 0, threadPool.getIoService());
+				std::bind(solveTestProblem, std::ref(solutionChecker),
+					std::ref(s), std::placeholders::_1),
+				TableIterator::MaxDistance{0},
+				TableIterator::WorkQueueLength{opts.workQueueLength_},
+				TableIterator::ReverseSearchMaxDepth{0},
+				threadPool.getIoService());
 		it.start(opts.test_, calculator,
 				ComplexChecker{expanderFactory.createBasicCheckers(calculator)});
 		it.wait(true);

@@ -51,7 +51,10 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
 					"..o"
 				}));
 
-	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
+	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MaxDistance{1},
+			TableIterator::WorkQueueLength{1},
+			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
@@ -80,7 +83,10 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
 					".o*"
 				}));
 
-	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
+	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MaxDistance{1},
+			TableIterator::WorkQueueLength{1},
+			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
@@ -125,7 +131,10 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
 					".*o"
 				}));
 
-	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
+	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MaxDistance{1},
+			TableIterator::WorkQueueLength{1},
+			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
@@ -199,7 +208,10 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
 				}));
 
 
-	TableIterator tableIteratorUnderTest{table, action, 2, 1, 0, ioService};
+	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MaxDistance{2},
+			TableIterator::WorkQueueLength{1},
+			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
@@ -265,7 +277,10 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
 				}));
 
 
-	TableIterator tableIteratorUnderTest{table, action, 1, 1, 0, ioService};
+	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MaxDistance{1},
+			TableIterator::WorkQueueLength{1},
+			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
 	ioService.run();
 	tableIteratorUnderTest.wait(false);
