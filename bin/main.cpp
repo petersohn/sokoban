@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 		TableIterator it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker),
 					std::ref(s), std::placeholders::_1),
-				TableIterator::MaxDistance{0},
+				TableIterator::MinDistance{0}, TableIterator::MaxDistance{0},
 				TableIterator::WorkQueueLength{opts.workQueueLength_},
 				TableIterator::ReverseSearchMaxDepth{0},
 				threadPool.getIoService());

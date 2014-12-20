@@ -21,6 +21,7 @@ private:
 	std::shared_ptr<const HeurCalculator> heurCalculator_;
 	ComplexChecker checker_;
 	Action action_;
+	std::size_t minDistance_;
 	std::size_t maxDistance_;
 	std::size_t iters_, solved_;
 	std::size_t lastTicks_;
@@ -43,6 +44,7 @@ private:
 
 public:
 
+	using MinDistance = util::ExplicitType<struct tag_MinDistance, std::size_t>;
 	using MaxDistance = util::ExplicitType<struct tag_MaxDistance, std::size_t>;
 	using WorkQueueLength = util::ExplicitType<struct tag_WorkQueueLength, std::size_t>;
 	using ReverseSearchMaxDepth = util::ExplicitType<struct tag_ReverseSearchMaxDepth, std::size_t>;
@@ -50,12 +52,14 @@ public:
 	TableIterator(
 			const Table& table,
 			const Action& action,
+			MinDistance minDistance,
 			MaxDistance maxDistance,
 			WorkQueueLength workQueueLength,
 			ReverseSearchMaxDepth reverseSearchMaxDepth,
 			boost::asio::io_service& ioService):
 		table_(&table),
 		action_(action),
+		minDistance_(minDistance.value()),
 		maxDistance_(maxDistance.value()),
 		iters_(0),
 		solved_(0),

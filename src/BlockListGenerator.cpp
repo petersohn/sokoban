@@ -93,9 +93,10 @@ void BlockListGenerator::init(const Table& table)
 	std::cerr << "Calculating block list..." << std::endl;
 	TableIterator tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
-			TableIterator::MaxDistance{options_.blockListDistance_}, 
+			TableIterator::MinDistance{0},
+			TableIterator::MaxDistance{options_.blockListDistance_},
 			TableIterator::WorkQueueLength{options_.workQueueLength_},
-			TableIterator::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_}, 
+			TableIterator::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
 			threadPool_.getIoService());
 	blockList_.clear();
 	heurList_.clear();

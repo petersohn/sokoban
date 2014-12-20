@@ -52,6 +52,7 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
 				}));
 
 	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{1},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
@@ -84,6 +85,7 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
 				}));
 
 	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{1},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
@@ -132,6 +134,7 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
 				}));
 
 	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{1},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
@@ -209,6 +212,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
 
 
 	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{2},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
@@ -278,6 +282,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
 
 
 	TableIterator tableIteratorUnderTest{table, action,
+			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{1},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
