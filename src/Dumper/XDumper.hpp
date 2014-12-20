@@ -18,12 +18,12 @@ class XDumper: public Dumper {
 
 	typedef std::shared_ptr<xml::XMLElement> ElementPtr;
 
-	ElementPtr createDumpElement(const std::string &s);
+	ElementPtr createDumpElement(const std::string& s);
 	ElementPtr getElement(const std::shared_ptr<Node>& node);
 	ElementPtr doAddNode(const std::shared_ptr<Node>& node);
 public:
 	XDumper(const std::string& filename);
-	void initialStatus(const Status &status) override;
+	void initialStatus(const Status& status) override;
 	void addNode(const std::shared_ptr<Node>& node) override;
 	void addToSolution(const std::shared_ptr<Node>& node) override;
 	void expand(const std::shared_ptr<Node>& node) override;

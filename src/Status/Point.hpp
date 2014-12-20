@@ -15,19 +15,19 @@ public:
 	constexpr Point(const Point& ) = default;
 	Point& operator=(const Point& ) = default;
 
-	Point &operator+=(Point other)
+	Point& operator+=(Point other)
 	{
 		x += other.x;
 		y += other.y;
 		return *this;
 	}
-	Point &operator-=(Point other)
+	Point& operator-=(Point other)
 	{
 		x -= other.x;
 		y -= other.y;
 		return *this;
 	}
-	Point &operator*=(int n)
+	Point& operator*=(int n)
 	{
 		x *= n;
 		y *= n;

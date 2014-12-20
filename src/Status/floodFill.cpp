@@ -3,7 +3,7 @@
 #include <vector>
 
 template <typename Action>
-void floodFillImpl(const Status &status, Point p0, Array<bool> &result,
+void floodFillImpl(const Status& status, Point p0, Array<bool> &result,
 		Action action)
 {
 	result.fill(false);

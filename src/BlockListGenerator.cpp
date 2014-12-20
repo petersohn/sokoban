@@ -187,7 +187,7 @@ std::shared_ptr<const HeurCalculator> BlockListGenerator::decisionTreeHeurCalcul
 				options_.numThreads_});
 }
 
-void BlockListGenerator::dumpStatus(const Status &status, const Point *p, const std::string &title)
+void BlockListGenerator::dumpStatus(const Status& status, const Point *p, const std::string& title)
 {
 	const std::size_t* threadId = util::ThreadPool::getCurrentThreadId();
 	std::ostream* dump = &dump_;

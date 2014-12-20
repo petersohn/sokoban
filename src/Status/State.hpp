@@ -52,7 +52,7 @@ public:
 		return result;
 	}
 
-	bool operator==(const State &other) const {
+	bool operator==(const State& other) const {
 		return stones_ == other.stones_ || *stones_ == *(other.stones_);
 	}
 	void addStone(Point p) {
@@ -106,7 +106,7 @@ namespace std {
 
 template<>
 struct hash<State> {
-	size_t operator()(const State &state) const
+	size_t operator()(const State& state) const
 	{
 		size_t result = 0;
 		std::hash<Point> h;

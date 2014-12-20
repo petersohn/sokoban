@@ -43,7 +43,7 @@ private:
 	std::deque<std::shared_ptr<Node>> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
 	void calculateHeurList(const Status& status);
-	void dumpStatus(const Status &status, const Point *p, const std::string &title);
+	void dumpStatus(const Status& status, const Point *p, const std::string& title);
 public:
 	BlockListGenerator(std::unique_ptr<const Solver> solver, std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker, const Options& options);

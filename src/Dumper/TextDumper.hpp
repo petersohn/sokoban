@@ -25,7 +25,7 @@ public:
 		file_(filename, std::ios::out | std::ios::trunc),
 		filter_(filter)
 	{}
-	void initialStatus(const Status &status) override;
+	void initialStatus(const Status& status) override;
 	void addNode(const std::shared_ptr<Node>& node) override;
 	void addToSolution(const std::shared_ptr<Node>& node) override;
 	void expand(const std::shared_ptr<Node>& node) override;

@@ -31,7 +31,7 @@ public:
 		funcs_.push_back(std::move(checker));
 	}
 
-	bool check(const Status &status, Point p0) const
+	bool check(const Status& status, Point p0) const
 	{
 #ifndef NO_UNSAFE_DIAGNOSTICS
 		lastError_ = "";

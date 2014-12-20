@@ -11,14 +11,14 @@
 #include <boost/thread/locks.hpp>
 
 class InternalExpander {
-	const Status &status_;
+	const Status& status_;
 	std::shared_ptr<Node> base_;
 	PrioNodeQueue& queue_;
 	Dumper* dumper_;
 	NormalExpander& owner_;
 public:
 	InternalExpander(const Status& status, std::shared_ptr<Node> base,
-			PrioNodeQueue& queue, Dumper* dumper, NormalExpander &owner):
+			PrioNodeQueue& queue, Dumper* dumper, NormalExpander& owner):
 				status_(status),
 				base_(std::move(base)),
 				queue_(queue),

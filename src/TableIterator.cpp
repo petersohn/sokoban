@@ -20,7 +20,7 @@ bool TableIterator::advancePoint(Point& p)
 	return true;
 }
 
-void TableIterator::initIter(Point p, std::size_t stones, const State &state)
+void TableIterator::initIter(Point p, std::size_t stones, const State& state)
 {
 	if (!state.empty()) {
 		if (maxDistance_ > 0) {

@@ -72,7 +72,7 @@ public:
 		data_.resize(width_ * height_);
 		fill(defValue);
 	}
-	void fill(const T &value)
+	void fill(const T& value)
 	{
 		boost::fill(data_, value);
 	}

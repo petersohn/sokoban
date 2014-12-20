@@ -14,7 +14,7 @@ XDumper::XDumper(const std::string& filename):
 	clear();
 }
 
-XDumper::ElementPtr XDumper::createDumpElement(const std::string &s) {
+XDumper::ElementPtr XDumper::createDumpElement(const std::string& s) {
 	std::shared_ptr<xml::XMLText> dump(new xml::XMLText());
 	dump->data(s);
 	ElementPtr dumpElem(new xml::XMLElement());
@@ -23,7 +23,7 @@ XDumper::ElementPtr XDumper::createDumpElement(const std::string &s) {
 	return dumpElem;
 }
 
-void XDumper::initialStatus(const Status &status) {
+void XDumper::initialStatus(const Status& status) {
 	std::stringstream ss;
 	dumpStatus(ss, status);
 	elements_[std::shared_ptr<Node>()]->children().push_back(createDumpElement(ss.str()));

@@ -8,7 +8,7 @@ class Node;
 
 class Dumper {
 public:
-	virtual void initialStatus(const Status &status) = 0;
+	virtual void initialStatus(const Status& status) = 0;
 	virtual void addNode(const std::shared_ptr<Node>& node) = 0;
 	virtual void addToSolution(const std::shared_ptr<Node>& node) = 0;
 	virtual void expand(const std::shared_ptr<Node>& node) = 0;

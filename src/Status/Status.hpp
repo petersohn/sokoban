@@ -54,8 +54,8 @@ public:
 #endif
 
 	explicit Status(const Table& table);
-	explicit Status(const Table& table, const State &state, Point currentPos);
-	explicit Status(const Table& table, const Node &node);
+	explicit Status(const Table& table, const State& state, Point currentPos);
+	explicit Status(const Table& table, const Node& node);
 	Status(const Status& other):
 		table_(other.table_),
 		state_(other.state_),
@@ -145,11 +145,11 @@ public:
 	Point currentPos() const { return currentPos_; }
 
 	bool currentPos(Point p);
-	void state(const State &value);
+	void state(const State& value);
 	bool addStone(Point p);
 	bool removeStone(Point p);
 	bool moveStone(Point from, Point to);
-	void set(const Node &node);
+	void set(const Node& node);
 	void shiftCurrentPos();
 
 	static void statusPoolSize(std::size_t value) {

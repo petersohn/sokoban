@@ -12,12 +12,12 @@
 class Table;
 class Node;
 
-void dumpNode(std::ostream &file, const Table& table, const Node &node,
+void dumpNode(std::ostream& file, const Table& table, const Node& node,
 		std::string title = "", const Array<bool> *highlight = nullptr, int indent = 0);
 
 template<class T>
-void dumpArray(std::ostream &file, const Array<T> table,
-		const std::string &title = "", int indent = 0) {
+void dumpArray(std::ostream& file, const Array<T> table,
+		const std::string& title = "", int indent = 0) {
 	std::string indentString(indent, ' ');
 	if (!title.empty()) {
 		file << indentString << title << std::endl;
@@ -43,7 +43,7 @@ void dumpArray(std::ostream &file, const Array<T> table,
 }
 
 template <class Status>
-void dumpStatus(std::ostream &file, const Status &status, std::string title = "",
+void dumpStatus(std::ostream& file, const Status& status, std::string title = "",
 		const Array<bool> *highlight = nullptr, int indent = 0)
 {
 	if (!title.empty()) {

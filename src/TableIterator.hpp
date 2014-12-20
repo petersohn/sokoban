@@ -33,7 +33,7 @@ private:
 	boost::asio::io_service& ioService_;
 	ConditionVariableType done_;
 
-	void initIter(Point p, std::size_t stones, const State &state);
+	void initIter(Point p, std::size_t stones, const State& state);
 	void doWork(const std::vector<Status>& statuses);
 	void cleanWorkQueue();
 	void progress();

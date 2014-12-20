@@ -32,7 +32,7 @@ void TextDumper::dump(const Node& node, const std::string& text)
 	}
 }
 
-void TextDumper::initialStatus(const Status &status) {
+void TextDumper::initialStatus(const Status& status) {
 	std::cerr << "Initial status" << std::endl;
 	table_ = &status.table();
 	dumpStatus(file_, status, "Initial status");

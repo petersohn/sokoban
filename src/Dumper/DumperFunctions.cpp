@@ -4,7 +4,7 @@
 #include "Node.hpp"
 #include <boost/format.hpp>
 
-void dumpNode(std::ostream &file, const Table& table, const Node &node,
+void dumpNode(std::ostream& file, const Table& table, const Node& node,
 		std::string title, const Array<bool> *highlight, int indent)
 {
 	if (title.length() > 0)

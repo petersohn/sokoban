@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Node::Node(const State &stones, const MoveDescriptor& moveDescriptor,
+Node::Node(const State& stones, const MoveDescriptor& moveDescriptor,
 		std::shared_ptr<Node> ancestor,
 		float c, float heur, float experimentalHeur, int time):
 	ancestor_(ancestor),

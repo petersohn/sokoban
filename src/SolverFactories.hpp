@@ -10,8 +10,8 @@ class ComplexChecker;
 struct Options;
 class Dumper;
 
-std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts);
-std::shared_ptr<Dumper> createDumperFromOptions(const Options &opts);
+std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts);
+std::shared_ptr<Dumper> createDumperFromOptions(const Options& opts);
 
 
 class OptionsBasedExpanderFactory {
@@ -19,7 +19,7 @@ class OptionsBasedExpanderFactory {
 	const Table& table_;
 	bool log_;
 public:
-	OptionsBasedExpanderFactory(const Options &opts, const Table& table, bool log):
+	OptionsBasedExpanderFactory(const Options& opts, const Table& table, bool log):
 		options_(opts),
 		table_(table),
 		log_(log)

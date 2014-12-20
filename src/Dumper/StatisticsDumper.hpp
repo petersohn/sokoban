@@ -17,7 +17,7 @@ public:
 		statistics(this->file, boost::posix_time::seconds(1))
 	{}
 
-	void initialStatus(const Status &status) override;
+	void initialStatus(const Status& status) override;
 	void addNode(const std::shared_ptr<Node>& node) override;
 	void addToSolution(const std::shared_ptr<Node>& node) override;
 	void expand(const std::shared_ptr<Node>& node) override;

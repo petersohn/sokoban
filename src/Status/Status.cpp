@@ -22,7 +22,7 @@ Status::Status(const Table& table):
 }
 
 
-Status::Status(const Table& table, const State &state, Point currentPos):
+Status::Status(const Table& table, const State& state, Point currentPos):
 	table_(&table),
 	state_(state),
 	currentPos_(currentPos),
@@ -31,7 +31,7 @@ Status::Status(const Table& table, const State &state, Point currentPos):
 	init();
 }
 
-Status::Status(const Table& table, const Node &node):
+Status::Status(const Table& table, const Node& node):
 		table_(&table),
 		state_(node.state()),
 		currentPos_(node.from()),
@@ -122,7 +122,7 @@ bool Status::removeStone(Point p) {
 	return true;
 }
 
-void Status::state(const State &value) {
+void Status::state(const State& value) {
 	state_ = value;
 	calculatedData_.reset();
 	init();
@@ -151,7 +151,7 @@ bool Status::moveStone(Point from, Point to) {
 	return true;
 }
 
-void Status::set(const Node &node) {
+void Status::set(const Node& node) {
 	state_ = node.state();
 	currentPos_ = node.from();
 	calculatedData_.reset();

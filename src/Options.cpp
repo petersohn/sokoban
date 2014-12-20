@@ -149,10 +149,10 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			if (configFileName) {
 				parseConfigFile(vm, generalDescription, configFileName);
 			}
-		} catch (boost::program_options::reading_file &e) {
+		} catch (boost::program_options::reading_file& e) {
 			// DON'T CARE
 		}
-	} catch (std::exception &e) {
+	} catch (std::exception& e) {
 		std::cerr << "An error has happened while parsing the command line: " <<
 				e.what() << std::endl;
 		exit(1);

@@ -6,7 +6,7 @@
 
 class ComplexChecker;
 
-std::vector<Status> getPartitions(const Table& table, const State &state,
+std::vector<Status> getPartitions(const Table& table, const State& state,
 			std::size_t maxDepth);
 bool checkStatus(const ComplexChecker& checker, const Status& status);
 bool checkState(const ComplexChecker& checker, const Table& table, const State& state);

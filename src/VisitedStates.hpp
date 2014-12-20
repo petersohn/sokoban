@@ -15,7 +15,7 @@ class VisitedStates {
 	VisitedStateSet visitedStates_;
 public:
 	VisitedStates() = default;
-	bool checkAndPush(const VisitedStateInput &elem);
+	bool checkAndPush(const VisitedStateInput& elem);
 	size_t size() const { return visitedStates_.size(); }
 	bool empty() const { return visitedStates_.empty(); }
 };

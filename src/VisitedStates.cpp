@@ -1,9 +1,9 @@
 #include "VisitedStates.hpp"
 #include <boost/foreach.hpp>
 
-bool VisitedStates::checkAndPush(const VisitedStateInput &elem)
+bool VisitedStates::checkAndPush(const VisitedStateInput& elem)
 {
-	const Status &status = elem.first;
+	const Status& status = elem.first;
 	int heur = elem.second;
 	VisitedStateInfo info(status);
 	VisitedStateSet::iterator it = visitedStates_.find(info);

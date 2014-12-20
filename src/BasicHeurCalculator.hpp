@@ -15,7 +15,7 @@ public:
 	BasicStoneCalculator(BasicStoneCalculator&&) = default;
 	BasicStoneCalculator& operator=(BasicStoneCalculator&&) = default;
 
-	float operator()(const Status &status, Point p) const;
+	float operator()(const Status& status, Point p) const;
 };
 
 using BasicHeurCalculator = TableHeurCalculator<BasicStoneCalculator>;

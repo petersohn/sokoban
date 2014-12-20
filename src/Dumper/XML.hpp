@@ -27,7 +27,7 @@ public:
 	std::vector<Ptr>& children() { return children_; }
 	const std::vector<Ptr>& children() const { return children_; }
 	const std::string& name() const { return name_; }
-	void name(const std::string &name) { name_ = name; }
+	void name(const std::string& name) { name_ = name; }
 
 	virtual std::string toString() const;
 };
@@ -35,7 +35,7 @@ public:
 class XMLText: public XMLNode {
 	std::string data_;
 public:
-	const std::string &data() { return data_; }
+	const std::string& data() { return data_; }
 	void data(const std::string data) { data_ = data; }
 	virtual std::string toString() const;
 };

@@ -32,7 +32,7 @@ std::shared_ptr<PrioNodeQueue> createPrioQueue()
 
 }
 
-std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options &opts)
+std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts)
 {
 	return std::make_shared<PrioNodeQueue>(CompareQueue{opts.compare_});
 }

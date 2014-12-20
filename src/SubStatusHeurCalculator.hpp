@@ -21,13 +21,13 @@ public:
 	{
 	}
 
-	float calculateStone(const Status &status, Point p) const override
+	float calculateStone(const Status& status, Point p) const override
 	{
 		return baseCalculator_->calculateStone(status, p) * heurMultiplier_;
 	}
 
 	float calculateStatus(
-			const Status &status,
+			const Status& status,
 			const MoveDescriptor* /*moveDescriptor*/,
 			const std::shared_ptr<Node>& ancestor) const override
 	{

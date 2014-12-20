@@ -2,7 +2,7 @@
 #include "ComplexChecker.hpp"
 #include "Status/IsStatusPossible.hpp"
 
-std::vector<Status> getPartitions(const Table& table, const State &state,
+std::vector<Status> getPartitions(const Table& table, const State& state,
 			std::size_t maxDepth)
 {
 	Array<bool> pointsToProcess(table.width(), table.height(), false);
