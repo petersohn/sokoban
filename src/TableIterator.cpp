@@ -25,6 +25,9 @@ void TableIterator::initIter(Point p, std::size_t stones, const State& state)
 	if (!state.empty()) {
 		if (maxDistance_ > 0 || minDistance_ > 0) {
 			for (Point pp: state) {
+				if (pp == p) {
+					continue;
+				}
 				std::size_t xDistance = std::abs(p.x - pp.x);
 				std::size_t yDistance = std::abs(p.y - pp.y);
 				if (
