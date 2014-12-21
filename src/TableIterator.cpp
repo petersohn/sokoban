@@ -5,24 +5,12 @@
 #include "Status/State.hpp"
 #include "HeurCalculator.hpp"
 
-bool TableIterator::advancePoint(Point& p)
-{
-	if (p.x == static_cast<int>(table_->width()) - 1) {
-		if (p.y < static_cast<int>(table_->height()) - 1) {
-			++p.y;
-			p.x = 0;
-		} else {
-			return false;
-		}
-	} else {
-		++p.x;
-	}
-	return true;
-}
 
-void TableIterator::initIter(Point p, std::size_t stones, const State& state)
+void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
+		const State& state)
 {
 	if (!state.empty()) {
+		Point p = *it;
 		if (maxDistance_ > 0 || minDistance_ > 0) {
 			for (Point pp: state) {
 				if (pp == p) {
@@ -68,12 +56,13 @@ void TableIterator::initIter(Point p, std::size_t stones, const State& state)
 		assert(stones > 0);
 	}
 	do {
+		Point p = *it;
 		if (!table_->wall(p) && !state[p] && p != table_->destination()) {
 			State state2(state);
 			state2.addStone(p);
-			initIter(p, stones - 1, state2);
+			initIter(it, stones - 1, state2);
 		}
-	} while (advancePoint(p));
+	} while (++it != range_.end());
 }
 
 void TableIterator::cleanWorkQueue() {
@@ -108,7 +97,7 @@ void TableIterator::start(std::size_t numStones,
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
 	iterationState_ = IterationState::filling;
-	initIter(Point(0, 0), numStones, State());
+	initIter(range_.begin(), numStones, State());
 	cleanWorkQueue();
 
 	{

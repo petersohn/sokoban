@@ -4,6 +4,7 @@
 #include "Mutexes.hpp"
 #include "TimeMeter.hpp"
 #include "ComplexChecker.hpp"
+#include "Status/PointRange.hpp"
 #include "util/ExplicitType.hpp"
 #include <boost/asio/io_service.hpp>
 #include <functional>
@@ -27,6 +28,7 @@ private:
 	std::size_t lastTicks_;
 	std::size_t workQueueLength_;
 	std::size_t reverseSearchMaxDepth_;
+	PointRange range_;
 	std::vector<Status> workQueue_;
 	TimeMeter timeMeter_;
 	enum class IterationState { idle, filling, working, done } iterationState_;
@@ -35,12 +37,11 @@ private:
 	boost::asio::io_service& ioService_;
 	ConditionVariableType done_;
 
-	void initIter(Point p, std::size_t stones, const State& state);
+	void initIter(PointRange::iterator it, std::size_t stones,
+			const State& state);
 	void doWork(const std::vector<Status>& statuses);
 	void cleanWorkQueue();
 	void progress();
-
-	bool advancePoint(Point& p);
 
 public:
 
@@ -66,6 +67,7 @@ public:
 		lastTicks_(-1),
 		workQueueLength_(workQueueLength.value()),
 		reverseSearchMaxDepth_(reverseSearchMaxDepth.value()),
+		range_(arrayRange(table)),
 		iterationState_(IterationState::idle),
 		MUTEX_DECL(iterMutex_),
 		ioService_(ioService)
