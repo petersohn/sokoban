@@ -58,6 +58,11 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			("blocklist-distance", defaultValue(&options.blockListDistance_),
 			"The maximum distance between stones in the "
 			"blocklist. 0 means no limit.")
+			("choke-point-number", defaultValue(&options.chokePointNum_),
+			 "The number of points to put on the table for finding choke points. "
+			 "0 means do not check for choke poitns.")
+			("choke-point-distance", defaultValue(&options.chokePointDistance_),
+			 "The minimum distance between two points when finding choke points")
 			("work-queue-length", defaultValue(&options.workQueueLength_),
 			 "The granularity of scheduling during blocklist generation.")
 			("thread-num,t", defaultValue(&options.numThreads_),

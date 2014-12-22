@@ -130,7 +130,9 @@ void TableIterator::wait(bool print)
 				progressBar.reset(new ProgressBar{iters_});
 			}
 
-			progressBar->draw(solved_);
+			if (progressBar) {
+				progressBar->draw(solved_);
+			}
 			lock.lock();
 		}
 	}
