@@ -134,5 +134,26 @@ BOOST_AUTO_TEST_CASE(more_choke_points_in_options)
 	BOOST_CHECK_EQUAL(util::wrap(chokePoints), util::wrap(expectedResult));
 }
 
+BOOST_AUTO_TEST_CASE(single_choke_point_with_more_points_in_options)
+{
+	options.chokePointNum_ = 2;
+
+	auto data = createStatus(5, 5, {
+			"yo...",
+			".....",
+			"**.**",
+			".....",
+			"x...."
+		});
+
+	std::vector<Point> expectedResult{Point{2, 1}, Point{2, 2}, Point{2, 3}};
+	auto chokePoints = findChokePoints(*data.first, options, heurCalculator,
+			ComplexChecker{checker}, false);
+
+	std::sort(chokePoints.begin(), chokePoints.end());
+	BOOST_CHECK_EQUAL(chokePoints.size(), expectedResult.size());
+	BOOST_CHECK_EQUAL(util::wrap(chokePoints), util::wrap(expectedResult));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 

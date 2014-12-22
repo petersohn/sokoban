@@ -7,6 +7,7 @@
 #include "HeurCalculator.hpp"
 #include "ComplexChecker.hpp"
 #include "util/ThreadPool.hpp"
+#include <algorithm>
 
 namespace {
 
@@ -19,9 +20,15 @@ class ChokePointFinder {
 	using CalculationInfo = Array<bool>;
 
 	std::vector<CalculationInfo> calculationInfos;
+	CalculationInfo result;
 
 	void checkChokePoint(const Status& status)
 	{
+		if (std::any_of(status.state().begin(), status.state().end(),
+					[&](Point p) { return result[p]; })) {
+			return;
+	}
+
 		auto partitions = getPartitions(*table, status.state(),
 				options.reverseSearchMaxDepth_);
 		if (partitions.size() > 1) {
@@ -36,7 +43,8 @@ public:
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker):
 		table(&table), options(std::move(options)),
-		calculator(std::move(calculator)), checker(std::move(checker))
+		calculator(std::move(calculator)), checker(std::move(checker)),
+		result{table.width(), table.height(), false}
 	{}
 
 	void find(bool print)
@@ -56,25 +64,39 @@ public:
 
 		calculationInfos.resize(options.numThreads_, CalculationInfo{
 				table->width(), table->height(), false});
-		{
-			util::ThreadPoolRunner runner{threadPool};
-			tableIterator.start(options.chokePointNum_, calculator, checker);
-			tableIterator.wait(print);
+		for (std::size_t numStones = 1; numStones <= options.chokePointNum_;
+				++numStones) {
+			if (print) {
+				std::cerr << "Stones = " << numStones << std::endl;
+			}
+
+			{
+				util::ThreadPoolRunner runner{threadPool};
+				tableIterator.start(numStones, calculator, checker);
+				tableIterator.wait(print);
+			}
+
+			for (Point p: arrayRange(*table)) {
+				if (std::any_of(calculationInfos.begin(), calculationInfos.end(),
+							[p](const CalculationInfo& info) { return info[p]; })) {
+					result[p] = true;
+				}
+			}
+
 		}
 	}
 
 	std::vector<Point> get()
 	{
-		std::vector<Point> result;
+		std::vector<Point> points;
 
-		for (Point p: arrayRange(*table)) {
-			if (std::any_of(calculationInfos.begin(), calculationInfos.end(),
-						[p](const CalculationInfo& info) { return info[p]; })) {
-				result.push_back(p);
+		for (Point p: arrayRange(result)) {
+			if (result[p]) {
+				points.push_back(p);
 			}
 		}
 
-		return result;
+		return points;
 	}
 };
 
