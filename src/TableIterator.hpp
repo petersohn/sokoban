@@ -7,6 +7,7 @@
 #include "Status/PointRange.hpp"
 #include "util/ExplicitType.hpp"
 #include <boost/asio/io_service.hpp>
+#include <boost/optional.hpp>
 #include <functional>
 
 class State;
@@ -29,6 +30,7 @@ private:
 	std::size_t workQueueLength_;
 	std::size_t reverseSearchMaxDepth_;
 	PointRange range_;
+	Array<bool> excludeList_;
 	std::vector<Status> workQueue_;
 	TimeMeter timeMeter_;
 	enum class IterationState { idle, filling, working, done } iterationState_;
@@ -76,7 +78,7 @@ public:
 
 	void start(std::size_t numStones,
 			std::shared_ptr<const HeurCalculator> heurCalculator,
-			ComplexChecker checker);
+			ComplexChecker checker, boost::optional<Array<bool>> excludeList = {});
 	void wait(bool print);
 };
 

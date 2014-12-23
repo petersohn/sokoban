@@ -57,7 +57,7 @@ void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
 	}
 	do {
 		Point p = *it;
-		if (!table_->wall(p) && !state[p] && p != table_->destination()) {
+		if (!excludeList_[p] && !state[p]) {
 			State state2(state);
 			state2.addStone(p);
 			initIter(it, stones - 1, state2);
@@ -89,7 +89,7 @@ void TableIterator::doWork(const std::vector<Status>& statuses)
 
 void TableIterator::start(std::size_t numStones,
 			std::shared_ptr<const HeurCalculator> heurCalculator,
-			ComplexChecker checker)
+			ComplexChecker checker, boost::optional<Array<bool>> excludeList)
 {
 	assert(iterationState_ == IterationState::idle);
 	heurCalculator_ = std::move(heurCalculator);
@@ -97,6 +97,23 @@ void TableIterator::start(std::size_t numStones,
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
 	iterationState_ = IterationState::filling;
+
+	if (excludeList) {
+		assert(excludeList->width() == table_->width());
+		assert(excludeList->height() == table_->height());
+		excludeList_ = std::move(*excludeList);
+	} else {
+		excludeList_.reset(table_->width(), table_->height(), false);
+	}
+
+	excludeList_[table_->destination()] = true;
+
+	for (Point p: arrayRange(*table_)) {
+		if (table_->wall(p)) {
+			excludeList_[p] = true;
+		}
+	}
+
 	initIter(range_.begin(), numStones, State());
 	cleanWorkQueue();
 
