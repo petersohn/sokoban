@@ -24,11 +24,6 @@ class ChokePointFinder {
 
 	void checkChokePoint(const Status& status)
 	{
-		if (std::any_of(status.state().begin(), status.state().end(),
-					[&](Point p) { return result[p]; })) {
-			return;
-	}
-
 		auto partitions = getPartitions(*table, status.state(),
 				options.reverseSearchMaxDepth_);
 		if (partitions.size() > 1) {
@@ -72,7 +67,7 @@ public:
 
 			{
 				util::ThreadPoolRunner runner{threadPool};
-				tableIterator.start(numStones, calculator, checker);
+				tableIterator.start(numStones, calculator, checker, result);
 				tableIterator.wait(print);
 			}
 
