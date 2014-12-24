@@ -42,6 +42,23 @@ BOOST_AUTO_TEST_CASE(hasSubStatus_contains_one_status)
 	BOOST_CHECK(indexedStatusListUnderTest.hasSubStatus(status, Point{2, 1}));
 }
 
+BOOST_AUTO_TEST_CASE(hasSubStatus_only_works_for_points_within_status)
+{
+	auto status = createTestStatus(*table, {
+			".o.",
+			"..o",
+			"y.."});
+	indexedStatusListUnderTest.add(Status{status});
+	BOOST_CHECK_EQUAL(indexedStatusListUnderTest.size(), 1);
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{0, 0}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{2, 0}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{0, 1}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{1, 1}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{0, 1}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{1, 2}));
+	BOOST_CHECK(!indexedStatusListUnderTest.hasSubStatus(status, Point{2, 2}));
+}
+
 BOOST_AUTO_TEST_CASE(hasSubStatus_contains_more_statuses)
 {
 	auto status1 = createTestStatus(*table, {
