@@ -6,6 +6,7 @@
 #include "MockHeurCalculator.hpp"
 #include "MockChecker.hpp"
 #include "ArrayIO.hpp"
+#include "createBoolArray.hpp"
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
@@ -23,17 +24,6 @@ struct ChokePointFinderTestFixture {
 		MOCK_EXPECT(checker->check).returns(true);
 	}
 
-	Array<bool> createChokePointArray(const Table& table,
-			const std::vector<Point>& chokePointList)
-	{
-		Array<bool> result{table.width(), table.height(), false};
-
-		for (Point p: chokePointList) {
-			result[p] = true;
-		}
-
-		return result;
-	}
 };
 
 
@@ -54,7 +44,7 @@ BOOST_AUTO_TEST_CASE(no_choke_point_in_empty_table)
 	auto chokePoints = findChokePoints(*data.first, options, heurCalculator,
 			ComplexChecker{checker}, false);
 
-	BOOST_CHECK_EQUAL(chokePoints, createChokePointArray(*data.first, {}));
+	BOOST_CHECK_EQUAL(chokePoints, createBoolArray(*data.first, {}));
 }
 
 BOOST_AUTO_TEST_CASE(single_choke_point)
@@ -74,7 +64,7 @@ BOOST_AUTO_TEST_CASE(single_choke_point)
 			ComplexChecker{checker}, false);
 
 	BOOST_CHECK_EQUAL(chokePoints,
-			createChokePointArray(*data.first, expectedResult));
+			createBoolArray(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_CASE(multiple_choke_points)
@@ -100,7 +90,7 @@ BOOST_AUTO_TEST_CASE(multiple_choke_points)
 			ComplexChecker{checker}, false);
 
 	BOOST_CHECK_EQUAL(chokePoints,
-			createChokePointArray(*data.first, expectedResult));
+			createBoolArray(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_CASE(no_choke_points_if_more_stones_are_needed)
@@ -118,7 +108,7 @@ BOOST_AUTO_TEST_CASE(no_choke_points_if_more_stones_are_needed)
 	auto chokePoints = findChokePoints(*data.first, options, heurCalculator,
 			ComplexChecker{checker}, false);
 
-	BOOST_CHECK_EQUAL(chokePoints, createChokePointArray(*data.first, {}));
+	BOOST_CHECK_EQUAL(chokePoints, createBoolArray(*data.first, {}));
 }
 
 BOOST_AUTO_TEST_CASE(more_choke_points_in_options)
@@ -142,7 +132,7 @@ BOOST_AUTO_TEST_CASE(more_choke_points_in_options)
 			ComplexChecker{checker}, false);
 
 	BOOST_CHECK_EQUAL(chokePoints,
-			createChokePointArray(*data.first, expectedResult));
+			createBoolArray(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_CASE(single_choke_point_with_more_points_in_options)
@@ -162,7 +152,7 @@ BOOST_AUTO_TEST_CASE(single_choke_point_with_more_points_in_options)
 			ComplexChecker{checker}, false);
 
 	BOOST_CHECK_EQUAL(chokePoints,
-			createChokePointArray(*data.first, expectedResult));
+			createBoolArray(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
