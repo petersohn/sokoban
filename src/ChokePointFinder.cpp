@@ -53,6 +53,7 @@ public:
 				std::bind(&ChokePointFinder::checkChokePoint, this, std::placeholders::_1),
 				TableIterator::MinDistance{options.chokePointDistance_},
 				TableIterator::MaxDistance{0},
+				TableIterator::ChokePointDistantNum{0}, {},
 				TableIterator::WorkQueueLength{options.workQueueLength_},
 				TableIterator::ReverseSearchMaxDepth{options.reverseSearchMaxDepth_},
 				threadPool.getIoService());

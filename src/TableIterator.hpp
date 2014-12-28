@@ -25,12 +25,14 @@ private:
 	Action action_;
 	std::size_t minDistance_;
 	std::size_t maxDistance_;
+	std::size_t chokePointDistantNum_;
 	std::size_t iters_, solved_;
 	std::size_t lastTicks_;
 	std::size_t workQueueLength_;
 	std::size_t reverseSearchMaxDepth_;
 	PointRange range_;
 	Array<bool> excludeList_;
+	Array<bool> chokePoints_;
 	std::vector<Status> workQueue_;
 	TimeMeter timeMeter_;
 	enum class IterationState { idle, filling, working, done } iterationState_;
@@ -49,14 +51,20 @@ public:
 
 	using MinDistance = util::ExplicitType<struct tag_MinDistance, std::size_t>;
 	using MaxDistance = util::ExplicitType<struct tag_MaxDistance, std::size_t>;
-	using WorkQueueLength = util::ExplicitType<struct tag_WorkQueueLength, std::size_t>;
-	using ReverseSearchMaxDepth = util::ExplicitType<struct tag_ReverseSearchMaxDepth, std::size_t>;
+	using ChokePointDistantNum =
+		util::ExplicitType<struct tag_ChokePointDistantNum, std::size_t>;
+	using WorkQueueLength =
+		util::ExplicitType<struct tag_WorkQueueLength, std::size_t>;
+	using ReverseSearchMaxDepth =
+		util::ExplicitType<struct tag_ReverseSearchMaxDepth, std::size_t>;
 
 	TableIterator(
 			const Table& table,
 			const Action& action,
 			MinDistance minDistance,
 			MaxDistance maxDistance,
+			ChokePointDistantNum chokePointDistantNum,
+			Array<bool> chokePoints,
 			WorkQueueLength workQueueLength,
 			ReverseSearchMaxDepth reverseSearchMaxDepth,
 			boost::asio::io_service& ioService):
@@ -64,12 +72,14 @@ public:
 		action_(action),
 		minDistance_(minDistance.value()),
 		maxDistance_(maxDistance.value()),
+		chokePointDistantNum_(chokePointDistantNum.value()),
 		iters_(0),
 		solved_(0),
 		lastTicks_(-1),
 		workQueueLength_(workQueueLength.value()),
 		reverseSearchMaxDepth_(reverseSearchMaxDepth.value()),
 		range_(arrayRange(table)),
+		chokePoints_(std::move(chokePoints)),
 		iterationState_(IterationState::idle),
 		MUTEX_DECL(iterMutex_),
 		ioService_(ioService)

@@ -5,6 +5,7 @@
 #include "ComplexChecker.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "CreateTestStatus.hpp"
+#include "createBoolArray.hpp"
 #include <boost/test/unit_test.hpp>
 #include <vector>
 
@@ -53,6 +54,7 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
 	TableIterator tableIteratorUnderTest{*table, action,
 			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{0},
+			TableIterator::ChokePointDistantNum{0}, {},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
@@ -86,6 +88,7 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
 	TableIterator tableIteratorUnderTest{*table, action,
 			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{0},
+			TableIterator::ChokePointDistantNum{0}, {},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
@@ -135,6 +138,7 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
 	TableIterator tableIteratorUnderTest{*table, action,
 			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{0},
+			TableIterator::ChokePointDistantNum{0}, {},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
@@ -208,6 +212,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
 	TableIterator tableIteratorUnderTest{*table, action,
 			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{0},
+			TableIterator::ChokePointDistantNum{0}, {},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
@@ -273,6 +278,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
 	TableIterator tableIteratorUnderTest{*table, action,
 			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{1},
+			TableIterator::ChokePointDistantNum{0}, {},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
@@ -301,6 +307,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_minimum_distance)
 	TableIterator tableIteratorUnderTest{*table, action,
 			TableIterator::MinDistance{2},
 			TableIterator::MaxDistance{0},
+			TableIterator::ChokePointDistantNum{0}, {},
 			TableIterator::WorkQueueLength{1},
 			TableIterator::ReverseSearchMaxDepth{0}, ioService};
 	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
