@@ -9,7 +9,9 @@ class Point;
 class HeurCalculator;
 class ComplexChecker;
 
-std::vector<Point> findChokePoints(const Table& table, Options options,
+template <typename T> class Array;
+
+Array<bool> findChokePoints(const Table& table, Options options,
 	    std::shared_ptr<const HeurCalculator> calculator,
 	    ComplexChecker checker, bool print);
 

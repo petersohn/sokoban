@@ -81,23 +81,15 @@ public:
 		}
 	}
 
-	std::vector<Point> get()
+	CalculationInfo get()
 	{
-		std::vector<Point> points;
-
-		for (Point p: arrayRange(result)) {
-			if (result[p]) {
-				points.push_back(p);
-			}
-		}
-
-		return points;
+		return result;
 	}
 };
 
 }
 
-std::vector<Point> findChokePoints(const Table& table, Options options,
+Array<bool> findChokePoints(const Table& table, Options options,
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker, bool print)
 {
