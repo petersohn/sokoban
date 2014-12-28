@@ -6,7 +6,6 @@
 #include "ComplexChecker.hpp"
 #include "Status/PointRange.hpp"
 #include "util/ExplicitType.hpp"
-#include <boost/asio/io_service.hpp>
 #include <boost/optional.hpp>
 #include <functional>
 
@@ -14,6 +13,8 @@ class State;
 class Status;
 class HeurCalculator;
 class Table;
+
+namespace boost { namespace asio { class io_service; }}
 
 class TableIterator {
 public:
@@ -67,24 +68,7 @@ public:
 			Array<bool> chokePoints,
 			WorkQueueLength workQueueLength,
 			ReverseSearchMaxDepth reverseSearchMaxDepth,
-			boost::asio::io_service& ioService):
-		table_(&table),
-		action_(action),
-		minDistance_(minDistance.value()),
-		maxDistance_(maxDistance.value()),
-		chokePointDistantNum_(chokePointDistantNum.value()),
-		iters_(0),
-		solved_(0),
-		lastTicks_(-1),
-		workQueueLength_(workQueueLength.value()),
-		reverseSearchMaxDepth_(reverseSearchMaxDepth.value()),
-		range_(arrayRange(table)),
-		chokePoints_(std::move(chokePoints)),
-		iterationState_(IterationState::idle),
-		MUTEX_DECL(iterMutex_),
-		ioService_(ioService)
-	{
-	}
+			boost::asio::io_service& ioService);
 
 	void start(std::size_t numStones,
 			std::shared_ptr<const HeurCalculator> heurCalculator,

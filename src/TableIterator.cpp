@@ -4,7 +4,35 @@
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
 #include "HeurCalculator.hpp"
+#include <boost/asio/io_service.hpp>
 
+TableIterator::TableIterator(
+			const Table& table,
+			const Action& action,
+			MinDistance minDistance,
+			MaxDistance maxDistance,
+			ChokePointDistantNum chokePointDistantNum,
+			Array<bool> chokePoints,
+			WorkQueueLength workQueueLength,
+			ReverseSearchMaxDepth reverseSearchMaxDepth,
+			boost::asio::io_service& ioService):
+		table_(&table),
+		action_(action),
+		minDistance_(minDistance.value()),
+		maxDistance_(maxDistance.value()),
+		chokePointDistantNum_(chokePointDistantNum.value()),
+		iters_(0),
+		solved_(0),
+		lastTicks_(-1),
+		workQueueLength_(workQueueLength.value()),
+		reverseSearchMaxDepth_(reverseSearchMaxDepth.value()),
+		range_(arrayRange(table)),
+		chokePoints_(std::move(chokePoints)),
+		iterationState_(IterationState::idle),
+		MUTEX_DECL(iterMutex_),
+		ioService_(ioService)
+	{
+	}
 
 void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
 		const State& state)

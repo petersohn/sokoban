@@ -7,6 +7,7 @@
 #include "CreateTestStatus.hpp"
 #include "createBoolArray.hpp"
 #include <boost/test/unit_test.hpp>
+#include <boost/asio/io_service.hpp>
 #include <vector>
 
 struct TableIteratorFixture {
