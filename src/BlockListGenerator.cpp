@@ -10,6 +10,7 @@
 #include "Dumper/DumperFunctions.hpp"
 #include "Solver.hpp"
 #include "HeurInfo.hpp"
+#include "ChokePointFinder.hpp"
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -90,12 +91,29 @@ void BlockListGenerator::init(const Table& table)
 	std::size_t decisionTreeDepth =
 		options_.blocklistHeurCalculatorType_ == BlockListHeurType::decisionTree ?
 			options_.blocklistDecisionTreeDepth_ : 0;
+	Array<bool> chokePoints;
+
+	if (options_.chokePointNum_ > 0) {
+		chokePoints = findChokePoints(table, options_, calculator_,
+				ComplexChecker{checker_}, true);
+		Status chokePointStatus{table};
+
+		for (Point p: arrayRange(chokePoints)) {
+			if (chokePoints[p]) {
+				chokePointStatus.addStone(p);
+			}
+		}
+
+		::dumpStatus(std::cerr, chokePointStatus, "Choke points");
+	}
+
 	std::cerr << "Calculating block list..." << std::endl;
 	TableIterator tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
 			TableIterator::MinDistance{0},
 			TableIterator::MaxDistance{options_.blockListDistance_},
-			TableIterator::ChokePointDistantNum{0}, {},
+			TableIterator::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
+					options_.chokePointDistantNum_ : 0}, chokePoints,
 			TableIterator::WorkQueueLength{options_.workQueueLength_},
 			TableIterator::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
 			threadPool_.getIoService());

@@ -62,7 +62,10 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			 "The number of points to put on the table for finding choke points. "
 			 "0 means do not check for choke poitns.")
 			("choke-point-distance", defaultValue(&options.chokePointDistance_),
-			 "The minimum distance between two points when finding choke points")
+			 "The minimum distance between two points when finding choke points.")
+			("choke-point-distant-number", defaultValue(&options.chokePointDistantNum_),
+			 "The maximum number of points that can be farther away from a choke "
+			 "point than blocklist-distance.")
 			("work-queue-length", defaultValue(&options.workQueueLength_),
 			 "The granularity of scheduling during blocklist generation.")
 			("thread-num,t", defaultValue(&options.numThreads_),
