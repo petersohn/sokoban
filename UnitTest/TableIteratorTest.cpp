@@ -287,6 +287,77 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
 	tableIteratorUnderTest.wait(false);
 }
 
+BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point)
+{
+	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+	MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
+	MOCK_EXPECT(checker->check).returns(true);
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"oo.",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"o..",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"oy.",
+					".o."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					".oo",
+					"y.."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					".o.",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					".o.",
+					".oy"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					".o.",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					".oy",
+					"..o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"..o",
+					"yo."
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"..o",
+					".oy"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"..o",
+					"y.o"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"...",
+					"yoo"
+				}));
+	MOCK_EXPECT(action).once().with(createTestStatus(*table, {
+					"o.o",
+					"y.."
+				}));
+
+
+	TableIterator tableIteratorUnderTest{*table, action,
+			TableIterator::MinDistance{0},
+			TableIterator::MaxDistance{1},
+			TableIterator::ChokePointDistantNum{1},
+			createBoolArray(*table, {Point{2, 0}}),
+			TableIterator::WorkQueueLength{1},
+			TableIterator::ReverseSearchMaxDepth{0}, ioService};
+	tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
+	ioService.run();
+	tableIteratorUnderTest.wait(false);
+}
+
 BOOST_AUTO_TEST_CASE(multiple_stones_with_minimum_distance)
 {
 	MOCK_EXPECT(heurCalculator->calculateStone).returns(1);

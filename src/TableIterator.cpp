@@ -40,6 +40,7 @@ void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
 	if (!state.empty()) {
 		Point p = *it;
 		if (maxDistance_ > 0 || minDistance_ > 0) {
+			std::size_t numWrongDistance = 0;
 			for (Point pp: state) {
 				if (pp == p) {
 					continue;
@@ -52,7 +53,14 @@ void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
 						(minDistance_ > 0 && (xDistance < minDistance_ &&
 							yDistance < minDistance_))
 					) {
-					return;
+					if (chokePointDistantNum_ > 0 &&
+							(chokePoints_[p] || chokePoints_[pp])) {
+						if (++numWrongDistance > chokePointDistantNum_) {
+							return;
+						}
+					} else {
+						return;
+					}
 				}
 			}
 		}
