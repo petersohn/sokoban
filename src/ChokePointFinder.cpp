@@ -3,7 +3,7 @@
 #include "Status/Point.hpp"
 #include "Status/Status.hpp"
 #include "Status/StatusUtils.hpp"
-#include "TableIterator.hpp"
+#include "SubStatusForEach.hpp"
 #include "HeurCalculator.hpp"
 #include "ComplexChecker.hpp"
 #include "util/ThreadPool.hpp"
@@ -49,13 +49,13 @@ public:
 		}
 
 		util::ThreadPool threadPool{options.numThreads_};
-		TableIterator tableIterator(*table,
+		SubStatusForEach tableIterator(*table,
 				std::bind(&ChokePointFinder::checkChokePoint, this, std::placeholders::_1),
-				TableIterator::MinDistance{options.chokePointDistance_},
-				TableIterator::MaxDistance{0},
-				TableIterator::ChokePointDistantNum{0}, {},
-				TableIterator::WorkQueueLength{options.workQueueLength_},
-				TableIterator::ReverseSearchMaxDepth{options.reverseSearchMaxDepth_},
+				SubStatusForEach::MinDistance{options.chokePointDistance_},
+				SubStatusForEach::MaxDistance{0},
+				SubStatusForEach::ChokePointDistantNum{0}, {},
+				SubStatusForEach::WorkQueueLength{options.workQueueLength_},
+				SubStatusForEach::ReverseSearchMaxDepth{options.reverseSearchMaxDepth_},
 				threadPool.getIoService());
 
 		calculationInfos.resize(options.numThreads_, CalculationInfo{

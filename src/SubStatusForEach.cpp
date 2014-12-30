@@ -1,4 +1,4 @@
-#include "TableIterator.hpp"
+#include "SubStatusForEach.hpp"
 #include "ProgressBar.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Status/Table.hpp"
@@ -6,7 +6,7 @@
 #include "HeurCalculator.hpp"
 #include <boost/asio/io_service.hpp>
 
-TableIterator::TableIterator(
+SubStatusForEach::SubStatusForEach(
 			const Table& table,
 			const Action& action,
 			MinDistance minDistance,
@@ -34,7 +34,7 @@ TableIterator::TableIterator(
 	{
 	}
 
-void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
+void SubStatusForEach::initIter(PointRange::iterator it, std::size_t stones,
 		const State& state)
 {
 	if (!state.empty()) {
@@ -101,14 +101,14 @@ void TableIterator::initIter(PointRange::iterator it, std::size_t stones,
 	} while (++it != range_.end());
 }
 
-void TableIterator::cleanWorkQueue() {
+void SubStatusForEach::cleanWorkQueue() {
 	++iters_;
 	ioService_.post(std::bind(
-			&TableIterator::doWork, this, std::move(workQueue_)));
+			&SubStatusForEach::doWork, this, std::move(workQueue_)));
 	workQueue_.clear(); // in case it wouldn't be moved
 }
 
-void TableIterator::doWork(const std::vector<Status>& statuses)
+void SubStatusForEach::doWork(const std::vector<Status>& statuses)
 {
 	for (const auto& status: statuses) {
 		action_(status);
@@ -123,7 +123,7 @@ void TableIterator::doWork(const std::vector<Status>& statuses)
 	done_.notify_all();
 }
 
-void TableIterator::start(std::size_t numStones,
+void SubStatusForEach::start(std::size_t numStones,
 			std::shared_ptr<const HeurCalculator> heurCalculator,
 			ComplexChecker checker, boost::optional<Array<bool>> excludeList)
 {
@@ -164,7 +164,7 @@ void TableIterator::start(std::size_t numStones,
 	}
 }
 
-void TableIterator::wait(bool print)
+void SubStatusForEach::wait(bool print)
 {
 	if (iterationState_ == IterationState::idle) {
 		return;

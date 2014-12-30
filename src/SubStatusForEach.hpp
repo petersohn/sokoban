@@ -16,7 +16,7 @@ class Table;
 
 namespace boost { namespace asio { class io_service; }}
 
-class TableIterator {
+class SubStatusForEach {
 public:
 	typedef std::function<void(const Status&)> Action;
 private:
@@ -59,7 +59,7 @@ public:
 	using ReverseSearchMaxDepth =
 		util::ExplicitType<struct tag_ReverseSearchMaxDepth, std::size_t>;
 
-	TableIterator(
+	SubStatusForEach(
 			const Table& table,
 			const Action& action,
 			MinDistance minDistance,

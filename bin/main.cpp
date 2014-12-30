@@ -6,7 +6,7 @@
 #include "Dumper/DumperFunctions.hpp"
 #include "Status/State.hpp"
 #include "SolutionChecker.hpp"
-#include "TableIterator.hpp"
+#include "SubStatusForEach.hpp"
 #include "ComplexChecker.hpp"
 #include "TimeMeter.hpp"
 #include "Status/StatusCreator.hpp"
@@ -52,13 +52,13 @@ int main(int argc, char** argv) {
 		util::ThreadPool threadPool;
 		util::ThreadPoolRunner runner(threadPool);
 		threadPool.setNumThreads(opts.numThreads_);
-		TableIterator it(status.table(),
+		SubStatusForEach it(status.table(),
 				std::bind(solveTestProblem, std::ref(solutionChecker),
 					std::ref(s), std::placeholders::_1),
-				TableIterator::MinDistance{0}, TableIterator::MaxDistance{0},
-				TableIterator::ChokePointDistantNum{0}, {},
-				TableIterator::WorkQueueLength{opts.workQueueLength_},
-				TableIterator::ReverseSearchMaxDepth{0},
+				SubStatusForEach::MinDistance{0}, SubStatusForEach::MaxDistance{0},
+				SubStatusForEach::ChokePointDistantNum{0}, {},
+				SubStatusForEach::WorkQueueLength{opts.workQueueLength_},
+				SubStatusForEach::ReverseSearchMaxDepth{0},
 				threadPool.getIoService());
 		it.start(opts.test_, calculator,
 				ComplexChecker{expanderFactory.createBasicCheckers(calculator)});

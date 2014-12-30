@@ -3,7 +3,7 @@
 #include "BlockListHeurCalculator.hpp"
 #include "DecisionTreeHeurCalculator.hpp"
 #include "ComplexChecker.hpp"
-#include "TableIterator.hpp"
+#include "SubStatusForEach.hpp"
 #include "TableHeurCalculator.hpp"
 #include "Checker.hpp"
 #include "HeurCalculator.hpp"
@@ -108,14 +108,14 @@ void BlockListGenerator::init(const Table& table)
 	}
 
 	std::cerr << "Calculating block list..." << std::endl;
-	TableIterator tableIterator(table,
+	SubStatusForEach tableIterator(table,
 			std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
-			TableIterator::MinDistance{0},
-			TableIterator::MaxDistance{options_.blockListDistance_},
-			TableIterator::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
+			SubStatusForEach::MinDistance{0},
+			SubStatusForEach::MaxDistance{options_.blockListDistance_},
+			SubStatusForEach::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
 					options_.chokePointDistantNum_ : 0}, chokePoints,
-			TableIterator::WorkQueueLength{options_.workQueueLength_},
-			TableIterator::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
+			SubStatusForEach::WorkQueueLength{options_.workQueueLength_},
+			SubStatusForEach::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
 			threadPool_.getIoService());
 	blockList_.clear();
 	heurList_.clear();
