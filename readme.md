@@ -259,7 +259,12 @@ On the other hand, in the next situation all stones are movable, becuase the sto
 . . . *
 ```
 
-This checker is used by default.
+The following options are possible for this checker:
+- `none`: This checker is not used.
+- `simple`: The checker is used but reachability is not considered. This is the default.
+- `extended`: Reachability is considered. A stone is only movable if the point where it is moved from is reachable.
+
+Note that `extended` is much slower than `simple`.
 
 ### Corridor Checker
 
@@ -309,7 +314,7 @@ o . . o
 
 For 1x1 corridors (i.e. one isolated floor tile) the check passes if any of the four endpoints can be opened.
 
-This checker is used by default.
+The options for this checker is the same as for Movable Checker. In this case `extended` is somewhat slower than `simple`.
 
 ### Blocklist Checker
 
