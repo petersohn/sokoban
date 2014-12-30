@@ -25,7 +25,7 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
         - [Corridor Checker](#corridor-checker)
         - [Blocklist Checker](#blocklist-checker)
     - [Preprocessing](#preprocessing)
-    - [Parallelization](#parallelization)
+        - [Choke points](#choke-points)
 
 # Getting started
 
@@ -321,7 +321,7 @@ This check is used if preprocessing is enabled.
 
 Generate a set of states on the table with the following algorithm. The table does not contain the initial stones present in the game.
 
-1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if *k*=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k* x *k* portion of the table.
+1. Put *n* stones on the table, with no two of them further away from each other than *k* in each dimension (for example, if *k*=4, then stones at (1,1) and (5,5) are allowed but at (1,1) and (1,6) are not). In other words, put *n* stones in every *k* x *k* portion of the table. Exceptions may happen when choke points are enabled.
 2. Run checkers to see whether there is a possible solution.
 3. Find a solution.
 4. If no solution is found or the total cost of the solution is more than the initial heuristic value, store the state.
@@ -338,7 +338,21 @@ The following parameters control preprocessing:
 - `--blocklist-distance`: Specifies *k*.
 - `--thread-num`: Specifies the number of working threads to use.
 
+### Choke points
 
+It is possible to enhance preprocessing by finding so called choke points before running the preprocessing. After that, the conditions of point 1 above change with the following:
+
+- No two stones can be further away from each other than *k* if none of them are on a choke point. At most *l* stones can be further away from each other than *k* if at least one of them is on a choke point.
+
+The definition of a choke point is that putting a stone there can potentially split the table into more unreachable part. It is calculated by putting some stones on the table and checking whether there are more than one partitions that are not reachable from other parts of the table.
+
+The rationale behind choke points is that it is more probable that something interesting is found if a stone is on a choke point than if they are just put down randomly. This way interesting states can be found with lower *k* values.
+
+The following parameters control choke points:
+
+- `--choke-point-number`: The number of stones to put on the table while finding choke points.
+- `--choke-point-distance`: The minimum distance between stones while finding choke points. The purpose is to avoid large gaps to be considered as choke points.
+- `--choke-point-distant-number`: Specifies *l*.
 
 
 
