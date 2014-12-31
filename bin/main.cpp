@@ -8,7 +8,7 @@
 #include "SolutionChecker.hpp"
 #include "SubStatusForEach.hpp"
 #include "ComplexChecker.hpp"
-#include "TimeMeter.hpp"
+#include "util/TimeMeter.hpp"
 #include "Status/StatusCreator.hpp"
 #include "util/ThreadPool.hpp"
 #include <iostream>
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
 	Status& status = data.second;
 	dumpStatus(std::cerr, status);
 
-	TimeMeter timeMeter;
+	util::TimeMeter timeMeter;
 	OptionsBasedExpanderFactory expanderFactory(opts, status.table(), !opts.test_);
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),

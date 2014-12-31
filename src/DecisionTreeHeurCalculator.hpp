@@ -4,7 +4,7 @@
 #include "HeurInfo.hpp"
 #include "Status/PseudoStatus.hpp"
 #include "DecisionTree/DecisionTree.hpp"
-#include "TimeMeter.hpp"
+#include "util/TimeMeter.hpp"
 #include "SubStatusHeurCalculator.hpp"
 
 class DecisionTreeHeurListFactory {
@@ -54,7 +54,7 @@ public:
 			std::size_t maxDepth,
 			std::size_t numThreads)
 	{
-		TimeMeter timeMeter;
+		util::TimeMeter timeMeter;
 		NodeType::ValueList convertedHeurList;
 		convertedHeurList.reserve(heurList.size());
 		boost::transform(heurList, std::back_inserter(convertedHeurList),

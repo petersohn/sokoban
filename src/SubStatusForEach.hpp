@@ -2,7 +2,7 @@
 #define TABLEITERATOR_H_
 
 #include "Mutexes.hpp"
-#include "TimeMeter.hpp"
+#include "util/TimeMeter.hpp"
 #include "ComplexChecker.hpp"
 #include "Status/PointRange.hpp"
 #include "util/ExplicitType.hpp"
@@ -35,7 +35,7 @@ private:
 	Array<bool> excludeList_;
 	Array<bool> chokePoints_;
 	std::vector<Status> workQueue_;
-	TimeMeter timeMeter_;
+	util::TimeMeter timeMeter_;
 	enum class IterationState { idle, filling, working, done } iterationState_;
 
 	MutexType iterMutex_;
