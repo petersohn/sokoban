@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_SUITE_END() // good_solutions
 
 BOOST_AUTO_TEST_SUITE(invalid_moves)
 
-BOOST_AUTO_TEST_CASE(stone_is_moved_in_too_much)
+BOOST_AUTO_TEST_CASE(stone_is_moved_too_much)
 {
 	auto initialStatus = createTestStatus(*table, {
 				"x....",
@@ -224,6 +224,45 @@ BOOST_AUTO_TEST_CASE(stone_is_moved_in_too_much)
 		NodeData{
 			State{Point{2, 0}},
 			MoveDescriptor{Point{2, 2}, Point{0, -2}},
+		},
+		NodeData{
+			State{Point{1, 0}},
+			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
+		},
+		NodeData{
+			State{},
+			MoveDescriptor{Point{1, 0}, Point{-1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
+BOOST_AUTO_TEST_CASE(stone_is_moved_diagonally)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"x....",
+				".....",
+				"**.**",
+				".....",
+				"...o.",
+				"y.*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
+			State{Point{2, 3}},
+			MoveDescriptor{Point{3, 4}, Point{-1, -1}},
+		},
+		NodeData{
+			State{Point{2, 2}},
+			MoveDescriptor{Point{2, 3}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 1}},
+			MoveDescriptor{Point{2, 2}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 0}},
+			MoveDescriptor{Point{2, 1}, Point{0, -1}},
 		},
 		NodeData{
 			State{Point{1, 0}},
@@ -260,6 +299,29 @@ BOOST_AUTO_TEST_CASE(stone_is_not_moved)
 			State{Point{2, 0}},
 			MoveDescriptor{Point{2, 1}, Point{0, -1}},
 		},
+		NodeData{
+			State{Point{1, 0}},
+			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
+		},
+		NodeData{
+			State{},
+			MoveDescriptor{Point{1, 0}, Point{-1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
+BOOST_AUTO_TEST_CASE(stone_is_moved_into_another)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"xoo..",
+				".....",
+				"**.**",
+				".....",
+				".....",
+				"y.*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
 		NodeData{
 			State{Point{1, 0}},
 			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
@@ -569,6 +631,61 @@ BOOST_AUTO_TEST_CASE(stone_is_moved_out_of_the_table_right)
 		NodeData{
 			State{Point{2, 0}},
 			MoveDescriptor{Point{3, 0}, Point{-1, 0}},
+		},
+		NodeData{
+			State{Point{1, 0}},
+			MoveDescriptor{Point{2, 0}, Point{-1, 0}},
+		},
+		NodeData{
+			State{},
+			MoveDescriptor{Point{1, 0}, Point{-1, 0}},
+		}
+		})};
+	BOOST_CHECK(!solutionCheckerUnderTest.checkResult(initialStatus, nodes));
+}
+
+BOOST_AUTO_TEST_CASE(stone_is_moved_out_of_the_table_down)
+{
+	auto initialStatus = createTestStatus(*table, {
+				"x....",
+				"y....",
+				"**.**",
+				".....",
+				".....",
+				".o*.."});
+
+	std::deque<std::shared_ptr<Node>> nodes{createNodes({
+		NodeData{
+			State{Point{1, 6}},
+			MoveDescriptor{Point{1, 5}, Point{0, 1}},
+		},
+		NodeData{
+			State{Point{1, 5}},
+			MoveDescriptor{Point{1, 6}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{1, 4}},
+			MoveDescriptor{Point{1, 5}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{1, 3}},
+			MoveDescriptor{Point{1, 4}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 3}},
+			MoveDescriptor{Point{1, 3}, Point{1, 0}},
+		},
+		NodeData{
+			State{Point{2, 2}},
+			MoveDescriptor{Point{2, 3}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 1}},
+			MoveDescriptor{Point{2, 2}, Point{0, -1}},
+		},
+		NodeData{
+			State{Point{2, 0}},
+			MoveDescriptor{Point{2, 1}, Point{0, -1}},
 		},
 		NodeData{
 			State{Point{1, 0}},
