@@ -50,7 +50,7 @@ struct Options {
 	std::string dumpFilename_;
 	std::string partitionsDumpFilename_ = "partitions.dump";
 	std::string solutionDumpFilename_ = "solution.dump";
-	bool oldStyleOutput_ = false;
+	std::string outputFormat_ = "";
 	float heurMultiplier_ = 1.0f;
 	bool useStonePusher_ = true;
 	MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;

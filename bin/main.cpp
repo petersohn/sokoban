@@ -11,6 +11,7 @@
 #include "util/TimeMeter.hpp"
 #include "Status/StatusCreator.hpp"
 #include "util/ThreadPool.hpp"
+#include "formatOutput.hpp"
 #include <iostream>
 #include <fstream>
 #include <deque>
@@ -84,15 +85,9 @@ int main(int argc, char** argv) {
 					it != solution.end(); ++it)
 			{
 				dumpNode(dump, status.table(), **it);
-				Point from = (*it)->from();
-				Point p(from - (*it)->d());
-				std::string dir =
-						! opts.oldStyleOutput_ ? direction((*it)->d()) :
-							(boost::format("(%2d, %2d)") %
-							p.x % p.y).str();
-				cout << boost::format("(%2d, %2d) --> %s") %
-						from.x % from.y % dir << endl;
 			}
+
+			std::cout << formatOutput(opts.outputFormat_, solution);
 		}
 	}
 #ifndef NO_UNSAFE_DIAGNOSTICS

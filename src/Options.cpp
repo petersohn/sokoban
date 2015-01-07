@@ -49,9 +49,8 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 
 	po::options_description generalDescription("General options");
 	generalDescription.add_options()
-			("old-style-output", defaultValue(&options.oldStyleOutput_),
-			"Produce output messages of (x1, y1) --> (x2, y2)"
-			" instead of (x1, y1) --> direction")
+			("output-format", defaultValue(&options.outputFormat_),
+			"The format of the text printed to stdout.")
 			("blocklist-number", defaultValue(&options.blockListStones_),
 			"The number of stones the blocklist contains. "
 			"The calculation time of the blocklist is exponential in this number.")
