@@ -20,16 +20,23 @@ std::string formatSolution(const std::deque<std::shared_ptr<Node>>& solution,
 	{
 		Point from = node->from();
 		Point p(from + node->d());
-		result << from << " --> ";
-		switch (solutionType) {
-		case SolutionType::coordinate:
-			result << p;
-			break;
-		case SolutionType::direction:
-			result << direction(node->d());
-			break;
+		if (solutionType == SolutionType::minimal) {
+			result << from.x << ',' << from.y << "->" <<
+				p.x << ',' << p.y << ' ';
+		} else {
+			result << from << " --> ";
+			switch (solutionType) {
+			case SolutionType::coordinate:
+				result << p;
+				break;
+			case SolutionType::direction:
+				result << direction(node->d());
+				break;
+			default:
+				break;
+			}
+			result << '\n';
 		}
-		result << '\n';
 	}
 
 	return result.str();

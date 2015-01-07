@@ -8,7 +8,8 @@
 
 class Node;
 
-LAZY_ARGUMENT_ENUM(SolutionType, solutionTypes, (coordinate)(direction))
+LAZY_ARGUMENT_ENUM(SolutionType, solutionTypes, 
+		(coordinate)(direction)(minimal))
 
 std::string formatOutput(const std::string& format,
 		const std::deque<std::shared_ptr<Node>>& solution);
