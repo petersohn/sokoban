@@ -44,6 +44,12 @@ std::string formatSolution(const std::deque<std::shared_ptr<Node>>& solution,
 	return result.str();
 }
 
+std::string formatSolutionLength(const std::deque<std::shared_ptr<Node>>& solution,
+		const std::vector<std::string>&)
+{
+	return boost::lexical_cast<std::string>(solution.size());
+}
+
 #ifndef NO_UNSAFE_DIAGNOSTICS
 std::string formatStatusMoved(const std::vector<std::string>&)
 {
@@ -84,6 +90,7 @@ std::string formatOutput(const std::string& format,
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
             {"solution", std::bind(formatSolution, std::cref(solution), _1)},
+            {"length", std::bind(formatSolutionLength, std::cref(solution), _1)},
 			{"status-moved", formatStatusMoved},
 			{"status-copied", formatStatusCopied},
 			{"calculate-reachable-called", formatCalculateReachableCalled},
