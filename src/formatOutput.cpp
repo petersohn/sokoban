@@ -1,8 +1,10 @@
 #include "formatOutput.hpp"
 #include "Node.hpp"
 #include "util/StringFormatter.hpp"
+#include "Status/Status.hpp"
 #include <sstream>
 #include <functional>
+#include <boost/lexical_cast.hpp>
 
 namespace {
 
@@ -42,6 +44,38 @@ std::string formatSolution(const std::deque<std::shared_ptr<Node>>& solution,
 	return result.str();
 }
 
+#ifndef NO_UNSAFE_DIAGNOSTICS
+std::string formatStatusMoved(const std::vector<std::string>&)
+{
+	return boost::lexical_cast<std::string>(Status::moveCount);
+}
+
+std::string formatStatusCopied(const std::vector<std::string>&)
+{
+	return boost::lexical_cast<std::string>(Status::copyCount);
+}
+
+std::string formatCalculateReachableCalled(const std::vector<std::string>&)
+{
+	return boost::lexical_cast<std::string>(Status::calculateReachableCount);
+}
+#else
+std::string formatStatusMoved(const std::vector<std::string>&)
+{
+	return "0";
+}
+
+std::string formatStatusCopied(const std::vector<std::string>&)
+{
+	return "0";
+}
+
+std::string formatCalculateReachableCalled(const std::vector<std::string>&)
+{
+	return "0";
+}
+#endif
+
 }
 
 std::string formatOutput(const std::string& format,
@@ -49,7 +83,10 @@ std::string formatOutput(const std::string& format,
 {
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
-            {"solution", std::bind(formatSolution, std::cref(solution), _1)}
+            {"solution", std::bind(formatSolution, std::cref(solution), _1)},
+			{"status-moved", formatStatusMoved},
+			{"status-copied", formatStatusCopied},
+			{"calculate-reachable-called", formatCalculateReachableCalled},
         };
 	util::StringFormatter formatter{actions};
 
