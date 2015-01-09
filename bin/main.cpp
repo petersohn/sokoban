@@ -85,11 +85,8 @@ int main(int argc, char** argv) {
 			}
 			std::ofstream dump(opts.solutionDumpFilename_,
 					std::ios::out | std::ios::trunc);
-			for (std::deque<std::shared_ptr<Node>>::iterator it = solution.begin();
-					it != solution.end(); ++it)
-			{
-				dumpNode(dump, status.table(), **it);
-			}
+			dump << formatOutput("%solution:dump%", *table, solution,
+					solutionQuality);
 		}
 
 		std::cout << formatOutput(opts.outputFormat_, *table, solution,
