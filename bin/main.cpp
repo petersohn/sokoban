@@ -67,19 +67,12 @@ int main(int argc, char** argv) {
 		it.wait(true);
 	} else {
 		std::deque<std::shared_ptr<Node>> solution = s.solve(status);
-		cerr << "Length of solution: " << solution.size() << endl;
-		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
-		cerr << "Real Time:" << timeMeter.realTime() << endl;
 		SolutionQuality solutionQuality = SolutionQuality::none;
-		if (solution.empty())
-			cerr << "No solution." << endl;
-		else
+		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {
-				cerr << "Solution OK." << endl;
 				solutionQuality = SolutionQuality::good;
 			} else {
-				cerr << "Solution bad." << endl;
 				solutionQuality = SolutionQuality::bad;
 				returnCode = 1;
 			}
@@ -92,11 +85,5 @@ int main(int argc, char** argv) {
 		std::cout << formatOutput(opts.outputFormat_, *table, solution,
 				solutionQuality);
 	}
-#ifndef NO_UNSAFE_DIAGNOSTICS
-	cerr << "Status copied " << Status::copyCount << " times.\n" <<
-			"Status moved " << Status::moveCount << " times.\n" <<
-			"calculateReachable called " << Status::calculateReachableCount << " times.\n" <<
-			"Status pool size = " << Status::currentStatusPoolSize() << endl;
-#endif
 	return returnCode;
 }
