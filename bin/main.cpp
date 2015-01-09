@@ -69,14 +69,17 @@ int main(int argc, char** argv) {
 		cerr << "Length of solution: " << solution.size() << endl;
 		cerr << "Processor Time:" << timeMeter.processorTime() << endl;
 		cerr << "Real Time:" << timeMeter.realTime() << endl;
+		SolutionQuality solutionQuality = SolutionQuality::none;
 		if (solution.empty())
 			cerr << "No solution." << endl;
 		else
 		{
 			if (solutionChecker.checkResult(status, solution)) {
 				cerr << "Solution OK." << endl;
+				solutionQuality = SolutionQuality::good;
 			} else {
 				cerr << "Solution bad." << endl;
+				solutionQuality = SolutionQuality::bad;
 				returnCode = 1;
 			}
 			std::ofstream dump(opts.solutionDumpFilename_,
@@ -86,9 +89,10 @@ int main(int argc, char** argv) {
 			{
 				dumpNode(dump, status.table(), **it);
 			}
-
-			std::cout << formatOutput(opts.outputFormat_, solution);
 		}
+
+		std::cout << formatOutput(opts.outputFormat_, solution,
+				solutionQuality);
 	}
 #ifndef NO_UNSAFE_DIAGNOSTICS
 	cerr << "Status copied " << Status::copyCount << " times.\n" <<

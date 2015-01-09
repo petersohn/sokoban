@@ -82,15 +82,29 @@ std::string formatCalculateReachableCalled(const std::vector<std::string>&)
 }
 #endif
 
+std::string formatSolutionQuality(SolutionQuality solutionQuality,
+		const std::vector<std::string>& args)
+{
+	std::size_t numericQuality = static_cast<int>(solutionQuality);
+
+	if (numericQuality < args.size()) {
+		return args[numericQuality];
+	} else {
+		return boost::lexical_cast<std::string>(solutionQuality);
+	}
+}
+
 }
 
 std::string formatOutput(const std::string& format,
-		const std::deque<std::shared_ptr<Node>>& solution)
+		const std::deque<std::shared_ptr<Node>>& solution,
+		SolutionQuality solutionQuality)
 {
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
             {"solution", std::bind(formatSolution, std::cref(solution), _1)},
             {"length", std::bind(formatSolutionLength, std::cref(solution), _1)},
+			{"quality", std::bind(formatSolutionQuality, solutionQuality, _1)},
 			{"status-moved", formatStatusMoved},
 			{"status-copied", formatStatusCopied},
 			{"calculate-reachable-called", formatCalculateReachableCalled},
