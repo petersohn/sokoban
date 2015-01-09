@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
 	Status::statusPoolSize(opts.statusPoolSize_);
 
 	auto data(loadStatusFromFile(opts.filename_.c_str()));
+	const auto& table = data.first;
 	Status& status = data.second;
 	dumpStatus(std::cerr, status);
 
@@ -91,7 +92,7 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		std::cout << formatOutput(opts.outputFormat_, solution,
+		std::cout << formatOutput(opts.outputFormat_, *table, solution,
 				solutionQuality);
 	}
 #ifndef NO_UNSAFE_DIAGNOSTICS

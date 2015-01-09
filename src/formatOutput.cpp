@@ -2,13 +2,17 @@
 #include "Node.hpp"
 #include "util/StringFormatter.hpp"
 #include "Status/Status.hpp"
+#include "Status/Table.hpp"
+#include "Dumper/DumperFunctions.hpp"
 #include <sstream>
 #include <functional>
 #include <boost/lexical_cast.hpp>
 
 namespace {
 
-std::string formatSolution(const std::deque<std::shared_ptr<Node>>& solution,
+std::string formatSolution(
+		const Table& table,
+		const std::deque<std::shared_ptr<Node>>& solution,
 		const std::vector<std::string>& args)
 {
 	SolutionType solutionType = SolutionType::direction;
@@ -26,6 +30,9 @@ std::string formatSolution(const std::deque<std::shared_ptr<Node>>& solution,
 		case SolutionType::minimal:
 			result << from.x << ',' << from.y << "->" <<
 				p.x << ',' << p.y << ' ';
+			break;
+		case SolutionType::dump:
+			dumpNode(result, table, *node);
 			break;
 		case SolutionType::coordinate:
 		case SolutionType::direction:
@@ -96,12 +103,14 @@ std::string formatSolutionQuality(SolutionQuality solutionQuality,
 }
 
 std::string formatOutput(const std::string& format,
+		const Table& table,
 		const std::deque<std::shared_ptr<Node>>& solution,
 		SolutionQuality solutionQuality)
 {
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
-            {"solution", std::bind(formatSolution, std::cref(solution), _1)},
+            {"solution", std::bind(formatSolution, std::cref(table),
+					std::cref(solution), _1)},
             {"length", std::bind(formatSolutionLength, std::cref(solution), _1)},
 			{"quality", std::bind(formatSolutionQuality, solutionQuality, _1)},
 			{"status-moved", formatStatusMoved},
