@@ -51,44 +51,6 @@ std::string formatSolution(
 	return result.str();
 }
 
-std::string formatSolutionLength(const std::deque<std::shared_ptr<Node>>& solution,
-		const std::vector<std::string>&)
-{
-	return boost::lexical_cast<std::string>(solution.size());
-}
-
-#ifndef NO_UNSAFE_DIAGNOSTICS
-std::string formatStatusMoved(const std::vector<std::string>&)
-{
-	return boost::lexical_cast<std::string>(Status::moveCount);
-}
-
-std::string formatStatusCopied(const std::vector<std::string>&)
-{
-	return boost::lexical_cast<std::string>(Status::copyCount);
-}
-
-std::string formatCalculateReachableCalled(const std::vector<std::string>&)
-{
-	return boost::lexical_cast<std::string>(Status::calculateReachableCount);
-}
-#else
-std::string formatStatusMoved(const std::vector<std::string>&)
-{
-	return "0";
-}
-
-std::string formatStatusCopied(const std::vector<std::string>&)
-{
-	return "0";
-}
-
-std::string formatCalculateReachableCalled(const std::vector<std::string>&)
-{
-	return "0";
-}
-#endif
-
 std::string formatSolutionQuality(SolutionQuality solutionQuality,
 		const std::vector<std::string>& args)
 {
@@ -115,13 +77,23 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 	util::StringFormatter::Map actions{
             {"solution", std::bind(formatSolution, std::cref(data.table),
 					std::cref(data.solution), _1)},
-			{"length", std::bind(formatSolutionLength,
-					std::cref(data.solution), _1)},
+			{"length", std::bind(genericFormat<std::size_t>,
+					data.solution.size(), _1)},
 			{"quality", std::bind(formatSolutionQuality,
 					data.solutionQuality, _1)},
-			{"status-moved", formatStatusMoved},
-			{"status-copied", formatStatusCopied},
-			{"calculate-reachable-called", formatCalculateReachableCalled},
+#ifndef NO_UNSAFE_DIAGNOSTICS
+			{"status-moved", std::bind(genericFormat<std::size_t>,
+					Status::moveCount, _1)},
+			{"status-copied", std::bind(genericFormat<std::size_t>,
+					Status::copyCount, _1)},
+			{"calculate-reachable-called", std::bind(genericFormat<std::size_t>,
+					Status::calculateReachableCount, _1)},
+#else
+			{"status-moved", std::bind(genericFormat<std::size_t>, 0, _1)},
+			{"status-copied", std::bind(genericFormat<std::size_t>, 0, _1)},
+			{"calculate-reachable-called", std::bind(genericFormat<std::size_t>,
+					0, _1)},
+#endif
 			{"expanded-nodes", std::bind(genericFormat<ExpandedNodes>,
 					data.expandedNodes, _1)},
 			{"processor-time", std::bind(genericFormat<ProcessorTime>,
