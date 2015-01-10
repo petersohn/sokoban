@@ -47,7 +47,7 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
 			return createExpander(
 					basicHeurCalculator,
 					ComplexChecker{createBasicCheckers(basicHeurCalculator)},
-					false);
+					nullptr);
 		}));
 	return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
 			table_, std::move(solver), options_.reverseSearchMaxDepth_,
@@ -87,14 +87,14 @@ std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createB
 std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker,
-			bool log,
+			std::size_t* expandedNodes,
 			std::shared_ptr<const HeurCalculator> experimentalCalculator)
 {
 	auto visitedStates = std::make_shared<VisitedStates>();
 	std::shared_ptr<NodeFactory> nodeFactory(new NodeFactory(calculator,
 				experimentalCalculator));
 	std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(visitedStates,
-			calculator, std::move(checker), nodeFactory, log);
+			calculator, std::move(checker), nodeFactory, expandedNodes);
 
 	if (options_.useStonePusher_) {
 		expander = std::make_shared<StonePusher>(expander, visitedStates,
@@ -122,7 +122,8 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 		std::unique_ptr<const Solver> solver(new Solver(
 				std::bind(&createPrioQueueFromOptions, options_),
 				[this, preprocessingCalculator, checker]() {
-					return createExpander(preprocessingCalculator, checker, false);
+					return createExpander(preprocessingCalculator, checker,
+							nullptr);
 				})) ;
 		BlockListGenerator blockListGenerator(
 				std::move(solver), preprocessingCalculator, checker, options_);
@@ -145,7 +146,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 	}
 //	experimentalCalculator = calculator;
 	return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
-			calculator, ComplexChecker{checkers}, log_, experimentalCalculator);
+			calculator, ComplexChecker{checkers}, expandedNodes_, experimentalCalculator);
 }
 
 namespace {

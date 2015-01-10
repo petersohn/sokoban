@@ -61,13 +61,13 @@ void InternalExpander::expandNode(Point p, Point d)
 			dumper_->addNode(node);
 		{
 			owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
-			if (owner_.enableLog_ && ++owner_.expandedNodes_ % 10000 == 0)
+			if (owner_.expandedNodes_ && ++*owner_.expandedNodes_ % 10000 == 0)
 				std::cerr << boost::format(
 						"Expanded nodes: %d.\n"
 						"Nodes in queue: %d.\n"
 						"Maximum depth: %d.\n"
 						"Cost function: %d\n") %
-					owner_.expandedNodes_ % queue_.size() %
+					*owner_.expandedNodes_ % queue_.size() %
 					owner_.maxDepth_ % (base_ ? base_->costFgv() : -1) << std::endl;
 		}
 	}
@@ -96,22 +96,20 @@ void InternalExpander::expand()
 
 NormalExpander::NormalExpander(
 		std::shared_ptr<VisitedStates> vs, std::shared_ptr<const HeurCalculator> calculator,
-		ComplexChecker ch, std::shared_ptr<NodeFactory> nodeFactory, bool enableLog):
+		ComplexChecker ch, std::shared_ptr<NodeFactory> nodeFactory,
+		std::size_t* expandedNodes):
 		visitedStates_(std::move(vs)),
 		calculator_(std::move(calculator)),
 		checker_(std::move(ch)),
 		nodeFactory_(std::move(nodeFactory)),
 		maxDepth_(0),
-		enableLog_(enableLog),
-		expandedNodes_(0)
+		expandedNodes_(expandedNodes)
 {
 	assert(calculator_.get() != NULL);
 }
 
 NormalExpander::~NormalExpander()
 {
-	if (enableLog_)
-		std::cerr << "Expanded nodes: " << expandedNodes_ << std::endl;
 }
 
 void NormalExpander::expand(const Status& status, std::shared_ptr<Node> base,

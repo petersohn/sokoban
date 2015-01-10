@@ -100,12 +100,18 @@ std::string formatSolutionQuality(SolutionQuality solutionQuality,
 	}
 }
 
+std::string formatExpandedNodes(ExpandedNodes expandedNodes,
+		const std::vector<std::string>&)
+{
+	return boost::lexical_cast<std::string>(expandedNodes.value());
+}
 }
 
 std::string formatOutput(const std::string& format,
 		const Table& table,
 		const std::deque<std::shared_ptr<Node>>& solution,
-		SolutionQuality solutionQuality)
+		SolutionQuality solutionQuality,
+		ExpandedNodes expandedNodes)
 {
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
@@ -116,6 +122,7 @@ std::string formatOutput(const std::string& format,
 			{"status-moved", formatStatusMoved},
 			{"status-copied", formatStatusCopied},
 			{"calculate-reachable-called", formatCalculateReachableCalled},
+			{"expanded-nodes", std::bind(formatExpandedNodes, expandedNodes, _1)}
         };
 	util::StringFormatter formatter{actions};
 

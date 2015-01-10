@@ -41,7 +41,9 @@ int main(int argc, char** argv) {
 	dumpStatus(std::cerr, status);
 
 	util::TimeMeter timeMeter;
-	OptionsBasedExpanderFactory expanderFactory(opts, status.table(), !opts.test_);
+	std::size_t expandedNodes = 0;
+	OptionsBasedExpanderFactory expanderFactory(opts, status.table(),
+			opts.test_ ? nullptr : &expandedNodes);
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
 			createExpander, std::bind(createDumperFromOptions, opts));
@@ -68,6 +70,11 @@ int main(int argc, char** argv) {
 	} else {
 		std::deque<std::shared_ptr<Node>> solution = s.solve(status);
 		SolutionQuality solutionQuality = SolutionQuality::none;
+		auto formatter = [&](const std::string& format)
+			{
+				return formatOutput(format, *table, solution,
+						solutionQuality, ExpandedNodes{expandedNodes});
+			};
 		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {
@@ -78,12 +85,10 @@ int main(int argc, char** argv) {
 			}
 			std::ofstream dump(opts.solutionDumpFilename_,
 					std::ios::out | std::ios::trunc);
-			dump << formatOutput("%solution:dump%", *table, solution,
-					solutionQuality);
+			dump << formatter("%solution:dump%");
 		}
 
-		std::cout << formatOutput(opts.outputFormat_, *table, solution,
-				solutionQuality);
+		std::cout << formatter(opts.outputFormat_);
 	}
 	return returnCode;
 }

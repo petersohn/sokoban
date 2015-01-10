@@ -17,12 +17,13 @@ std::shared_ptr<Dumper> createDumperFromOptions(const Options& opts);
 class OptionsBasedExpanderFactory {
 	const Options& options_;
 	const Table& table_;
-	bool log_;
+	std::size_t* expandedNodes_;
 public:
-	OptionsBasedExpanderFactory(const Options& opts, const Table& table, bool log):
+	OptionsBasedExpanderFactory(const Options& opts, const Table& table,
+			std::size_t* expandedNodes):
 		options_(opts),
 		table_(table),
-		log_(log)
+		expandedNodes_(expandedNodes)
 	{
 	}
 
@@ -33,7 +34,7 @@ public:
 	std::shared_ptr<Expander> createExpander(
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker checker,
-			bool log,
+			std::size_t* expandedNodes,
 			std::shared_ptr<const HeurCalculator> experimentalCalculator = std::shared_ptr<const HeurCalculator>());
 	std::vector<std::shared_ptr<const Checker>> createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator);
 
