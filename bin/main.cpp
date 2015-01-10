@@ -71,7 +71,9 @@ int main(int argc, char** argv) {
 		std::deque<std::shared_ptr<Node>> solution = s.solve(status);
 		SolutionQuality solutionQuality = SolutionQuality::none;
 		SolutionData solutionData{*table, solution,
-				solutionQuality, ExpandedNodes{expandedNodes}};
+				solutionQuality, ExpandedNodes{expandedNodes},
+				ProcessorTime{timeMeter.processorTime()},
+				RealTime{timeMeter.realTime()}};
 		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {

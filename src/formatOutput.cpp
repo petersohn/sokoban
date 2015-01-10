@@ -7,6 +7,7 @@
 #include <sstream>
 #include <functional>
 #include <boost/lexical_cast.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace {
 
@@ -100,11 +101,12 @@ std::string formatSolutionQuality(SolutionQuality solutionQuality,
 	}
 }
 
-std::string formatExpandedNodes(ExpandedNodes expandedNodes,
-		const std::vector<std::string>&)
+template <typename T>
+std::string genericFormat(const T& value, const std::vector<std::string>&)
 {
-	return boost::lexical_cast<std::string>(expandedNodes.value());
+	return boost::lexical_cast<std::string>(value);
 }
+
 }
 
 std::string formatOutput(const std::string& format, const SolutionData& data)
@@ -113,15 +115,19 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 	util::StringFormatter::Map actions{
             {"solution", std::bind(formatSolution, std::cref(data.table),
 					std::cref(data.solution), _1)},
-			{"length", std::bind(formatSolutionLength, 
+			{"length", std::bind(formatSolutionLength,
 					std::cref(data.solution), _1)},
-			{"quality", std::bind(formatSolutionQuality, 
+			{"quality", std::bind(formatSolutionQuality,
 					data.solutionQuality, _1)},
 			{"status-moved", formatStatusMoved},
 			{"status-copied", formatStatusCopied},
 			{"calculate-reachable-called", formatCalculateReachableCalled},
-			{"expanded-nodes", std::bind(formatExpandedNodes,
-					data.expandedNodes, _1)}
+			{"expanded-nodes", std::bind(genericFormat<ExpandedNodes>,
+					data.expandedNodes, _1)},
+			{"processor-time", std::bind(genericFormat<ProcessorTime>,
+					data.processorTime, _1)},
+			{"real-time", std::bind(genericFormat<RealTime>,
+					data.realTime, _1)},
         };
 	util::StringFormatter formatter{actions};
 
