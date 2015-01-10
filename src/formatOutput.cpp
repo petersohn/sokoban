@@ -111,7 +111,7 @@ std::string formatOutput(const std::string& format,
 	util::StringFormatter::Map actions{
             {"solution", std::bind(formatSolution, std::cref(table),
 					std::cref(solution), _1)},
-            {"length", std::bind(formatSolutionLength, std::cref(solution), _1)},
+			{"length", std::bind(formatSolutionLength, std::cref(solution), _1)},
 			{"quality", std::bind(formatSolutionQuality, solutionQuality, _1)},
 			{"status-moved", formatStatusMoved},
 			{"status-copied", formatStatusCopied},
