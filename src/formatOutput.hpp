@@ -18,11 +18,14 @@ STRINGED_ENUM(SolutionQuality, (none)(good)(bad))
 
 using ExpandedNodes = util::ExplicitType<struct tag_ExplicitType, std::size_t>;
 
-std::string formatOutput(const std::string& format,
-		const Table& table,
-		const std::deque<std::shared_ptr<Node>>& solution,
-		SolutionQuality solutionQuality,
-		ExpandedNodes expandedNodes);
+struct SolutionData {
+		const Table& table;
+		const std::deque<std::shared_ptr<Node>>& solution;
+		SolutionQuality solutionQuality;
+		ExpandedNodes expandedNodes;
+};
+
+std::string formatOutput(const std::string& format, const SolutionData& data);
 
 
 #endif /* FORMATOUTPUT_HPP */

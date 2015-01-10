@@ -70,11 +70,8 @@ int main(int argc, char** argv) {
 	} else {
 		std::deque<std::shared_ptr<Node>> solution = s.solve(status);
 		SolutionQuality solutionQuality = SolutionQuality::none;
-		auto formatter = [&](const std::string& format)
-			{
-				return formatOutput(format, *table, solution,
-						solutionQuality, ExpandedNodes{expandedNodes});
-			};
+		SolutionData solutionData{*table, solution,
+				solutionQuality, ExpandedNodes{expandedNodes}};
 		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {
@@ -85,10 +82,10 @@ int main(int argc, char** argv) {
 			}
 			std::ofstream dump(opts.solutionDumpFilename_,
 					std::ios::out | std::ios::trunc);
-			dump << formatter("%solution:dump%");
+			dump << formatOutput("%solution:dump%", solutionData);
 		}
 
-		std::cout << formatter(opts.outputFormat_);
+		std::cout << formatOutput(opts.outputFormat_, solutionData);
 	}
 	return returnCode;
 }

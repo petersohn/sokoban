@@ -107,22 +107,21 @@ std::string formatExpandedNodes(ExpandedNodes expandedNodes,
 }
 }
 
-std::string formatOutput(const std::string& format,
-		const Table& table,
-		const std::deque<std::shared_ptr<Node>>& solution,
-		SolutionQuality solutionQuality,
-		ExpandedNodes expandedNodes)
+std::string formatOutput(const std::string& format, const SolutionData& data)
 {
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
-            {"solution", std::bind(formatSolution, std::cref(table),
-					std::cref(solution), _1)},
-			{"length", std::bind(formatSolutionLength, std::cref(solution), _1)},
-			{"quality", std::bind(formatSolutionQuality, solutionQuality, _1)},
+            {"solution", std::bind(formatSolution, std::cref(data.table),
+					std::cref(data.solution), _1)},
+			{"length", std::bind(formatSolutionLength, 
+					std::cref(data.solution), _1)},
+			{"quality", std::bind(formatSolutionQuality, 
+					data.solutionQuality, _1)},
 			{"status-moved", formatStatusMoved},
 			{"status-copied", formatStatusCopied},
 			{"calculate-reachable-called", formatCalculateReachableCalled},
-			{"expanded-nodes", std::bind(formatExpandedNodes, expandedNodes, _1)}
+			{"expanded-nodes", std::bind(formatExpandedNodes,
+					data.expandedNodes, _1)}
         };
 	util::StringFormatter formatter{actions};
 
