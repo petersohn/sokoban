@@ -63,12 +63,6 @@ std::string formatSolutionQuality(SolutionQuality solutionQuality,
 	}
 }
 
-template <typename T>
-std::string genericFormat(const T& value, const std::vector<std::string>&)
-{
-	return boost::lexical_cast<std::string>(value);
-}
-
 }
 
 std::string formatOutput(const std::string& format, const SolutionData& data)
@@ -77,29 +71,22 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 	util::StringFormatter::Map actions{
 			{"solution", std::bind(formatSolution, std::cref(data.table),
 					std::cref(data.solution), _1)},
-			{"length", std::bind(genericFormat<std::size_t>,
-					data.solution.size(), _1)},
+			{"length", util::genericFormat(data.solution.size())},
 			{"quality", std::bind(formatSolutionQuality,
 					data.solutionQuality, _1)},
 #ifndef NO_UNSAFE_DIAGNOSTICS
-			{"status-moved", std::bind(genericFormat<std::size_t>,
-					Status::moveCount, _1)},
-			{"status-copied", std::bind(genericFormat<std::size_t>,
-					Status::copyCount, _1)},
-			{"calculate-reachable-called", std::bind(genericFormat<std::size_t>,
-					Status::calculateReachableCount, _1)},
+			{"status-moved", util::genericFormat(Status::moveCount)},
+			{"status-copied", util::genericFormat(Status::copyCount)},
+			{"calculate-reachable-called",
+					util::genericFormat(Status::calculateReachableCount)},
 #else
-			{"status-moved", std::bind(genericFormat<std::size_t>, 0, _1)},
-			{"status-copied", std::bind(genericFormat<std::size_t>, 0, _1)},
-			{"calculate-reachable-called", std::bind(genericFormat<std::size_t>,
-					0, _1)},
+			{"status-moved", util::genericFormat(0)},
+			{"status-copied", util::genericFormat(0)},
+			{"calculate-reachable-called", util::genericFormat(0)},
 #endif
-			{"expanded-nodes", std::bind(genericFormat<ExpandedNodes>,
-					data.expandedNodes, _1)},
-			{"processor-time", std::bind(genericFormat<ProcessorTime>,
-					data.processorTime, _1)},
-			{"real-time", std::bind(genericFormat<RealTime>,
-					data.realTime, _1)},
+			{"expanded-nodes", util::genericFormat(data.expandedNodes)},
+			{"processor-time", util::genericFormat(data.processorTime)},
+			{"real-time", util::genericFormat(data.realTime)},
 		};
 	util::StringFormatter formatter{actions};
 
