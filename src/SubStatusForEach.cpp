@@ -133,6 +133,7 @@ void SubStatusForEach::start(std::size_t numStones,
 	solved_ = iters_ = 0;
 	lastTicks_ = -1;
 	iterationState_ = IterationState::filling;
+	timeMeter_.reset();
 
 	if (excludeList) {
 		assert(excludeList->width() == table_->width());
