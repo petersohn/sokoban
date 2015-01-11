@@ -24,12 +24,12 @@ using RealTime = util::ExplicitType<struct tag_RealTime,
 	  boost::posix_time::time_duration>;
 
 struct SolutionData {
-		const Table& table;
-		const std::deque<std::shared_ptr<Node>>& solution;
-		SolutionQuality solutionQuality;
-		ExpandedNodes expandedNodes;
-		ProcessorTime processorTime;
-		RealTime realTime;
+	const Table& table;
+	const std::deque<std::shared_ptr<Node>>& solution;
+	SolutionQuality solutionQuality;
+	ExpandedNodes expandedNodes;
+	ProcessorTime processorTime;
+	RealTime realTime;
 };
 
 std::string formatOutput(const std::string& format, const SolutionData& data);

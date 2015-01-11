@@ -75,7 +75,7 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 {
 	using std::placeholders::_1;
 	util::StringFormatter::Map actions{
-            {"solution", std::bind(formatSolution, std::cref(data.table),
+			{"solution", std::bind(formatSolution, std::cref(data.table),
 					std::cref(data.solution), _1)},
 			{"length", std::bind(genericFormat<std::size_t>,
 					data.solution.size(), _1)},
@@ -100,7 +100,7 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 					data.processorTime, _1)},
 			{"real-time", std::bind(genericFormat<RealTime>,
 					data.realTime, _1)},
-        };
+		};
 	util::StringFormatter formatter{actions};
 
 	return formatter.formatString(format);
