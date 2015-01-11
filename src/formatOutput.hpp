@@ -4,6 +4,7 @@
 #include "util/LazyArgumentEnum.hpp"
 #include "util/StringedEnum.hpp"
 #include "util/ExplicitType.hpp"
+#include "util/TimeMeter.hpp"
 #include <string>
 #include <deque>
 #include <memory>
@@ -18,18 +19,15 @@ LAZY_ARGUMENT_ENUM(SolutionType, solutionTypes,
 STRINGED_ENUM(SolutionQuality, (none)(good)(bad))
 
 using ExpandedNodes = util::ExplicitType<struct tag_ExpandedNodes, std::size_t>;
-using ProcessorTime = util::ExplicitType<struct tag_ProcessorTime,
-	  boost::posix_time::time_duration>;
-using RealTime = util::ExplicitType<struct tag_RealTime,
-	  boost::posix_time::time_duration>;
+using TotalTime = util::ExplicitType<struct tag_ProcessorTime,
+	  util::TimerData>;
 
 struct SolutionData {
 	const Table& table;
 	const std::deque<std::shared_ptr<Node>>& solution;
 	SolutionQuality solutionQuality;
 	ExpandedNodes expandedNodes;
-	ProcessorTime processorTime;
-	RealTime realTime;
+	TotalTime totalTime;
 };
 
 std::string formatOutput(const std::string& format, const SolutionData& data);

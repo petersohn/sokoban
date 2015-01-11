@@ -85,8 +85,10 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 			{"calculate-reachable-called", util::genericFormat(0)},
 #endif
 			{"expanded-nodes", util::genericFormat(data.expandedNodes)},
-			{"processor-time", util::genericFormat(data.processorTime)},
-			{"real-time", util::genericFormat(data.realTime)},
+			{"total-processor-time",
+					util::genericFormat(data.totalTime.value().processorTime)},
+			{"total-real-time",
+					util::genericFormat(data.totalTime.value().realTime)},
 		};
 	util::StringFormatter formatter{actions};
 

@@ -72,8 +72,7 @@ int main(int argc, char** argv) {
 		SolutionQuality solutionQuality = SolutionQuality::none;
 		SolutionData solutionData{*table, solution,
 				solutionQuality, ExpandedNodes{expandedNodes},
-				ProcessorTime{timeMeter.processorTime()},
-				RealTime{timeMeter.realTime()}};
+				TotalTime{{timeMeter.processorTime(), timeMeter.realTime()}}};
 		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {
