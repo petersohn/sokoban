@@ -42,8 +42,11 @@ int main(int argc, char** argv) {
 
 	util::TimeMeter timeMeter;
 	std::size_t expandedNodes = 0;
+	util::TimerData chokePointFinderTime;
+	util::TimerData preprocessingIterationTime;
 	OptionsBasedExpanderFactory expanderFactory(opts, status.table(),
-			opts.test_ ? nullptr : &expandedNodes);
+			(opts.test_ ? nullptr : &expandedNodes),
+			&chokePointFinderTime, &preprocessingIterationTime);
 	auto createExpander = expanderFactory.factory();
 	Solver s(std::bind(createPrioQueueFromOptions, opts),
 			createExpander, std::bind(createDumperFromOptions, opts));
@@ -72,7 +75,9 @@ int main(int argc, char** argv) {
 		SolutionQuality solutionQuality = SolutionQuality::none;
 		SolutionData solutionData{*table, solution,
 				solutionQuality, ExpandedNodes{expandedNodes},
-				TotalTime{{timeMeter.processorTime(), timeMeter.realTime()}}};
+				TotalTime{timeMeter.data()},
+				ChokePointFindingTime{chokePointFinderTime},
+				PreprocessingIterationTime{preprocessingIterationTime}};
 		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {

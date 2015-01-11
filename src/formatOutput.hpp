@@ -19,8 +19,12 @@ LAZY_ARGUMENT_ENUM(SolutionType, solutionTypes,
 STRINGED_ENUM(SolutionQuality, (none)(good)(bad))
 
 using ExpandedNodes = util::ExplicitType<struct tag_ExpandedNodes, std::size_t>;
-using TotalTime = util::ExplicitType<struct tag_ProcessorTime,
-	  util::TimerData>;
+using TotalTime = util::ExplicitType<struct tag_ProcessorTime, util::TimerData>;
+using ChokePointFindingTime =
+		util::ExplicitType<struct tag_ChokePointFindingTime, util::TimerData>;
+using PreprocessingIterationTime =
+		util::ExplicitType<struct tag_PreprocessingIterationTime,
+		util::TimerData>;
 
 struct SolutionData {
 	const Table& table;
@@ -28,6 +32,8 @@ struct SolutionData {
 	SolutionQuality solutionQuality;
 	ExpandedNodes expandedNodes;
 	TotalTime totalTime;
+	ChokePointFindingTime chokePointFinderTime;
+	PreprocessingIterationTime preprocessingIterationTime;
 };
 
 std::string formatOutput(const std::string& format, const SolutionData& data);

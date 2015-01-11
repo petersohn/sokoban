@@ -4,6 +4,7 @@
 #include "ExpanderFactory.hpp"
 #include "Checker.hpp"
 #include "PrioNodeQueueFwd.hpp"
+#include "util/TimeMeter.hpp"
 
 class HeurCalculator;
 class ComplexChecker;
@@ -18,12 +19,17 @@ class OptionsBasedExpanderFactory {
 	const Options& options_;
 	const Table& table_;
 	std::size_t* expandedNodes_;
+	util::TimerData* chokePointFindingTime_;
+	util::TimerData* preprocessingIterationTime_;
 public:
 	OptionsBasedExpanderFactory(const Options& opts, const Table& table,
-			std::size_t* expandedNodes):
+			std::size_t* expandedNodes, util::TimerData* chokePointFindingTime,
+			util::TimerData* preprocessingIterationTime):
 		options_(opts),
 		table_(table),
-		expandedNodes_(expandedNodes)
+		expandedNodes_(expandedNodes),
+		chokePointFindingTime_(chokePointFindingTime),
+		preprocessingIterationTime_(preprocessingIterationTime)
 	{
 	}
 

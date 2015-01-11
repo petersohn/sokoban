@@ -5,6 +5,7 @@
 #include "util/ThreadPool.hpp"
 #include "ComplexChecker.hpp"
 #include "Options.hpp"
+#include "util/TimeMeter.hpp"
 #include <fstream>
 #include <memory>
 #include <boost/thread.hpp>
@@ -39,6 +40,8 @@ private:
 	std::vector<CalculationInfoPtr> calculationInfos_;
 	std::ofstream dump_;
 	util::ThreadPool threadPool_;
+	util::TimerData chokePointFinderTime_;
+	util::TimerData iteratingTime_;
 
 	std::deque<std::shared_ptr<Node>> doCalculateBlockList(const Status& status);
 	void calculateBlockList(const Status& status);
@@ -53,6 +56,8 @@ public:
 	std::shared_ptr<const HeurCalculator> decisionTreeHeurCalculator(std::size_t maxDepth,
 			bool useChecker, float heurMultiplier);
 	void init(const Table& table);
+	util::TimerData chokePointFinderTime() const { return chokePointFinderTime_; }
+	util::TimerData iteratingTime() const { return iteratingTime_; }
 };
 
 #endif /* BLOCKLISTGENERATOR_H */

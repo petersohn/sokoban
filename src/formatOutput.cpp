@@ -89,6 +89,14 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 					util::genericFormat(data.totalTime.value().processorTime)},
 			{"total-real-time",
 					util::genericFormat(data.totalTime.value().realTime)},
+			{"chokepoint-processor-time", util::genericFormat(
+					data.chokePointFinderTime.value().processorTime)},
+			{"chokepoint-real-time", util::genericFormat(
+					data.chokePointFinderTime.value().realTime)},
+			{"iteration-processor-time", util::genericFormat(
+					data.preprocessingIterationTime.value().processorTime)},
+			{"iteration-real-time", util::genericFormat(
+					data.preprocessingIterationTime.value().realTime)},
 		};
 	util::StringFormatter formatter{actions};
 

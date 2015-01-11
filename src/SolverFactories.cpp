@@ -128,6 +128,12 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 		BlockListGenerator blockListGenerator(
 				std::move(solver), preprocessingCalculator, checker, options_);
 		blockListGenerator.init(table_);
+		if (chokePointFindingTime_) {
+			*chokePointFindingTime_ = blockListGenerator.chokePointFinderTime();
+		}
+		if (preprocessingIterationTime_) {
+			*preprocessingIterationTime_ = blockListGenerator.iteratingTime();
+		}
 		checkers.push_back(blockListGenerator.checker());
 		switch (options_.blocklistHeurCalculatorType_) {
 		case BlockListHeurType::none:

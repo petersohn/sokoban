@@ -93,9 +93,11 @@ void BlockListGenerator::init(const Table& table)
 			options_.blocklistDecisionTreeDepth_ : 0;
 	Array<bool> chokePoints;
 
+	util::TimeMeter timeMeter;
 	if (options_.chokePointNum_ > 0) {
 		chokePoints = findChokePoints(table, options_, calculator_,
 				ComplexChecker{checker_}, true);
+		chokePointFinderTime_ = timeMeter.data();
 		Status chokePointStatus{table};
 
 		for (Point p: arrayRange(chokePoints)) {
@@ -120,6 +122,7 @@ void BlockListGenerator::init(const Table& table)
 	blockList_.clear();
 	heurList_.clear();
 	calculationInfos_.resize(options_.numThreads_);
+	timeMeter.reset();
 	for (std::size_t n = 2; n <= options_.blockListStones_; ++n) {
 		incrementalCalculator_ = n == 2 ?
 			calculator_ :
@@ -165,6 +168,7 @@ void BlockListGenerator::init(const Table& table)
 						);
 			});
 	}
+	iteratingTime_ = timeMeter.data();
 	if (options_.maxHeurListSize_ > 0 &&
 			heurList_.size() > options_.maxHeurListSize_) {
 		IncrementList(heurList_.begin(),
