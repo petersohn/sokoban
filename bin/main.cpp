@@ -72,18 +72,17 @@ int main(int argc, char** argv) {
 		it.wait(true);
 	} else {
 		std::deque<std::shared_ptr<Node>> solution = s.solve(status);
-		SolutionQuality solutionQuality = SolutionQuality::none;
 		SolutionData solutionData{*table, solution,
-				solutionQuality, ExpandedNodes{expandedNodes},
+				SolutionQuality::none, ExpandedNodes{expandedNodes},
 				TotalTime{timeMeter.data()},
 				ChokePointFindingTime{chokePointFinderTime},
 				PreprocessingIterationTime{preprocessingIterationTime}};
 		if (!solution.empty())
 		{
 			if (solutionChecker.checkResult(status, solution)) {
-				solutionQuality = SolutionQuality::good;
+				solutionData.solutionQuality = SolutionQuality::good;
 			} else {
-				solutionQuality = SolutionQuality::bad;
+				solutionData.solutionQuality = SolutionQuality::bad;
 				returnCode = 1;
 			}
 			std::ofstream dump(opts.solutionDumpFilename_,
