@@ -23,36 +23,14 @@ public:
 	IndexedStatusList(IndexedStatusList&&) = default;
 	IndexedStatusList& operator=(IndexedStatusList&&) = default;
 
-	void add(const Status& status)
-	{
-		if (!index_.width()) {
-			index_.reset(status.width(), status.height());
-		}
-
-		for (Point  p: status.state()) {
-			index_[p].push_back(status);
-		}
-		++size_;
-	}
+	void add(const Status& status);
 
 	void clear() {
 		index_.reset(0, 0);
 		size_ = 0;
 	}
 
-	bool hasSubStatus(const Status& status, Point p) const
-	{
-		if (!index_.width()) {
-			return false;
-		}
-
-		for (const auto& value: index_[p]) {
-			if (isSubStatus(value, status)) {
-				return true;
-			}
-		}
-		return false;
-	}
+	bool hasSubStatus(const Status& status, Point p) const;
 
 	size_t size() const { return size_; }
 };
