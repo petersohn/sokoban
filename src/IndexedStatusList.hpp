@@ -2,14 +2,9 @@
 #define SRC_INDEXEDSTATUSLIST_HPP
 
 #include <memory>
-#include <unordered_map>
-#include <boost/range/iterator_range.hpp>
-#include <algorithm>
-#include <functional>
+#include <vector>
 #include <boost/thread/locks.hpp>
 #include "Status/Status.hpp"
-#include "Status/StatusUtils.hpp"
-#include "Status/State.hpp"
 
 class IndexedStatusList {
 private:

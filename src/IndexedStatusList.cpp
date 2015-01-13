@@ -1,4 +1,6 @@
 #include "IndexedStatusList.hpp"
+#include "Status/StatusUtils.hpp"
+
 
 void IndexedStatusList::add(const Status& status)
 {
