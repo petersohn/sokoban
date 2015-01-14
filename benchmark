@@ -1,0 +1,54 @@
+#!/bin/bash
+
+print_usage() {
+    echo "Runs tests for different configurations and create statistics."
+    echo "Usage: $0 -h"
+    echo "       $0 [options] --flag1 min1 max1 [--flag2 min2 max2 ...]"
+    echo "Options:"
+    echo "    -h        This help message."
+    echo "    -x        The process to execute (default=$process)."
+    echo "    -n        The number of times each configuration is run (default=$numberOfRuns)."
+    echo
+}
+
+runWithParameter() {
+    local accumulated="$1"
+    shift
+
+    if [ "$#" -eq 0 ]; then
+        echo $accumulated
+        return
+    fi
+
+    local parameter="$1"
+    local min="$2"
+    local max="$3"
+    shift 3
+
+    local value
+    for ((value=min; value <= max; ++value)); do
+        runWithParameter "$accumulated $parameter=$value" "$@"
+    done
+}
+
+process=./bin/sokoban
+numberOfRuns=1
+while getopts ":hx:n:" Option; do
+    case $Option in
+    h)
+        print_usage
+        exit
+        ;;
+    n)
+        numberOfRuns=$OPTARG
+        ;;
+    x)
+        process=$OPTARG
+        ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+runWithParameter "" "$@"
+
