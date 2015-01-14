@@ -134,7 +134,7 @@ The solution can be displayed in the following formats:
 ( 5,  6) --> ( 4,  6)
 ```
 - `minimal`: Write a simple machine readable format without new lines. Each step is written as `x1,y1->x2,y2` and the steps are separated by spaces.
-- `dump`: Use a visual representation that is the same as the one written into the solution file.
+- `dump`: Use a visual representation that is the same as the one written into the solution file (see [Output file format](#output-file-format).
 
 ## Input file format
 
@@ -359,7 +359,7 @@ Generate a set of states on the table with the following algorithm. The table do
 3. Find a solution.
 4. If no solution is found or the total cost of the solution is more than the initial heuristic value, store the state.
 
-The output is used by Blocklist Checker and Blocklist Heuristics Calculator.
+The output is used by [Blocklist Checker](#blocklist-checker) and [Blocklist Heuristics Calculator](#blocklist-heuristics-calculator).
 
 Preprocessing can be parallelized. Since for each substate the program operates on distinct data, they can be run in parallel. In fact, the solutions are always generated on separate thread(s) from the main thread, so the generation of states always runs parallel to the solutions, even if the number of threads are set to 1.
 
