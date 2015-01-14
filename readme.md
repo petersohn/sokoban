@@ -10,6 +10,7 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
     - [Building](#building)
     - [Running](#running)
 - [Input and output](#input-and-output)
+    - [Standard output formatting](#standard-output-formatting)
     - [Input file format](#input-file-format)
     - [Output file format](#output-file-format)
 - [Algorithms](#algorithms)
