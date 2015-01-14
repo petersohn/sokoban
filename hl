@@ -79,7 +79,7 @@ On_IWhite=`echo -e '\e[0;107m'`   # White
 
 print_usage() {
     echo "Highlights parts of the text."
-    echo "Usage: $0 -h" 
+    echo "Usage: $0 -h"
     echo "       $0 [options] color pattern"
     echo "Options:"
     echo "    -h        This help message."
@@ -103,7 +103,7 @@ postfix=
 matchindex=1
 while getopts ":hilr" Option; do
     case $Option in
-        h) 
+        h)
 	    print_usage
 	    exit
 	    ;;
