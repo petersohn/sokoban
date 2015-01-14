@@ -8,7 +8,17 @@ print_usage() {
     echo "    -h        This help message."
     echo "    -x        The process to execute (default=$process)."
     echo "    -n        The number of times each configuration is run (default=$numberOfRuns)."
+    echo "    -l        The level to run the test on. Can be added multiple times."
+    echo "    -L        A file containing a list of levels to use. Can be added multiple times."
     echo
+}
+
+runTest() {
+    for level in "${levels[@]}"; do
+        for ((i=0; i<numberOfRuns; ++i)); do
+            "$process" --output-format='' "$level" "$@"
+        done
+    done
 }
 
 runWithParameter() {
@@ -16,7 +26,7 @@ runWithParameter() {
     shift
 
     if [ "$#" -eq 0 ]; then
-        echo $accumulated
+        runTest $accumulated
         return
     fi
 
@@ -33,7 +43,8 @@ runWithParameter() {
 
 process=./bin/sokoban
 numberOfRuns=1
-while getopts ":hx:n:" Option; do
+levels=()
+while getopts ":hx:n:l:L:" Option; do
     case $Option in
     h)
         print_usage
@@ -45,6 +56,15 @@ while getopts ":hx:n:" Option; do
     x)
         process=$OPTARG
         ;;
+    l)
+        levels+=($OPTARG)
+        ;;
+    L)
+        file=$OPTARG
+        dir=$(dirname $OPTARG)
+        while read file; do
+            levels+=("$dir/$file")
+        done < <(grep '\S' "$file")
     esac
 done
 
