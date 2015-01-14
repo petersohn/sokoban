@@ -79,23 +79,7 @@ The solution is printed to the standard output, but it is not very visual. A mor
 
 # Input and output
 
-The program reads its input from a file. Debug output is written to standard error. The solution is written to the standard output in the following format: `(x, y) --> direction`. For example:
-
-```
-( 7,  3) --> left
-( 7,  2) --> up
-( 5,  3) --> down
-( 5,  6) --> right
-```
-
-If the `--old-style-output` option is given, the output looks like this instead: `(x1, y1) --> (x2, y2)`. For example:
-
-```
-( 7,  3) --> ( 8,  3)
-( 7,  2) --> ( 7,  3)
-( 5,  3) --> ( 5,  2)
-( 5,  6) --> ( 4,  6)
-```
+The program reads its input from a file. Debug output is written to standard error. Results are printed to standard output. The format is controlled by the `--output-format` parameter. By default nothing is printed.
 
 The following additional files are written:
 - `solution.dump`: Visualizes the solution.
@@ -107,6 +91,49 @@ The following additional files are written:
 - If `--dump-style=xml` is enabled: `dump.xml`: shows the full progress in a hierarchical form (in xml format).
 
 The dump files can be opened with the `showdump` shell script. It opens the dump file in `less` with some additional coloring.
+
+## Standard output formatting
+
+The output format parameter accepts parameters between `%` characters that are substituted by a value. For example: `Expanded nodes = %expanded-nodes%` is translated to something like `Expanded nodes = 12451`. These parameters may accept additional arguments, separated by `:` characters.. For example: %solution:dump%`. Standard escape sequences such as `\n` or `\t` are also accepted.
+
+The following parameters are accepted:
+
+| Name        | Description
+| ----------- | -----------
+| `solution`                   | The solution. Accepts solution type as a parameter. Default is `direction`.
+| `length`                     | The length of the solution. If there is no solution, it is 0.
+| `quality`                    | The quality of the solution. Possible values are: `none` (no solution), `good` (the solution is good) or `bad` (there is an error in the solution). If arguments are supplied, they are printed instead of the predefined strings.
+| `status-moved`               | The number of times the `Status` data structure is moved.
+| `status-copied`              | The number of times the `Status` data structure is copied.
+| `calculate-reachable-called` | The number of times reachability is calculated for `Status`.
+| `expanded-nodes`             | The number of nodes expanded by the A\* algorithm.
+| `total-processor-time`       | Total processor time used for finding the solution.
+| `total-real-time`            | Total real time used for finding the solution.
+| `chokepoint-processor-time`  | Processor time used for finding choke points.
+| `chokepoint-real-time`       | Real time used for finding choke points.
+| `iteration-processor-time`   | Processor time used for all iterations during preprocessing.
+| `iteration-real-time`        | Real time used for all iterations during preprocessing.
+
+The solution can be displayed in the following formats:
+- `direction`: Write each step of the solution in a new line in the following format: `(x, y) --> direction`. For example:
+
+```
+( 7,  3) --> left
+( 7,  2) --> up
+( 5,  3) --> down
+( 5,  6) --> right
+```
+
+- `coordinate`: Similar to `direction`, but with the following format: `(x1, y1) --> (x2, y2)`. For example:
+
+```
+( 7,  3) --> ( 8,  3)
+( 7,  2) --> ( 7,  3)
+( 5,  3) --> ( 5,  2)
+( 5,  6) --> ( 4,  6)
+```
+- `minimal`: Write a simple machine readable format without new lines. Each step is written as `x1,y1->x2,y2` and the steps are separated by spaces.
+- `dump`: Use a visual representation that is the same as the one written into the solution file.
 
 ## Input file format
 
