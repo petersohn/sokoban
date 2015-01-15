@@ -134,7 +134,7 @@ The solution can be displayed in the following formats:
 ( 5,  6) --> ( 4,  6)
 ```
 - `minimal`: Write a simple machine readable format without new lines. Each step is written as `x1,y1->x2,y2` and the steps are separated by spaces.
-- `dump`: Use a visual representation that is the same as the one written into the solution file (see [Output file format](#output-file-format).
+- `dump`: Use a visual representation that is the same as the one written into the solution file (see [Output file format](#output-file-format)).
 
 The time formats optionally accept a parameter for displaying the time.
 
