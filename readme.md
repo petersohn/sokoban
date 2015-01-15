@@ -136,6 +136,15 @@ The solution can be displayed in the following formats:
 - `minimal`: Write a simple machine readable format without new lines. Each step is written as `x1,y1->x2,y2` and the steps are separated by spaces.
 - `dump`: Use a visual representation that is the same as the one written into the solution file (see [Output file format](#output-file-format).
 
+The time formats optionally accept a parameter for displaying the time.
+
+| Value            | Description
+| ---------------- | ----------
+| `full` (default) | Standard human-readable format (hh:mm:ss).
+| `s`(`econds`)    | The total seconds rounded down.
+| `ms`(`econds`)   | The total milliseconds.
+
+
 ## Input file format
 
 The input file consists of two parts. It is a file readable by `boost::program_options` (basically an ini file) that describes the extra parameters (typically the preferred preprocessing level) of that particular game (it overrides defaults but is overridden by command line parameters). The comments in this file are used for the actual input. It is of the following format:
