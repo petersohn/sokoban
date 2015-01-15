@@ -63,6 +63,25 @@ std::string formatSolutionQuality(SolutionQuality solutionQuality,
 	}
 }
 
+std::string formatTime(boost::posix_time::time_duration value,
+		const std::vector<std::string>& args)
+{
+	TimeFormatType format = TimeFormatType::full;
+
+	if (args.size() >= 1) {
+		format = timeFormatTypes().at(args[0]);
+	}
+
+	switch (format) {
+	case TimeFormatType::full:
+		return boost::posix_time::to_simple_string(value);
+	case TimeFormatType::seconds:
+		return boost::lexical_cast<std::string>(value.total_seconds());
+	case TimeFormatType::mseconds:
+		return boost::lexical_cast<std::string>(value.total_milliseconds());
+	}
+}
+
 }
 
 std::string formatOutput(const std::string& format, const SolutionData& data)
@@ -85,18 +104,19 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 			{"calculate-reachable-called", util::genericFormat(0)},
 #endif
 			{"expanded-nodes", util::genericFormat(data.expandedNodes)},
-			{"total-processor-time",
-					util::genericFormat(data.totalTime.value().processorTime)},
-			{"total-real-time",
-					util::genericFormat(data.totalTime.value().realTime)},
-			{"chokepoint-processor-time", util::genericFormat(
-					data.chokePointFinderTime.value().processorTime)},
-			{"chokepoint-real-time", util::genericFormat(
-					data.chokePointFinderTime.value().realTime)},
-			{"iteration-processor-time", util::genericFormat(
-					data.preprocessingIterationTime.value().processorTime)},
-			{"iteration-real-time", util::genericFormat(
-					data.preprocessingIterationTime.value().realTime)},
+			{"total-processor-time", std::bind(formatTime,
+					data.totalTime.value().processorTime, _1)},
+			{"total-real-time", std::bind(formatTime,
+					data.totalTime.value().realTime, _1)},
+			{"chokepoint-processor-time", std::bind(formatTime,
+					data.chokePointFinderTime.value().processorTime, _1)},
+			{"chokepoint-real-time", std::bind(formatTime,
+					data.chokePointFinderTime.value().realTime, _1)},
+			{"iteration-processor-time", std::bind(formatTime,
+					data.preprocessingIterationTime.value().processorTime, _1)},
+			{"iteration-real-time", std::bind(formatTime,
+					data.preprocessingIterationTime.value().realTime, _1)},
+
 		};
 	util::StringFormatter formatter{actions};
 

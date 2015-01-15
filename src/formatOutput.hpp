@@ -15,6 +15,8 @@ class Table;
 
 LAZY_ARGUMENT_ENUM(SolutionType, solutionTypes,
 		(coordinate)(direction)(minimal)(dump))
+LAZY_ARGUMENT_ENUM(TimeFormatType, timeFormatTypes,
+		(full)(seconds)(mseconds))
 
 STRINGED_ENUM(SolutionQuality, (none)(good)(bad))
 
