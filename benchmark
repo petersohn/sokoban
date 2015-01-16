@@ -3,7 +3,7 @@
 print_usage() {
     echo "Runs tests for different configurations and create statistics."
     echo "Usage: $0 -h"
-    echo "       $0 [options] --flag1 min1 max1 [--flag2 min2 max2 ...]"
+    echo "       $0 [options] -- --flag1 min1 max1 [--flag2 min2 max2 ...]"
     echo "Options:"
     echo "    -h        This help message."
     echo "    -x        The process to execute (default=$process)."
