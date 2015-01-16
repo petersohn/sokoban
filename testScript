@@ -21,11 +21,11 @@ while read file; do
 	filePath="$(dirname $input)/$file"
     echo "----------------------------------" >>"$output"
     "$@" "$filePath" --output-format='Solution %quality%
-Solution length:           %length%
-Expanded nodes:            %expanded-nodes%
-Status copied:             %status-copied%
-Status moved:              %status-moved%
-calculateReachable called: %calculate-reachable-called%
+Solution length:           %length:8%
+Expanded nodes:            %expanded-nodes:8%
+Status copied:             %status-copied:8%
+Status moved:              %status-moved:8%
+calculateReachable called: %calculate-reachable-called:8%
 Chokepoint finding time:   %chokepoint-real-time% [%chokepoint-processor-time%]
 Preprocessing time:        %iteration-real-time% [%iteration-processor-time%]
 Total time:                %total-real-time% [%total-processor-time%]
