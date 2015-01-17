@@ -69,6 +69,10 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			 "The granularity of scheduling during blocklist generation.")
 			("thread-num,t", defaultValue(&options.numThreads_),
 			"The maximum number of threads to use.")
+			("expanded-node-limit", defaultValue(&options.expandedNodeLimit_),
+			 "The maximum number of nodes to expand. After this limit is reached, "
+			 "the elements in the queue are still expanded, but no more "
+			 "nodes are added to the queue.")
 			("dump-style,d", defaultValue(&options.dumpStyle_),
 			"Generate dump file of the process. Dump generation slows down calculation.\n"
 			"Values can be:\n"

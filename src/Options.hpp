@@ -66,6 +66,7 @@ struct Options {
 	std::size_t chokePointDistantNum_ = 2;
 	std::size_t workQueueLength_ = 100;
 	std::size_t numThreads_ = 1;
+	std::size_t expandedNodeLimit_ = 0;
 	std::size_t test_ = 0;
 	std::size_t maxDecisionTreeDepth_ = 10;
 	std::size_t blocklistDecisionTreeDepth_ = 0;

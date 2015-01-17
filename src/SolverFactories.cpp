@@ -94,7 +94,8 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
 	std::shared_ptr<NodeFactory> nodeFactory(new NodeFactory(calculator,
 				experimentalCalculator));
 	std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(visitedStates,
-			calculator, std::move(checker), nodeFactory, expandedNodes);
+			calculator, std::move(checker), nodeFactory, expandedNodes,
+			expandedNodes ? options_.expandedNodeLimit_ : 0);
 
 	if (options_.useStonePusher_) {
 		expander = std::make_shared<StonePusher>(expander, visitedStates,

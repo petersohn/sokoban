@@ -18,11 +18,13 @@ class NormalExpander: public Expander {
 	std::shared_ptr<NodeFactory> nodeFactory_;
 	int maxDepth_;
 	std::size_t* expandedNodes_;
+	std::size_t expandedNodeLimit_;
 public:
 	NormalExpander(std::shared_ptr<VisitedStates> vs,
 			std::shared_ptr<const HeurCalculator> calculator,
 			ComplexChecker ch, std::shared_ptr<NodeFactory> nodeFactory,
-			std::size_t* expandedNodes = nullptr);
+			std::size_t* expandedNodes = nullptr,
+			std::size_t expandedNodeLimit = 0);
 	~NormalExpander();
 	void expand(const Status& status, std::shared_ptr<Node> base,
 			PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) override;
