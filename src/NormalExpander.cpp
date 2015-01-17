@@ -43,6 +43,14 @@ void InternalExpander::expandNode(Point p, Point d)
 		}
 		std::shared_ptr<Node> node =
 				owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
+		if (owner_.expandedNodes_ && owner_.expandedNodeLimit_ > 0 &&
+				*owner_.expandedNodes_ >= owner_.expandedNodeLimit_ &&
+				node->heur() > 0) {
+			if (dumper_) {
+				dumper_->reject(node, "node limit exceeded");
+			}
+			return;
+		}
 		if (pd != status.table().destination()) {
 			if (!owner_.checker_.check(status, pd)) {
 				if (dumper_)
@@ -54,14 +62,6 @@ void InternalExpander::expandNode(Point p, Point d)
 		if (!owner_.visitedStates_->checkAndPush(vsi)) {
 			if (dumper_) {
 				dumper_->reject(node, "already visited");
-			}
-			return;
-		}
-		if (owner_.expandedNodes_ && owner_.expandedNodeLimit_ > 0 &&
-				*owner_.expandedNodes_ >= owner_.expandedNodeLimit_ &&
-				node->heur() > 0) {
-			if (dumper_) {
-				dumper_->reject(node, "node limit exceeded");
 			}
 			return;
 		}
