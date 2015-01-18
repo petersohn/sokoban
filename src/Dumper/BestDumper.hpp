@@ -25,6 +25,7 @@ private:
 	const Table* table = nullptr;
 	float bestHeur = -1.0;
 	std::size_t nodeNumber = 0;
+	std::size_t bestNodeNumber = 0;
 };
 
 #endif /* SRC_DUMPER_BESTDUMPER_HPP */
