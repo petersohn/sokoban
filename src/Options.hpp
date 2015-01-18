@@ -9,7 +9,8 @@
 #include "util/LazyArgumentEnum.hpp"
 #include "Compare.hpp"
 
-LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, (none)(text)(xml)(statistics))
+LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, 
+		(none)(text)(xml)(statistics)(best))
 LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
 	(none)(vector)(decisionTree))
 LAZY_ARGUMENT_ENUM(MovableCheckerType, movableCheckerTypes,

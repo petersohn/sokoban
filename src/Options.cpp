@@ -79,7 +79,11 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 			"    (n)one   \tDisable dumping.\n"
 			"    (t)ext   \tText dump format. Slows down dump generation moderately.\n"
 			"    (x)ml    \tXML dump format. Highly increases memory consumption"
-			" and calculation time.")
+			" and calculation time.\n"
+			"    (s)tatistics\tPrint statistics of what happens to a csv file. Statistics "
+			"are printed each second. Has low performance impact.\n"
+			"    (b)est   \tPrint each node added to the queue when the node has lower "
+			"heuristics than any previous one. Has minimal performance impact.")
 			("dump-filter-type", defaultValue(&options.dumpFilterType_),
 			 "Only dump nodes where the description matches this filter.\n"
 			 "Values can be:\n"

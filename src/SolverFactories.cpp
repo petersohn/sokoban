@@ -15,6 +15,7 @@
 #include "Dumper/TextDumper.hpp"
 #include "Dumper/XDumper.hpp"
 #include "Dumper/StatisticsDumper.hpp"
+#include "Dumper/BestDumper.hpp"
 #include "NodeFactory.hpp"
 #include "HeurCalculator.hpp"
 #include "ComplexChecker.hpp"
@@ -189,6 +190,8 @@ std::shared_ptr<Dumper> createDumperFromOptions(const Options & opts)
 		return std::shared_ptr<Dumper>(new XDumper(getDumpFilename(opts, "dump.xml")));
 	case DumpStyle::statistics:
 		return std::shared_ptr<Dumper>(new StatisticsDumper(getDumpFilename(opts, "dump.csv")));
+	case DumpStyle::best:
+		return std::shared_ptr<Dumper>(new BestDumper(getDumpFilename(opts, "dump.dump")));
 	default:
 		return std::shared_ptr<Dumper>();
 	}
