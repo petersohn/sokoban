@@ -13,6 +13,7 @@ A sokoban solver AI. It solves a simplified version of sokoban where each bix ha
     - [Standard output formatting](#standard-output-formatting)
     - [Input file format](#input-file-format)
     - [Output file format](#output-file-format)
+        - [Dump styles](#dump-styles)
 - [Algorithms](#algorithms)
     - [Heuristics calculation](#heuristics-calculation)
         - [Basic Heuristics Calculator](#basic-heuristics-calculator)
@@ -83,15 +84,14 @@ The solution is printed to the standard output, but it is not very visual. A mor
 The program reads its input from a file. Debug output is written to standard error. Results are printed to standard output. The format is controlled by the `--output-format` parameter. By default nothing is printed.
 
 The following additional files are written:
-- `solution.dump`: Visualizes the solution.
-- `partitions.dump`: Some information about the calculated heuristics table.
+- `solution.dump`: Visualizes the solution. Can be configured from command line.
+- `partitions.dump`: Some information about the calculated heuristics table. Can be configured from command line.
 - If `--blocklist-heur-calculator` is enabled:
  - `blocklist.dump`: The result of the preprocessing. Shows which states are blocked or have additional cost.
 - `plusHeur.dump`: Stores some information about experimental features. Currently it contains no useful information.
-- If `--dump-style=text` is enabled: `dump.dump`: shows the full progress of finding the solution.
-- If `--dump-style=xml` is enabled: `dump.xml`: shows the full progress in a hierarchical form (in xml format).
+- If `--dump-style` is not set to `none`: `dump.*` shows information about the details of solving the problem. The default file name depends on the actual dump style, and can be configured from command line.
 
-The dump files can be opened with the `showdump` shell script. It opens the dump file in `less` with some additional coloring.
+The dump files (the ones typically names `*.dump`) can be opened with the `showdump` shell script. It opens the dump file in `less` with some additional coloring.
 
 ## Standard output formatting
 
@@ -188,6 +188,18 @@ The *info lines* store some information that depends on the type of dump. The *s
 - `O`: highlighted stone (typically represents stone being moved)
 - `.`: floor
 - `+`: highlighted floor (typically represents floor tiles reachable for the player)
+
+### Dump styles
+
+The `--dump-style` parameter controls what kind of dump is generated. More detailed dumps usually have a higher performance impact and are harder to see through, but they give more information about what is happening.
+
+| Dump style    | Default file name | Performance impact | Description
+| ------------- | ----------------- | ------------------ | -----------
+| `none`        | -                 | -                  | No dumping.
+| `text`        | `dump.dump`       | Low - moderate     | Dump everything in a standard dump format. Dumps when a node is added to the queue, expanded, pushed or rejected. Dumped elements can be filtered using the `--dump-filter` and `--dump-filter-type` command line parameters.
+| `xml`         | `dump.xml`        | High               | Dumps the same information as `text`, but puts it into a tree in XML format. Note that the file is only written at the end, so there is no partial solution when the program is interrupted. It also greatly increases memory usage.
+| `statistics`  | `dump.csv`        | Low                | Prints the number of times each event happens (node added to the queue, node expanded etc.) each second in a CSV format.
+| `best`        | `dump.dump`       | Low                | Dumps nodes that are added to the queue, but only ones that has the lowest heuristic value so far.
 
 # Algorithms
 
