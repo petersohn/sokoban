@@ -66,14 +66,32 @@ runWithParameter() {
     fi
 
     local parameter="$1"
-    local min="$2"
-    local max="$3"
-    shift 3
+    shift
 
-    local value
-    for ((value=min; value <= max; ++value)); do
-        runWithParameter "$accumulated $parameter=$value" "$@"
+    local start=
+    local end=
+    local step=1
+
+    params=(start end step)
+
+    for param in "${params[@]}"; do
+        if [[ $# == 0 || "$1" == -* ]]; then
+            break
+        fi
+        eval $param='$1'
+        shift
     done
+
+    if [ -z "$start" ]; then
+        runWithParameter "$accumulated $parameter" "$@"
+    elif [ -z "$end" ]; then
+        runWithParameter "$accumulated $parameter=$start" "$@"
+    else
+        local value
+        for (( value=start; value <= end; value+=step )); do
+            runWithParameter "$accumulated $parameter=$value" "$@"
+        done
+    fi
 }
 
 # -----------------------------------------------------------------------------
