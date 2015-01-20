@@ -6,6 +6,7 @@ print_usage() {
     echo "       $0 [options] -- --flag1 min1 max1 [--flag2 min2 max2 ...]"
     echo "Options:"
     echo "    -h        This help message."
+    echo "    -d        Dry run. Print what would be called, but do not actually call it."
     echo "    -x        The process to execute (default=$process)."
     echo "    -n        The number of times each configuration is run (default=$numberOfRuns)."
     echo "    -l        The level to run the test on. Can be added multiple times."
@@ -26,20 +27,29 @@ runTest() {
     for level in "${levels[@]}"; do
         local sum=(0 0 0)
         for ((i=0; i<numberOfRuns; ++i)); do
-            local result=($("$process" --output-format='%expanded-nodes% %total-real-time:ms% %total-processor-time:ms%' "$level" "$@"))
+            command=("$process" --output-format='%expanded-nodes% %total-real-time:ms% %total-processor-time:ms%' "$level" "$@")
 
-            for ((j=0; j < ${#sum[@]}; ++j)); do
-                ((sum[j] += result[j]))
+            if [ -z "$dryRun" ]; then
+                local result=($("${command[@]}"))
+
+                for ((j=0; j < ${#sum[@]}; ++j)); do
+                    ((sum[j] += result[j]))
+                done
+            else
+                echo "${command[@]}"
+            fi
+        done
+
+        if [ -z "$dryRun" ]; then
+            echo -n "$level;"
+            for arg in "$@"; do
+                echo -n "${arg#*=};"
             done
-        done
-        echo -n "$level;"
-        for arg in "$@"; do
-            echo -n "${arg#*=};"
-        done
-        for value in "${sum[@]}"; do
-            echo -n "$((value / ${#value[@]}));"
-        done
-        echo
+            for value in "${sum[@]}"; do
+                echo -n "$((value / ${#value[@]}));"
+            done
+            echo
+        fi
     done
 }
 
@@ -68,11 +78,15 @@ runWithParameter() {
 process=./bin/sokoban
 numberOfRuns=1
 levels=()
-while getopts ":hx:n:l:L:" Option; do
+dryRun=
+while getopts ":hdx:n:l:L:" Option; do
     case $Option in
     h)
         print_usage
         exit
+        ;;
+    d)
+        dryRun=yes
         ;;
     n)
         numberOfRuns=$OPTARG
@@ -96,6 +110,9 @@ shift $(($OPTIND - 1))
 
 # -----------------------------------------------------------------------------
 
-printHeader "$@"
+if [ -z "$dryRun" ]; then
+    printHeader "$@"
+fi
+
 runWithParameter "" "$@"
 
