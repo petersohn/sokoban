@@ -26,8 +26,10 @@ printHeader() {
 runTest() {
     for level in "${levels[@]}"; do
         local sum=(0 0 0)
+        local i
+        local j
         for ((i=0; i<numberOfRuns; ++i)); do
-            command=("$process" --output-format='%expanded-nodes% %total-real-time:ms% %total-processor-time:ms%' "$level" "$@")
+            local command=("$process" --output-format='%expanded-nodes% %total-real-time:ms% %total-processor-time:ms%' "$level" "$@")
 
             if [ -z "$dryRun" ]; then
                 local result=($("${command[@]}"))
@@ -45,6 +47,7 @@ runTest() {
             for arg in "$@"; do
                 echo -n "${arg#*=};"
             done
+            local value
             for value in "${sum[@]}"; do
                 echo -n "$((value / ${#value[@]}));"
             done
