@@ -4,7 +4,7 @@
 #include <Status/Point.hpp>
 
 template <typename Status, typename Function>
-void findNodesToExpand(const Status& status, Function expandFunction)
+void expandStatus(const Status& status, Function expandFunction)
 {
 	for (const auto& stone: status.state())
 	{

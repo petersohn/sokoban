@@ -7,6 +7,7 @@
 #include "HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
+#include "ExpandHelper.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 
@@ -92,15 +93,7 @@ void InternalExpander::expand()
 	if (dumper_ && base_) {
 		dumper_->expand(base_);
 	}
-	for (const auto& state: status_.state())
-	{
-		if (state == status_.table().destination())
-			continue;
-		expandNode(state, p10);
-		expandNode(state, -p10);
-		expandNode(state, p01);
-		expandNode(state, -p01);
-	}
+	expandStatus(status_, [&](Point stone, Point d) { expandNode(stone, d); });
 }
 
 
