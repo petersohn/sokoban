@@ -1,9 +1,10 @@
 #ifndef SRC_EXPANDHELPER_HPP
 #define SRC_EXPANDHELPER_HPP
 
-#include <Status/Point.hpp>
+#include "Status/Point.hpp"
+#include "Status/Status.hpp"
 
-template <typename Status, typename Function>
+template <typename Function>
 void expandStatus(const Status& status, Function expandFunction)
 {
 	for (const auto& stone: status.state())
