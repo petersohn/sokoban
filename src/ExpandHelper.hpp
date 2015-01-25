@@ -3,6 +3,10 @@
 
 #include "Status/Point.hpp"
 #include "Status/Status.hpp"
+#include "Node.hpp"
+#include "NodeFactory.hpp"
+#include "Dumper/Dumper.hpp"
+#include <memory>
 
 template <typename Function>
 void expandStatus(const Status& status, Function expandFunction)
@@ -18,5 +22,36 @@ void expandStatus(const Status& status, Function expandFunction)
 	}
 }
 
+template <typename NodeFactory, typename HeurCalculator, typename Checker>
+std::shared_ptr<Node> createNode(const Status& originalStatus, Point p, Point d,
+		const std::shared_ptr<Node>& base, NodeFactory& nodeFactory,
+		const HeurCalculator& heurCalculator, const Checker& checker,
+		Dumper* dumper)
+{
+	Point pd = p+d, pmd = p-d;
+	if (originalStatus.value(pd) != FieldType::floor ||
+			!originalStatus.reachable(pmd)) {
+		return {};
+	}
+
+	Status status(originalStatus);
+	status.currentPos(p);
+	if (heurCalculator.calculateStone(status, pd) < 0 ||
+			!status.moveStone(p, pd)) {
+		return {};
+	}
+
+	std::shared_ptr<Node> node =
+			nodeFactory.createNode(status, MoveDescriptor(p, d), base);
+	if (pd != status.table().destination()) {
+		if (!checker.check(status, pd)) {
+			if (dumper)
+				dumper->reject(node, checker.errorMessage());
+			return {};
+		}
+	}
+
+	return node;
+}
 
 #endif /* SRC_EXPANDHELPER_HPP */
