@@ -25,6 +25,5 @@ DecisionTreeHeurListFactory::Next::operator()(const PseudoStatus& pseudoStatus)
 		iterator_ = heurList_->begin();
 	}
 
-	return iterator_ == heurList_->end() ? nullptr :
-		(iterator_++)->get();
+	return iterator_ == heurList_->end() ? nullptr : (iterator_++)->get();
 }
