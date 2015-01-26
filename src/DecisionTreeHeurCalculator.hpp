@@ -2,10 +2,11 @@
 #define DECISIONTREEHEURCALCULATOR_H_
 
 #include "HeurInfo.hpp"
-#include "Status/PseudoStatus.hpp"
 #include "DecisionTree/DecisionTree.hpp"
 #include "util/TimeMeter.hpp"
 #include "SubStatusHeurCalculator.hpp"
+#include "Status/PseudoStatus.hpp"
+#include "Status/Status.hpp"
 
 class DecisionTreeHeurListFactory {
 	typedef decisionTree::Node<PseudoStatus, float> NodeType;
@@ -27,22 +28,7 @@ class DecisionTreeHeurListFactory {
 			owner_(owner)
 		{}
 
-		const NodeType::Value* operator()(const PseudoStatus& pseudoStatus)
-		{
-			if (pseudoStatus.state().size() == 0) {
-				return nullptr;
-			}
-
-			if (pseudoStatus.state().size() != lastSize_) {
-				lastSize_ = pseudoStatus.state().size();
-				heurList_ = &owner_->decisionTree_->get(pseudoStatus);
-				iterator_ = heurList_->begin();
-			}
-
-			return iterator_ == heurList_->end() ? nullptr :
-				(iterator_++)->get();
-		}
-
+		const NodeType::Value* operator()(const PseudoStatus& pseudoStatus);
 	};
 
 public:

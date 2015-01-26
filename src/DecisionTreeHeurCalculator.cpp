@@ -12,3 +12,19 @@ DecisionTreeHeurListFactory::pointList(const Table& table)
 	return result;
 }
 
+const DecisionTreeHeurListFactory::NodeType::Value*
+DecisionTreeHeurListFactory::Next::operator()(const PseudoStatus& pseudoStatus)
+{
+	if (pseudoStatus.state().size() == 0) {
+		return nullptr;
+	}
+
+	if (pseudoStatus.state().size() != lastSize_) {
+		lastSize_ = pseudoStatus.state().size();
+		heurList_ = &owner_->decisionTree_->get(pseudoStatus);
+		iterator_ = heurList_->begin();
+	}
+
+	return iterator_ == heurList_->end() ? nullptr :
+		(iterator_++)->get();
+}

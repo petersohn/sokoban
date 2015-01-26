@@ -3,9 +3,8 @@
 
 #include <ostream>
 #include "Dumper/DumperFunctions.hpp"
-
-class Status;
-class PseudoStatus;
+#include "Status/PseudoStatus.hpp"
+#include "Status/Status.hpp"
 
 template <class T>
 inline
