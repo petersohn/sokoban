@@ -83,14 +83,18 @@ BOOST_AUTO_TEST_CASE(create_one_node)
 			emptyNode).returns(heur);
 	MOCK_EXPECT(checker.check).with(expectedStatus, Point{1, 1}).returns(true);
 
-	auto node = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
+	auto result = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
 			nodeFactory, *heurCalculator, checker, nullptr);
+	const auto& node = result.first;
+	const auto& newStatus = result.second;
 	BOOST_REQUIRE(node);
 	BOOST_CHECK_EQUAL(node->heur(), heur);
 	BOOST_CHECK_EQUAL(node->ancestor(), emptyNode);
 	BOOST_CHECK_EQUAL(node->moveDescriptor().from_, (Point{2, 1}));
 	BOOST_CHECK_EQUAL(node->moveDescriptor().d_, (Point{-1, 0}));
 	BOOST_CHECK_EQUAL((Status{*data.first, *node}), expectedStatus);
+	BOOST_REQUIRE(newStatus);
+	BOOST_CHECK_EQUAL(*newStatus, expectedStatus);
 }
 
 BOOST_AUTO_TEST_CASE(create_more_nodes)
@@ -110,8 +114,9 @@ BOOST_AUTO_TEST_CASE(create_more_nodes)
 			emptyNode).returns(20);
 	MOCK_EXPECT(checker.check).with(intermediateStatus, Point{1, 1}).returns(true);
 
-	auto node1 = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
+	auto result1 = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
 			nodeFactory, *heurCalculator, checker, nullptr);
+	const auto& node1 = result1.first;
 
 	MOCK_EXPECT(heurCalculator->calculateStone).with(mock::any, Point{0, 1}).
 			returns(1);
@@ -119,8 +124,10 @@ BOOST_AUTO_TEST_CASE(create_more_nodes)
 			node1).returns(heur);
 	MOCK_EXPECT(checker.check).with(expectedStatus, Point{0, 1}).returns(true);
 
-	auto node2 = createNode(intermediateStatus, Point{1, 1}, Point{-1, 0}, node1,
+	auto result2 = createNode(intermediateStatus, Point{1, 1}, Point{-1, 0}, node1,
 			nodeFactory, *heurCalculator, checker, nullptr);
+	const auto& node2 = result2.first;
+	const auto& status2 = result2.second;
 
 	BOOST_REQUIRE(node1);
 	BOOST_REQUIRE(node2);
@@ -129,6 +136,8 @@ BOOST_AUTO_TEST_CASE(create_more_nodes)
 	BOOST_CHECK_EQUAL(node2->moveDescriptor().from_, (Point{1, 1}));
 	BOOST_CHECK_EQUAL(node2->moveDescriptor().d_, (Point{-1, 0}));
 	BOOST_CHECK_EQUAL((Status{*data.first, *node2}), expectedStatus);
+	BOOST_REQUIRE(status2);
+	BOOST_CHECK_EQUAL(*status2, expectedStatus);
 }
 
 BOOST_AUTO_TEST_CASE(no_node_if_heur_calculator_returns_negative_for_stone)
@@ -144,9 +153,12 @@ BOOST_AUTO_TEST_CASE(no_node_if_heur_calculator_returns_negative_for_stone)
 			emptyNode).returns(heur);
 	MOCK_EXPECT(checker.check).with(expectedStatus, Point{1, 1}).returns(true);
 
-	auto node = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
+	auto result = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
 			nodeFactory, *heurCalculator, checker, nullptr);
+	const auto& node = result.first;
+	const auto& newStatus = result.second;
 	BOOST_CHECK(!node);
+	BOOST_CHECK(!newStatus);
 }
 
 BOOST_AUTO_TEST_CASE(no_node_if_checker_returns_false)
@@ -162,9 +174,12 @@ BOOST_AUTO_TEST_CASE(no_node_if_checker_returns_false)
 			emptyNode).returns(heur);
 	MOCK_EXPECT(checker.check).with(expectedStatus, Point{1, 1}).returns(false);
 
-	auto node = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
+	auto result = createNode(data.second, Point{2, 1}, Point{-1, 0}, emptyNode,
 			nodeFactory, *heurCalculator, checker, nullptr);
+	const auto& node = result.first;
+	const auto& newStatus = result.second;
 	BOOST_CHECK(!node);
+	BOOST_CHECK(!newStatus);
 }
 
 BOOST_AUTO_TEST_SUITE_END() // CreateNode

@@ -7,6 +7,7 @@
 #include "NodeFactory.hpp"
 #include "Dumper/Dumper.hpp"
 #include <memory>
+#include <boost/optional.hpp>
 
 template <typename Function>
 void expandStatus(const Status& status, Function expandFunction)
@@ -23,7 +24,8 @@ void expandStatus(const Status& status, Function expandFunction)
 }
 
 template <typename NodeFactory, typename HeurCalculator, typename Checker>
-std::shared_ptr<Node> createNode(const Status& originalStatus, Point p, Point d,
+std::pair<std::shared_ptr<Node>, boost::optional<Status>>
+createNode(const Status& originalStatus, Point p, Point d,
 		const std::shared_ptr<Node>& base, NodeFactory& nodeFactory,
 		const HeurCalculator& heurCalculator, const Checker& checker,
 		Dumper* dumper)
@@ -51,7 +53,7 @@ std::shared_ptr<Node> createNode(const Status& originalStatus, Point p, Point d,
 		}
 	}
 
-	return node;
+	return {node, status};
 }
 
 #endif /* SRC_EXPANDHELPER_HPP */
