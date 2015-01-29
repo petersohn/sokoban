@@ -46,6 +46,15 @@ private:
 	void init();
 	bool shiftIter(Point p);
 
+	const CalculatedData& calculatedData() const
+	{
+		if (!calculatedData_) {
+			fillReachable();
+		}
+
+		return *calculatedData_;
+	}
+
 public:
 #ifndef NO_UNSAFE_DIAGNOSTICS
 	static std::size_t copyCount;
@@ -127,19 +136,13 @@ public:
 	std::size_t height() const { return table().height(); }
 	const State& state() const { return state_; }
 	bool reachable(Point p) const {
-		if (!calculatedData_)
-			fillReachable();
-		return arrayAt<bool>(calculatedData_->reachable_, p, false);
+		return arrayAt<bool>(calculatedData().reachable_, p, false);
 	}
 	const Array<bool>& reachableArray() const {
-		if (!calculatedData_)
-			fillReachable();
-		return calculatedData_->reachable_;
+		return calculatedData().reachable_;
 	}
 	const BorderType& border() const {
-		if (!calculatedData_)
-			fillReachable();
-		return calculatedData_->border_;
+		return calculatedData().border_;
 	}
 	FieldType value(Point p) const { return arrayAt<FieldType>(fields_, p, FieldType::wall); }
 	Point currentPos() const { return currentPos_; }
