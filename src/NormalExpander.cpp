@@ -34,53 +34,49 @@ public:
 
 void InternalExpander::expandNode(Point p, Point d)
 {
-	Point pd = p+d, pmd = p-d;
-	if (status_.value(pd) == FieldType::floor && status_.reachable(pmd)) {
-		Status status(status_);
-		status.currentPos(p);
-		if (owner_.calculator_->calculateStone(status, pd) < 0 ||
-				!status.moveStone(p, pd)) {
-			return;
-		}
-		std::shared_ptr<Node> node =
-				owner_.nodeFactory_->createNode(status, MoveDescriptor(p, d), base_);
-		if (owner_.expandedNodes_ && owner_.expandedNodeLimit_ > 0 &&
-				*owner_.expandedNodes_ >= owner_.expandedNodeLimit_ &&
-				node->heur() > 0) {
-			if (dumper_) {
-				dumper_->reject(node, "node limit exceeded");
-			}
-			return;
-		}
-		if (pd != status.table().destination()) {
-			if (!owner_.checker_.check(status, pd)) {
-				if (dumper_)
-					dumper_->reject(node, owner_.checker_.errorMessage());
-				return;
-			}
-		}
-		VisitedStateInput vsi(status, node->costFgv());
-		if (!owner_.visitedStates_->checkAndPush(vsi)) {
-			if (dumper_) {
-				dumper_->reject(node, "already visited");
-			}
-			return;
-		}
-		queue_.push(node);
+	auto expanded = createNode(status_, p, d, base_, *owner_.nodeFactory_,
+			*owner_.calculator_, owner_.checker_, dumper_);
+	const auto& node = expanded.first;
+	const auto& status = expanded.second;
+
+	if (!node) {
+		return;
+	}
+
+	assert(status);
+
+	if (owner_.expandedNodes_ && owner_.expandedNodeLimit_ > 0 &&
+			*owner_.expandedNodes_ >= owner_.expandedNodeLimit_ &&
+			node->heur() > 0) {
 		if (dumper_) {
-			dumper_->addNode(node);
+			dumper_->reject(node, "node limit exceeded");
 		}
-		owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
-		if (owner_.expandedNodes_ && ++*owner_.expandedNodes_ % 10000 == 0) {
-			std::cerr << boost::format(
-					"Expanded nodes: %d.\n"
-					"Nodes in queue: %d.\n"
-					"Maximum depth: %d.\n"
-					"Cost function: %d\n") %
-				*owner_.expandedNodes_ % queue_.size() %
-				owner_.maxDepth_ % (base_ ? base_->costFgv() : -1) <<
-				std::endl;
+		return;
+	}
+
+	VisitedStateInput vsi(*status, node->costFgv());
+	if (!owner_.visitedStates_->checkAndPush(vsi)) {
+		if (dumper_) {
+			dumper_->reject(node, "already visited");
 		}
+		return;
+	}
+
+	queue_.push(node);
+	if (dumper_) {
+		dumper_->addNode(node);
+	}
+
+	owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
+	if (owner_.expandedNodes_ && ++*owner_.expandedNodes_ % 10000 == 0) {
+		std::cerr << boost::format(
+				"Expanded nodes: %d.\n"
+				"Nodes in queue: %d.\n"
+				"Maximum depth: %d.\n"
+				"Cost function: %d\n") %
+			*owner_.expandedNodes_ % queue_.size() %
+			owner_.maxDepth_ % (base_ ? base_->costFgv() : -1) <<
+			std::endl;
 	}
 }
 

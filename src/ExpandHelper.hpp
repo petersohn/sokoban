@@ -53,7 +53,7 @@ createNode(const Status& originalStatus, Point p, Point d,
 		}
 	}
 
-	return {node, status};
+	return {std::move(node), std::move(status)};
 }
 
 #endif /* SRC_EXPANDHELPER_HPP */
