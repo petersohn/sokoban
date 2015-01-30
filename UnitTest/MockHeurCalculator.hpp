@@ -2,6 +2,7 @@
 #define UNITTEST_MOCKHEURCALCULATOR_HPP
 
 #include "HeurCalculator.hpp"
+#include "Status/Status.hpp"
 #include <turtle/mock.hpp>
 
 MOCK_BASE_CLASS(MockHeurCalculator, HeurCalculator) {

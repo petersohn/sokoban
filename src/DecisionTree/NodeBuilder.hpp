@@ -15,7 +15,6 @@
 #include "Status/StatusUtils.hpp"
 #include "ComplexCheckerFwd.hpp"
 #include "ComplexCheckerBase.hpp"
-#include "Checker.hpp"
 #include "util/ThreadPool.hpp"
 #include "Mutexes.hpp"
 

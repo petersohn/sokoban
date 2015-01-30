@@ -4,7 +4,6 @@
 #include "Status/Status.hpp"
 #include "ComplexCheckerFwd.hpp"
 #include "ComplexCheckerBase.hpp"
-#include "Checker.hpp"
 #include "MockHeurCalculator.hpp"
 #include "MockChecker.hpp"
 #include "ArrayIO.hpp"

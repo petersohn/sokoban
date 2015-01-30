@@ -2,6 +2,7 @@
 #define SRC_EXTENDEDMOVABLECHECKER_HPP
 
 #include "Checker.hpp"
+#include <memory>
 
 class Status;
 class HeurCalculator;

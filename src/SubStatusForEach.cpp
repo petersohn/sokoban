@@ -5,7 +5,6 @@
 #include "Status/State.hpp"
 #include "HeurCalculator.hpp"
 #include "ComplexCheckerBase.hpp"
-#include "Checker.hpp"
 #include <boost/asio/io_service.hpp>
 
 SubStatusForEach::SubStatusForEach(

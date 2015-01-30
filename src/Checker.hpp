@@ -1,9 +1,7 @@
 #ifndef SRC_CHECKER_HPP
 #define SRC_CHECKER_HPP
 
-#include <memory>
 #include <string>
-#include "Status/Table.hpp"
 
 class Status;
 class Point;

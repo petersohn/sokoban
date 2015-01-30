@@ -2,6 +2,7 @@
 #define MOVABLECHECKER_H_
 
 #include "Checker.hpp"
+#include <memory>
 
 class Status;
 class HeurCalculator;

@@ -4,7 +4,6 @@
 #include "DecisionTreeHeurCalculator.hpp"
 #include "SubStatusForEach.hpp"
 #include "TableHeurCalculator.hpp"
-#include "Checker.hpp"
 #include "HeurCalculator.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "Solver.hpp"

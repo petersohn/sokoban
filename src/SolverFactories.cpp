@@ -19,7 +19,6 @@
 #include "NodeFactory.hpp"
 #include "HeurCalculator.hpp"
 #include "ComplexCheckerBase.hpp"
-#include "Checker.hpp"
 #include <vector>
 #include <functional>
 
