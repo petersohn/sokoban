@@ -10,7 +10,6 @@ class Point;
 
 class Checker {
 public:
-	typedef std::shared_ptr<const Checker> Ptr;
 	virtual bool check(const Status&, Point ) const = 0;
 	virtual ~Checker() {}
 	// for efficiency reasons, it is assumed that it will

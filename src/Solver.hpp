@@ -17,8 +17,6 @@ public:
 };
 
 class Solver {
-public:
-	typedef std::unique_ptr<const Solver> Ptr;
 private:
 	QueueFactory queueFactory_;
 	ExpanderFactory expanderFactory_;
