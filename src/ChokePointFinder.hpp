@@ -2,12 +2,12 @@
 #define SRC_CHOKEPOINTFINDER_HPP
 
 #include "Options.hpp"
+#include "ComplexCheckerFwd.hpp"
 #include <vector>
 
 class Table;
 class Point;
 class HeurCalculator;
-class ComplexChecker;
 
 template <typename T> class Array;
 

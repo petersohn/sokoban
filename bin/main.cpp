@@ -7,7 +7,7 @@
 #include "Status/State.hpp"
 #include "SolutionChecker.hpp"
 #include "SubStatusForEach.hpp"
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerFwd.hpp"
 #include "util/TimeMeter.hpp"
 #include "Status/StatusCreator.hpp"
 #include "util/ThreadPool.hpp"

@@ -4,10 +4,10 @@
 #include "ExpanderFactory.hpp"
 #include "Checker.hpp"
 #include "PrioNodeQueueFwd.hpp"
+#include "ComplexCheckerFwd.hpp"
 #include "util/TimeMeter.hpp"
 
 class HeurCalculator;
-class ComplexChecker;
 struct Options;
 class Dumper;
 

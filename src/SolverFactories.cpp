@@ -18,7 +18,8 @@
 #include "Dumper/BestDumper.hpp"
 #include "NodeFactory.hpp"
 #include "HeurCalculator.hpp"
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerBase.hpp"
+#include "Checker.hpp"
 #include <vector>
 #include <functional>
 

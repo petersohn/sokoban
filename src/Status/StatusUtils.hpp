@@ -3,8 +3,7 @@
 
 #include "Status.hpp"
 #include "FieldType.hpp"
-
-class ComplexChecker;
+#include "ComplexCheckerFwd.hpp"
 
 std::vector<Status> getPartitions(const Table& table, const State& state,
 			std::size_t maxDepth);

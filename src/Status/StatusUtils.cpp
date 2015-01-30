@@ -1,6 +1,7 @@
 #include "Status/StatusUtils.hpp"
-#include "ComplexChecker.hpp"
 #include "Status/IsStatusPossible.hpp"
+#include "ComplexCheckerBase.hpp"
+#include "Checker.hpp"
 
 std::vector<Status> getPartitions(const Table& table, const State& state,
 			std::size_t maxDepth)

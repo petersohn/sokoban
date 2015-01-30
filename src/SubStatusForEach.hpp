@@ -1,10 +1,12 @@
-#ifndef TABLEITERATOR_H_
-#define TABLEITERATOR_H_
+#ifndef SRC_SUBSTATUSFOREACH_HPP
+#define SRC_SUBSTATUSFOREACH_HPP
 
 #include "Mutexes.hpp"
 #include "util/TimeMeter.hpp"
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerFwd.hpp"
+#include "ComplexCheckerBase.hpp"
 #include "Status/PointRange.hpp"
+#include "Array.hpp"
 #include "util/ExplicitType.hpp"
 #include <boost/optional.hpp>
 #include <functional>
@@ -77,4 +79,4 @@ public:
 };
 
 
-#endif /* TABLEITERATOR_H_ */
+#endif /* SRC_SUBSTATUSFOREACH_HPP */

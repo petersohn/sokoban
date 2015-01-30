@@ -8,6 +8,7 @@
 #include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
 #include "ExpandHelper.hpp"
+#include "Checker.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 

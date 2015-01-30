@@ -3,9 +3,11 @@
 
 #include "IndexedStatusList.hpp"
 #include "util/ThreadPool.hpp"
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerFwd.hpp"
 #include "Options.hpp"
 #include "util/TimeMeter.hpp"
+#include "ComplexCheckerFwd.hpp"
+#include "ComplexCheckerBase.hpp"
 #include <fstream>
 #include <memory>
 #include <boost/thread.hpp>

@@ -2,7 +2,8 @@
 #define NORMALEXPANDER_H_
 
 #include "Expander.hpp"
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerFwd.hpp"
+#include "ComplexCheckerBase.hpp"
 #include "Mutexes.hpp"
 
 class VisitedStates;

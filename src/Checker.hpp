@@ -1,5 +1,5 @@
-#ifndef CHECKER_H_
-#define CHECKER_H_
+#ifndef SRC_CHECKER_HPP
+#define SRC_CHECKER_HPP
 
 #include <memory>
 #include <string>
@@ -18,4 +18,4 @@ public:
 	virtual const char* errorMessage() const = 0;
 };
 
-#endif /* CHECKER_H_ */
+#endif /* SRC_CHECKER_HPP */

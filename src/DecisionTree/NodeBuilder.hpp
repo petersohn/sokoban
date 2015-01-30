@@ -13,7 +13,9 @@
 #include "DecisionTree/SplittingValue.hpp"
 #include "Dumper/IndentedOutput.hpp"
 #include "Status/StatusUtils.hpp"
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerFwd.hpp"
+#include "ComplexCheckerBase.hpp"
+#include "Checker.hpp"
 #include "util/ThreadPool.hpp"
 #include "Mutexes.hpp"
 

@@ -2,10 +2,10 @@
 #include "Status/StatusCreator.hpp"
 #include "MockHeurCalculator.hpp"
 #include "MockChecker.hpp"
-#include "ComplexChecker.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include "CreateTestStatus.hpp"
 #include "createBoolArray.hpp"
+#include "Array.hpp"
 #include <boost/test/unit_test.hpp>
 #include <boost/asio/io_service.hpp>
 #include <vector>

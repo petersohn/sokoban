@@ -1,4 +1,6 @@
-#include "ComplexChecker.hpp"
+#include "ComplexCheckerFwd.hpp"
+#include "ComplexCheckerBase.hpp"
+#include "Checker.hpp"
 #include "Status/StatusCreator.hpp"
 #include "Status/Status.hpp"
 #include "MockChecker.hpp"

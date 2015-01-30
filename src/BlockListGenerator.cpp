@@ -2,7 +2,6 @@
 #include "BlockListChecker.hpp"
 #include "BlockListHeurCalculator.hpp"
 #include "DecisionTreeHeurCalculator.hpp"
-#include "ComplexChecker.hpp"
 #include "SubStatusForEach.hpp"
 #include "TableHeurCalculator.hpp"
 #include "Checker.hpp"
