@@ -1,13 +1,17 @@
 
 include_rules
 
-LIBS += -lboost_unit_test_framework
+include $(COMPILE_TUP)
 INCLUDE_DIRS += -isystem$(TURTLE_DIR)/include
 
 : foreach *.cpp |> !cxx |>
+
+include $(LINK_TUP)
+LIBS += -lboost_unit_test_framework
+
 : ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \
 		$(STATUS_DIR)/*.o $(CPP_UTIL_LIB) |> !linker |> unitTest
 
-export LD_LIBRARY_PATH
+include $(TEST_TUP)
 
 : unitTest |> !unitTest |>

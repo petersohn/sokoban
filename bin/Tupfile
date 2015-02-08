@@ -1,6 +1,11 @@
 
 include_rules
 
+include $(COMPILE_TUP)
+
 : foreach *.cpp |> !cxx |>
+
+include $(LINK_TUP)
+
 : ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \
 		$(STATUS_DIR)/*.o $(CPP_UTIL_LIB) |> !linker |> sokoban

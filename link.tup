@@ -1,0 +1,13 @@
+
+export EXTRA_LD_FLAGS
+
+LIBS += -lboost_program_options
+LIBS += -lboost_date_time
+LIBS += -lboost_thread
+LIBS += -lboost_system
+LIBS += -lpthread
+LIBS += @(PROFILER_LIBS)
+
+LD_FLAGS += $EXTRA_LD_FLAGS
+
+!linker = |> ^ LD %o^ $(LD) $(LD_FLAGS) %f $(LIBS) -o %o |>
