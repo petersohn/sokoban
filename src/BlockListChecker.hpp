@@ -6,15 +6,15 @@
 
 class BlockListChecker: public Checker {
 private:
-	IndexedStatusList blockList_;
+    IndexedStatusList blockList_;
 public:
-	BlockListChecker(IndexedStatusList blockList):
-			blockList_(std::move(blockList))
-	{
-	}
+    BlockListChecker(IndexedStatusList blockList):
+            blockList_(std::move(blockList))
+    {
+    }
 
-	bool check(const Status& status, Point  p) const override;
-	const char* errorMessage() const override;
+    bool check(const Status& status, Point  p) const override;
+    const char* errorMessage() const override;
 };
 
 

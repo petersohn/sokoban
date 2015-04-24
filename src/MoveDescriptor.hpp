@@ -4,10 +4,10 @@
 #include "Status/Point.hpp"
 
 struct MoveDescriptor {
-	Point from_;
-	Point d_;
-	MoveDescriptor(Point  p, Point  d):
-		from_(p), d_(d) {}
+    Point from_;
+    Point d_;
+    MoveDescriptor(Point  p, Point  d):
+        from_(p), d_(d) {}
 };
 
 

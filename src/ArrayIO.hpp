@@ -5,8 +5,8 @@
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const Array<T>& array)
 {
-	dumpArray(os, array, " ");
-	return os;
+    dumpArray(os, array, " ");
+    return os;
 }
 
 

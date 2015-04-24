@@ -12,7 +12,7 @@ class HeurCalculator;
 template <typename T> class Array;
 
 Array<bool> findChokePoints(const Table& table, Options options,
-	    std::shared_ptr<const HeurCalculator> calculator,
-	    ComplexChecker checker, bool print);
+        std::shared_ptr<const HeurCalculator> calculator,
+        ComplexChecker checker, bool print);
 
 #endif /* SRC_CHOKEPOINTFINDER_HPP */

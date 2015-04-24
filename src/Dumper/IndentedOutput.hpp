@@ -10,24 +10,24 @@ template <class T>
 inline
 void indentedOutput(std::ostream& os, const T& t, int level)
 {
-	for (int i = 0; i < level; ++i) {
-		os << ' ';
-	}
-	os << t << std::endl;
+    for (int i = 0; i < level; ++i) {
+        os << ' ';
+    }
+    os << t << std::endl;
 }
 
 template <>
 inline
 void indentedOutput(std::ostream& os, const Status& status, int level)
 {
-	dumpStatus(os, status, "", &status.reachableArray(), level);
+    dumpStatus(os, status, "", &status.reachableArray(), level);
 }
 
 template <>
 inline
 void indentedOutput(std::ostream& os, const PseudoStatus& status, int level)
 {
-	dumpStatus(os, status, "", &status.reachableArray(), level);
+    dumpStatus(os, status, "", &status.reachableArray(), level);
 }
 
 

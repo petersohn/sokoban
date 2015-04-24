@@ -9,96 +9,96 @@
 
 
 XDumper::XDumper(const std::string& filename):
-		filename_(filename)
+        filename_(filename)
 {
-	clear();
+    clear();
 }
 
 XDumper::ElementPtr XDumper::createDumpElement(const std::string& s) {
-	std::shared_ptr<xml::XMLText> dump(new xml::XMLText());
-	dump->data(s);
-	ElementPtr dumpElem(new xml::XMLElement());
-	dumpElem->name("dump");
-	dumpElem->children().push_back(dump);
-	return dumpElem;
+    std::shared_ptr<xml::XMLText> dump(new xml::XMLText());
+    dump->data(s);
+    ElementPtr dumpElem(new xml::XMLElement());
+    dumpElem->name("dump");
+    dumpElem->children().push_back(dump);
+    return dumpElem;
 }
 
 void XDumper::initialStatus(const Status& status) {
-	std::stringstream ss;
-	dumpStatus(ss, status);
-	elements_[std::shared_ptr<Node>()]->children().push_back(createDumpElement(ss.str()));
-	table_ = &status.table();
+    std::stringstream ss;
+    dumpStatus(ss, status);
+    elements_[std::shared_ptr<Node>()]->children().push_back(createDumpElement(ss.str()));
+    table_ = &status.table();
 }
 
 void  XDumper::addNode(const std::shared_ptr<Node>& node)
 {
-	doAddNode(node);
+    doAddNode(node);
 }
 
 XDumper::ElementPtr XDumper::doAddNode(const std::shared_ptr<Node>& node)
 {
-	ElementPtr elem(new xml::XMLElement());
-	elem->name("node");
-	std::stringstream ss;
-	dumpNode(ss, *table_, *node);
-	elem->children().push_back(createDumpElement(ss.str()));
-	elem->attributes().insert(make_pair("stone", pointStr(node->from())));
-	elem->attributes().insert(make_pair("d", direction(node->d())));
-	elem->attributes().insert(make_pair("cost", boost::lexical_cast<std::string>(node->cost())));
-	elem->attributes().insert(make_pair("heur", boost::lexical_cast<std::string>(node->heur())));
-	elem->attributes().insert(make_pair("costFgv", boost::lexical_cast<std::string>(node->costFgv())));
-	elements_[node] = elem;
-	elements_[node->ancestor()]->children().push_back(elem);
-	return elem;
+    ElementPtr elem(new xml::XMLElement());
+    elem->name("node");
+    std::stringstream ss;
+    dumpNode(ss, *table_, *node);
+    elem->children().push_back(createDumpElement(ss.str()));
+    elem->attributes().insert(make_pair("stone", pointStr(node->from())));
+    elem->attributes().insert(make_pair("d", direction(node->d())));
+    elem->attributes().insert(make_pair("cost", boost::lexical_cast<std::string>(node->cost())));
+    elem->attributes().insert(make_pair("heur", boost::lexical_cast<std::string>(node->heur())));
+    elem->attributes().insert(make_pair("costFgv", boost::lexical_cast<std::string>(node->costFgv())));
+    elements_[node] = elem;
+    elements_[node->ancestor()]->children().push_back(elem);
+    return elem;
 }
 
 XDumper::ElementPtr XDumper::getElement(const std::shared_ptr<Node>& node)
 {
-	MapType::iterator it = elements_.find(node);
-	if (it == elements_.end())
-		return doAddNode(node);
-	return it->second;
+    MapType::iterator it = elements_.find(node);
+    if (it == elements_.end())
+        return doAddNode(node);
+    return it->second;
 }
 
 void XDumper::addToSolution(const std::shared_ptr<Node>& node) {
-	getElement(node)->attributes()["part-of-solution"] = "yes";
+    getElement(node)->attributes()["part-of-solution"] = "yes";
 }
 
 void XDumper::expand(const std::shared_ptr<Node>& node) {
-	getElement(node)->attributes()["expanded"] = "normal";
+    getElement(node)->attributes()["expanded"] = "normal";
 }
 
 void XDumper::startPushing(const std::shared_ptr<Node>& node) {
-	getElement(node)->attributes()["expanded"] = "pushed";
+    getElement(node)->attributes()["expanded"] = "pushed";
 }
 
 void XDumper::push(const std::shared_ptr<Node>& node) {
-	getElement(node)->attributes()["expanded"] = "push-node";
+    getElement(node)->attributes()["expanded"] = "push-node";
 }
 
 void XDumper::reject(const std::shared_ptr<Node>& node, const char *text) {
-	getElement(node)->attributes()["rejected"] = text;
+    getElement(node)->attributes()["rejected"] = text;
 }
 
 void XDumper::clear() {
-	elements_.clear();
-	std::shared_ptr<xml::XMLElement> root(new xml::XMLElement());
-	root->name("root-node");
-	elements_.insert(std::make_pair(std::shared_ptr<Node>(), root));
+    elements_.clear();
+    std::shared_ptr<xml::XMLElement> root(new xml::XMLElement());
+    root->name("root-node");
+    elements_.insert(std::make_pair(std::shared_ptr<Node>(), root));
 }
 
 void XDumper::save() {
-	std::cerr << elements_.size() << std::endl;
-	MapType::const_iterator it = elements_.find(std::shared_ptr<Node>());
-	assert(it != elements_.end());
-	saveXMLFile(it->second, filename_.c_str(), "dump.dtd");
+    std::cerr << elements_.size() << std::endl;
+    MapType::const_iterator it = elements_.find(std::shared_ptr<Node>());
+    assert(it != elements_.end());
+    saveXMLFile(it->second, filename_.c_str(), "dump.dtd");
 }
 
 void XDumper::dump() const {
-	for (MapType::const_iterator it = elements_.begin(); it != elements_.end(); ++it) {
-		std::cerr << "Node" << std::endl;
-		std::cerr << it->second->toString() << std::endl << std::endl;
-	}
+    for (MapType::const_iterator it = elements_.begin(); it != elements_.end(); ++it) {
+        std::cerr << "Node" << std::endl;
+        std::cerr << it->second->toString() << std::endl << std::endl;
+    }
 }
 
 

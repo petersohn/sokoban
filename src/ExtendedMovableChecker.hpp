@@ -9,13 +9,13 @@ class HeurCalculator;
 class Point;
 
 class ExtendedMovableChecker: public Checker {
-	std::shared_ptr<const HeurCalculator> calculator_;
+    std::shared_ptr<const HeurCalculator> calculator_;
 public:
-	ExtendedMovableChecker(std::shared_ptr<const HeurCalculator> calculator):
-		calculator_(std::move(calculator))
-	{}
-	bool check(const Status& status, Point p) const override;
-	const char* errorMessage() const override;
+    ExtendedMovableChecker(std::shared_ptr<const HeurCalculator> calculator):
+        calculator_(std::move(calculator))
+    {}
+    bool check(const Status& status, Point p) const override;
+    const char* errorMessage() const override;
 };
 
 #endif /* SRC_EXTENDEDMOVABLECHECKER_HPP */

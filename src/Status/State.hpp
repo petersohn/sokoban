@@ -11,93 +11,93 @@
 #include <iterator>
 
 class State {
-	typedef std::unordered_set<Point> ContainerType;
-	typedef std::shared_ptr<ContainerType> ContainerPtr;
-	ContainerPtr stones_;
-	void modify() {
-		if (!stones_.unique())
-			stones_.reset(new ContainerType(*stones_));
-	}
+    typedef std::unordered_set<Point> ContainerType;
+    typedef std::shared_ptr<ContainerType> ContainerPtr;
+    ContainerPtr stones_;
+    void modify() {
+        if (!stones_.unique())
+            stones_.reset(new ContainerType(*stones_));
+    }
 public:
-	typedef ContainerType::const_iterator const_iterator;
+    typedef ContainerType::const_iterator const_iterator;
 
-	State():stones_(new ContainerType) {}
-	State(const State& ) = default;
-	State& operator=(const State& ) = default;
-	State(State&& ) = default;
-	State& operator=(State&& ) = default;
+    State():stones_(new ContainerType) {}
+    State(const State& ) = default;
+    State& operator=(const State& ) = default;
+    State(State&& ) = default;
+    State& operator=(State&& ) = default;
 
-	explicit State(std::initializer_list<Point> range):stones_(new ContainerType)
-	{
-		std::move(std::begin(range), std::end(range),
-				std::inserter(*stones_, stones_->begin()));
-	}
+    explicit State(std::initializer_list<Point> range):stones_(new ContainerType)
+    {
+        std::move(std::begin(range), std::end(range),
+                std::inserter(*stones_, stones_->begin()));
+    }
 
-	template <typename Range>
-	explicit State(Range range):stones_(new ContainerType)
-	{
-		std::move(std::begin(range), std::end(range),
-				std::inserter(*stones_, stones_->begin()));
-	}
+    template <typename Range>
+    explicit State(Range range):stones_(new ContainerType)
+    {
+        std::move(std::begin(range), std::end(range),
+                std::inserter(*stones_, stones_->begin()));
+    }
 
-	explicit State(ContainerType range):
-		stones_{new ContainerType(std::move(range))}
-	{
-	}
+    explicit State(ContainerType range):
+        stones_{new ContainerType(std::move(range))}
+    {
+    }
 
 
-	State deepCopy() const {
-		State result{*this};
-		result.modify();
-		return result;
-	}
+    State deepCopy() const {
+        State result{*this};
+        result.modify();
+        return result;
+    }
 
-	bool operator==(const State& other) const {
-		return stones_ == other.stones_ || *stones_ == *(other.stones_);
-	}
-	void addStone(Point p) {
-		modify();
-		stones_->insert(p);
-	}
-	void removeStone(Point p) {
-		modify();
-		stones_->erase(p);
-	}
-	void clear() {
-		modify();
-		stones_->clear();
-	}
-	bool operator[](Point p) const {
-		return stones_->count(p) != 0;
-	}
-	size_t size() const { return stones_->size(); }
-	bool empty() const { return stones_->empty(); }
-	const_iterator begin() const { return stones_->begin(); }
-	const_iterator end() const { return stones_->end(); }
+    bool operator==(const State& other) const {
+        return stones_ == other.stones_ || *stones_ == *(other.stones_);
+    }
+    void addStone(Point p) {
+        modify();
+        stones_->insert(p);
+    }
+    void removeStone(Point p) {
+        modify();
+        stones_->erase(p);
+    }
+    void clear() {
+        modify();
+        stones_->clear();
+    }
+    bool operator[](Point p) const {
+        return stones_->count(p) != 0;
+    }
+    size_t size() const { return stones_->size(); }
+    bool empty() const { return stones_->empty(); }
+    const_iterator begin() const { return stones_->begin(); }
+    const_iterator end() const { return stones_->end(); }
 };
 
 inline bool isSubState(const State& subState, const State& state)
 {
-	return boost::find_if(subState,
-			[&state](Point p) { return !state[p]; }) == subState.end();
+    return boost::find_if(subState,
+            [&state](Point p) { return !state[p]; }) == subState.end();
 }
 
 inline bool operator!=(const State& lhs, const State& rhs)
 {
-	return !(lhs == rhs);
+    return !(lhs == rhs);
 }
 
 class AddStonesToState {
-	State& state_;
+    State& state_;
 public:
-	AddStonesToState(State& state):
-		state_(state){}
-	AddStonesToState& operator()(Point  p)
-	{
-		state_.addStone(p);
-		return *this;
-	}
-	State& get() { return state_; }
+    AddStonesToState(State& state):
+        state_(state){}
+    AddStonesToState& operator()(Point  p)
+    {
+        state_.addStone(p);
+        return *this;
+    }
+    State& get() { return state_; }
 };
 
 
@@ -106,16 +106,16 @@ namespace std {
 
 template<>
 struct hash<State> {
-	size_t operator()(const State& state) const
-	{
-		size_t result = 0;
-		std::hash<Point> h;
-		for (State::const_iterator it = state.begin();
-				it != state.end(); ++it) {
-			result += h(*it); // the order of elements doesn't count
-		}
-		return std::hash<size_t>()(result);
-	}
+    size_t operator()(const State& state) const
+    {
+        size_t result = 0;
+        std::hash<Point> h;
+        for (State::const_iterator it = state.begin();
+                it != state.end(); ++it) {
+            result += h(*it); // the order of elements doesn't count
+        }
+        return std::hash<size_t>()(result);
+    }
 };
 
 }

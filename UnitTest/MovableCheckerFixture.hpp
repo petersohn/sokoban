@@ -6,9 +6,9 @@
 
 template <typename Checker>
 struct MovableCheckerFixture {
-	std::shared_ptr<MockHeurCalculator> heurCalculator =
-		std::make_shared<MockHeurCalculator>();
-	Checker movableCheckerUnderTest{heurCalculator};
+    std::shared_ptr<MockHeurCalculator> heurCalculator =
+        std::make_shared<MockHeurCalculator>();
+    Checker movableCheckerUnderTest{heurCalculator};
 };
 
 

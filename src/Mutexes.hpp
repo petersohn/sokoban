@@ -14,64 +14,64 @@
 
 template <class Mutex>
 class TraceMutex {
-	Mutex mutex;
-	boost::posix_time::time_duration waitTime;
-	unsigned uniqueNum = 0;
-	unsigned sharedNum = 0;
-	const char* name;
+    Mutex mutex;
+    boost::posix_time::time_duration waitTime;
+    unsigned uniqueNum = 0;
+    unsigned sharedNum = 0;
+    const char* name;
 public:
-	typedef Mutex MutexType;
-	TraceMutex(const char* name):
-		name(name)
-	{
-		std::cerr << "Mutex " << name << " created." << std::endl;
-	}
-	~TraceMutex()
-	{
-		std::cerr << "Mutex " << name << " destroyed. Total waiting time: " << waitTime << " Unique locks: " << uniqueNum << " Shared locks: " << sharedNum << std::endl;
-	}
+    typedef Mutex MutexType;
+    TraceMutex(const char* name):
+        name(name)
+    {
+        std::cerr << "Mutex " << name << " created." << std::endl;
+    }
+    ~TraceMutex()
+    {
+        std::cerr << "Mutex " << name << " destroyed. Total waiting time: " << waitTime << " Unique locks: " << uniqueNum << " Shared locks: " << sharedNum << std::endl;
+    }
 
-	// Lockable Concept
-	void lock()
-	{
-		if (mutex.try_lock()) {
-			return;
-		}
-		boost::posix_time::ptime waitBegin(boost::posix_time::microsec_clock::local_time());
-		mutex.lock();
-		boost::posix_time::ptime waitEnd(boost::posix_time::microsec_clock::local_time());
-		waitTime += waitEnd - waitBegin;
-	}
-	bool try_lock()
-	{
-		return mutex.try_lock();
-	}
-	void unlock()
-	{
-		++uniqueNum;
-		mutex.unlock();
-	}
+    // Lockable Concept
+    void lock()
+    {
+        if (mutex.try_lock()) {
+            return;
+        }
+        boost::posix_time::ptime waitBegin(boost::posix_time::microsec_clock::local_time());
+        mutex.lock();
+        boost::posix_time::ptime waitEnd(boost::posix_time::microsec_clock::local_time());
+        waitTime += waitEnd - waitBegin;
+    }
+    bool try_lock()
+    {
+        return mutex.try_lock();
+    }
+    void unlock()
+    {
+        ++uniqueNum;
+        mutex.unlock();
+    }
 
-	// SharedLockable Concept
-	void lock_shared()
-	{
-		if (mutex.try_lock_shared()) {
-			return;
-		}
-		boost::posix_time::ptime waitBegin(boost::posix_time::microsec_clock::local_time());
-		mutex.lock_shared();
-		boost::posix_time::ptime waitEnd(boost::posix_time::microsec_clock::local_time());
-		waitTime += waitEnd - waitBegin;
-	}
-	bool try_lock_shared()
-	{
-		return mutex.try_lock_shared();
-	}
-	void unlock_shared()
-	{
-		++sharedNum;
-		mutex.unlock_shared();
-	}
+    // SharedLockable Concept
+    void lock_shared()
+    {
+        if (mutex.try_lock_shared()) {
+            return;
+        }
+        boost::posix_time::ptime waitBegin(boost::posix_time::microsec_clock::local_time());
+        mutex.lock_shared();
+        boost::posix_time::ptime waitEnd(boost::posix_time::microsec_clock::local_time());
+        waitTime += waitEnd - waitBegin;
+    }
+    bool try_lock_shared()
+    {
+        return mutex.try_lock_shared();
+    }
+    void unlock_shared()
+    {
+        ++sharedNum;
+        mutex.unlock_shared();
+    }
 
 };
 

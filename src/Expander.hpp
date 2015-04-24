@@ -10,10 +10,10 @@ class Dumper;
 
 class Expander {
 public:
-	// returns true if no more expansions should be made
-	virtual void expand(const Status&, std::shared_ptr<Node>, PrioNodeQueue&,
-			std::shared_ptr<Dumper>) = 0;
-	virtual ~Expander() {}
+    // returns true if no more expansions should be made
+    virtual void expand(const Status&, std::shared_ptr<Node>, PrioNodeQueue&,
+            std::shared_ptr<Dumper>) = 0;
+    virtual ~Expander() {}
 };
 
 

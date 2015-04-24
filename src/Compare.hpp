@@ -4,12 +4,12 @@
 enum class CompareMethod {time = 1, heur, depth};
 
 struct Compare {
-	CompareMethod type;
-	bool reverse;
-	Compare(): type(CompareMethod::time), reverse(false) {}
-	Compare(CompareMethod type, bool reverse):
-		type(type), reverse(reverse)
-	{}
+    CompareMethod type;
+    bool reverse;
+    Compare(): type(CompareMethod::time), reverse(false) {}
+    Compare(CompareMethod type, bool reverse):
+        type(type), reverse(reverse)
+    {}
 };
 
 

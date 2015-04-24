@@ -8,26 +8,26 @@
 
 class IndexedStatusList {
 private:
-	Array<std::vector<Status>> index_;
-	size_t size_;
+    Array<std::vector<Status>> index_;
+    size_t size_;
 
 public:
-	IndexedStatusList():size_(0) {}
-	IndexedStatusList(const IndexedStatusList&) = default;
-	IndexedStatusList& operator=(const IndexedStatusList&) = default;
-	IndexedStatusList(IndexedStatusList&&) = default;
-	IndexedStatusList& operator=(IndexedStatusList&&) = default;
+    IndexedStatusList():size_(0) {}
+    IndexedStatusList(const IndexedStatusList&) = default;
+    IndexedStatusList& operator=(const IndexedStatusList&) = default;
+    IndexedStatusList(IndexedStatusList&&) = default;
+    IndexedStatusList& operator=(IndexedStatusList&&) = default;
 
-	void add(const Status& status);
+    void add(const Status& status);
 
-	void clear() {
-		index_.reset(0, 0);
-		size_ = 0;
-	}
+    void clear() {
+        index_.reset(0, 0);
+        size_ = 0;
+    }
 
-	bool hasSubStatus(const Status& status, Point p) const;
+    bool hasSubStatus(const Status& status, Point p) const;
 
-	size_t size() const { return size_; }
+    size_t size() const { return size_; }
 };
 
 #endif /* SRC_INDEXEDSTATUSLIST_HPP */

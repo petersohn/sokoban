@@ -9,12 +9,12 @@ namespace decisionTree {
 template <class Status, class T>
 class Node {
 public:
-	typedef std::pair<Status, T> Value;
-	typedef std::shared_ptr<Value> ValuePtr;
-	typedef std::shared_ptr<const Value> ValueConstPtr;
-	typedef std::vector<ValuePtr> ValueList;
-	virtual const ValueList& get(const Status& key) const = 0;
-	virtual ~Node() {}
+    typedef std::pair<Status, T> Value;
+    typedef std::shared_ptr<Value> ValuePtr;
+    typedef std::shared_ptr<const Value> ValueConstPtr;
+    typedef std::vector<ValuePtr> ValueList;
+    virtual const ValueList& get(const Status& key) const = 0;
+    virtual ~Node() {}
 };
 
 }

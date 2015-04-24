@@ -2,12 +2,12 @@
 
 bool BlockListChecker::check(const Status& status, Point  p) const
 {
-	return !blockList_.hasSubStatus(status, p);
+    return !blockList_.hasSubStatus(status, p);
 }
 
 const char* BlockListChecker::errorMessage() const
 {
-	return "on blocklist";
+    return "on blocklist";
 }
 
 

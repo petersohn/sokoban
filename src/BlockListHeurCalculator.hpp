@@ -6,33 +6,33 @@
 
 
 class BlockListHeurListFactory {
-	HeurList heurList_;
+    HeurList heurList_;
 public:
-	friend class Next;
-	class Next {
-		const BlockListHeurListFactory* owner_;
-		HeurList::const_iterator iterator_;
-	public:
-		explicit Next(const BlockListHeurListFactory* owner):
-			owner_(owner),
-			iterator_(owner->heurList_.begin())
-		{}
+    friend class Next;
+    class Next {
+        const BlockListHeurListFactory* owner_;
+        HeurList::const_iterator iterator_;
+    public:
+        explicit Next(const BlockListHeurListFactory* owner):
+            owner_(owner),
+            iterator_(owner->heurList_.begin())
+        {}
 
-		const HeurInfo* operator()(const PseudoStatus&)
-		{
-			return iterator_ == owner_->heurList_.end() ?
-					nullptr : &*(iterator_++);
-		}
-	};
+        const HeurInfo* operator()(const PseudoStatus&)
+        {
+            return iterator_ == owner_->heurList_.end() ?
+                    nullptr : &*(iterator_++);
+        }
+    };
 
-	template <typename HeurListType>
-	explicit BlockListHeurListFactory(const HeurListType& heurList):
-		heurList_(std::begin(heurList), std::end(heurList)) {}
+    template <typename HeurListType>
+    explicit BlockListHeurListFactory(const HeurListType& heurList):
+        heurList_(std::begin(heurList), std::end(heurList)) {}
 
-	Next operator()() const
-	{
-		return Next{this};
-	}
+    Next operator()() const
+    {
+        return Next{this};
+    }
 
 };
 

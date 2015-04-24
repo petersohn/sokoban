@@ -5,15 +5,15 @@
 
 template <typename Table>
 Array<bool> createBoolArray(const Table& table,
-		const std::vector<Point>& trueList)
+        const std::vector<Point>& trueList)
 {
-	Array<bool> result{table.width(), table.height(), false};
+    Array<bool> result{table.width(), table.height(), false};
 
-	for (Point p: trueList) {
-		result[p] = true;
-	}
+    for (Point p: trueList) {
+        result[p] = true;
+    }
 
-	return result;
+    return result;
 }
 
 
