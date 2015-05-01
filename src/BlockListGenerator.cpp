@@ -128,7 +128,7 @@ void BlockListGenerator::init(const Table& table)
                 decisionTreeHeurCalculator(decisionTreeDepth, false, 1.0f) :
                 vectorHeurCalculator(1.0f);
         for (auto& calculationInfo: calculationInfos_) {
-            calculationInfo.reset(new CalculationInfo);
+            calculationInfo = std::make_unique<CalculationInfo>();
         }
         std::cerr << "Stones = " << n << std::endl;
         {

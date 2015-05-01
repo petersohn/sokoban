@@ -38,8 +38,8 @@ public:
     {
         Status::BorderType border;
         ::floodFill(status, p0, result, minmax, border);
-        simpleStatus.reset(new Status{status.table(),
-            State{std::move(std::move(border))}, status.currentPos()});
+        simpleStatus = std::make_unique<Status>(status.table(),
+            State{std::move(std::move(border))}, status.currentPos());
     }
 };
 

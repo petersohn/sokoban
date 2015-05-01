@@ -189,8 +189,7 @@ namespace detail {
                 valueList = originalValueList;
             }
             advanceProgress(valueList.size(), depthRemaining);
-            return std::unique_ptr<Node<Status, T>>(
-                        new detail::LeafNode<Status, T>(std::move(valueList)));
+            return std::make_unique<LeafNode<Status, T>>(std::move(valueList));
         }
 
         template <class Status, class T, class PointList>
@@ -280,8 +279,7 @@ namespace detail {
                     { return isStone(value->first, *point); });
 
             assert(falseValues.size() != valueList.size());
-            result.reset(
-                    new detail::DecisionNode<Status, T>(*point));
+            result = std::make_unique<detail::DecisionNode<Status, T>>(*point);
             buildDecisionChildren(
                     falseValues, valueList,
                     newFunctorList, depthRemaining - 1,

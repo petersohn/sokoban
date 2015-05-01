@@ -182,7 +182,7 @@ void SubStatusForEach::wait(bool print)
 
             if (print && !progressBar &&
                     iterationState_ == IterationState::working) {
-                progressBar.reset(new ProgressBar{iters_});
+                progressBar = std::make_unique<ProgressBar>(iters_);
             }
 
             if (progressBar) {

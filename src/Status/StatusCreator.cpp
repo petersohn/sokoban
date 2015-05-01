@@ -8,7 +8,7 @@
 std::pair<std::unique_ptr<Table>, Status>
 createStatus(int width, int height, const std::vector<std::string>& lines)
 {
-    std::unique_ptr<Table> table{new Table(width, height)};
+    auto table = std::make_unique<Table>(width, height);
     State state;
     bool startPosOK = false, destinationOK = false;
     int stoneNum = 0;

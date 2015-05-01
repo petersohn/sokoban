@@ -43,13 +43,13 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
 {
     auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
             BasicStoneCalculator{table_}, 1.0f);
-    std::unique_ptr<const Solver> solver(new Solver(createPrioQueue,
+    auto solver = std::make_unique<const Solver>(createPrioQueue,
         [this, basicHeurCalculator]() {
             return createExpander(
                     basicHeurCalculator,
                     ComplexChecker{createBasicCheckers(basicHeurCalculator)},
                     nullptr);
-        }));
+        });
     return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
             table_, std::move(solver), options_.reverseSearchMaxDepth_,
             options_.partitionsDumpFilename_}, heurMultiplier);
@@ -62,10 +62,10 @@ std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createB
     case MovableCheckerType::none:
         break;
     case MovableCheckerType::simple:
-        checkers.push_back(std::shared_ptr<const Checker>(new MovableChecker(calculator)));
+        checkers.push_back(std::make_shared<MovableChecker>(calculator));
         break;
     case MovableCheckerType::extended:
-        checkers.push_back(std::shared_ptr<const Checker>(new ExtendedMovableChecker(calculator)));
+        checkers.push_back(std::make_shared<ExtendedMovableChecker>(calculator));
         break;
     }
 
@@ -73,12 +73,12 @@ std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createB
     case CorridorCheckerType::none:
         break;
     case CorridorCheckerType::simple:
-        checkers.push_back(std::shared_ptr<const Checker>(new CorridorChecker(
-                        CorridorCheckerStrategyFactory{calculator})));
+        checkers.push_back(std::make_shared<CorridorChecker>(
+                        CorridorCheckerStrategyFactory{calculator}));
         break;
     case CorridorCheckerType::extended:
-        checkers.push_back(std::shared_ptr<const Checker>(new ExtendedCorridorChecker(
-                        ExtendedCorridorCheckerStrategyFactory{calculator})));
+        checkers.push_back(std::make_shared<ExtendedCorridorChecker>(
+                        ExtendedCorridorCheckerStrategyFactory{calculator}));
         break;
     }
 
@@ -92,8 +92,8 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
             std::shared_ptr<const HeurCalculator> experimentalCalculator)
 {
     auto visitedStates = std::make_shared<VisitedStates>();
-    std::shared_ptr<NodeFactory> nodeFactory(new NodeFactory(calculator,
-                experimentalCalculator));
+    auto nodeFactory = std::make_shared<NodeFactory>(calculator,
+                experimentalCalculator);
     std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(visitedStates,
             calculator, std::move(checker), nodeFactory, expandedNodes,
             expandedNodes ? options_.expandedNodeLimit_ : 0);
@@ -121,12 +121,12 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
                 options_.useAdvancedHeurCalculator_ ?
                 createAdvancedHeurCalcularor(1.0f) :
                 std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);
-        std::unique_ptr<const Solver> solver(new Solver(
+        auto solver = std::make_unique<Solver>(
                 std::bind(&createPrioQueueFromOptions, options_),
                 [this, preprocessingCalculator, checker]() {
                     return createExpander(preprocessingCalculator, checker,
                             nullptr);
-                })) ;
+                });
         BlockListGenerator blockListGenerator(
                 std::move(solver), preprocessingCalculator, checker, options_);
         blockListGenerator.init(table_);
@@ -184,16 +184,16 @@ std::shared_ptr<Dumper> createDumperFromOptions(const Options & opts)
             break;
         }
 
-        return std::shared_ptr<Dumper>(new TextDumper(getDumpFilename(opts, "dump.dump"), dumpFilter));
+        return std::make_shared<TextDumper>(getDumpFilename(opts, "dump.dump"), dumpFilter);
     }
     case DumpStyle::xml:
-        return std::shared_ptr<Dumper>(new XDumper(getDumpFilename(opts, "dump.xml")));
+        return std::make_shared<XDumper>(getDumpFilename(opts, "dump.xml"));
     case DumpStyle::statistics:
-        return std::shared_ptr<Dumper>(new StatisticsDumper(getDumpFilename(opts, "dump.csv")));
+        return std::make_shared<StatisticsDumper>(getDumpFilename(opts, "dump.csv"));
     case DumpStyle::best:
-        return std::shared_ptr<Dumper>(new BestDumper(getDumpFilename(opts, "dump.dump")));
+        return std::make_shared<BestDumper>(getDumpFilename(opts, "dump.dump"));
     default:
-        return std::shared_ptr<Dumper>();
+        return {};
     }
 }
 

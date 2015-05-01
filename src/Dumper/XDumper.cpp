@@ -15,9 +15,9 @@ XDumper::XDumper(const std::string& filename):
 }
 
 XDumper::ElementPtr XDumper::createDumpElement(const std::string& s) {
-    std::shared_ptr<xml::XMLText> dump(new xml::XMLText());
+    auto dump = std::make_shared<xml::XMLText>();
     dump->data(s);
-    ElementPtr dumpElem(new xml::XMLElement());
+    auto dumpElem = std::make_shared<xml::XMLElement>();
     dumpElem->name("dump");
     dumpElem->children().push_back(dump);
     return dumpElem;
@@ -37,7 +37,7 @@ void  XDumper::addNode(const std::shared_ptr<Node>& node)
 
 XDumper::ElementPtr XDumper::doAddNode(const std::shared_ptr<Node>& node)
 {
-    ElementPtr elem(new xml::XMLElement());
+    auto elem = std::make_shared<xml::XMLElement>();
     elem->name("node");
     std::stringstream ss;
     dumpNode(ss, *table_, *node);
@@ -82,7 +82,7 @@ void XDumper::reject(const std::shared_ptr<Node>& node, const char *text) {
 
 void XDumper::clear() {
     elements_.clear();
-    std::shared_ptr<xml::XMLElement> root(new xml::XMLElement());
+    auto root = std::make_shared<xml::XMLElement>();
     root->name("root-node");
     elements_.insert(std::make_pair(std::shared_ptr<Node>(), root));
 }

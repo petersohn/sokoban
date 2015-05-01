@@ -56,7 +56,7 @@ void Status::calculateReachable() const
 #ifndef NO_UNSAFE_DIAGNOSTICS
     ++calculateReachableCount;
 #endif
-    calculatedData_.reset(new CalculatedData(width(), height()));
+    calculatedData_ = std::make_shared<CalculatedData>(width(), height());
     floodFill(*this, currentPos_, calculatedData_->reachable_,
             calculatedData_->border_);
 }

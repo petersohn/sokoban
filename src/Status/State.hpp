@@ -16,32 +16,34 @@ class State {
     ContainerPtr stones_;
     void modify() {
         if (!stones_.unique())
-            stones_.reset(new ContainerType(*stones_));
+            stones_ = std::make_shared<ContainerType>(*stones_);
     }
 public:
     typedef ContainerType::const_iterator const_iterator;
 
-    State():stones_(new ContainerType) {}
-    State(const State& ) = default;
-    State& operator=(const State& ) = default;
-    State(State&& ) = default;
-    State& operator=(State&& ) = default;
+    State(): stones_(std::make_shared<ContainerType>()) {}
+    State(const State&) = default;
+    State& operator=(const State&) = default;
+    State(State&&) = default;
+    State& operator=(State&&) = default;
 
-    explicit State(std::initializer_list<Point> range):stones_(new ContainerType)
+    explicit State(std::initializer_list<Point> range):
+            stones_(std::make_shared<ContainerType>())
     {
         std::move(std::begin(range), std::end(range),
                 std::inserter(*stones_, stones_->begin()));
     }
 
     template <typename Range>
-    explicit State(Range range):stones_(new ContainerType)
+    explicit State(Range range):
+            stones_(std::make_shared<ContainerType>())
     {
         std::move(std::begin(range), std::end(range),
                 std::inserter(*stones_, stones_->begin()));
     }
 
     explicit State(ContainerType range):
-        stones_{new ContainerType(std::move(range))}
+        stones_{std::make_shared<ContainerType>(std::move(range))}
     {
     }
 

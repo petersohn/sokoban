@@ -22,7 +22,7 @@ struct ComplexCheckerTestFixture {
             MOCK_EXPECT(mockChecker->errorMessage).returns("mock fail");
         }
 
-        complexCheckerUnderTest.reset(new ComplexChecker{mockCheckers});
+        complexCheckerUnderTest = std::make_unique<ComplexChecker>(mockCheckers);
 
         std::tie(table, status) = createStatus(2, 2, {
             "x.",
