@@ -79,6 +79,8 @@ std::string formatTime(boost::posix_time::time_duration value,
         return boost::lexical_cast<std::string>(value.total_seconds());
     case TimeFormatType::mseconds:
         return boost::lexical_cast<std::string>(value.total_milliseconds());
+    default:
+        return "";
     }
 }
 
