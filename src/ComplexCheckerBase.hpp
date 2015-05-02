@@ -34,14 +34,14 @@ public:
     }
 
     template <typename... Args>
-    bool check(Args&&... args) const {
+    bool check(const Args&... args) const {
 
 #ifndef NO_UNSAFE_DIAGNOSTICS
         lastError_ = "";
 #endif
         for (const auto& func: funcs_) {
             assert(func.get() != NULL);
-            if (!func->check(std::forward<Args>(args)...)) {
+            if (!func->check(args...)) {
 #ifndef NO_UNSAFE_DIAGNOSTICS
                 lastError_ = func->errorMessage();
 #endif
