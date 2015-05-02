@@ -18,7 +18,7 @@ while read file; do
     echo
     echo "$file"
     echo "$file" >>$"$output"
-	filePath="$(dirname $input)/$file"
+    filePath="$(dirname $input)/$file"
     echo "----------------------------------" >>"$output"
     "$@" "$filePath" --output-format='Solution %quality%
 Solution length:           %length:8%
@@ -30,7 +30,7 @@ Chokepoint finding time:   %chokepoint-real-time% [%chokepoint-processor-time%]
 Preprocessing time:        %iteration-real-time% [%iteration-processor-time%]
 Total time:                %total-real-time% [%total-processor-time%]
 ' | tee -a "$output"
-	echo "Return code: $?" >>"$output"
+    echo "Return code: $?" >>"$output"
     echo "----------------------------------" >>"$output"
     echo >>"$output"
 done <"$input"

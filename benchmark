@@ -1,17 +1,21 @@
 #!/bin/bash
 
 print_usage() {
-    echo "Runs tests for different configurations and create statistics."
-    echo "Usage: $0 -h"
-    echo "       $0 [options] -- --flag1 min1 max1 [--flag2 min2 max2 ...]"
-    echo "Options:"
-    echo "    -h        This help message."
-    echo "    -d        Dry run. Print what would be called, but do not actually call it."
-    echo "    -x        The process to execute (default=$process)."
-    echo "    -n        The number of times each configuration is run (default=$numberOfRuns)."
-    echo "    -l        The level to run the test on. Can be added multiple times."
-    echo "    -L        A file containing a list of levels to use. Can be added multiple times."
-    echo
+    cat <<_END_
+Runs tests for different configurations and create statistics.
+
+Usage: $0 -h
+       $0 [options] -- --flag1 min1 max1 [--flag2 min2 max2 ...]
+
+Options:
+    -h        This help message.
+    -d        Dry run. Print what would be called, but do not actually call it.
+    -x        The process to execute (default=$process).
+    -n        The number of times each configuration is run (default=$numberOfRuns).
+    -l        The level to run the test on. Can be added multiple times.
+    -L        A file containing a list of levels to use. Can be added multiple times.
+
+_END_
 }
 
 printHeader() {

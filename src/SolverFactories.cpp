@@ -30,8 +30,7 @@ std::shared_ptr<PrioNodeQueue> createPrioQueue()
     return std::make_shared<PrioNodeQueue>(CompareQueue{std::move(compares)});
 }
 
-
-}
+} // unnamed namespace
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts)
 {
