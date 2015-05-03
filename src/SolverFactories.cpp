@@ -112,7 +112,7 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
     auto nodeFactory = std::make_shared<NodeFactory>(calculator,
                 experimentalCalculator);
     std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(
-            calculator, std::move(checker), std::move(nodeChecker), nodeFactory,
+            calculator, std::move(checker), nodeChecker, nodeFactory,
             expandedNodes);
 
     if (options_.useStonePusher_) {
