@@ -10,6 +10,7 @@ class HeurCalculator;
 struct Options;
 class Dumper;
 class Checker;
+class NodeChecker;
 class Table;
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts);
@@ -41,9 +42,15 @@ public:
     std::shared_ptr<Expander> createExpander(
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker,
+            ComplexNodeChecker nodeChecker,
             std::size_t* expandedNodes,
-            std::shared_ptr<const HeurCalculator> experimentalCalculator = std::shared_ptr<const HeurCalculator>());
-    std::vector<std::shared_ptr<const Checker>> createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator);
+            std::shared_ptr<const HeurCalculator> experimentalCalculator =
+                    std::shared_ptr<const HeurCalculator>());
+    std::vector<std::shared_ptr<const Checker>> createBasicCheckers(
+            const std::shared_ptr<const HeurCalculator>& calculator);
+    std::deque<std::shared_ptr<const NodeChecker>> createBasicNodeCheckers(
+            const std::shared_ptr<const HeurCalculator>& calculator,
+            const Status& status);
 
     ExpanderFactory factory();
 };

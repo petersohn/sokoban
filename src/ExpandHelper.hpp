@@ -47,8 +47,9 @@ createNode(const Status& originalStatus, Point p, Point d,
             nodeFactory.createNode(status, MoveDescriptor(p, d), base);
     if (pd != status.table().destination()) {
         if (!checker.check(status, pd)) {
-            if (dumper)
+            if (dumper) {
                 dumper->reject(node, checker.errorMessage());
+            }
             return {};
         }
     }

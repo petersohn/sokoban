@@ -1,19 +1,20 @@
-#ifndef CHECKER_HPP
-#define CHECKER_HPP
+#ifndef NODECHECKER_HPP
+#define NODECHECKER_HPP
 
 #include <string>
 
 class Status;
-class Point;
+class Node;
 
-class Checker {
+class NodeChecker {
 public:
-    virtual bool check(const Status& status, Point p) const = 0;
-    virtual ~Checker() {}
+    virtual bool check(const Status& status, const Node& node) const = 0;
+    virtual ~NodeChecker() {}
     // for efficiency reasons, it is assumed that it will
     // return a *real* string constant, or at least
     // remain valid until the next call
     virtual const char* errorMessage() const = 0;
 };
 
-#endif // CHECKER_HPP
+#endif // NODECHECKER_HPP
+

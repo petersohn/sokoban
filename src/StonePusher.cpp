@@ -10,6 +10,7 @@
 #include "HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
+#include "NodeChecker.hpp"
 #include <iostream>
 #include <memory>
 
@@ -97,10 +98,10 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
 
 
 StonePusher::StonePusher(std::shared_ptr<Expander> expander,
-        std::shared_ptr<VisitedStates> visitedStates,
+        ComplexNodeChecker nodeChecker,
         std::shared_ptr<const HeurCalculator> calculator, std::shared_ptr<NodeFactory> nodeFactory):
         expander_(std::move(expander)),
-        visitedStates_(visitedStates),
+        nodeChecker_(std::move(nodeChecker)),
         calculator_(std::move(calculator)),
         nodeFactory_(std::move(nodeFactory))
 
@@ -120,10 +121,10 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
     }
 
     Status newStatus(status.table(), *node);
-    VisitedStateInput vsi(newStatus, node->costFgv());
-    if (!visitedStates_->checkAndPush(vsi)) {
+
+    if (!nodeChecker_.check(status, *node)) {
         if (dumper) {
-            dumper->reject(node, "already visited");
+            dumper->reject(node, nodeChecker_.errorMessage());
         }
         return;
     }

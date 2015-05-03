@@ -9,6 +9,7 @@
 #include "NodeFactory.hpp"
 #include "ExpandHelper.hpp"
 #include "Checker.hpp"
+#include "NodeChecker.hpp"
 #include <iostream>
 #include <boost/thread/locks.hpp>
 
@@ -43,22 +44,11 @@ void InternalExpander::expandNode(Point p, Point d)
     if (!node) {
         return;
     }
-
     assert(status);
 
-    if (owner_.expandedNodes_ && owner_.expandedNodeLimit_ > 0 &&
-            *owner_.expandedNodes_ >= owner_.expandedNodeLimit_ &&
-            node->heur() > 0) {
+    if (!owner_.nodeChecker_.check(*status, *node)) {
         if (dumper_) {
-            dumper_->reject(node, "node limit exceeded");
-        }
-        return;
-    }
-
-    VisitedStateInput vsi(*status, node->costFgv());
-    if (!owner_.visitedStates_->checkAndPush(vsi)) {
-        if (dumper_) {
-            dumper_->reject(node, "already visited");
+            dumper_->reject(node, owner_.nodeChecker_.errorMessage());
         }
         return;
     }
@@ -83,10 +73,6 @@ void InternalExpander::expandNode(Point p, Point d)
 
 void InternalExpander::expand()
 {
-    if (owner_.visitedStates_->empty()) {
-        owner_.visitedStates_->checkAndPush(std::pair<const Status&, int>(status_,
-                owner_.calculator_->calculateStatus(status_)));
-    }
     if (dumper_ && base_) {
         dumper_->expand(base_);
     }
@@ -96,16 +82,15 @@ void InternalExpander::expand()
 
 
 NormalExpander::NormalExpander(
-        std::shared_ptr<VisitedStates> vs, std::shared_ptr<const HeurCalculator> calculator,
-        ComplexChecker ch, std::shared_ptr<NodeFactory> nodeFactory,
-        std::size_t* expandedNodes, std::size_t expandedNodeLimit):
-        visitedStates_(std::move(vs)),
+        std::shared_ptr<const HeurCalculator> calculator,
+        ComplexChecker checker, ComplexNodeChecker nodeChecker,
+        std::shared_ptr<NodeFactory> nodeFactory, std::size_t* expandedNodes):
         calculator_(std::move(calculator)),
-        checker_(std::move(ch)),
+        checker_(std::move(checker)),
+        nodeChecker_(std::move(nodeChecker)),
         nodeFactory_(std::move(nodeFactory)),
         maxDepth_(0),
-        expandedNodes_(expandedNodes),
-        expandedNodeLimit_(expandedNodeLimit)
+        expandedNodes_(expandedNodes)
 {
     assert(calculator_.get() != NULL);
 }

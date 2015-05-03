@@ -19,6 +19,8 @@
 #include "NodeFactory.hpp"
 #include "HeurCalculator.hpp"
 #include "ComplexCheckerBase.hpp"
+#include "ExpandedNodeLimiter.hpp"
+#include "VisitedStatesChecker.hpp"
 #include <vector>
 #include <functional>
 
@@ -43,10 +45,12 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
     auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
             BasicStoneCalculator{table_}, 1.0f);
     auto solver = std::make_unique<const Solver>(createPrioQueue,
-        [this, basicHeurCalculator]() {
+        [this, basicHeurCalculator](const Status& status) {
             return createExpander(
                     basicHeurCalculator,
                     ComplexChecker{createBasicCheckers(basicHeurCalculator)},
+                    ComplexNodeChecker{createBasicNodeCheckers(
+                            basicHeurCalculator, status)},
                     nullptr);
         });
     return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
@@ -54,7 +58,9 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
             options_.partitionsDumpFilename_}, heurMultiplier);
 }
 
-std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createBasicCheckers(const std::shared_ptr<const HeurCalculator>& calculator)
+std::vector<std::shared_ptr<const Checker>>
+OptionsBasedExpanderFactory::createBasicCheckers(
+        const std::shared_ptr<const HeurCalculator>& calculator)
 {
     std::vector<std::shared_ptr<const Checker>> checkers;
     switch (options_.movableCheckerType_) {
@@ -84,21 +90,34 @@ std::vector<std::shared_ptr<const Checker>> OptionsBasedExpanderFactory::createB
     return checkers;
 }
 
+std::deque<std::shared_ptr<const NodeChecker>>
+OptionsBasedExpanderFactory::createBasicNodeCheckers(
+        const std::shared_ptr<const HeurCalculator>& calculator,
+        const Status& status)
+{
+    auto visitedStates = std::make_shared<VisitedStates>();
+    visitedStates->checkAndPush(std::pair<const Status&, int>(status,
+            calculator->calculateStatus(status)));
+
+    return {std::make_shared<VisitedStatesChecker>(visitedStates)};
+}
+
 std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker,
+            ComplexNodeChecker nodeChecker,
             std::size_t* expandedNodes,
             std::shared_ptr<const HeurCalculator> experimentalCalculator)
 {
-    auto visitedStates = std::make_shared<VisitedStates>();
     auto nodeFactory = std::make_shared<NodeFactory>(calculator,
                 experimentalCalculator);
-    std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(visitedStates,
-            calculator, std::move(checker), nodeFactory, expandedNodes,
-            expandedNodes ? options_.expandedNodeLimit_ : 0);
+    std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(
+            calculator, std::move(checker), std::move(nodeChecker), nodeFactory,
+            expandedNodes);
 
     if (options_.useStonePusher_) {
-        expander = std::make_shared<StonePusher>(expander, visitedStates,
+        expander = std::make_shared<StonePusher>(expander,
+                std::move(nodeChecker),
                 calculator, nodeFactory);
     }
 
@@ -113,28 +132,35 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
         std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_},
                 options_.heurMultiplier_);
     std::shared_ptr<const HeurCalculator> experimentalCalculator;
-    std::vector<std::shared_ptr<const Checker>> checkers = createBasicCheckers(calculator);
+    auto checkers = createBasicCheckers(calculator);
+
     if (options_.blockListStones_ > 1) {
         ComplexChecker checker{checkers};
         std::shared_ptr<const HeurCalculator> preprocessingCalculator =
                 options_.useAdvancedHeurCalculator_ ?
                 createAdvancedHeurCalcularor(1.0f) :
                 std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);
+
         auto solver = std::make_unique<Solver>(
                 std::bind(&createPrioQueueFromOptions, options_),
-                [this, preprocessingCalculator, checker]() {
+                [=](const Status& status) {
                     return createExpander(preprocessingCalculator, checker,
+                            ComplexNodeChecker{createBasicNodeCheckers(
+                                    preprocessingCalculator, status)},
                             nullptr);
                 });
+
         BlockListGenerator blockListGenerator(
                 std::move(solver), preprocessingCalculator, checker, options_);
         blockListGenerator.init(table_);
+
         if (chokePointFindingTime_) {
             *chokePointFindingTime_ = blockListGenerator.chokePointFinderTime();
         }
         if (preprocessingIterationTime_) {
             *preprocessingIterationTime_ = blockListGenerator.iteratingTime();
         }
+
         checkers.push_back(blockListGenerator.checker());
         switch (options_.blocklistHeurCalculatorType_) {
         case BlockListHeurType::none:
@@ -152,8 +178,18 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
         }
     }
 //    experimentalCalculator = calculator;
-    return std::bind(&OptionsBasedExpanderFactory::createExpander, this,
-            calculator, ComplexChecker{checkers}, expandedNodes_, experimentalCalculator);
+    return [=](const Status& status) {
+            auto nodeCheckers = createBasicNodeCheckers(calculator, status);
+            if (options_.expandedNodeLimit_ > 0) {
+                assert(expandedNodes_);
+                nodeCheckers.push_front(std::make_shared<ExpandedNodeLimiter>(
+                        *expandedNodes_, options_.expandedNodeLimit_));
+            }
+
+            return createExpander(calculator, ComplexChecker{checkers},
+                    ComplexNodeChecker{nodeCheckers}, expandedNodes_,
+                    experimentalCalculator);
+        };
 }
 
 namespace {

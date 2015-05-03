@@ -42,20 +42,24 @@ public:
     std::deque<std::shared_ptr<Node>> solve(Status& status) {
         costFgv_ = -1;
         currentNode_.reset();
-        if (dumper_)
+
+        if (dumper_) {
             dumper_->initialStatus(status);
-        do
-        {
+        }
+
+        do {
             if (!expandSerial(status)) {
                 break;
             }
         } while (currentNode_->heur() > 0);
+
         std::deque<std::shared_ptr<Node>> result;
         if (currentNode_ && currentNode_->heur() == 0) {
             result = pathToRoot(currentNode_);
         }
+
         if (dumper_) {
-            BOOST_FOREACH(std::shared_ptr<Node> node, result) {
+            for (const auto& node: result) {
                 dumper_->addToSolution(node);
             }
             dumper_->save();
@@ -69,7 +73,7 @@ std::deque<std::shared_ptr<Node>> Solver::solve(Status status) const
 {
     InternalSolver solver(
             queueFactory_(),
-            expanderFactory_(),
+            expanderFactory_(status),
             dumperFactory_());
     return solver.solve(status);
 
