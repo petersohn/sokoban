@@ -1,11 +1,9 @@
 #include "SubStatusForEach.hpp"
-#include "ProgressBar.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
 #include "HeurCalculator.hpp"
 #include "ComplexCheckerBase.hpp"
-#include <boost/asio/io_service.hpp>
 
 SubStatusForEach::SubStatusForEach(
             const Table& table,

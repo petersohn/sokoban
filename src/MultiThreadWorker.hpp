@@ -3,10 +3,10 @@
 
 #include "Mutexes.hpp"
 
-#include <boost/asio/io_service.hpp>
-
 #include <functional>
 #include <vector>
+
+namespace boost { namespace asio { class io_service; }}
 
 class MultiThreadWorker {
 public:

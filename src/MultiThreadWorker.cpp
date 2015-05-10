@@ -1,7 +1,7 @@
 #include "MultiThreadWorker.hpp"
-
 #include "ProgressBar.hpp"
 
+#include <boost/asio/io_service.hpp>
 #include <boost/thread.hpp>
 
 #include <memory>
