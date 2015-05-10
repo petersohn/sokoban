@@ -68,7 +68,9 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
             ("work-queue-length", defaultValue(&options.workQueueLength_),
              "The granularity of scheduling during blocklist generation.")
             ("thread-num,t", defaultValue(&options.numThreads_),
-            "The maximum number of threads to use.")
+             "The maximum number of threads to use.")
+            ("parallel-expand", defaultValue(&options.parallelExpand_),
+             "Use parallelization when expanding nodes.")
             ("expanded-node-limit", defaultValue(&options.expandedNodeLimit_),
              "The maximum number of nodes to expand. After this limit is reached, "
              "the elements in the queue are still expanded, but no more "

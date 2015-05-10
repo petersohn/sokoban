@@ -21,6 +21,8 @@
 #include "ComplexCheckerBase.hpp"
 #include "ExpandedNodeLimiter.hpp"
 #include "VisitedStatesChecker.hpp"
+#include "MultiThreadExpander.hpp"
+
 #include <vector>
 #include <functional>
 
@@ -47,6 +49,7 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
     auto solver = std::make_unique<const Solver>(createPrioQueue,
         [this, basicHeurCalculator](const Status& status) {
             return createExpander(
+                    false,
                     basicHeurCalculator,
                     ComplexChecker{createBasicCheckers(basicHeurCalculator)},
                     ComplexNodeChecker{createBasicNodeCheckers(
@@ -103,6 +106,7 @@ OptionsBasedExpanderFactory::createBasicNodeCheckers(
 }
 
 std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
+            bool allowMultiThread,
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker,
             ComplexNodeChecker nodeChecker,
@@ -111,9 +115,16 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
 {
     auto nodeFactory = std::make_shared<NodeFactory>(calculator,
                 experimentalCalculator);
-    std::shared_ptr<Expander> expander = std::make_shared<NormalExpander>(
-            calculator, std::move(checker), nodeChecker, nodeFactory,
-            expandedNodes);
+    std::shared_ptr<Expander> expander;
+    if (allowMultiThread && options_.numThreads_ > 1 && options_.parallelExpand_) {
+        expander = std::make_shared<MultiThreadExpander>(
+                calculator, std::move(checker), nodeChecker, nodeFactory,
+                expandedNodes, options_.numThreads_);
+    } else {
+        expander = std::make_shared<NormalExpander>(
+                calculator, std::move(checker), nodeChecker, nodeFactory,
+                expandedNodes);
+    }
 
     if (options_.useStonePusher_) {
         expander = std::make_shared<StonePusher>(expander,
@@ -144,7 +155,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
         auto solver = std::make_unique<Solver>(
                 std::bind(&createPrioQueueFromOptions, options_),
                 [=](const Status& status) {
-                    return createExpander(preprocessingCalculator, checker,
+                    return createExpander(false, preprocessingCalculator, checker,
                             ComplexNodeChecker{createBasicNodeCheckers(
                                     preprocessingCalculator, status)},
                             nullptr);
@@ -186,7 +197,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
                         *expandedNodes_, options_.expandedNodeLimit_));
             }
 
-            return createExpander(calculator, ComplexChecker{checkers},
+            return createExpander(true, calculator, ComplexChecker{checkers},
                     ComplexNodeChecker{nodeCheckers}, expandedNodes_,
                     experimentalCalculator);
         };
