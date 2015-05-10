@@ -8,6 +8,7 @@
 #include "Status/PointRange.hpp"
 #include "Array.hpp"
 #include "util/ExplicitType.hpp"
+#include "MultiThreadWorker.hpp"
 #include <boost/optional.hpp>
 #include <functional>
 
@@ -22,6 +23,8 @@ class SubStatusForEach {
 public:
     typedef std::function<void(const Status&)> Action;
 private:
+    MultiThreadWorker worker;
+
     const Table* table_;
     std::shared_ptr<const HeurCalculator> heurCalculator_;
     ComplexChecker checker_;
@@ -29,26 +32,14 @@ private:
     std::size_t minDistance_;
     std::size_t maxDistance_;
     std::size_t chokePointDistantNum_;
-    std::size_t iters_, solved_;
-    std::size_t lastTicks_;
-    std::size_t workQueueLength_;
     std::size_t reverseSearchMaxDepth_;
     PointRange range_;
     Array<bool> excludeList_;
     Array<bool> chokePoints_;
-    std::vector<Status> workQueue_;
     util::TimeMeter timeMeter_;
-    enum class IterationState { idle, filling, working, done } iterationState_;
-
-    MutexType iterMutex_;
-    boost::asio::io_service& ioService_;
-    ConditionVariableType done_;
 
     void initIter(PointRange::iterator it, std::size_t stones,
             const State& state);
-    void doWork(const std::vector<Status>& statuses);
-    void cleanWorkQueue();
-    void progress();
 
 public:
 
