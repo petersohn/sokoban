@@ -9,7 +9,7 @@
 #include "util/LazyArgumentEnum.hpp"
 #include "Compare.hpp"
 
-LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles, 
+LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles,
         (none)(text)(xml)(statistics)(best))
 LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
     (none)(vector)(decisionTree))
@@ -45,37 +45,38 @@ std::ostream& operator<<(std::ostream& os, const Compare& value);
 struct Options {
     typedef std::vector<Compare> CompareList;
 
-    DumpStyle dumpStyle_ = DumpStyle::none;
-    DumpFilterType dumpFilterType_ = DumpFilterType::none;
-    std::string dumpFilter_;
-    std::string dumpFilename_;
-    std::string partitionsDumpFilename_ = "partitions.dump";
-    std::string solutionDumpFilename_ = "solution.dump";
-    std::string outputFormat_ = "";
-    float heurMultiplier_ = 1.0f;
-    bool useStonePusher_ = true;
-    MovableCheckerType movableCheckerType_ = MovableCheckerType::simple;
+    std::size_t         blocklistDecisionTreeDepth_ = 0;
+    std::size_t         blockListDistance_ = 0;
+    BlockListHeurType   blocklistHeurCalculatorType_ = BlockListHeurType::none;
+    std::size_t         blockListStones_ = 0;
+    std::size_t         chokePointDistance_ = 2;
+    std::size_t         chokePointDistantNum_ = 2;
+    std::size_t         chokePointNum_ = 0;
+    CompareList         compare_;
     CorridorCheckerType corridorCheckerType_ = CorridorCheckerType::simple;
-    bool useAdvancedHeurCalculator_ = true;
-    std::size_t statusPoolSize_ = 0;
-    BlockListHeurType blocklistHeurCalculatorType_ = BlockListHeurType::none;
-    std::size_t blockListStones_ = 0;
-    std::size_t blockListDistance_ = 0;
-    std::size_t maxHeurListSize_ = 0;
-    std::size_t chokePointNum_ = 0;
-    std::size_t chokePointDistance_ = 2;
-    std::size_t chokePointDistantNum_ = 2;
-    std::size_t workQueueLength_ = 100;
-    std::size_t numThreads_ = 1;
-    bool parallelExpand_ = false;
-    std::size_t expandedNodeLimit_ = 0;
-    std::size_t test_ = 0;
-    std::size_t maxDecisionTreeDepth_ = 10;
-    std::size_t blocklistDecisionTreeDepth_ = 0;
-    std::size_t reverseSearchMaxDepth_ = 2;
-    bool useCheckerForDecisionTree_ = false;
-    CompareList compare_;
-    std::string filename_;
+    std::string         dumpFilename_;
+    std::string         dumpFilter_;
+    DumpFilterType      dumpFilterType_ = DumpFilterType::none;
+    DumpStyle           dumpStyle_ = DumpStyle::none;
+    std::size_t         expandedNodeLimit_ = 0;
+    float               heurMultiplier_ = 1.0f;
+    std::size_t         maxDecisionTreeDepth_ = 10;
+    std::size_t         maxHeurListSize_ = 0;
+    MovableCheckerType  movableCheckerType_ = MovableCheckerType::simple;
+    std::size_t         numThreads_ = 1;
+    std::string         outputFormat_ = "";
+    bool                parallelExpand_ = false;
+    std::string         partitionsDumpFilename_ = "partitions.dump";
+    std::size_t         reverseSearchMaxDepth_ = 2;
+    std::string         solutionDumpFilename_ = "solution.dump";
+    std::size_t         statusPoolSize_ = 0;
+    bool                useAdvancedHeurCalculator_ = true;
+    bool                useCheckerForDecisionTree_ = false;
+    bool                useStonePusher_ = true;
+    std::size_t         workQueueLength_ = 100;
+
+    std::string         filename_;
+    std::size_t         test_ = 0;
 };
 
 Options parseOptions(int argc, char **argv, const char *configFileName);
