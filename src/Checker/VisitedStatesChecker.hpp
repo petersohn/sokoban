@@ -1,7 +1,7 @@
 #ifndef VISITEDSTATESCHECKER_HPP
 #define VISITEDSTATESCHECKER_HPP
 
-#include "NodeChecker.hpp"
+#include "Checker/NodeChecker.hpp"
 #include "VisitedStates.hpp"
 #include "Node.hpp"
 

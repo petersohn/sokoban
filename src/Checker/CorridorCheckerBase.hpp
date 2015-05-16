@@ -1,7 +1,7 @@
 #ifndef CORRIDORCHECKERBASE_HPP
 #define CORRIDORCHECKERBASE_HPP
 
-#include "Checker.hpp"
+#include "Checker/Checker.hpp"
 #include "Status/floodFill.hpp"
 
 template <typename StrategyFactory>

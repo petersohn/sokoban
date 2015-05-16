@@ -1,7 +1,7 @@
 #ifndef MOVABLECHECKER_H_
 #define MOVABLECHECKER_H_
 
-#include "Checker.hpp"
+#include "Checker/Checker.hpp"
 #include <memory>
 
 class Status;

@@ -5,7 +5,7 @@
 #include "Status/StatusUtils.hpp"
 #include "SubStatusForEach.hpp"
 #include "HeurCalculator.hpp"
-#include "ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerBase.hpp"
 #include "util/ThreadPool.hpp"
 #include <algorithm>
 

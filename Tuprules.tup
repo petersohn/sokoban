@@ -16,9 +16,11 @@ LINK_TUP = $(TUP_CWD)/link.tup
 TEST_TUP = $(TUP_CWD)/test.tup
 
 SOURCE_DIR = $(TUP_CWD)/src
+CHECKER_DIR = $(SOURCE_DIR)/Checker
 DECISION_TREE_DIR = $(SOURCE_DIR)/DecisionTree
 DUMPER_DIR = $(SOURCE_DIR)/Dumper
 STATUS_DIR = $(SOURCE_DIR)/Status
+
 CPP_UTIL_DIR = $(TUP_CWD)/cpp-util
 CPP_UTIL_LIB = $(CPP_UTIL_DIR)/lib/libcpp-util.a
 TURTLE_DIR = $(TUP_CWD)/turtle

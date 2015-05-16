@@ -1,5 +1,5 @@
-#include "ExtendedMovableChecker.hpp"
-#include "MovableCheckerImpl.hpp"
+#include "Checker/ExtendedMovableChecker.hpp"
+#include "Checker/MovableCheckerImpl.hpp"
 
 bool ExtendedMovableChecker::check(const Status& status, Point p) const {
     MovableCheckerImpl ch(status, *calculator_);

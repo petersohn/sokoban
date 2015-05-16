@@ -7,5 +7,5 @@ include $(COMPILE_TUP)
 
 include $(LINK_TUP)
 
-: ./*.o $(SOURCE_DIR)/*.o $(DECISION_TREE_DIR)/*.o $(DUMPER_DIR)/*.o \
-		$(STATUS_DIR)/*.o $(CPP_UTIL_LIB) |> !linker |> sokoban
+: ./*.o $(SOURCE_DIR)/*.o $(CHECKER_DIR)/*.o $(DECISION_TREE_DIR)/*.o \
+		$(DUMPER_DIR)/*.o $(STATUS_DIR)/*.o $(CPP_UTIL_LIB) |> !linker |> sokoban

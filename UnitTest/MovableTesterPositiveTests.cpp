@@ -1,5 +1,5 @@
-#include "MovableChecker.hpp"
-#include "ExtendedMovableChecker.hpp"
+#include "Checker/MovableChecker.hpp"
+#include "Checker/ExtendedMovableChecker.hpp"
 #include "Status/StatusCreator.hpp"
 #include "CheckerTest.hpp"
 #include "MovableCheckerFixture.hpp"

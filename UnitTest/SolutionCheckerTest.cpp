@@ -1,4 +1,4 @@
-#include "SolutionChecker.hpp"
+#include "Checker/SolutionChecker.hpp"
 #include "Status/Status.hpp"
 #include "Status/StatusCreator.hpp"
 #include "CreateTestStatus.hpp"

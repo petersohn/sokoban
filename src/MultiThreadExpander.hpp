@@ -2,8 +2,8 @@
 #define MULTITHREADEXPANDER_HPP
 
 #include "Expander.hpp"
-#include "ComplexCheckerFwd.hpp"
-#include "ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+#include "Checker/ComplexCheckerBase.hpp"
 #include "MultiThreadWorker.hpp"
 #include "Mutexes.hpp"
 

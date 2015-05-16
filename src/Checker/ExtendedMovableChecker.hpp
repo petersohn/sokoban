@@ -1,7 +1,7 @@
 #ifndef SRC_EXTENDEDMOVABLECHECKER_HPP
 #define SRC_EXTENDEDMOVABLECHECKER_HPP
 
-#include "Checker.hpp"
+#include "Checker/Checker.hpp"
 #include <memory>
 
 class Status;

@@ -1,7 +1,7 @@
 #ifndef SRC_EXTENDEDCORRIDORCHECKER_HPP
 #define SRC_EXTENDEDCORRIDORCHECKER_HPP
 
-#include "CorridorCheckerBase.hpp"
+#include "Checker/CorridorCheckerBase.hpp"
 #include "HeurCalculator.hpp"
 #include "Array.hpp"
 #include "Status/floodFill.hpp"

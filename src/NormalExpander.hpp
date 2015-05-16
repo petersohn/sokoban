@@ -2,8 +2,8 @@
 #define NORMALEXPANDER_H_
 
 #include "Expander.hpp"
-#include "ComplexCheckerFwd.hpp"
-#include "ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+#include "Checker/ComplexCheckerBase.hpp"
 #include "Mutexes.hpp"
 
 class HeurCalculator;

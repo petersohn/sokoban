@@ -3,7 +3,7 @@
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
 #include "HeurCalculator.hpp"
-#include "ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerBase.hpp"
 
 SubStatusForEach::SubStatusForEach(
             const Table& table,

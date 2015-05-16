@@ -10,7 +10,7 @@
 #include "HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
-#include "NodeChecker.hpp"
+#include "Checker/NodeChecker.hpp"
 #include <iostream>
 #include <memory>
 

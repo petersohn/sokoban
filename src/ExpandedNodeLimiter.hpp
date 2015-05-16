@@ -1,7 +1,7 @@
 #ifndef EXPANDEDNODELIMITER_HPP
 #define EXPANDEDNODELIMITER_HPP
 
-#include "NodeChecker.hpp"
+#include "Checker/NodeChecker.hpp"
 #include "Node.hpp"
 
 class ExpandedNodeLimiter: public NodeChecker {

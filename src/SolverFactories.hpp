@@ -3,7 +3,7 @@
 
 #include "ExpanderFactory.hpp"
 #include "PrioNodeQueueFwd.hpp"
-#include "ComplexCheckerFwd.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
 #include "util/TimeMeter.hpp"
 
 class HeurCalculator;

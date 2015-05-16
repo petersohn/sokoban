@@ -1,7 +1,7 @@
 #ifndef BLOCKLISTCHECKER_HPP_
 #define BLOCKLISTCHECKER_HPP_
 
-#include "Checker.hpp"
+#include "Checker/Checker.hpp"
 #include "IndexedStatusList.hpp"
 
 class BlockListChecker: public Checker {

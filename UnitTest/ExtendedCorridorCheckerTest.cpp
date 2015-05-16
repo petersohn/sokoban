@@ -1,4 +1,4 @@
-#include "ExtendedCorridorChecker.hpp"
+#include "Checker/ExtendedCorridorChecker.hpp"
 #include "Status/StatusCreator.hpp"
 #include "MockHeurCalculator.hpp"
 #include "Status/Status.hpp"

@@ -1,7 +1,7 @@
 #ifndef CORRIDORCHECKER_H_
 #define CORRIDORCHECKER_H_
 
-#include "CorridorCheckerBase.hpp"
+#include "Checker/CorridorCheckerBase.hpp"
 #include "HeurCalculator.hpp"
 #include "Array.hpp"
 #include "Status/Status.hpp"

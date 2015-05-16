@@ -3,8 +3,8 @@
 
 #include "Expander.hpp"
 #include "PrioNodeQueueFwd.hpp"
-#include "ComplexCheckerFwd.hpp"
-#include "ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+#include "Checker/ComplexCheckerBase.hpp"
 
 class State;
 class Node;

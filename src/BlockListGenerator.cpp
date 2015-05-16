@@ -1,5 +1,5 @@
 #include "BlockListGenerator.hpp"
-#include "BlockListChecker.hpp"
+#include "Checker/BlockListChecker.hpp"
 #include "BlockListHeurCalculator.hpp"
 #include "DecisionTreeHeurCalculator.hpp"
 #include "SubStatusForEach.hpp"

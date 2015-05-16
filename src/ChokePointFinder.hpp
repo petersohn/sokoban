@@ -2,7 +2,7 @@
 #define SRC_CHOKEPOINTFINDER_HPP
 
 #include "Options.hpp"
-#include "ComplexCheckerFwd.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
 #include <vector>
 
 class Table;

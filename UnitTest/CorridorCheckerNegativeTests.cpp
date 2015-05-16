@@ -1,5 +1,5 @@
-#include "CorridorChecker.hpp"
-#include "ExtendedCorridorChecker.hpp"
+#include "Checker/CorridorChecker.hpp"
+#include "Checker/ExtendedCorridorChecker.hpp"
 #include "Status/StatusCreator.hpp"
 #include "CheckerTest.hpp"
 #include "CorridorCheckerFixture.hpp"

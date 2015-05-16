@@ -2,8 +2,8 @@
 #define SRC_SUBSTATUSFOREACH_HPP
 
 #include "util/TimeMeter.hpp"
-#include "ComplexCheckerFwd.hpp"
-#include "ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+#include "Checker/ComplexCheckerBase.hpp"
 #include "Status/PointRange.hpp"
 #include "Array.hpp"
 #include "util/ExplicitType.hpp"
