@@ -1,7 +1,7 @@
 #ifndef TABLEHEURCALCULATOR_H_
 #define TABLEHEURCALCULATOR_H_
 
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Array.hpp"
 #include "Status/Status.hpp"
 #include "Status/Table.hpp"

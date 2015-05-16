@@ -1,7 +1,7 @@
 #ifndef SRC_SUBSTATUSHEURCALCULATOR_HPP
 #define SRC_SUBSTATUSHEURCALCULATOR_HPP
 
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Status/PseudoStatus.hpp"
 #include "Node.hpp"
 

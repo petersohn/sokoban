@@ -1,7 +1,7 @@
 #ifndef ADVANCEDHEURCALCULATOR_H_
 #define ADVANCEDHEURCALCULATOR_H_
 
-#include "TableHeurCalculator.hpp"
+#include "HeurCalculator/TableHeurCalculator.hpp"
 #include "Dumper/DumperFunctions.hpp"
 #include <vector>
 #include <iostream>

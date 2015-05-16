@@ -1,4 +1,4 @@
-#include "DecisionTreeHeurCalculator.hpp"
+#include "HeurCalculator/DecisionTreeHeurCalculator.hpp"
 
 std::vector<Point>
 DecisionTreeHeurListFactory::pointList(const Table& table)

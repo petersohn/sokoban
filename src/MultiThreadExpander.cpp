@@ -4,7 +4,7 @@
 #include "FieldType.hpp"
 #include "VisitedStates.hpp"
 #include "PrioNodeQueue.hpp"
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"
 #include "NodeFactory.hpp"
 #include "ExpandHelper.hpp"

@@ -1,10 +1,10 @@
 #ifndef DECISIONTREEHEURCALCULATOR_H_
 #define DECISIONTREEHEURCALCULATOR_H_
 
-#include "HeurInfo.hpp"
+#include "HeurCalculator/HeurInfo.hpp"
 #include "DecisionTree/DecisionTree.hpp"
 #include "util/TimeMeter.hpp"
-#include "SubStatusHeurCalculator.hpp"
+#include "HeurCalculator/SubStatusHeurCalculator.hpp"
 #include "Status/PseudoStatus.hpp"
 #include "Status/Status.hpp"
 

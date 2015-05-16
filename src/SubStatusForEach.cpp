@@ -2,7 +2,7 @@
 #include "Status/StatusUtils.hpp"
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
 
 SubStatusForEach::SubStatusForEach(

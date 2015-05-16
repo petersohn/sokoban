@@ -2,7 +2,7 @@
 #define NODEFACTORY_HPP_
 
 #include "Node.hpp"
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Status/Status.hpp"
 #include <memory>
 

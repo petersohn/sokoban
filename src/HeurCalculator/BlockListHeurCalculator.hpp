@@ -1,8 +1,8 @@
 #ifndef BLOCKLISTHEURCALCULATOR_H_
 #define BLOCKLISTHEURCALCULATOR_H_
 
-#include "HeurInfo.hpp"
-#include "SubStatusHeurCalculator.hpp"
+#include "HeurCalculator/HeurInfo.hpp"
+#include "HeurCalculator/SubStatusHeurCalculator.hpp"
 
 
 class BlockListHeurListFactory {

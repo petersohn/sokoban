@@ -1,7 +1,7 @@
 #ifndef BASICHEURCALCULATOR_H_
 #define BASICHEURCALCULATOR_H_
 
-#include "TableHeurCalculator.hpp"
+#include "HeurCalculator/TableHeurCalculator.hpp"
 #include "Array.hpp"
 
 class BasicStoneCalculator {

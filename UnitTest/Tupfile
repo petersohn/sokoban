@@ -10,7 +10,8 @@ include $(LINK_TUP)
 LIBS += -lboost_unit_test_framework
 
 : ./*.o $(SOURCE_DIR)/*.o $(CHECKER_DIR)/*.o $(DECISION_TREE_DIR)/*.o \
-		$(DUMPER_DIR)/*.o $(STATUS_DIR)/*.o $(CPP_UTIL_LIB) |> !linker |> unitTest
+		$(DUMPER_DIR)/*.o $(HEUR_CALCULATOR_DIR)/*.o $(STATUS_DIR)/*.o \
+		$(CPP_UTIL_LIB) |> !linker |> unitTest
 
 include $(TEST_TUP)
 

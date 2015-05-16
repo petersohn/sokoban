@@ -1,4 +1,4 @@
-#include "AdvancedHeurCalculator.hpp"
+#include "HeurCalculator/AdvancedHeurCalculator.hpp"
 #include "Status/Status.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Node.hpp"

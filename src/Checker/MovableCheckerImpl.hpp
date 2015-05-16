@@ -2,7 +2,7 @@
 #define SRC_MOVABLECHECKERIMPL_HPP
 
 #include "Status/Status.hpp"
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "FieldType.hpp"
 #include <boost/optional.hpp>
 #include <unordered_set>

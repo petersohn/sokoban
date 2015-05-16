@@ -1,4 +1,4 @@
-#include "BasicHeurCalculator.hpp"
+#include "HeurCalculator/BasicHeurCalculator.hpp"
 
 
 BasicStoneCalculator::BasicStoneCalculator(const Table& table)

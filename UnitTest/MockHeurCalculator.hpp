@@ -1,7 +1,7 @@
 #ifndef UNITTEST_MOCKHEURCALCULATOR_HPP
 #define UNITTEST_MOCKHEURCALCULATOR_HPP
 
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Status/Status.hpp"
 #include <turtle/mock.hpp>
 

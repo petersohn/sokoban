@@ -2,7 +2,7 @@
 #define CORRIDORCHECKER_H_
 
 #include "Checker/CorridorCheckerBase.hpp"
-#include "HeurCalculator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
 #include "Array.hpp"
 #include "Status/Status.hpp"
 #include "Status/floodFill.hpp"
