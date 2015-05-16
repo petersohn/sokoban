@@ -2,7 +2,7 @@
 #include "Status/Status.hpp"
 #include "Node.hpp"
 #include "FieldType.hpp"
-#include "VisitedStates.hpp"
+#include "Checker/VisitedStates.hpp"
 #include "PrioNodeQueue.hpp"
 #include "HeurCalculator/HeurCalculator.hpp"
 #include "Dumper/Dumper.hpp"

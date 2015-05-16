@@ -2,7 +2,7 @@
 #define VISITEDSTATES_H_
 
 #include "Status/State.hpp"
-#include "VisitedStateInfo.hpp"
+#include "Checker/VisitedStateInfo.hpp"
 #include "Mutexes.hpp"
 #include <unordered_map>
 

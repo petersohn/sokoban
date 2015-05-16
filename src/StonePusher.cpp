@@ -1,7 +1,7 @@
 #include "StonePusher.hpp"
 #include "Array.hpp"
 #include "Status/Status.hpp"
-#include "VisitedStates.hpp"
+#include "Checker/VisitedStates.hpp"
 #include "Status/floodFill.hpp"
 #include "intersect.hpp"
 #include "FieldType.hpp"

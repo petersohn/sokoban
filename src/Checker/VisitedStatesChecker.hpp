@@ -2,7 +2,7 @@
 #define VISITEDSTATESCHECKER_HPP
 
 #include "Checker/NodeChecker.hpp"
-#include "VisitedStates.hpp"
+#include "Checker/VisitedStates.hpp"
 #include "Node.hpp"
 
 #include <memory>

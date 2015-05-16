@@ -1,4 +1,4 @@
-#include "VisitedStateInfo.hpp"
+#include "Checker/VisitedStateInfo.hpp"
 #include "Status/Status.hpp"
 #include "Dumper/DumperFunctions.hpp"
 

@@ -1,4 +1,4 @@
-#include "VisitedStates.hpp"
+#include "Checker/VisitedStates.hpp"
 #include <boost/foreach.hpp>
 
 bool VisitedStates::checkAndPush(const VisitedStateInput& elem)

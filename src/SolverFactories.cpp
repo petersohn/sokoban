@@ -10,7 +10,7 @@
 #include "HeurCalculator/BlockListGenerator.hpp"
 #include "HeurCalculator/BasicHeurCalculator.hpp"
 #include "HeurCalculator/AdvancedHeurCalculator.hpp"
-#include "VisitedStates.hpp"
+#include "Checker/VisitedStates.hpp"
 #include "CompareQueue.hpp"
 #include "Dumper/TextDumper.hpp"
 #include "Dumper/XDumper.hpp"
