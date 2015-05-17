@@ -122,6 +122,7 @@ void BlockListGenerator::init(const Table& table)
     heurList_.clear();
     calculationInfos_.resize(options_.numThreads_);
     timeMeter.reset();
+    util::ThreadPoolRunner runner(threadPool_);
 
     for (std::size_t n = 2; n <= options_.blockListStones_; ++n) {
         incrementalCalculator_ = n == 2 ?
@@ -136,13 +137,10 @@ void BlockListGenerator::init(const Table& table)
 
         std::cerr << "Stones = " << n << std::endl;
 
-        {
-            util::ThreadPoolRunner runner(threadPool_);
-            ComplexChecker actualChecker{checker_};
-            actualChecker.append(checker());
-            subStatusForEach.start(n, calculator_, actualChecker);
-            subStatusForEach.wait(true);
-        }
+        ComplexChecker actualChecker{checker_};
+        actualChecker.append(checker());
+        subStatusForEach.start(n, calculator_, actualChecker);
+        subStatusForEach.wait(true);
 
         for (const auto& calculationInfo: calculationInfos_) {
             dump_ << calculationInfo->dump_.str();
