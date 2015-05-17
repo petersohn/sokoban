@@ -49,7 +49,7 @@ public:
         }
 
         util::ThreadPool threadPool{options.numThreads_};
-        SubStatusForEach tableIterator(*table,
+        SubStatusForEach subStatusForEach(*table,
                 std::bind(&ChokePointFinder::checkChokePoint, this, std::placeholders::_1),
                 SubStatusForEach::MinDistance{options.chokePointDistance_},
                 SubStatusForEach::MaxDistance{0},
@@ -68,8 +68,8 @@ public:
 
             {
                 util::ThreadPoolRunner runner{threadPool};
-                tableIterator.start(numStones, calculator, checker, result);
-                tableIterator.wait(print);
+                subStatusForEach.start(numStones, calculator, checker, result);
+                subStatusForEach.wait(print);
             }
 
             for (Point p: arrayRange(*table)) {

@@ -52,15 +52,15 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
                     "..o"
                 }));
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{0},
             SubStatusForEach::ChokePointDistantNum{0}, {},
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(1, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(ignore_walls)
@@ -86,15 +86,15 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
                     ".o*"
                 }));
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{0},
             SubStatusForEach::ChokePointDistantNum{0}, {},
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(1, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_partitions)
@@ -136,15 +136,15 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
                     ".*o"
                 }));
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{0},
             SubStatusForEach::ChokePointDistantNum{0}, {},
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(1, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(1, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
@@ -210,15 +210,15 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
                 }));
 
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{0},
             SubStatusForEach::ChokePointDistantNum{0}, {},
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
@@ -276,15 +276,15 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
                 }));
 
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{1},
             SubStatusForEach::ChokePointDistantNum{0}, {},
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point1)
@@ -346,16 +346,16 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point1)
                 }));
 
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{1},
             SubStatusForEach::ChokePointDistantNum{1},
             createBoolArray(*table, {Point{2, 0}}),
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point2)
@@ -421,16 +421,16 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point2)
                 }));
 
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{1},
             SubStatusForEach::ChokePointDistantNum{1},
             createBoolArray(*table, {Point{0, 0}}),
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_CASE(multiple_stones_with_minimum_distance)
@@ -451,15 +451,15 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_minimum_distance)
         });
 
 
-    SubStatusForEach tableIteratorUnderTest{*table, action,
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{2},
             SubStatusForEach::MaxDistance{0},
             SubStatusForEach::ChokePointDistantNum{0}, {},
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
-    tableIteratorUnderTest.start(2, heurCalculator, ComplexChecker{checker});
+    subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});
     ioService.run();
-    tableIteratorUnderTest.wait(false);
+    subStatusForEachUnderTest.wait(false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

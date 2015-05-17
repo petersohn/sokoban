@@ -108,7 +108,7 @@ void BlockListGenerator::init(const Table& table)
     }
 
     std::cerr << "Calculating block list..." << std::endl;
-    SubStatusForEach tableIterator(table,
+    SubStatusForEach subStatusForEach(table,
             std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{options_.blockListDistance_},
@@ -135,8 +135,8 @@ void BlockListGenerator::init(const Table& table)
             util::ThreadPoolRunner runner(threadPool_);
             ComplexChecker actualChecker{checker_};
             actualChecker.append(checker());
-            tableIterator.start(n, calculator_, actualChecker);
-            tableIterator.wait(true);
+            subStatusForEach.start(n, calculator_, actualChecker);
+            subStatusForEach.wait(true);
         }
         for (const auto& calculationInfo: calculationInfos_) {
             dump_ << calculationInfo->dump_.str();

@@ -138,7 +138,6 @@ void SubStatusForEach::start(std::size_t numStones,
     worker.startFilling();
     initIter(range_.begin(), numStones, State());
     worker.finishFilling();
-
 }
 
 void SubStatusForEach::wait(bool print)
