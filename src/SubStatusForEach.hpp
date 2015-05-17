@@ -39,6 +39,8 @@ private:
 
     void initIter(PointRange::iterator it, std::size_t stones,
             const State& state);
+    bool checkDistances(const State& state, Point p);
+    bool processState(const State& state, std::size_t stones);
 
 public:
 

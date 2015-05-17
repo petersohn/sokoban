@@ -31,57 +31,14 @@ void SubStatusForEach::initIter(PointRange::iterator it, std::size_t stones,
         const State& state)
 {
     if (!state.empty()) {
-        Point p = *it;
-        if (maxDistance_ > 0 || minDistance_ > 0) {
-            std::size_t numWrongDistance = 0;
-            for (Point pp: state) {
-                if (pp == p) {
-                    continue;
-                }
-                std::size_t xDistance = std::abs(p.x - pp.x);
-                std::size_t yDistance = std::abs(p.y - pp.y);
-                if (
-                        (maxDistance_ > 0 && (xDistance > maxDistance_ ||
-                            yDistance > maxDistance_)) ||
-                        (minDistance_ > 0 && (xDistance < minDistance_ &&
-                            yDistance < minDistance_))
-                    ) {
-                    if (chokePointDistantNum_ > 0 &&
-                            (chokePoints_[p] || chokePoints_[pp])) {
-                        if (++numWrongDistance > chokePointDistantNum_) {
-                            return;
-                        }
-                    } else {
-                        return;
-                    }
-                }
-            }
-        }
-        auto parts = getPartitions(*table_, state, reverseSearchMaxDepth_);
-        bool ok = false;
-        for (auto& status: parts) {
-            float heur = heurCalculator_->calculateStatus(status);
-            if (heur < 0) {
-                continue;
-            }
-            if (!checkStatus(checker_, status)) {
-                continue;
-            }
-            if (stones == 0) {
-                // This will be accessed from another thread. Make sure that no
-                // shared pointers that are potentially modified are shared
-                // between the threads.
-                auto copiedStatus = status.deepCopy();
-                worker.addAction([this, copiedStatus]() {
-                        action_(copiedStatus);
-                    });
-            } else {
-                ok = true;
-            }
-        }
-        if (!ok) {
+        if (!checkDistances(state, *it)) {
             return;
         }
+
+        if (!processState(state, stones)) {
+            return;
+        }
+
         assert(stones > 0);
     }
     do {
@@ -92,6 +49,66 @@ void SubStatusForEach::initIter(PointRange::iterator it, std::size_t stones,
             initIter(it, stones - 1, state2);
         }
     } while (++it != range_.end());
+}
+
+bool SubStatusForEach::checkDistances(const State& state, Point p)
+{
+    if (maxDistance_ > 0 || minDistance_ > 0) {
+        std::size_t numWrongDistance = 0;
+        for (Point pp: state) {
+            if (pp == p) {
+                continue;
+            }
+            std::size_t xDistance = std::abs(p.x - pp.x);
+            std::size_t yDistance = std::abs(p.y - pp.y);
+            if (
+                    (maxDistance_ > 0 && (xDistance > maxDistance_ ||
+                        yDistance > maxDistance_)) ||
+                    (minDistance_ > 0 && (xDistance < minDistance_ &&
+                        yDistance < minDistance_))
+                ) {
+                if (chokePointDistantNum_ > 0 &&
+                        (chokePoints_[p] || chokePoints_[pp])) {
+                    if (++numWrongDistance > chokePointDistantNum_) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool SubStatusForEach::processState(const State& state, std::size_t stones)
+{
+    auto parts = getPartitions(*table_, state, reverseSearchMaxDepth_);
+    bool result = false;
+
+    for (auto& status: parts) {
+        float heur = heurCalculator_->calculateStatus(status);
+        if (heur < 0) {
+            continue;
+        }
+        if (!checkStatus(checker_, status)) {
+            continue;
+        }
+        if (stones == 0) {
+            // This will be accessed from another thread. Make sure that no
+            // shared pointers that are potentially modified are shared
+            // between the threads.
+            auto copiedStatus = status.deepCopy();
+            worker.addAction([this, copiedStatus]() {
+                    action_(copiedStatus);
+                });
+        } else {
+            result = true;
+        }
+    }
+
+    return result;
 }
 
 void SubStatusForEach::start(std::size_t numStones,
