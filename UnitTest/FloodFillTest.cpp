@@ -1,7 +1,9 @@
 #include "Status/floodFill.hpp"
 #include "Status/StatusCreator.hpp"
+
 #include "ArrayIO.hpp"
 #include "BorderTypeIO.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(MovableCheckerTest)

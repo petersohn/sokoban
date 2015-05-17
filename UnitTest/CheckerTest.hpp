@@ -2,6 +2,7 @@
 #define UNITTEST_CHECKERTEST_HPP
 
 #include "Status/Status.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 #define CHECK_CHECKER_RESULT(...) checkCheckerResult(__VA_ARGS__, __FILE__, __LINE__)

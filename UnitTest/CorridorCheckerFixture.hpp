@@ -2,6 +2,7 @@
 #define UNITTEST_CORRIDORCHECKERFIXTURE_HPP
 
 #include "MockHeurCalculator.hpp"
+
 #include <memory>
 
 template <typename Checker>

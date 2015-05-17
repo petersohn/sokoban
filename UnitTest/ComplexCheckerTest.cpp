@@ -1,10 +1,14 @@
-#include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
-#include "Status/StatusCreator.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+
 #include "Status/Status.hpp"
+#include "Status/StatusCreator.hpp"
+
 #include "MockChecker.hpp"
-#include <boost/test/unit_test.hpp>
+
 #include <boost/optional.hpp>
+#include <boost/test/unit_test.hpp>
+
 #include <array>
 
 template <int N>

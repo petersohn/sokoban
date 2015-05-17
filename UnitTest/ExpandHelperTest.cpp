@@ -1,11 +1,14 @@
-#include "ExpandHelper.hpp"
 #include "Status/Status.hpp"
 #include "Status/StatusCreator.hpp"
+
+#include "ExpandHelper.hpp"
 #include "MockHeurCalculator.hpp"
 #include "MockChecker.hpp"
 #include "NodeFactory.hpp"
 #include "CreateTestStatus.hpp"
+
 #include <boost/test/unit_test.hpp>
+
 #include <turtle/mock.hpp>
 
 BOOST_AUTO_TEST_SUITE(ExpandHelperTest)

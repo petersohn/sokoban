@@ -2,11 +2,13 @@
 #define UNITTEST_BORDERTYPEIO_HPP
 
 #include "Status/Status.hpp"
-#include <ostream>
+
 #include <algorithm>
+#include <ostream>
+
 #include <boost/algorithm/string/join.hpp>
-#include <boost/range/adaptor/transformed.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/range/adaptor/transformed.hpp>
 
 inline bool operator==(Status::BorderType lhs, Status::BorderType rhs)
 {

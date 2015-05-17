@@ -1,14 +1,19 @@
-#include "ChokePointFinder.hpp"
-#include "util/ContainerWrapper.hpp"
-#include "Status/StatusCreator.hpp"
-#include "Status/Status.hpp"
 #include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
-#include "MockHeurCalculator.hpp"
-#include "MockChecker.hpp"
+
+#include "Status/StatusCreator.hpp"
+#include "Status/Status.hpp"
+
 #include "ArrayIO.hpp"
+#include "ChokePointFinder.hpp"
 #include "createBoolArray.hpp"
+#include "MockChecker.hpp"
+#include "MockHeurCalculator.hpp"
+
+#include "util/ContainerWrapper.hpp"
+
 #include <boost/test/unit_test.hpp>
+
 #include <algorithm>
 
 struct ChokePointFinderTestFixture {

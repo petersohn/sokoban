@@ -1,4 +1,5 @@
 #include "PrioQueue.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 struct IntPtrCompare {

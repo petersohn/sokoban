@@ -1,6 +1,9 @@
 #include "intersect.hpp"
+
 #include "util/ContainerWrapper.hpp"
+
 #include <boost/test/unit_test.hpp>
+
 #include <algorithm>
 
 BOOST_AUTO_TEST_SUITE(IntersectTest)

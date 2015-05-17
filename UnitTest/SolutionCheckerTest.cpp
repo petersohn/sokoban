@@ -1,9 +1,13 @@
 #include "Checker/SolutionChecker.hpp"
+
 #include "Status/Status.hpp"
 #include "Status/StatusCreator.hpp"
+
 #include "CreateTestStatus.hpp"
 #include "Node.hpp"
+
 #include <boost/test/unit_test.hpp>
+
 #include <sstream>
 
 struct SolutionCheckerTestFixture {

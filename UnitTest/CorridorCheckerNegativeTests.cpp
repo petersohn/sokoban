@@ -1,10 +1,13 @@
 #include "Checker/CorridorChecker.hpp"
 #include "Checker/ExtendedCorridorChecker.hpp"
+
 #include "Status/StatusCreator.hpp"
+
 #include "CheckerTest.hpp"
 #include "CorridorCheckerFixture.hpp"
-#include <boost/test/unit_test.hpp>
+
 #include <boost/mpl/list.hpp>
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(CorridorCheckerCommonTests)
 

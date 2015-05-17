@@ -1,10 +1,13 @@
-#include "Checker/MovableChecker.hpp"
 #include "Checker/ExtendedMovableChecker.hpp"
+#include "Checker/MovableChecker.hpp"
+
 #include "Status/StatusCreator.hpp"
+
 #include "CheckerTest.hpp"
 #include "MovableCheckerFixture.hpp"
-#include <boost/test/unit_test.hpp>
+
 #include <boost/mpl/list.hpp>
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(MovableCheckerCommonTests)
 

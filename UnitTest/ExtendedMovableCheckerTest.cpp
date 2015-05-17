@@ -1,8 +1,11 @@
 #include "Checker/ExtendedMovableChecker.hpp"
+
 #include "Status/StatusCreator.hpp"
-#include "MockHeurCalculator.hpp"
+
 #include "CheckerTest.hpp"
+#include "MockHeurCalculator.hpp"
 #include "MovableCheckerFixture.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(ExtendedMovableCheckerTest,

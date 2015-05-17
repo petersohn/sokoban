@@ -1,13 +1,17 @@
-#include "SubStatusForEach.hpp"
-#include "Status/StatusCreator.hpp"
-#include "MockHeurCalculator.hpp"
-#include "MockChecker.hpp"
 #include "Dumper/DumperFunctions.hpp"
-#include "CreateTestStatus.hpp"
-#include "createBoolArray.hpp"
+
+#include "Status/StatusCreator.hpp"
+
 #include "Array.hpp"
-#include <boost/test/unit_test.hpp>
+#include "createBoolArray.hpp"
+#include "CreateTestStatus.hpp"
+#include "MockChecker.hpp"
+#include "MockHeurCalculator.hpp"
+#include "SubStatusForEach.hpp"
+
 #include <boost/asio/io_service.hpp>
+#include <boost/test/unit_test.hpp>
+
 #include <vector>
 
 struct SubStatusForEachFixture {

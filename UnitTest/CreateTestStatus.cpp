@@ -6,6 +6,7 @@ Status createTestStatus(const Table& table, const std::vector<std::string>& line
     Status result{table};
     Point p;
     bool currentPosOK = false;
+
     for (const std::string& line: lines)
     {
         for (p.x = 0; p.x < static_cast<int>(line.length()) &&
@@ -26,8 +27,11 @@ Status createTestStatus(const Table& table, const std::vector<std::string>& line
         if (++p.y >= static_cast<int>(table.height()))
             break;
     }
-    if (!currentPosOK)
+
+    if (!currentPosOK) {
         throw SokobanException("Current position not given");
+    }
+
     return result;
 }
 

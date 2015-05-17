@@ -1,9 +1,12 @@
 #include "Checker/ExtendedCorridorChecker.hpp"
-#include "Status/StatusCreator.hpp"
-#include "MockHeurCalculator.hpp"
+
 #include "Status/Status.hpp"
+#include "Status/StatusCreator.hpp"
+
 #include "CheckerTest.hpp"
 #include "CorridorCheckerFixture.hpp"
+#include "MockHeurCalculator.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(ExtendedCorridorCheckerTest,

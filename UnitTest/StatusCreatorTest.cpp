@@ -1,7 +1,9 @@
-#include "Status/StatusCreator.hpp"
 #include "Status/Status.hpp"
+#include "Status/StatusCreator.hpp"
+
 #include "Exception.hpp"
 #include "FieldType.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(StatusCreatorTest)

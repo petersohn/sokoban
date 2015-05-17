@@ -2,6 +2,7 @@
 #define UNITTEST_FAKENODEFACTORY_HPP
 
 #include "Node.hpp"
+
 #include <memory>
 
 class FakeNodeFactory {

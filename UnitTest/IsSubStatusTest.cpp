@@ -1,6 +1,7 @@
 #include "Status/Status.hpp"
-#include "Status/StatusUtils.hpp"
 #include "Status/StatusCreator.hpp"
+#include "Status/StatusUtils.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 

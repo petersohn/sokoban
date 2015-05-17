@@ -1,11 +1,11 @@
 #include "CompareQueue.hpp"
 #include "FakeNodeFactory.hpp"
-#include <boost/test/unit_test.hpp>
-#include <boost/preprocessor/seq/seq.hpp>
+
 #include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/seq/for_each_i.hpp>
+#include <boost/preprocessor/seq/seq.hpp>
 #include <boost/preprocessor/seq/rest_n.hpp>
-
+#include <boost/test/unit_test.hpp>
 
 #define CHECK_NODE_LESS(less, more) do {\
     BOOST_CHECK(!compareQueueUnderTest((less), (more))); \

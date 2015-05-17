@@ -1,6 +1,8 @@
-#include "IndexedStatusList.hpp"
 #include "Status/StatusCreator.hpp"
+
 #include "CreateTestStatus.hpp"
+#include "IndexedStatusList.hpp"
+
 #include <boost/test/unit_test.hpp>
 
 struct IndexedStatusListTestFixture {

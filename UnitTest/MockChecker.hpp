@@ -3,6 +3,7 @@
 
 #include "Checker/Checker.hpp"
 #include "Status/Point.hpp"
+
 #include <turtle/mock.hpp>
 
 MOCK_BASE_CLASS(MockChecker, Checker) {
