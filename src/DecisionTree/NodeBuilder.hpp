@@ -1,22 +1,29 @@
 #ifndef NODEBUILDER_H_
 #define NODEBUILDER_H_
 
-#include <boost/range/algorithm.hpp>
+#include "Checker/ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+
+#include "DecisionTree/Node.hpp"
+#include "DecisionTree/SplittingValue.hpp"
+
+#include "Dumper/IndentedOutput.hpp"
+
+#include "Status/StatusUtils.hpp"
+
+#include "Mutexes.hpp"
+#include "ProgressBar.hpp"
+
+#include "util/ThreadPool.hpp"
+
 #include <boost/range/adaptors.hpp>
+#include <boost/range/algorithm.hpp>
 #include <boost/optional.hpp>
 #include <boost/thread.hpp>
+
 #include <cstdlib>
 #include <iostream>
 #include <iterator>
-#include "ProgressBar.hpp"
-#include "DecisionTree/Node.hpp"
-#include "DecisionTree/SplittingValue.hpp"
-#include "Dumper/IndentedOutput.hpp"
-#include "Status/StatusUtils.hpp"
-#include "Checker/ComplexCheckerFwd.hpp"
-#include "Checker/ComplexCheckerBase.hpp"
-#include "util/ThreadPool.hpp"
-#include "Mutexes.hpp"
 
 namespace decisionTree {
 

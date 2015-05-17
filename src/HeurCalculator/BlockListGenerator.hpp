@@ -1,18 +1,22 @@
 #ifndef BLOCKLISTGENERATOR_H
 #define BLOCKLISTGENERATOR_H
 
-#include "IndexedStatusList.hpp"
-#include "util/ThreadPool.hpp"
-#include "Checker/ComplexCheckerFwd.hpp"
-#include "Options.hpp"
-#include "util/TimeMeter.hpp"
 #include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+
+#include "IndexedStatusList.hpp"
+#include "Options.hpp"
+
+#include "util/ThreadPool.hpp"
+#include "util/TimeMeter.hpp"
+
+#include <boost/asio/io_service.hpp>
+#include <boost/date_time.hpp>
+#include <boost/thread.hpp>
+
 #include <fstream>
 #include <memory>
-#include <boost/thread.hpp>
-#include <boost/asio.hpp>
-#include <boost/date_time.hpp>
 
 class HeurCalculator;
 class Solver;

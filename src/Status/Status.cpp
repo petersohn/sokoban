@@ -1,6 +1,7 @@
 #include "Status/Status.hpp"
-#include "Status/floodFill.hpp"
+
 #include "Dumper/DumperFunctions.hpp"
+#include "Status/floodFill.hpp"
 #include "Node.hpp"
 
 #ifndef NO_UNSAFE_DIAGNOSTICS

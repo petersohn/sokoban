@@ -2,9 +2,11 @@
 #define TEXTDUMPER_H_
 
 #include "Dumper/Dumper.hpp"
+
+#include <boost/variant.hpp>
+
 #include <fstream>
 #include <regex>
-#include <boost/variant.hpp>
 
 class Table;
 

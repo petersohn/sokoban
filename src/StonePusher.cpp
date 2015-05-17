@@ -1,16 +1,22 @@
 #include "StonePusher.hpp"
-#include "Array.hpp"
-#include "Status/Status.hpp"
-#include "Checker/VisitedStates.hpp"
-#include "Status/floodFill.hpp"
-#include "intersect.hpp"
-#include "FieldType.hpp"
-#include "PrioNodeQueue.hpp"
-#include "Node.hpp"
-#include "HeurCalculator/HeurCalculator.hpp"
-#include "Dumper/Dumper.hpp"
-#include "NodeFactory.hpp"
+
 #include "Checker/NodeChecker.hpp"
+#include "Checker/VisitedStates.hpp"
+
+#include "Dumper/Dumper.hpp"
+
+#include "HeurCalculator/HeurCalculator.hpp"
+
+#include "Status/floodFill.hpp"
+#include "Status/Status.hpp"
+
+#include "Array.hpp"
+#include "FieldType.hpp"
+#include "intersect.hpp"
+#include "Node.hpp"
+#include "NodeFactory.hpp"
+#include "PrioNodeQueue.hpp"
+
 #include <iostream>
 #include <memory>
 

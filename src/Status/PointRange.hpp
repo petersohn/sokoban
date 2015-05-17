@@ -2,8 +2,10 @@
 #define POINTRANGE_H_
 
 #include "Status/Point.hpp"
+
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/exception/all.hpp>
+
 #include <stdexcept>
 
 class PointRangeIterator;

@@ -1,9 +1,11 @@
 #include "SubStatusForEach.hpp"
+
+#include "Checker/ComplexCheckerBase.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
+#include "Status/State.hpp"
 #include "Status/StatusUtils.hpp"
 #include "Status/Table.hpp"
-#include "Status/State.hpp"
-#include "HeurCalculator/HeurCalculator.hpp"
-#include "Checker/ComplexCheckerBase.hpp"
+
 
 SubStatusForEach::SubStatusForEach(
             const Table& table,

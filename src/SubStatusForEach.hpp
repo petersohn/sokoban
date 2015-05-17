@@ -1,14 +1,17 @@
 #ifndef SRC_SUBSTATUSFOREACH_HPP
 #define SRC_SUBSTATUSFOREACH_HPP
 
-#include "util/TimeMeter.hpp"
-#include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
 #include "Status/PointRange.hpp"
 #include "Array.hpp"
-#include "util/ExplicitType.hpp"
 #include "MultiThreadWorker.hpp"
+
+#include "util/ExplicitType.hpp"
+#include "util/TimeMeter.hpp"
+
 #include <boost/optional.hpp>
+
 #include <functional>
 
 class State;

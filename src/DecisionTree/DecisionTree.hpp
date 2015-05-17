@@ -5,7 +5,7 @@
 
 namespace decisionTree {
 
-template <class Key, class T, class PointList>
+template <typename Key, typename T, typename PointList>
 std::unique_ptr<Node<Key, T>>
 buildNode(
         const typename Node<Key, T>::ValueList& valueList,

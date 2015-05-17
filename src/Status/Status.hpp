@@ -1,17 +1,19 @@
 #ifndef STATUS_H_
 #define STATUS_H_
 
-#include "Array.hpp"
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
+#include "Array.hpp"
 #include "FieldType.hpp"
+
 #include <boost/thread/mutex.hpp>
-#include <memory>
-#include <functional>
-#include <vector>
+
 #include <deque>
-#include <unordered_map>
+#include <functional>
+#include <memory>
 #include <ostream>
+#include <unordered_map>
+#include <vector>
 
 class Node;
 

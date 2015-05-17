@@ -2,13 +2,15 @@
 #define STATE_H_
 
 #include "Status/Point.hpp"
-#include <unordered_set>
-#include <memory>
+
+#include <boost/range/algorithm.hpp>
+
+#include <algorithm>
 #include <assert.h>
 #include <functional>
-#include <boost/range/algorithm.hpp>
-#include <algorithm>
 #include <iterator>
+#include <memory>
+#include <unordered_set>
 
 class State {
     typedef std::unordered_set<Point> ContainerType;

@@ -2,12 +2,10 @@
 #define TABLEHEURCALCULATOR_H_
 
 #include "HeurCalculator/HeurCalculator.hpp"
-#include "Array.hpp"
 #include "Status/Status.hpp"
 #include "Status/Table.hpp"
+#include "Array.hpp"
 #include "Mutexes.hpp"
-#include <boost/scoped_ptr.hpp>
-#include <boost/thread/locks.hpp>
 
 template <typename StoneCalculator>
 class TableHeurCalculator: public HeurCalculator {

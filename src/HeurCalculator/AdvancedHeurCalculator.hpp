@@ -1,12 +1,14 @@
 #ifndef ADVANCEDHEURCALCULATOR_H_
 #define ADVANCEDHEURCALCULATOR_H_
 
-#include "HeurCalculator/TableHeurCalculator.hpp"
 #include "Dumper/DumperFunctions.hpp"
-#include <vector>
+#include "HeurCalculator/TableHeurCalculator.hpp"
+
+#include <boost/optional.hpp>
+
 #include <iostream>
 #include <fstream>
-#include <boost/optional.hpp>
+#include <vector>
 
 class Solver;
 

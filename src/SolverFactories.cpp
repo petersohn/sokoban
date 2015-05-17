@@ -1,30 +1,34 @@
 #include "SolverFactories.hpp"
-#include "Solver.hpp"
-#include "PrioNodeQueue.hpp"
-#include "NormalExpander.hpp"
-#include "StonePusher.hpp"
-#include "Checker/MovableChecker.hpp"
-#include "Checker/ExtendedMovableChecker.hpp"
+
+#include "Checker/ComplexCheckerBase.hpp"
 #include "Checker/CorridorChecker.hpp"
 #include "Checker/ExtendedCorridorChecker.hpp"
-#include "HeurCalculator/BlockListGenerator.hpp"
-#include "HeurCalculator/BasicHeurCalculator.hpp"
-#include "HeurCalculator/AdvancedHeurCalculator.hpp"
+#include "Checker/ExtendedMovableChecker.hpp"
+#include "Checker/MovableChecker.hpp"
 #include "Checker/VisitedStates.hpp"
-#include "CompareQueue.hpp"
+#include "Checker/VisitedStatesChecker.hpp"
+
+#include "Dumper/BestDumper.hpp"
+#include "Dumper/StatisticsDumper.hpp"
 #include "Dumper/TextDumper.hpp"
 #include "Dumper/XDumper.hpp"
-#include "Dumper/StatisticsDumper.hpp"
-#include "Dumper/BestDumper.hpp"
-#include "NodeFactory.hpp"
-#include "HeurCalculator/HeurCalculator.hpp"
-#include "Checker/ComplexCheckerBase.hpp"
-#include "ExpandedNodeLimiter.hpp"
-#include "Checker/VisitedStatesChecker.hpp"
-#include "MultiThreadExpander.hpp"
 
-#include <vector>
+#include "HeurCalculator/AdvancedHeurCalculator.hpp"
+#include "HeurCalculator/BasicHeurCalculator.hpp"
+#include "HeurCalculator/BlockListGenerator.hpp"
+#include "HeurCalculator/HeurCalculator.hpp"
+
+#include "CompareQueue.hpp"
+#include "ExpandedNodeLimiter.hpp"
+#include "MultiThreadExpander.hpp"
+#include "NodeFactory.hpp"
+#include "NormalExpander.hpp"
+#include "PrioNodeQueue.hpp"
+#include "Solver.hpp"
+#include "StonePusher.hpp"
+
 #include <functional>
+#include <vector>
 
 namespace {
 

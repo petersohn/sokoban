@@ -1,5 +1,7 @@
 #include "floodFill.hpp"
+
 #include "FieldType.hpp"
+
 #include <vector>
 
 template <typename Action>

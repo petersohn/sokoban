@@ -1,17 +1,22 @@
+#include "Checker/ComplexCheckerFwd.hpp"
+#include "Checker/SolutionChecker.hpp"
+
+#include "Dumper/DumperFunctions.hpp"
+
+#include "Status/State.hpp"
 #include "Status/Status.hpp"
-#include "Options.hpp"
+#include "Status/StatusCreator.hpp"
+
+#include "formatOutput.hpp"
 #include "Node.hpp"
+#include "Options.hpp"
 #include "Solver.hpp"
 #include "SolverFactories.hpp"
-#include "Dumper/DumperFunctions.hpp"
-#include "Status/State.hpp"
-#include "Checker/SolutionChecker.hpp"
 #include "SubStatusForEach.hpp"
-#include "Checker/ComplexCheckerFwd.hpp"
+
 #include "util/TimeMeter.hpp"
-#include "Status/StatusCreator.hpp"
 #include "util/ThreadPool.hpp"
-#include "formatOutput.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <deque>

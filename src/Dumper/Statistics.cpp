@@ -1,6 +1,7 @@
 #include "Dumper/Statistics.hpp"
-#include <boost/lexical_cast.hpp>
+
 #include <boost/algorithm/string/join.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/range/adaptor/map.hpp>
 
 void Statistics::update(const std::string& key)

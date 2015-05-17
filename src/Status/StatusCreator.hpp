@@ -1,9 +1,9 @@
 #ifndef STATUSCREATOR_H_
 #define STATUSCREATOR_H_
 
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 class Status;
 class Table;

@@ -1,17 +1,21 @@
 #include "NormalExpander.hpp"
-#include "Status/Status.hpp"
-#include "Node.hpp"
-#include "FieldType.hpp"
-#include "Checker/VisitedStates.hpp"
-#include "PrioNodeQueue.hpp"
-#include "HeurCalculator/HeurCalculator.hpp"
-#include "Dumper/Dumper.hpp"
-#include "NodeFactory.hpp"
-#include "ExpandHelper.hpp"
+
 #include "Checker/Checker.hpp"
 #include "Checker/NodeChecker.hpp"
+#include "Checker/VisitedStates.hpp"
+
+#include "Dumper/Dumper.hpp"
+
+#include "HeurCalculator/HeurCalculator.hpp"
+
+#include "Status/Status.hpp"
+
+#include "ExpandHelper.hpp"
+#include "Node.hpp"
+#include "NodeFactory.hpp"
+#include "PrioNodeQueue.hpp"
+
 #include <iostream>
-#include <boost/thread/locks.hpp>
 
 class NormalExpander::InternalExpander {
     const Status& status_;

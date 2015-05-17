@@ -1,10 +1,10 @@
 #ifndef SRC_INDEXEDSTATUSLIST_HPP
 #define SRC_INDEXEDSTATUSLIST_HPP
 
+#include "Status/Status.hpp"
+
 #include <memory>
 #include <vector>
-#include <boost/thread/locks.hpp>
-#include "Status/Status.hpp"
 
 class IndexedStatusList {
 private:

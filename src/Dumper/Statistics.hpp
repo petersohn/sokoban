@@ -1,11 +1,11 @@
 #ifndef SRC_DUMPER_STATISTICS_HPP
 #define SRC_DUMPER_STATISTICS_HPP
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 #include <map>
 #include <ostream>
 #include <string>
-#include <boost/date_time/posix_time/posix_time.hpp>
-
 
 class Statistics {
     using Data = std::map<std::string, unsigned>;

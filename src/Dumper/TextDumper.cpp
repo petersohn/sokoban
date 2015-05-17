@@ -1,7 +1,9 @@
 #include "Dumper/TextDumper.hpp"
-#include "Status/Status.hpp"
+
 #include "Dumper/DumperFunctions.hpp"
+#include "Status/Status.hpp"
 #include "Status/Table.hpp"
+
 #include <string>
 
 class FilterVisitor {

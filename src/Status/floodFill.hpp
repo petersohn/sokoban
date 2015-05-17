@@ -2,6 +2,7 @@
 #define SRC_STATUS_FLOODFILL_HPP
 
 #include "Status.hpp"
+
 #include <ostream>
 
 struct MinMax {

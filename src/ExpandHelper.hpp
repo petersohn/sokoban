@@ -1,13 +1,15 @@
 #ifndef SRC_EXPANDHELPER_HPP
 #define SRC_EXPANDHELPER_HPP
 
+#include "Dumper/Dumper.hpp"
 #include "Status/Point.hpp"
 #include "Status/Status.hpp"
 #include "Node.hpp"
 #include "NodeFactory.hpp"
-#include "Dumper/Dumper.hpp"
-#include <memory>
+
 #include <boost/optional.hpp>
+
+#include <memory>
 
 template <typename Function>
 void expandStatus(const Status& status, Function expandFunction)

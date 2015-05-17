@@ -1,9 +1,9 @@
 #ifndef MULTITHREADEXPANDER_HPP
 #define MULTITHREADEXPANDER_HPP
 
-#include "Expander.hpp"
-#include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
+#include "Checker/ComplexCheckerFwd.hpp"
+#include "Expander.hpp"
 #include "MultiThreadWorker.hpp"
 #include "Mutexes.hpp"
 

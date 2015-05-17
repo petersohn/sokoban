@@ -3,7 +3,7 @@
 
 namespace decisionTree {
 
-template <class Arg>
+template <typename Arg>
 struct SplittingValue {
     Arg arg_;
     int trueNum_;
@@ -24,7 +24,7 @@ bool betterSplittingValue(const SplittingValue<Arg>& left, const SplittingValue<
     return left.trueNum_ > right.trueNum_;
 }
 
-template <class ValueList, class PointIterator>
+template <typename ValueList, typename PointIterator>
 SplittingValue<PointIterator> calculateSplittingValue(
         PointIterator& iterator,
         const ValueList& valueList)

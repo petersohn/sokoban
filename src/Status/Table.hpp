@@ -2,6 +2,7 @@
 #define TABLE_H_
 
 #include "Array.hpp"
+
 #include <memory>
 
 class Table {

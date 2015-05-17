@@ -1,9 +1,11 @@
 #ifndef POINT_H_
 #define POINT_H_
 
-#include <stddef.h>
-#include <boost/format.hpp>
 #include "Hash.hpp"
+
+#include <boost/format.hpp>
+
+#include <stddef.h>
 
 class Point
 {

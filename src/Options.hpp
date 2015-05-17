@@ -1,13 +1,15 @@
 #ifndef OPTIONS_H_
 #define OPTIONS_H_
 
-#include <string>
-#include <exception>
-#include <vector>
-#include <unordered_map>
-#include <iostream>
-#include "util/LazyArgumentEnum.hpp"
 #include "Compare.hpp"
+
+#include "util/LazyArgumentEnum.hpp"
+
+#include <exception>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles,
         (none)(text)(xml)(statistics)(best))

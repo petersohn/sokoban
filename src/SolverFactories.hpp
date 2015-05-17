@@ -1,9 +1,11 @@
 #ifndef SOLVERFACTORIES_H_
 #define SOLVERFACTORIES_H_
 
+#include "Checker/ComplexCheckerFwd.hpp"
+
 #include "ExpanderFactory.hpp"
 #include "PrioNodeQueueFwd.hpp"
-#include "Checker/ComplexCheckerFwd.hpp"
+
 #include "util/TimeMeter.hpp"
 
 class HeurCalculator;

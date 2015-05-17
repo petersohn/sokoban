@@ -1,9 +1,11 @@
 #include "Options.hpp"
-#include <iostream>
-#include <boost/program_options.hpp>
+
 #include <boost/format.hpp>
-#include <vector>
+#include <boost/program_options.hpp>
+
 #include <cstdlib>
+#include <iostream>
+#include <vector>
 
 namespace po = boost::program_options;
 

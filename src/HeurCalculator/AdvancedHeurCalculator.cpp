@@ -3,12 +3,13 @@
 #include "Status/StatusUtils.hpp"
 #include "Node.hpp"
 #include "Solver.hpp"
-#include <vector>
-#include <algorithm>
+
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-#include <string>
+
 #include <algorithm>
+#include <string>
+#include <vector>
 
 
 /* AdvancedStoneCalculator::HeurDumper */
