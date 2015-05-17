@@ -203,10 +203,12 @@ std::shared_ptr<const HeurCalculator> BlockListGenerator::decisionTreeHeurCalcul
         std::size_t maxDepth, bool useChecker, float heurMultiplier)
 {
     assert(table_);
+
     boost::optional<ComplexChecker> checker;
     if (useChecker) {
-        checker = ComplexChecker{checker_};
+        checker = checker_;
     }
+
     return std::make_shared<DecisionTreeHeurCalculator>(
             heurMultiplier, calculator_,
             DecisionTreeHeurListFactory{
