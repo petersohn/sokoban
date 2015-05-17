@@ -141,35 +141,7 @@ void BlockListGenerator::init(const Table& table)
         actualChecker.append(checker());
         subStatusForEach.start(n, calculator_, actualChecker);
         subStatusForEach.wait(true);
-
-        for (const auto& calculationInfo: calculationInfos_) {
-            dump_ << calculationInfo->dump_.str();
-
-            for (const auto& status: calculationInfo->blockList_) {
-                blockList_.add(status);
-            }
-
-            heurList_.reserve(heurList_.size() +
-                    calculationInfo->heurList_.size());
-            std::move(calculationInfo->heurList_.begin(),
-                    calculationInfo->heurList_.end(),
-                    std::back_inserter(heurList_));
-            boost::sort(calculationInfo->heurList_,
-                    [](const IncrementInfo& lhs, const IncrementInfo& rhs) {
-                        return lhs.difference_ > rhs.difference_;
-                    });
-        }
-
-        std::cerr << "Block list size = " << blockList_.size() << std::endl;
-        std::cerr << "Heur list size = " << heurList_.size() << std::endl;
-        boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)
-            {
-                return left.difference_ > right.difference_ ||
-                        (left.difference_ == right.difference_ &&
-                        left.heurInfo_.first.state().size() <
-                        right.heurInfo_.first.state().size()
-                        );
-            });
+        updateResult();
     }
 
     iteratingTime_ = timeMeter.data();
@@ -181,6 +153,38 @@ void BlockListGenerator::init(const Table& table)
 
     std::cerr << "Heur list size = " << heurList_.size() << std::endl;
     dump_.flush();
+}
+
+void BlockListGenerator::updateResult()
+{
+    for (const auto& calculationInfo: calculationInfos_) {
+        dump_ << calculationInfo->dump_.str();
+
+        for (const auto& status: calculationInfo->blockList_) {
+            blockList_.add(status);
+        }
+
+        heurList_.reserve(heurList_.size() +
+                calculationInfo->heurList_.size());
+        std::move(calculationInfo->heurList_.begin(),
+                calculationInfo->heurList_.end(),
+                std::back_inserter(heurList_));
+        boost::sort(calculationInfo->heurList_,
+                [](const IncrementInfo& lhs, const IncrementInfo& rhs) {
+                    return lhs.difference_ > rhs.difference_;
+                });
+    }
+
+    std::cerr << "Block list size = " << blockList_.size() << std::endl;
+    std::cerr << "Heur list size = " << heurList_.size() << std::endl;
+    boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)
+        {
+            return left.difference_ > right.difference_ ||
+                    (left.difference_ == right.difference_ &&
+                    left.heurInfo_.first.state().size() <
+                    right.heurInfo_.first.state().size()
+                    );
+        });
 }
 
 std::shared_ptr<const Checker> BlockListGenerator::checker()
