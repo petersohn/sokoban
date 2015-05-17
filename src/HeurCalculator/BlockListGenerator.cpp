@@ -117,20 +117,25 @@ void BlockListGenerator::init(const Table& table)
             SubStatusForEach::WorkQueueLength{options_.workQueueLength_},
             SubStatusForEach::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
             threadPool_.getIoService());
+
     blockList_.clear();
     heurList_.clear();
     calculationInfos_.resize(options_.numThreads_);
     timeMeter.reset();
+
     for (std::size_t n = 2; n <= options_.blockListStones_; ++n) {
         incrementalCalculator_ = n == 2 ?
             calculator_ :
                 decisionTreeDepth > 0 ?
                 decisionTreeHeurCalculator(decisionTreeDepth, false, 1.0f) :
                 vectorHeurCalculator(1.0f);
+
         for (auto& calculationInfo: calculationInfos_) {
             calculationInfo = std::make_unique<CalculationInfo>();
         }
+
         std::cerr << "Stones = " << n << std::endl;
+
         {
             util::ThreadPoolRunner runner(threadPool_);
             ComplexChecker actualChecker{checker_};
@@ -138,6 +143,7 @@ void BlockListGenerator::init(const Table& table)
             subStatusForEach.start(n, calculator_, actualChecker);
             subStatusForEach.wait(true);
         }
+
         for (const auto& calculationInfo: calculationInfos_) {
             dump_ << calculationInfo->dump_.str();
 
@@ -155,6 +161,7 @@ void BlockListGenerator::init(const Table& table)
                         return lhs.difference_ > rhs.difference_;
                     });
         }
+
         std::cerr << "Block list size = " << blockList_.size() << std::endl;
         std::cerr << "Heur list size = " << heurList_.size() << std::endl;
         boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)
@@ -166,12 +173,14 @@ void BlockListGenerator::init(const Table& table)
                         );
             });
     }
+
     iteratingTime_ = timeMeter.data();
     if (options_.maxHeurListSize_ > 0 &&
             heurList_.size() > options_.maxHeurListSize_) {
         IncrementList(heurList_.begin(),
                 heurList_.begin() + options_.maxHeurListSize_).swap(heurList_);
     }
+
     std::cerr << "Heur list size = " << heurList_.size() << std::endl;
     dump_.flush();
 }

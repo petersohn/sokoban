@@ -48,20 +48,21 @@ int main(int argc, char** argv) {
             (opts.test_ ? nullptr : &expandedNodes),
             &chokePointFinderTime, &preprocessingIterationTime);
     auto createExpander = expanderFactory.factory();
-    Solver s(std::bind(createPrioQueueFromOptions, opts),
+    Solver solver(std::bind(createPrioQueueFromOptions, opts),
             createExpander, std::bind(createDumperFromOptions, opts));
     std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
     SolutionChecker solutionChecker(std::cerr, heurDump);
     int returnCode = 0;
+
     if (opts.test_ > 0) {
-        std::shared_ptr<const HeurCalculator> calculator = expanderFactory.createAdvancedHeurCalcularor(
-                1.0);
+        std::shared_ptr<const HeurCalculator> calculator =
+                expanderFactory.createAdvancedHeurCalcularor(1.0);
         util::ThreadPool threadPool;
         util::ThreadPoolRunner runner(threadPool);
         threadPool.setNumThreads(opts.numThreads_);
         SubStatusForEach it(status.table(),
                 std::bind(solveTestProblem, std::ref(solutionChecker),
-                    std::ref(s), std::placeholders::_1),
+                    std::ref(solver), std::placeholders::_1),
                 SubStatusForEach::MinDistance{0}, SubStatusForEach::MaxDistance{0},
                 SubStatusForEach::ChokePointDistantNum{0}, {},
                 SubStatusForEach::WorkQueueLength{opts.workQueueLength_},
@@ -71,7 +72,7 @@ int main(int argc, char** argv) {
                 ComplexChecker{expanderFactory.createBasicCheckers(calculator)});
         it.wait(true);
     } else {
-        std::deque<std::shared_ptr<Node>> solution = s.solve(status);
+        std::deque<std::shared_ptr<Node>> solution = solver.solve(status);
         SolutionData solutionData{*table, solution,
                 SolutionQuality::none, ExpandedNodes{expandedNodes},
                 TotalTime{timeMeter.data()},
