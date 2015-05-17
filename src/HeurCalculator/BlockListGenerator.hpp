@@ -50,6 +50,7 @@ private:
     void calculateHeurList(const Status& status);
     void dumpStatus(const Status& status, const Point *p, const std::string& title);
     void updateResult();
+    Array<bool> calculateChokePoints();
 
 public:
     BlockListGenerator(std::unique_ptr<const Solver> solver, std::shared_ptr<const HeurCalculator> calculator,

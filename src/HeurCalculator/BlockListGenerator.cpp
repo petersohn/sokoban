@@ -89,23 +89,6 @@ void BlockListGenerator::init(const Table& table)
     std::size_t decisionTreeDepth =
         options_.blocklistHeurCalculatorType_ == BlockListHeurType::decisionTree ?
             options_.blocklistDecisionTreeDepth_ : 0;
-    Array<bool> chokePoints;
-
-    util::TimeMeter timeMeter;
-    if (options_.chokePointNum_ > 0) {
-        chokePoints = findChokePoints(table, options_, calculator_,
-                ComplexChecker{checker_}, true);
-        chokePointFinderTime_ = timeMeter.data();
-        Status chokePointStatus{table};
-
-        for (Point p: arrayRange(chokePoints)) {
-            if (chokePoints[p]) {
-                chokePointStatus.addStone(p);
-            }
-        }
-
-        ::dumpStatus(std::cerr, chokePointStatus, "Choke points");
-    }
 
     std::cerr << "Calculating block list..." << std::endl;
     SubStatusForEach subStatusForEach(table,
@@ -113,7 +96,8 @@ void BlockListGenerator::init(const Table& table)
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{options_.blockListDistance_},
             SubStatusForEach::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
-                    options_.chokePointDistantNum_ : 0}, chokePoints,
+                    options_.chokePointDistantNum_ : 0},
+            calculateChokePoints(),
             SubStatusForEach::WorkQueueLength{options_.workQueueLength_},
             SubStatusForEach::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
             threadPool_.getIoService());
@@ -121,7 +105,7 @@ void BlockListGenerator::init(const Table& table)
     blockList_.clear();
     heurList_.clear();
     calculationInfos_.resize(options_.numThreads_);
-    timeMeter.reset();
+    util::TimeMeter timeMeter;
     util::ThreadPoolRunner runner(threadPool_);
 
     for (std::size_t n = 2; n <= options_.blockListStones_; ++n) {
@@ -153,6 +137,29 @@ void BlockListGenerator::init(const Table& table)
 
     std::cerr << "Heur list size = " << heurList_.size() << std::endl;
     dump_.flush();
+}
+
+Array<bool> BlockListGenerator::calculateChokePoints()
+{
+    Array<bool> result;
+
+    util::TimeMeter timeMeter;
+    if (options_.chokePointNum_ > 0) {
+        result = findChokePoints(*table_, options_, calculator_,
+                ComplexChecker{checker_}, true);
+        chokePointFinderTime_ = timeMeter.data();
+        Status chokePointStatus{*table_};
+
+        for (Point p: arrayRange(result)) {
+            if (result[p]) {
+                chokePointStatus.addStone(p);
+            }
+        }
+
+        ::dumpStatus(std::cerr, chokePointStatus, "Choke points");
+    }
+
+    return result;
 }
 
 void BlockListGenerator::updateResult()
