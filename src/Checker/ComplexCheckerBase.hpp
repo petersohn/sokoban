@@ -14,6 +14,23 @@ class ComplexCheckerBase {
     mutable const char *lastError_;
 #endif
 
+    template <typename... Args>
+    bool doCheck(const Args&... args) const {
+
+#ifndef NO_UNSAFE_DIAGNOSTICS
+        lastError_ = "";
+#endif
+        for (const auto& func: funcs_) {
+            assert(func.get() != NULL);
+            if (!func->check(args...)) {
+#ifndef NO_UNSAFE_DIAGNOSTICS
+                lastError_ = func->errorMessage();
+#endif
+                return false;
+            }
+        }
+        return true;
+    }
 public:
     ComplexCheckerBase() = default;
 
@@ -38,39 +55,13 @@ public:
     template <typename... Args, bool enabled = std::is_const<Checker>::value>
     typename std::enable_if<enabled, bool>::type
     check(const Args&... args) const {
-
-#ifndef NO_UNSAFE_DIAGNOSTICS
-        lastError_ = "";
-#endif
-        for (const auto& func: funcs_) {
-            assert(func.get() != NULL);
-            if (!func->check(args...)) {
-#ifndef NO_UNSAFE_DIAGNOSTICS
-                lastError_ = func->errorMessage();
-#endif
-                return false;
-            }
-        }
-        return true;
+        return doCheck(args...);
     }
 
     template <typename... Args, bool enabled = !std::is_const<Checker>::value>
     typename std::enable_if<enabled, bool>::type
     check(const Args&... args) {
-
-#ifndef NO_UNSAFE_DIAGNOSTICS
-        lastError_ = "";
-#endif
-        for (const auto& func: funcs_) {
-            assert(func.get() != NULL);
-            if (!func->check(args...)) {
-#ifndef NO_UNSAFE_DIAGNOSTICS
-                lastError_ = func->errorMessage();
-#endif
-                return false;
-            }
-        }
-        return true;
+        return doCheck(args...);
     }
 
     const char* errorMessage() const
