@@ -6,7 +6,7 @@ class NodeChecker;
 template <typename Checker> class ComplexCheckerBase;
 
 using ComplexChecker = ComplexCheckerBase<const Checker>;
-using ComplexNodeChecker = ComplexCheckerBase<const NodeChecker>;
+using ComplexNodeChecker = ComplexCheckerBase<NodeChecker>;
 
 
 #endif /* SRC_COMPLEXCHECKER_HPP */

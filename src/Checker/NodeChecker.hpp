@@ -8,7 +8,7 @@ class Node;
 
 class NodeChecker {
 public:
-    virtual bool check(const Status& status, const Node& node) const = 0;
+    virtual bool check(const Status& status, const Node& node) = 0;
     virtual ~NodeChecker() {}
     // for efficiency reasons, it is assumed that it will
     // return a *real* string constant, or at least

@@ -97,13 +97,13 @@ OptionsBasedExpanderFactory::createBasicCheckers(
     return checkers;
 }
 
-std::deque<std::shared_ptr<const NodeChecker>>
+std::deque<std::shared_ptr<NodeChecker>>
 OptionsBasedExpanderFactory::createBasicNodeCheckers(
         const std::shared_ptr<const HeurCalculator>& calculator,
         const Status& status)
 {
-    auto visitedStates = std::make_shared<VisitedStates>();
-    visitedStates->checkAndPush(std::pair<const Status&, int>(status,
+    VisitedStates visitedStates;
+    visitedStates.checkAndPush(std::pair<const Status&, int>(status,
             calculator->calculateStatus(status)));
 
     return {std::make_shared<VisitedStatesChecker>(visitedStates)};

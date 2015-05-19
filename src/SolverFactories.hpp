@@ -51,7 +51,7 @@ public:
                     std::shared_ptr<const HeurCalculator>());
     std::vector<std::shared_ptr<const Checker>> createBasicCheckers(
             const std::shared_ptr<const HeurCalculator>& calculator);
-    std::deque<std::shared_ptr<const NodeChecker>> createBasicNodeCheckers(
+    std::deque<std::shared_ptr<NodeChecker>> createBasicNodeCheckers(
             const std::shared_ptr<const HeurCalculator>& calculator,
             const Status& status);
 

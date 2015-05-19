@@ -8,16 +8,16 @@
 #include <memory>
 
 class VisitedStatesChecker: public NodeChecker {
-    std::shared_ptr<VisitedStates> visitedStates;
+    VisitedStates visitedStates;
 public:
-	VisitedStatesChecker(std::shared_ptr<VisitedStates> visitedStates):
+	VisitedStatesChecker(VisitedStates visitedStates):
 			visitedStates(std::move(visitedStates)) {
 	}
 
-	bool check(const Status& status, const Node& node) const override
+	bool check(const Status& status, const Node& node) override
 	{
-		VisitedStateInput vsi(status, node.costFgv());
-		return visitedStates->checkAndPush(vsi);
+		VisitedStateInput input(status, node.costFgv());
+		return visitedStates.checkAndPush(input);
 	}
 
 	const char* errorMessage() const override
