@@ -9,21 +9,11 @@
 #include <boost/range/algorithm.hpp>
 #include <type_traits>
 
-//#define NDEBUG
-//
-//#define assert assert_
-//
-//inline void assert_(bool expr) {
-//    if (!expr) {
-//        std::cerr << "bing" << std::endl;
-//        exit(1);
-//    }
-//}
-
 template <typename Array>
 inline bool isInsideArray(const Array& array, Point p)
 {
-    return p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(array.width()) && p.y < static_cast<int>(array.height());
+    return p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(array.width()) && 
+            p.y < static_cast<int>(array.height());
 }
 
 template<typename T>
