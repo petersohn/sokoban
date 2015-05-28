@@ -28,7 +28,7 @@ bool DistanceChecker::check(const Status& status, const Node& /*node*/)
     }
 
     currentDistance = distance;
-    return 0;
+    return true;
 }
 
 const char* DistanceChecker::errorMessage() const
