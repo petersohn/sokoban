@@ -4,9 +4,10 @@
 #include "Status/Status.hpp"
 #include "Node.hpp"
 
-#include <boost/bind.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/algorithm.hpp>
+
+#include <functional>
 
 DistanceChecker::DistanceChecker(std::shared_ptr<HeurCalculator> heurCalculator):
         heurCalculator(std::move(heurCalculator))
@@ -15,10 +16,12 @@ DistanceChecker::DistanceChecker(std::shared_ptr<HeurCalculator> heurCalculator)
 
 bool DistanceChecker::check(const Status& status, const Node& /*node*/)
 {
+    using std::placeholders::_1;
+    auto distanceFunction = [&status, this](Point p) {
+            return heurCalculator->calculateStone(status, p);
+        };
     float distance = *boost::min_element(status.state() |
-            boost::adaptors::transformed(boost::bind(
-                    &HeurCalculator::calculateStone, heurCalculator.get(),
-                    std::ref(status), _1)));
+            boost::adaptors::transformed(std::ref(distanceFunction)));
 
     if (distance < currentDistance) {
         return false;
