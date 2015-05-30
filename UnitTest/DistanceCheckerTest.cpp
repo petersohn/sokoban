@@ -193,5 +193,33 @@ BOOST_AUTO_TEST_CASE(allow_input_if_farther_stone_is_moved_closer)
     BOOST_CHECK_EQUAL(distanceCheckerUnderTest.check(status2, *node2), true);
 }
 
+BOOST_AUTO_TEST_CASE(allow_empty_input)
+{
+    auto data = createStatus(4, 2, {
+            "y...",
+            "..ox"
+        });
+    Status& status = data.second;
+    status.removeStone(Point{2, 1});
+    Node node{status.state(), {Point{2, 1}, Point{3, 1}}, {}, 1, 0, 0, 0};
+
+    BOOST_CHECK_EQUAL(distanceCheckerUnderTest.check(status, node), true);
+}
+
+BOOST_AUTO_TEST_CASE(allow_empty_input_after_non_empty_input)
+{
+    auto data = createStatus(4, 2, {
+            "y...",
+            "..ox"
+        });
+    Status& status = data.second;
+    Node node1{status.state(), {Point{2, 1}, Point{3, 1}}, {}, 1, 1, 0, 0};
+    BOOST_CHECK_EQUAL(distanceCheckerUnderTest.check(status, node1), true);
+
+    status.removeStone(Point{2, 1});
+    Node node2{status.state(), {Point{2, 1}, Point{3, 1}}, {}, 1, 0, 0, 0};
+    BOOST_CHECK_EQUAL(distanceCheckerUnderTest.check(status, node2), true);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 

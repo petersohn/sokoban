@@ -16,7 +16,11 @@ DistanceChecker::DistanceChecker(std::shared_ptr<HeurCalculator> heurCalculator)
 
 bool DistanceChecker::check(const Status& status, const Node& /*node*/)
 {
-    using std::placeholders::_1;
+    //std::cerr << "stones=" << status.state().size();
+    if (status.state().size() == 0) {
+        return true;
+    }
+
     auto distanceFunction = [&status, this](Point p) {
             return heurCalculator->calculateStone(status, p);
         };
@@ -24,9 +28,11 @@ bool DistanceChecker::check(const Status& status, const Node& /*node*/)
             boost::adaptors::transformed(std::ref(distanceFunction)));
 
     if (distance < currentDistance) {
+        //std::cerr << "Reject\n";
         return false;
     }
 
+    //std::cerr << "Acccept: new distance = " << distance << "\n";
     currentDistance = distance;
     return true;
 }
