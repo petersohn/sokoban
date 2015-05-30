@@ -17,6 +17,7 @@ private:
     int depth_;
     float cost_;
     int time_;
+    std::size_t minDistance_ = 0;
 public:
 //    Node();
     Node(const State& stones, const MoveDescriptor& moveDescriptor, std::shared_ptr<Node> ancestor,
@@ -34,6 +35,8 @@ public:
     int time() const { return time_; }
     float experimtntalHeur() const { return experimentalHeur_; }
     float experimtntalCostFgv() const { return cost_ + experimentalHeur_; }
+    std::size_t minDistance() const { return minDistance_; }
+    void minDistance(std::size_t value) { minDistance_ = value; }
 };
 
 std::deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::shared_ptr<Node> base);

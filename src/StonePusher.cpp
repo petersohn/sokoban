@@ -128,7 +128,7 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
 
     Status newStatus(status.table(), *node);
 
-    if (!nodeChecker_.check(newStatus, *node)) {
+    if (!nodeChecker_.check(newStatus, std::ref(*node))) {
         if (dumper) {
             dumper->reject(node, nodeChecker_.errorMessage());
         }

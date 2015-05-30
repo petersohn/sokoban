@@ -9,8 +9,9 @@ void dumpNode(std::ostream& file, const Table& table, const Node& node,
 {
     if (title.length() > 0)
         title += ": ";
-    title += (boost::format("(%d + %d = %d)") %
-                node.cost() % node.heur() % node.costFgv()).str();
+    title += (boost::format("heur = (%d + %d = %d) d = %d") %
+                node.cost() % node.heur() % node.costFgv() % 
+                node.minDistance()).str();
     Status status(table, node);
     Array<bool> highlight2;
     if (highlight != NULL)

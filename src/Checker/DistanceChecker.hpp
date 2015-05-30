@@ -10,11 +10,10 @@ class HeurCalculator;
 class DistanceChecker: public NodeChecker {
 public:
     DistanceChecker(std::shared_ptr<HeurCalculator> heurCalculator);
-    bool check(const Status& status, const Node& node) override;
+    bool check(const Status& status, Node& node) override;
     const char* errorMessage() const override;
 
 private:
-    float currentDistance = 0;
     std::shared_ptr<HeurCalculator> heurCalculator;
 };
 

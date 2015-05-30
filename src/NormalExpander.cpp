@@ -50,7 +50,7 @@ void NormalExpander::InternalExpander::expandNode(Point p, Point d)
     }
     assert(status);
 
-    if (!owner_.nodeChecker_.check(*status, *node)) {
+    if (!owner_.nodeChecker_.check(*status, std::ref(*node))) {
         if (dumper_) {
             dumper_->reject(node, owner_.nodeChecker_.errorMessage());
         }

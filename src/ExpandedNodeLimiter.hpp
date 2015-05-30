@@ -13,7 +13,7 @@ public:
 			expandedNodes(expandedNodes),
 			expandedNodeLimit(expandedNodeLimit) {}
 
-	bool check(const Status& /*status*/, const Node& node) override
+	bool check(const Status& /*status*/, Node& node) override
 	{
 		return expandedNodes < expandedNodeLimit || node.heur() == 0;
 	}

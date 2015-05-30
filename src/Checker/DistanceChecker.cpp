@@ -14,9 +14,8 @@ DistanceChecker::DistanceChecker(std::shared_ptr<HeurCalculator> heurCalculator)
 {
 }
 
-bool DistanceChecker::check(const Status& status, const Node& /*node*/)
+bool DistanceChecker::check(const Status& status, Node& node)
 {
-    //std::cerr << "stones=" << status.state().size();
     if (status.state().size() == 0) {
         return true;
     }
@@ -27,13 +26,11 @@ bool DistanceChecker::check(const Status& status, const Node& /*node*/)
     float distance = *boost::min_element(status.state() |
             boost::adaptors::transformed(std::ref(distanceFunction)));
 
-    if (distance < currentDistance) {
-        //std::cerr << "Reject\n";
+    if (node.ancestor() && distance < node.ancestor()->minDistance()) {
         return false;
     }
 
-    //std::cerr << "Acccept: new distance = " << distance << "\n";
-    currentDistance = distance;
+    node.minDistance(distance);
     return true;
 }
 

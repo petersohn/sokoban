@@ -14,7 +14,7 @@ public:
 			visitedStates(std::move(visitedStates)) {
 	}
 
-	bool check(const Status& status, const Node& node) override
+	bool check(const Status& status, Node& node) override
 	{
 		VisitedStateInput input(status, node.costFgv());
 		return visitedStates.checkAndPush(input);

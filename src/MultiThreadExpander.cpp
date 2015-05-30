@@ -60,7 +60,7 @@ void MultiThreadExpander::InternalExpander::prepareNode(Point p, Point d)
 void MultiThreadExpander::InternalExpander::expandNode(
         const std::shared_ptr<Node>& node, const Status& status)
 {
-    if (!owner_.nodeChecker_.check(status, *node)) {
+    if (!owner_.nodeChecker_.check(status, std::ref(*node))) {
         if (dumper_) {
             dumper_->reject(node, owner_.nodeChecker_.errorMessage());
         }
