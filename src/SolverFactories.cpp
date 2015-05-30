@@ -2,6 +2,7 @@
 
 #include "Checker/ComplexCheckerBase.hpp"
 #include "Checker/CorridorChecker.hpp"
+#include "Checker/DistanceChecker.hpp"
 #include "Checker/ExtendedCorridorChecker.hpp"
 #include "Checker/ExtendedMovableChecker.hpp"
 #include "Checker/MovableChecker.hpp"
@@ -195,6 +196,13 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
 //    experimentalCalculator = calculator;
     return [=](const Status& status) {
             auto nodeCheckers = createBasicNodeCheckers(calculator, status);
+            if (options_.distanceLimiter_) {
+                auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
+                        BasicStoneCalculator{table_}, 1.0f);
+                nodeCheckers.push_front(std::make_shared<DistanceChecker>(
+                        basicHeurCalculator));
+            }
+
             if (options_.expandedNodeLimit_ > 0) {
                 assert(expandedNodes_);
                 nodeCheckers.push_front(std::make_shared<ExpandedNodeLimiter>(

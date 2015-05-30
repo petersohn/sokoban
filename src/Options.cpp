@@ -84,6 +84,10 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
              "Type of corridor checking.\n")
             ("decision-tree-checker", defaultValue(&options.useCheckerForDecisionTree_),
              "Enable/disable usage of checker in DecisionTree building.\n")
+            ("distance-limiter", defaultValue(&options.distanceLimiter_),
+             "If a state was once found that had empty places near the deatination, "
+             "do not allow more states that has stones in that empty place. "
+             "Does not work if --stone-pusher is disabled. May cut valid results.")
             ("dump-filename", po::value(&options.dumpFilename_),
              "The file to save dumps to. The default depends on the dump style.\n")
             ("dump-filter", po::value(&options.dumpFilter_),

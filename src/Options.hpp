@@ -56,6 +56,7 @@ struct Options {
     std::size_t         chokePointNum_ = 0;
     CompareList         compare_;
     CorridorCheckerType corridorCheckerType_ = CorridorCheckerType::simple;
+    bool                distanceLimiter_ = false;
     std::string         dumpFilename_;
     std::string         dumpFilter_;
     DumpFilterType      dumpFilterType_ = DumpFilterType::none;
