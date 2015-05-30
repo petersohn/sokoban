@@ -24,7 +24,7 @@ printHeader() {
         echo -n "$1;"
         shift 3
     done
-    echo "expanded nodes;real time;processor time"
+    echo "solution length;expanded nodes;real time;processor time"
 }
 
 runTest() {
@@ -33,7 +33,7 @@ runTest() {
         local i
         local j
         for ((i=0; i<numberOfRuns; ++i)); do
-            local command=("$process" --output-format='%expanded-nodes% %total-real-time:ms% %total-processor-time:ms%' "$level" "$@")
+            local command=("$process" --output-format='%length% %expanded-nodes% %total-real-time:ms% %total-processor-time:ms%' "$level" "$@")
 
             if [ -z "$dryRun" ]; then
                 local result=($("${command[@]}"))
