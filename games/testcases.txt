@@ -17,5 +17,4 @@ classic/reactor.txt
 birthday/179.txt
 birthday/180.txt
 perfect/20.txt
-perfect/21.txt
 
