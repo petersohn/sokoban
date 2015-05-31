@@ -22,7 +22,10 @@ printHeader() {
     echo -n "level;"
     while [ $# -gt 0 ]; do
         echo -n "$1;"
-        shift 3
+        shift
+        while [[ $# > 0 && "$1" != -* ]]; do
+            shift
+        done
     done
     echo "solution length;expanded nodes;real time;processor time"
 }
