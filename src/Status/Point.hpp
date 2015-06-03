@@ -35,9 +35,14 @@ public:
         y *= n;
         return *this;
     }
-
-
 };
+
+template<typename Archive>
+void serialize(Archive& ar, Point& p, const unsigned int /*version*/) {
+    ar & p.x;
+    ar & p.y;
+}
+
 
 constexpr Point p10{1, 0}, p01{0, 1}, p11{1, 1};
 
@@ -70,7 +75,7 @@ inline constexpr bool operator<(Point p1, Point p2) {
 }
 
 inline std::string direction(Point d)
- {
+{
     return
             d.x > 0 ? "right" :
             d.x < 0 ? "left" :
@@ -88,7 +93,6 @@ inline std::ostream& operator<<(std::ostream& os, Point  p)
     os << pointStr(p);
     return os;
 }
-
 
 
 namespace std {

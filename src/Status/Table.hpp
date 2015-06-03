@@ -44,6 +44,13 @@ public:
                 startingPoint_ == other.startingPoint_ &&
                 destination_ == other.destination_;
     }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
+        ar & walls_;
+        ar & startingPoint_;
+        ar & destination_;
+    }
 };
 
 inline

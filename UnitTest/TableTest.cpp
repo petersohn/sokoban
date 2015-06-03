@@ -1,6 +1,10 @@
 #include "Status/Table.hpp"
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <boost/test/unit_test.hpp>
+
+#include <sstream>
 
 BOOST_AUTO_TEST_SUITE(TableTest)
 
@@ -178,6 +182,27 @@ BOOST_AUTO_TEST_CASE(tables_with_different_destinations_are_different) {
 
     BOOST_CHECK(table1 != table2);
     BOOST_CHECK(!(table1 == table2));
+}
+
+BOOST_AUTO_TEST_CASE(serialize_works) {
+    Table table1(3, 3);
+    table1.wall(Point{0, 0}, false);
+    table1.wall(Point{0, 1}, false);
+    table1.wall(Point{0, 2}, false);
+    table1.wall(Point{1, 1}, false);
+    table1.startingPoint(Point{1, 0});
+    table1.destination(Point{1, 1});
+
+    std::stringstream stream;
+    boost::archive::text_oarchive out{stream};
+    out << table1;
+
+    Table table2{0, 0};
+    boost::archive::text_iarchive in{stream};
+    in >> table2;
+
+    BOOST_CHECK(table1 == table2);
+    BOOST_CHECK(!(table1 != table2));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

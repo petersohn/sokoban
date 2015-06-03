@@ -3,16 +3,20 @@
 
 #include "Status/Point.hpp"
 #include "Status/PointRange.hpp"
+
 #include "Hash.hpp"
-#include <assert.h>
-#include <vector>
+
 #include <boost/range/algorithm.hpp>
+#include <boost/serialization/vector.hpp>
+
+#include <assert.h>
 #include <type_traits>
+#include <vector>
 
 template <typename Array>
 inline bool isInsideArray(const Array& array, Point p)
 {
-    return p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(array.width()) && 
+    return p.x >= 0 && p.y >= 0 && p.x < static_cast<int>(array.width()) &&
             p.y < static_cast<int>(array.height());
 }
 
@@ -84,6 +88,13 @@ public:
     const_iterator end() const { return data_.end(); }
     const_iterator cbegin() const { return data_.cbegin(); }
     const_iterator cend() const { return data_.cend(); }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
+        ar & width_;
+        ar & height_;
+        ar & data_;
+    }
 };
 
 template<typename T>

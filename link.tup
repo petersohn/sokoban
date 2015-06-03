@@ -3,6 +3,7 @@ export EXTRA_LD_FLAGS
 
 LIBS += -lboost_program_options
 LIBS += -lboost_date_time
+LIBS += -lboost_serialization
 LIBS += -lboost_thread
 LIBS += -lboost_system
 LIBS += -lpthread
