@@ -12,8 +12,12 @@ private:
     Point destination_;
 
 public:
-    Table() {}
     Table(size_t width, size_t height):walls_(width, height, true) {}
+
+    Table(const Table&) = default;
+    Table& operator=(const Table&) = default;
+    Table(Table&&) = default;
+    Table& operator=(Table&&) = default;
 
     size_t width() const { return walls_.width(); }
     size_t height() const { return walls_.height(); }
