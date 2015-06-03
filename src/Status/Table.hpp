@@ -10,6 +10,7 @@ private:
     Array<bool> walls_;
     Point startingPoint_;
     Point destination_;
+
 public:
     Table() {}
     Table(size_t width, size_t height):walls_(width, height, true) {}
@@ -33,7 +34,17 @@ public:
         assert(isInsideArray(walls_, p));
         startingPoint_ = p;
     }
+
+    bool operator==(const Table& other) const {
+        return walls_ == other.walls_ &&
+                startingPoint_ == other.startingPoint_ &&
+                destination_ == other.destination_;
+    }
 };
 
+inline
+bool operator!=(const Table& lhs, const Table& rhs) {
+    return !(lhs == rhs);
+}
 
 #endif /* TABLE_H_ */

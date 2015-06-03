@@ -74,5 +74,111 @@ BOOST_AUTO_TEST_CASE(startingPoint) {
     BOOST_CHECK_EQUAL(table.startingPoint(), startingPoint2);
 }
 
+BOOST_AUTO_TEST_CASE(equal_tables_are_equal) {
+    Table table1(3, 3);
+    table1.wall(Point{0, 0}, false);
+    table1.wall(Point{0, 1}, false);
+    table1.wall(Point{0, 2}, false);
+    table1.wall(Point{1, 1}, false);
+    table1.startingPoint(Point{1, 0});
+    table1.destination(Point{1, 1});
+
+    Table table2(3, 3);
+    table2.wall(Point{0, 0}, false);
+    table2.wall(Point{0, 1}, false);
+    table2.wall(Point{0, 2}, false);
+    table2.wall(Point{1, 1}, false);
+    table2.destination(Point{1, 1});
+    table2.startingPoint(Point{1, 0});
+
+    BOOST_CHECK(table1 == table2);
+    BOOST_CHECK(!(table1 != table2));
+}
+
+BOOST_AUTO_TEST_CASE(copied_tables_are_same) {
+    Table table1(3, 3);
+    table1.wall(Point{0, 0}, false);
+    table1.wall(Point{0, 1}, false);
+    table1.wall(Point{0, 2}, false);
+    table1.wall(Point{1, 1}, false);
+    table1.startingPoint(Point{1, 0});
+    table1.destination(Point{1, 1});
+
+    Table table2 = table1;
+
+    BOOST_CHECK(table1 == table2);
+    BOOST_CHECK(!(table1 != table2));
+}
+
+BOOST_AUTO_TEST_CASE(differently_sized_tables_are_different) {
+    Table table1(3, 3);
+    Table table2(3, 5);
+
+    BOOST_CHECK(table1 != table2);
+    BOOST_CHECK(!(table1 == table2));
+}
+
+BOOST_AUTO_TEST_CASE(tables_with_different_walls_are_different) {
+    Table table1(3, 3);
+    table1.wall(Point{0, 0}, false);
+    table1.wall(Point{0, 1}, false);
+    table1.wall(Point{0, 2}, false);
+    table1.wall(Point{1, 1}, false);
+    table1.startingPoint(Point{1, 0});
+    table1.destination(Point{1, 1});
+
+    Table table2(3, 3);
+    table2.wall(Point{0, 0}, false);
+    table2.wall(Point{0, 1}, false);
+    table2.wall(Point{1, 1}, false);
+    table2.destination(Point{1, 1});
+    table2.startingPoint(Point{1, 0});
+
+    BOOST_CHECK(table1 != table2);
+    BOOST_CHECK(!(table1 == table2));
+}
+
+BOOST_AUTO_TEST_CASE(tables_with_different_starting_points_are_different) {
+    Table table1(3, 3);
+    table1.wall(Point{0, 0}, false);
+    table1.wall(Point{0, 1}, false);
+    table1.wall(Point{0, 2}, false);
+    table1.wall(Point{1, 1}, false);
+    table1.startingPoint(Point{1, 0});
+    table1.destination(Point{1, 1});
+
+    Table table2(3, 3);
+    table2.wall(Point{0, 0}, false);
+    table2.wall(Point{0, 1}, false);
+    table2.wall(Point{0, 2}, false);
+    table2.wall(Point{1, 1}, false);
+    table2.destination(Point{1, 1});
+    table2.startingPoint(Point{0, 0});
+
+    BOOST_CHECK(table1 != table2);
+    BOOST_CHECK(!(table1 == table2));
+}
+
+BOOST_AUTO_TEST_CASE(tables_with_different_destinations_are_different) {
+    Table table1(3, 3);
+    table1.wall(Point{0, 0}, false);
+    table1.wall(Point{0, 1}, false);
+    table1.wall(Point{0, 2}, false);
+    table1.wall(Point{1, 1}, false);
+    table1.startingPoint(Point{1, 0});
+    table1.destination(Point{1, 1});
+
+    Table table2(3, 3);
+    table2.wall(Point{0, 0}, false);
+    table2.wall(Point{0, 1}, false);
+    table2.wall(Point{0, 2}, false);
+    table2.wall(Point{1, 1}, false);
+    table2.destination(Point{1, 2});
+    table2.startingPoint(Point{1, 0});
+
+    BOOST_CHECK(table1 != table2);
+    BOOST_CHECK(!(table1 == table2));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
