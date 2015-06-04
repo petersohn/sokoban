@@ -1,4 +1,5 @@
 #include "Status/Table.hpp"
+#include "OperatorChecks.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -95,8 +96,7 @@ BOOST_AUTO_TEST_CASE(equal_tables_are_equal) {
     table2.destination(Point{1, 1});
     table2.startingPoint(Point{1, 0});
 
-    BOOST_CHECK(table1 == table2);
-    BOOST_CHECK(!(table1 != table2));
+    CHECK_EQ(table1, table2);
 }
 
 BOOST_AUTO_TEST_CASE(copied_tables_are_same) {
@@ -110,16 +110,14 @@ BOOST_AUTO_TEST_CASE(copied_tables_are_same) {
 
     Table table2 = table1;
 
-    BOOST_CHECK(table1 == table2);
-    BOOST_CHECK(!(table1 != table2));
+    CHECK_EQ(table1, table2);
 }
 
 BOOST_AUTO_TEST_CASE(differently_sized_tables_are_different) {
     Table table1(3, 3);
     Table table2(3, 5);
 
-    BOOST_CHECK(table1 != table2);
-    BOOST_CHECK(!(table1 == table2));
+    CHECK_NE(table1, table2);
 }
 
 BOOST_AUTO_TEST_CASE(tables_with_different_walls_are_different) {
@@ -138,8 +136,7 @@ BOOST_AUTO_TEST_CASE(tables_with_different_walls_are_different) {
     table2.destination(Point{1, 1});
     table2.startingPoint(Point{1, 0});
 
-    BOOST_CHECK(table1 != table2);
-    BOOST_CHECK(!(table1 == table2));
+    CHECK_NE(table1, table2);
 }
 
 BOOST_AUTO_TEST_CASE(tables_with_different_starting_points_are_different) {
@@ -159,8 +156,7 @@ BOOST_AUTO_TEST_CASE(tables_with_different_starting_points_are_different) {
     table2.destination(Point{1, 1});
     table2.startingPoint(Point{0, 0});
 
-    BOOST_CHECK(table1 != table2);
-    BOOST_CHECK(!(table1 == table2));
+    CHECK_NE(table1, table2);
 }
 
 BOOST_AUTO_TEST_CASE(tables_with_different_destinations_are_different) {
@@ -180,8 +176,7 @@ BOOST_AUTO_TEST_CASE(tables_with_different_destinations_are_different) {
     table2.destination(Point{1, 2});
     table2.startingPoint(Point{1, 0});
 
-    BOOST_CHECK(table1 != table2);
-    BOOST_CHECK(!(table1 == table2));
+    CHECK_NE(table1, table2);
 }
 
 BOOST_AUTO_TEST_CASE(serialize_works) {
@@ -201,8 +196,7 @@ BOOST_AUTO_TEST_CASE(serialize_works) {
     boost::archive::text_iarchive in{stream};
     in >> table2;
 
-    BOOST_CHECK(table1 == table2);
-    BOOST_CHECK(!(table1 != table2));
+    CHECK_EQ(table1, table2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
