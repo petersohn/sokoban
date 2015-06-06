@@ -169,6 +169,28 @@ inline bool operator!=(const Status& lhs, const Status& rhs)
     return !(lhs == rhs);
 }
 
+template <typename Archive>
+void save(Archive& ar, const Status& status, const unsigned int /*version*/)
+{
+    ar & status.state();
+    Point currentPos = status.currentPos();
+    ar & currentPos;
+}
+
+template <typename Archive>
+void load(Archive& ar, Status& status, const unsigned int /*version*/)
+{
+    State state;
+    ar & state;
+    Point currentPos;
+    ar & currentPos;
+
+    status.state(state);
+    status.currentPos(currentPos);
+}
+
 std::ostream& operator<<(std::ostream& os, const Status& status);
+
+BOOST_SERIALIZATION_SPLIT_FREE(Status)
 
 #endif /* STATUS_H_ */

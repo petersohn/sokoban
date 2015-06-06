@@ -5,9 +5,12 @@
 #include "CreateTestStatus.hpp"
 #include "OperatorChecks.hpp"
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
+#include <ostream>
 #include <vector>
 
 BOOST_AUTO_TEST_SUITE(StatusTest)
@@ -306,6 +309,28 @@ BOOST_AUTO_TEST_CASE(add_stone_onto_other_stone_fails) {
     auto& status = data.second;
 
     BOOST_CHECK(!status.addStone(Point{1, 1}));
+}
+
+BOOST_AUTO_TEST_CASE(serialize) {
+    std::size_t width = 3;
+    std::size_t height = 3;
+    auto data = createStatus(width, height, {
+            "**x",
+            ".o.",
+            "o.y"});
+    const auto& table = *data.first;
+    auto& status1 = data.second;
+
+    std::stringstream stream;
+
+    boost::archive::text_oarchive out{stream};
+    out << status1;
+
+    Status status2{table};
+    boost::archive::text_iarchive in{stream};
+    in >> status2;
+
+    BOOST_CHECK_EQUAL(status2, status1);
 }
 
 
