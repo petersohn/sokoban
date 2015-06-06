@@ -81,23 +81,28 @@ bool InternalPusher::pushStoneIter(const Status& status, Point p, Point d) {
     if (status.value(pmd) != FieldType::floor || status.value(pd) != FieldType::floor || !status.reachable(pmd))
         return false;
     Status newStatus(status);
-    if (newStatus.currentPos() == pd)
+    if (newStatus.currentPos() == pd) {
         newStatus.shiftCurrentPos();
+    }
+
     float heur1 = calculator_.calculateStone(newStatus, p);
     newStatus.currentPos(p);
     float heur2 = calculator_.calculateStone(newStatus, pd);
-    if ((heur2 < 0 && (pd != newStatus.table().destination())) || heur2 >= heur1)
-    {
+    if ((heur2 < 0 && (pd != newStatus.table().destination())) || heur2 >= heur1) {
         return false;
     }
-    if (!newStatus.moveStone(p, pd))
-    {
+
+    if (!newStatus.moveStone(p, pd)) {
         std::cerr << "Whoopsie doopsie!";
         return false; // should never happen
     }
+
     node_ = nodeFactory_.createNode(newStatus, MoveDescriptor(p, d), node_);
-    if (pushStone(newStatus, pd))
+
+    if (pushStone(newStatus, pd)) {
         return true;
+    }
+
     node_ = node_->ancestor();
     return false;
 }

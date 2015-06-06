@@ -143,11 +143,12 @@ bool Status::moveStone(Point from, Point to) {
     fields_[from] = FieldType::floor;
     currentPos_ = from;
     state_.removeStone(from);
-    if (to != table().destination())
-    {
+
+    if (to != table().destination()) {
         fields_[to] = FieldType::stone;
         state_.addStone(to);
     }
+
     calculatedData_.reset();
     return true;
 }
@@ -171,14 +172,10 @@ bool Status::shiftIter(Point p)
 void Status::shiftCurrentPos()
 {
     Point p = currentPos();
-    if (shiftIter(p+p01))
-        return;
-    if (shiftIter(p-p01))
-        return;
-    if (shiftIter(p+p10))
-        return;
-    if (shiftIter(p-p10))
-        return;
+    if (shiftIter(p+p01)) return;
+    if (shiftIter(p-p01)) return;
+    if (shiftIter(p+p10)) return;
+    if (shiftIter(p-p10)) return;
 }
 
 std::ostream& operator<<(std::ostream& os, const Status& status)

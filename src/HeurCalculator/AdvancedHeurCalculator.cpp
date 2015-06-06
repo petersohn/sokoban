@@ -14,7 +14,8 @@
 
 /* AdvancedStoneCalculator::HeurDumper */
 
-void AdvancedStoneCalculator::HeurDumper::open() {
+void AdvancedStoneCalculator::HeurDumper::open() 
+{
     if (!file_.is_open())
         file_.open(filename_, std::ofstream::out | std::ofstream::trunc);
 }
@@ -26,7 +27,8 @@ void AdvancedStoneCalculator::HeurDumper::dumpPartition(
     Status s(table);
     s.addStone(partition.pos);
     s.currentPos(Point(-1, -1));
-    dumpStatus(file_, s, (boost::format("Partition (%d)") % partition.heur).str(), &partition.reachable);
+    dumpStatus(file_, s, (boost::format("Partition (%d)") % partition.heur).str(),
+            &partition.reachable);
     file_ << std::endl;
 }
 
