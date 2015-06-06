@@ -42,11 +42,15 @@ XDumper::ElementPtr XDumper::doAddNode(const std::shared_ptr<Node>& node)
     std::stringstream ss;
     dumpNode(ss, *table_, *node);
     elem->children().push_back(createDumpElement(ss.str()));
-    elem->attributes().insert(make_pair("stone", pointStr(node->from())));
+    elem->attributes().insert(make_pair("stone", 
+            boost::lexical_cast<std::string>(node->from())));
     elem->attributes().insert(make_pair("d", direction(node->d())));
-    elem->attributes().insert(make_pair("cost", boost::lexical_cast<std::string>(node->cost())));
-    elem->attributes().insert(make_pair("heur", boost::lexical_cast<std::string>(node->heur())));
-    elem->attributes().insert(make_pair("costFgv", boost::lexical_cast<std::string>(node->costFgv())));
+    elem->attributes().insert(make_pair("cost", 
+            boost::lexical_cast<std::string>(node->cost())));
+    elem->attributes().insert(make_pair("heur", 
+            boost::lexical_cast<std::string>(node->heur())));
+    elem->attributes().insert(make_pair("costFgv", 
+            boost::lexical_cast<std::string>(node->costFgv())));
     elements_[node] = elem;
     elements_[node->ancestor()]->children().push_back(elem);
     return elem;

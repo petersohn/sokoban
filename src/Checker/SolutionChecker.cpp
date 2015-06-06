@@ -23,7 +23,7 @@ bool SolutionChecker::isSuccessor(const Status& oldStatus, const Node& node)
     }
     for(Point  p: oldStatus.state()) {
         if (p != node.from() && !node.state()[p]) {
-            errorDump_ << "Stone point mismatch: " << pointStr(p) << endl;
+            errorDump_ << "Stone point mismatch: " << p << endl;
             return false;
         }
     }

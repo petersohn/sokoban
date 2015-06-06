@@ -3,19 +3,17 @@
 
 #include "Hash.hpp"
 
-#include <boost/format.hpp>
-
+#include <ostream>
 #include <stddef.h>
 
-class Point
-{
+class Point {
 public:
     int x, y;
     Point():x(0), y(0) { }
-    explicit constexpr Point(int x, int y):x(x),y(y) {}
+    explicit constexpr Point(int x, int y):x(x), y(y) {}
 
-    constexpr Point(const Point& ) = default;
-    Point& operator=(const Point& ) = default;
+    constexpr Point(const Point&) = default;
+    Point& operator=(const Point&) = default;
 
     Point& operator+=(Point other)
     {
@@ -74,26 +72,8 @@ inline constexpr bool operator<(Point p1, Point p2) {
     return p1.y < p2.y || (p1.y == p2.y && p1.x < p2.x);
 }
 
-inline std::string direction(Point d)
-{
-    return
-            d.x > 0 ? "right" :
-            d.x < 0 ? "left" :
-            d.y > 0 ? "down" :
-            d.y < 0 ? "up" : "???";
-}
-
-inline std::string pointStr(Point p)
-{
-    return (boost::format("(%d, %d)") % p.x % p.y).str();
-}
-
-inline std::ostream& operator<<(std::ostream& os, Point  p)
-{
-    os << pointStr(p);
-    return os;
-}
-
+std::string direction(Point d);
+std::ostream& operator<<(std::ostream& os, Point p);
 
 namespace std {
 
@@ -108,8 +88,6 @@ struct hash<Point> {
     }
 };
 
-
-}
-
+} // namespace std
 
 #endif /*POINT_H_*/

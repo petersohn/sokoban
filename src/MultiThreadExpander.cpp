@@ -15,6 +15,8 @@
 #include "NodeFactory.hpp"
 #include "PrioNodeQueue.hpp"
 
+#include <boost/format.hpp>
+
 #include <iostream>
 
 class MultiThreadExpander::InternalExpander {
