@@ -10,8 +10,9 @@
 
 class DecisionTreeHeurListFactory {
     typedef decisionTree::Node<PseudoStatus, float> NodeType;
+    typedef decisionTree::NodeTypes<PseudoStatus, float> NodeTypes;
 
-    std::unique_ptr<const NodeType> decisionTree_;
+    NodeType decisionTree_;
 
     static std::vector<Point> pointList(const Table& table);
 
@@ -19,8 +20,8 @@ class DecisionTreeHeurListFactory {
     class Next {
         const DecisionTreeHeurListFactory* owner_ = nullptr;
         std::size_t lastSize_ = 0;
-        const NodeType::ValueList* heurList_ = nullptr;
-        NodeType::ValueList::const_iterator iterator_;
+        const NodeTypes::ValueList* heurList_ = nullptr;
+        NodeTypes::ValueList::const_iterator iterator_;
 
     public:
 
@@ -28,7 +29,7 @@ class DecisionTreeHeurListFactory {
             owner_(owner)
         {}
 
-        const NodeType::Value* operator()(const PseudoStatus& pseudoStatus);
+        const NodeTypes::Value* operator()(const PseudoStatus& pseudoStatus);
     };
 
 public:
@@ -41,7 +42,7 @@ public:
             std::size_t numThreads)
     {
         util::TimeMeter timeMeter;
-        NodeType::ValueList convertedHeurList;
+        NodeTypes::ValueList convertedHeurList;
         convertedHeurList.reserve(heurList.size());
         boost::transform(heurList, std::back_inserter(convertedHeurList),
                 [](const HeurInfo& heurInfo)

@@ -31,56 +31,6 @@ namespace detail {
 
     const int indentLevel = 2;
 
-    template <class Status, class T>
-    class LeafNode: public Node<Status, T> {
-        typedef typename Node<Status, T>::Value Value;
-        typedef typename Node<Status, T>::ValueList ValueList;
-        ValueList value_;
-    public:
-        LeafNode(const ValueList& value):
-            value_(value) {}
-        LeafNode(ValueList&& value):
-            value_(std::move(value)) {}
-        virtual const ValueList& get(const Status&) const
-        {
-            return value_;
-        }
-    };
-
-    template <class Status, class T>
-    class DecisionNode: public Node<Status, T> {
-        typedef typename Node<Status, T>::Value Value;
-        typedef typename Node<Status, T>::ValueList ValueList;
-        Point point_;
-
-        typedef std::unique_ptr<Node<Status, T>> ChildType;
-        ChildType falseChild_;
-        ChildType trueChild_;
-    public:
-        DecisionNode(Point  point):
-            point_(point)
-        {}
-
-        DecisionNode(Point  point,
-                ChildType&& falseChild, ChildType&& trueChild):
-            point_(point),
-            falseChild_(std::move(falseChild)),
-            trueChild_(std::move(trueChild))
-        {}
-
-        virtual const ValueList& get(const Status& status) const
-        {
-            if (isStone(status, point_)) {
-                return trueChild_->get(status);
-            } else {
-                return falseChild_->get(status);
-            }
-        }
-
-        ChildType& falseChild() { return falseChild_; }
-        ChildType& trueChild() { return trueChild_; }
-    }; // class DecisionNode
-
     class NodeBuilder {
         int maxDepth_;
         ProgressBar progressBar_;
@@ -170,14 +120,13 @@ namespace detail {
         } // fastFilterFunctorList
 
         template <class Status, class T>
-        std::unique_ptr<Node<Status, T>>
-        createLeaf(
-                const typename Node<Status, T>::ValueList& originalValueList,
+        Node<Status, T> createLeaf(
+                const typename NodeTypes<Status, T>::ValueList& originalValueList,
                 int depthRemaining,
                 const State& collectedState)
         {
-            typedef typename Node<Status, T>::ValuePtr ValuePtr;
-            typedef typename Node<Status, T>::ValueList ValueList;
+            typedef typename NodeTypes<Status, T>::ValuePtr ValuePtr;
+            typedef typename NodeTypes<Status, T>::ValueList ValueList;
 
             ValueList valueList;
             if (checker_) {
@@ -196,21 +145,20 @@ namespace detail {
                 valueList = originalValueList;
             }
             advanceProgress(valueList.size(), depthRemaining);
-            return std::make_unique<LeafNode<Status, T>>(std::move(valueList));
+            return LeafNode<Status, T>(std::move(valueList));
         }
 
         template <class Status, class T, class PointList>
         void buildDecisionChildren(
-            const typename Node<Status, T>::ValueList& falseValues,
-            const typename Node<Status, T>::ValueList& trueValues,
+            const typename NodeTypes<Status, T>::ValueList& falseValues,
+            const typename NodeTypes<Status, T>::ValueList& trueValues,
             const PointList& pointList,
             int depthRemaining,
             const State& falseCollectedState,
             const State& trueCollectedState,
-            std::unique_ptr<Node<Status, T>>& result)
+            Node<Status, T>& result)
         {
-            DecisionNode<Status, T>& resultNode =
-                    static_cast<DecisionNode<Status, T>&>(*result);
+            auto& resultNode = boost::get<DecisionNode<Status, T, Node<Status, T>>&>(result);
             if (numThreads_ > 1) {
                 threadPool_.getIoService().post(std::bind(
                         &NodeBuilder::doBuildNode<Status, T, std::vector<Point>>,
@@ -232,15 +180,15 @@ namespace detail {
 
         template <class Status, class T, class PointList>
         void doBuildNode(
-            const typename Node<Status, T>::ValueList& valueList,
+            const typename NodeTypes<Status, T>::ValueList& valueList,
             const PointList& pointList,
             int depthRemaining,
             bool trueBranch,
             const State& collectedState,
-            std::unique_ptr<Node<Status, T>>& result)
+            Node<Status, T>& result)
         {
-            typedef typename Node<Status, T>::ValuePtr ValuePtr;
-            typedef typename Node<Status, T>::ValueList ValueList;
+            typedef typename NodeTypes<Status, T>::ValuePtr ValuePtr;
+            typedef typename NodeTypes<Status, T>::ValueList ValueList;
 
             if (valueList.empty() ||
                     pointList.empty() ||
@@ -286,8 +234,8 @@ namespace detail {
                     { return isStone(value->first, *point); });
 
             assert(falseValues.size() != valueList.size());
-            result = std::make_unique<detail::DecisionNode<Status, T>>(*point);
-            buildDecisionChildren(
+            result = DecisionNode<Status, T, Node<Status, T>>(*point);
+            buildDecisionChildren<Status, T, PointList>(
                     falseValues, valueList,
                     newFunctorList, depthRemaining - 1,
                     collectedState, newCollectedState,
@@ -327,13 +275,12 @@ namespace detail {
         }
 
         template <class Key, class T, class PointList>
-        std::unique_ptr<Node<Key, T>>
-        buildNode(
-            const typename Node<Key, T>::ValueList& valueList,
+        Node<Key, T> buildNode(
+            const typename NodeTypes<Key, T>::ValueList& valueList,
             const PointList& pointList)
         {
             minLength_ = pointList.size();
-            std::unique_ptr<Node<Key, T>> result;
+            Node<Key, T> result;
             {
                 util::ThreadPoolRunner runner(threadPool_);
                 doBuildNode<Key, T>(

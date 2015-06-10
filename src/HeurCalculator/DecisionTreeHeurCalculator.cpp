@@ -12,7 +12,7 @@ DecisionTreeHeurListFactory::pointList(const Table& table)
     return result;
 }
 
-const DecisionTreeHeurListFactory::NodeType::Value*
+const DecisionTreeHeurListFactory::NodeTypes::Value*
 DecisionTreeHeurListFactory::Next::operator()(const PseudoStatus& pseudoStatus)
 {
     if (pseudoStatus.state().size() == 0) {
@@ -21,7 +21,9 @@ DecisionTreeHeurListFactory::Next::operator()(const PseudoStatus& pseudoStatus)
 
     if (pseudoStatus.state().size() != lastSize_) {
         lastSize_ = pseudoStatus.state().size();
-        heurList_ = &owner_->decisionTree_->get(pseudoStatus);
+        heurList_ = &boost::apply_visitor(
+                decisionTree::NodeVisitor<PseudoStatus, float>(pseudoStatus),
+                owner_->decisionTree_);
         iterator_ = heurList_->begin();
     }
 

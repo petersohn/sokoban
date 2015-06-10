@@ -6,9 +6,8 @@
 namespace decisionTree {
 
 template <typename Key, typename T, typename PointList>
-std::unique_ptr<Node<Key, T>>
-buildNode(
-        const typename Node<Key, T>::ValueList& valueList,
+Node<Key, T> buildNode(
+        const typename NodeTypes<Key, T>::ValueList& valueList,
         const PointList& pointList,
         boost::optional<ComplexChecker> checker,
         int maxDepth,
