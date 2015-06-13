@@ -2,7 +2,7 @@
 
 #include "Dumper/DumperFunctions.hpp"
 
-#include "HeurCalculator/BlockListGenerator.hpp"
+#include "BlockListGenerator.hpp"
 #include "HeurCalculator/BlockListHeurCalculator.hpp"
 #include "HeurCalculator/DecisionTreeHeurCalculator.hpp"
 #include "HeurCalculator/TableHeurCalculator.hpp"

@@ -16,7 +16,7 @@
 
 #include "HeurCalculator/AdvancedHeurCalculator.hpp"
 #include "HeurCalculator/BasicHeurCalculator.hpp"
-#include "HeurCalculator/BlockListGenerator.hpp"
+#include "BlockListGenerator.hpp"
 #include "HeurCalculator/HeurCalculator.hpp"
 
 #include "CompareQueue.hpp"
