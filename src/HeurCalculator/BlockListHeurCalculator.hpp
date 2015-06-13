@@ -1,9 +1,9 @@
-#ifndef BLOCKLISTHEURCALCULATOR_H_
-#define BLOCKLISTHEURCALCULATOR_H_
+#ifndef HEURCALCULATOR_BLOCKLISTHEURCALCULATOR_HPP
+#define HEURCALCULATOR_BLOCKLISTHEURCALCULATOR_HPP
 
+#include "HeurCalculator/BlockListHeurCalculatorFwd.hpp"
 #include "HeurCalculator/HeurInfo.hpp"
 #include "HeurCalculator/SubStatusHeurCalculator.hpp"
-
 
 class BlockListHeurListFactory {
     HeurList heurList_;
@@ -36,6 +36,4 @@ public:
 
 };
 
-using BlocklistHeurCalculator = SubStatusHeurCalculator<BlockListHeurListFactory>;
-
-#endif /* BLOCKLISTHEURCALCULATOR_H_ */
+#endif // HEURCALCULATOR_BLOCKLISTHEURCALCULATOR_HPP

@@ -208,7 +208,7 @@ std::shared_ptr<const Checker> BlockListGenerator::checker()
 std::shared_ptr<const HeurCalculator> BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
 {
     assert(table_);
-    return std::make_shared<BlocklistHeurCalculator>(
+    return std::make_shared<BlockListHeurCalculator>(
             heurMultiplier, calculator_,
             BlockListHeurListFactory{heurList_ | boost::adaptors::transformed(
                     IncrementInfo::getHeurInfo) | boost::adaptors::reversed});

@@ -1,12 +1,16 @@
-#ifndef DECISIONTREEHEURCALCULATOR_H_
-#define DECISIONTREEHEURCALCULATOR_H_
+#ifndef HEURCALCULATOR_DECISIONTREEHEURCALCULATOR_HPP
+#define HEURCALCULATOR_DECISIONTREEHEURCALCULATOR_HPP
+
+#include "DecisionTree/DecisionTree.hpp"
 
 #include "HeurCalculator/HeurInfo.hpp"
-#include "DecisionTree/DecisionTree.hpp"
-#include "util/TimeMeter.hpp"
+#include "HeurCalculator/DecisionTreeHeurCalculatorFwd.hpp"
 #include "HeurCalculator/SubStatusHeurCalculator.hpp"
+
 #include "Status/PseudoStatus.hpp"
 #include "Status/Status.hpp"
+
+#include "util/TimeMeter.hpp"
 
 class DecisionTreeHeurListFactory {
     typedef decisionTree::Node<PseudoStatus, float> NodeType;
@@ -66,10 +70,6 @@ public:
     {
         return Next{this};
     }
-
 };
 
-using DecisionTreeHeurCalculator = SubStatusHeurCalculator<DecisionTreeHeurListFactory>;
-
-
-#endif /* DECISIONTREEHEURCALCULATOR_H_ */
+#endif // HEURCALCULATOR_DECISIONTREEHEURCALCULATOR_HPP
