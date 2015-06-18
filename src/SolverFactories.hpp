@@ -20,11 +20,16 @@ std::shared_ptr<Dumper> createDumperFromOptions(const Options& opts);
 
 
 class OptionsBasedExpanderFactory {
+    using Checkers = std::vector<std::shared_ptr<const Checker>>;
+    using NodeCheckers = std::deque<std::shared_ptr<NodeChecker>>;
     const Options& options_;
     const Table& table_;
     std::size_t* expandedNodes_;
     util::TimerData* chokePointFindingTime_;
     util::TimerData* preprocessingIterationTime_;
+
+    void preprocess(std::shared_ptr<const HeurCalculator>& calculator,
+            Checkers& checkers);
 public:
     OptionsBasedExpanderFactory(const Options& opts, const Table& table,
             std::size_t* expandedNodes, util::TimerData* chokePointFindingTime,
@@ -49,9 +54,9 @@ public:
             std::size_t* expandedNodes,
             std::shared_ptr<const HeurCalculator> experimentalCalculator =
                     std::shared_ptr<const HeurCalculator>());
-    std::vector<std::shared_ptr<const Checker>> createBasicCheckers(
+    Checkers createBasicCheckers(
             const std::shared_ptr<const HeurCalculator>& calculator);
-    std::deque<std::shared_ptr<NodeChecker>> createBasicNodeCheckers(
+    NodeCheckers createBasicNodeCheckers(
             const std::shared_ptr<const HeurCalculator>& calculator,
             const Status& status);
 

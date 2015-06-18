@@ -66,9 +66,8 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
             options_.partitionsDumpFilename_}, heurMultiplier);
 }
 
-std::vector<std::shared_ptr<const Checker>>
-OptionsBasedExpanderFactory::createBasicCheckers(
-        const std::shared_ptr<const HeurCalculator>& calculator)
+auto OptionsBasedExpanderFactory::createBasicCheckers(
+        const std::shared_ptr<const HeurCalculator>& calculator) -> Checkers
 {
     std::vector<std::shared_ptr<const Checker>> checkers;
     switch (options_.movableCheckerType_) {
@@ -98,10 +97,9 @@ OptionsBasedExpanderFactory::createBasicCheckers(
     return checkers;
 }
 
-std::deque<std::shared_ptr<NodeChecker>>
-OptionsBasedExpanderFactory::createBasicNodeCheckers(
+auto OptionsBasedExpanderFactory::createBasicNodeCheckers(
         const std::shared_ptr<const HeurCalculator>& calculator,
-        const Status& status)
+        const Status& status) -> NodeCheckers
 {
     VisitedStates visitedStates;
     visitedStates.checkAndPush(std::pair<const Status&, int>(status,
@@ -151,47 +149,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
     auto checkers = createBasicCheckers(calculator);
 
     if (options_.blockListStones_ > 1) {
-        ComplexChecker checker{checkers};
-        std::shared_ptr<const HeurCalculator> preprocessingCalculator =
-                options_.useAdvancedHeurCalculator_ ?
-                createAdvancedHeurCalcularor(1.0f) :
-                std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);
-
-        auto solver = std::make_unique<Solver>(
-                std::bind(&createPrioQueueFromOptions, options_),
-                [=](const Status& status) {
-                    return createExpander(false, preprocessingCalculator, checker,
-                            ComplexNodeChecker{createBasicNodeCheckers(
-                                    preprocessingCalculator, status)},
-                            nullptr);
-                });
-
-        BlockListGenerator blockListGenerator(
-                std::move(solver), preprocessingCalculator, checker, options_);
-        blockListGenerator.init(table_);
-
-        if (chokePointFindingTime_) {
-            *chokePointFindingTime_ = blockListGenerator.chokePointFinderTime();
-        }
-        if (preprocessingIterationTime_) {
-            *preprocessingIterationTime_ = blockListGenerator.iteratingTime();
-        }
-
-        checkers.push_back(blockListGenerator.checker());
-        switch (options_.blocklistHeurCalculatorType_) {
-        case BlockListHeurType::none:
-            break;
-        case BlockListHeurType::vector:
-            calculator = blockListGenerator.vectorHeurCalculator(options_.heurMultiplier_);
-//            experimentalCalculator = blockListGenerator.vectorHeurCalculator2();
-            break;
-        case BlockListHeurType::decisionTree:
-            calculator = blockListGenerator.decisionTreeHeurCalculator(
-                    options_.maxDecisionTreeDepth_,
-                    options_.useCheckerForDecisionTree_,
-                    options_.heurMultiplier_);
-            break;
-        }
+        preprocess(calculator, checkers);
     }
 //    experimentalCalculator = calculator;
     return [=](const Status& status) {
@@ -213,6 +171,51 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
                     ComplexNodeChecker{nodeCheckers}, expandedNodes_,
                     experimentalCalculator);
         };
+}
+
+void OptionsBasedExpanderFactory::preprocess(
+        std::shared_ptr<const HeurCalculator>& calculator, Checkers& checkers)
+{
+    ComplexChecker checker{checkers};
+    std::shared_ptr<const HeurCalculator> preprocessingCalculator =
+            options_.useAdvancedHeurCalculator_ ?
+            createAdvancedHeurCalcularor(1.0f) :
+            std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);
+
+    auto solver = std::make_unique<Solver>(
+            std::bind(&createPrioQueueFromOptions, options_),
+            [=](const Status& status) {
+                return createExpander(false, preprocessingCalculator, checker,
+                        ComplexNodeChecker{createBasicNodeCheckers(
+                                preprocessingCalculator, status)},
+                        nullptr);
+            });
+
+    BlockListGenerator blockListGenerator(
+            std::move(solver), preprocessingCalculator, checker, options_);
+    blockListGenerator.init(table_);
+
+    if (chokePointFindingTime_) {
+        *chokePointFindingTime_ = blockListGenerator.chokePointFinderTime();
+    }
+    if (preprocessingIterationTime_) {
+        *preprocessingIterationTime_ = blockListGenerator.iteratingTime();
+    }
+
+    checkers.push_back(blockListGenerator.checker());
+    switch (options_.blocklistHeurCalculatorType_) {
+    case BlockListHeurType::none:
+        break;
+    case BlockListHeurType::vector:
+        calculator = blockListGenerator.vectorHeurCalculator(options_.heurMultiplier_);
+        break;
+    case BlockListHeurType::decisionTree:
+        calculator = blockListGenerator.decisionTreeHeurCalculator(
+                options_.maxDecisionTreeDepth_,
+                options_.useCheckerForDecisionTree_,
+                options_.heurMultiplier_);
+        break;
+    }
 }
 
 namespace {
