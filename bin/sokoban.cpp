@@ -53,8 +53,10 @@ int main(int argc, char** argv) {
             (opts.test_ ? nullptr : &expandedNodes),
             &chokePointFinderTime, &preprocessingIterationTime);
     auto createExpander = expanderFactory.factory();
-    Solver solver(std::bind(createPrioQueueFromOptions, opts),
-            createExpander, std::bind(createDumperFromOptions, opts));
+    Solver solver(
+            [&opts]() { return createPrioQueueFromOptions(opts); },
+            createExpander, 
+            [&opts]() { return createDumperFromOptions(opts); });
     std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
     SolutionChecker solutionChecker(std::cerr, heurDump);
     int returnCode = 0;
