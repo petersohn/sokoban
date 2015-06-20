@@ -70,6 +70,8 @@ struct Options {
     std::string         outputFormat_ = "";
     bool                parallelExpand_ = false;
     std::string         partitionsDumpFilename_ = "partitions.dump";
+    std::string         preprocessLoadFilename_;
+    std::string         preprocessSaveFilename_;
     std::size_t         reverseSearchMaxDepth_ = 2;
     std::string         solutionDumpFilename_ = "solution.dump";
     std::size_t         statusPoolSize_ = 0;

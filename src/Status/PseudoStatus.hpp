@@ -4,12 +4,15 @@
 #include "Status/Status.hpp"
 #include "FieldType.hpp"
 
+#include <boost/serialization/vector.hpp>
+
 class PseudoStatus {
     const Table* table_;
     State state_;
     Point currentPos_;
     Array<bool> reachableArray_;
 public:
+    PseudoStatus(): table_{nullptr} {}
     explicit PseudoStatus(const Status& status):
         table_(&status.table()),
         state_(status.state()),
@@ -31,6 +34,15 @@ public:
     bool reachable(Point  p) const { return arrayAt<bool>(reachableArray_, p, false); }
     Array<bool>& reachableArray() { return reachableArray_; }
     const Array<bool>& reachableArray() const { return reachableArray_; }
+
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int)
+    {
+        ar & table_;
+        ar & state_;
+        ar & currentPos_;
+        ar & reachableArray_;
+    }
 };
 
 

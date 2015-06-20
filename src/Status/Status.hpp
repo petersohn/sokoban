@@ -172,21 +172,38 @@ inline bool operator!=(const Status& lhs, const Status& rhs)
 template <typename Archive>
 void save(Archive& ar, const Status& status, const unsigned int /*version*/)
 {
-    ar & status.state();
+    ar << status.state();
     Point currentPos = status.currentPos();
-    ar & currentPos;
+    ar << currentPos;
 }
 
 template <typename Archive>
 void load(Archive& ar, Status& status, const unsigned int /*version*/)
 {
     State state;
-    ar & state;
+    ar >> state;
     Point currentPos;
-    ar & currentPos;
+    ar >> currentPos;
 
     status.state(state);
     status.currentPos(currentPos);
+}
+
+template <typename Archive>
+void save_construct_data(Archive& ar, const Status* status,
+        const unsigned int /*version*/)
+{
+    const Table* table = &status->table();
+    ar << table;
+}
+
+template <typename Archive>
+void load_construct_data(Archive& ar, Status* status,
+        const unsigned int /*version*/)
+{
+    Table* table;
+    ar >> table;
+    ::new(status)Status{*table};
 }
 
 std::ostream& operator<<(std::ostream& os, const Status& status);

@@ -37,6 +37,8 @@ class DecisionTreeHeurListFactory {
     };
 
 public:
+    DecisionTreeHeurListFactory() = default;
+
     template <class HeurListType>
     DecisionTreeHeurListFactory(
             const Table& table,
@@ -69,6 +71,11 @@ public:
     Next operator()() const
     {
         return Next{this};
+    }
+
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int /*version*/) {
+        ar & decisionTree_;
     }
 };
 

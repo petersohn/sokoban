@@ -1,13 +1,17 @@
+#include "Checker/Checker.hpp"
 #include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/SolutionChecker.hpp"
 
 #include "Dumper/DumperFunctions.hpp"
+
+#include "HeurCalculator/HeurCalculator.hpp"
 
 #include "Status/State.hpp"
 #include "Status/Status.hpp"
 #include "Status/StatusCreator.hpp"
 
 #include "formatOutput.hpp"
+#include "Loader.hpp"
 #include "Node.hpp"
 #include "Options.hpp"
 #include "Solver.hpp"
@@ -17,6 +21,9 @@
 #include "util/TimeMeter.hpp"
 #include "util/ThreadPool.hpp"
 
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/unique_ptr.hpp>
+
 #include <iostream>
 #include <fstream>
 #include <deque>
@@ -25,7 +32,6 @@
 
 using namespace std;
 namespace pt = boost::posix_time;
-
 
 void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, Status status)
 {
@@ -40,22 +46,52 @@ int main(int argc, char** argv) {
 
     Status::statusPoolSize(opts.statusPoolSize_);
 
-    auto data(loadStatusFromFile(opts.filename_.c_str()));
-    const auto& table = data.first;
-    Status& status = data.second;
-    dumpStatus(std::cerr, status);
+    std::unique_ptr<const Table> table;
+    std::unique_ptr<Status> status;
+    std::unique_ptr<Loader> loader;
+
+    if (!opts.preprocessLoadFilename_.empty()) {
+        loader = std::make_unique<Loader>(opts.preprocessLoadFilename_);
+        loader->get() >> table;
+        loader->get() >> status;
+    } else {
+        auto data(loadStatusFromFile(opts.filename_.c_str()));
+        table = std::move(data.first);
+        status = std::make_unique<Status>(std::move(data.second));
+    }
+    dumpStatus(std::cerr, *status);
 
     util::TimeMeter timeMeter;
     std::size_t expandedNodes = 0;
     util::TimerData chokePointFinderTime;
     util::TimerData preprocessingIterationTime;
-    OptionsBasedExpanderFactory expanderFactory(opts, status.table(),
+    OptionsBasedExpanderFactory expanderFactory(opts, status->table(),
             (opts.test_ ? nullptr : &expandedNodes),
             &chokePointFinderTime, &preprocessingIterationTime);
-    auto createExpander = expanderFactory.factory();
+
+    PreprocessedResult preprocessedResult;
+
+    if (loader) {
+        loader->get() >> preprocessedResult;
+        expanderFactory.setHeurCalculatorParameters(
+                *preprocessedResult.heurCalculator);
+    } else {
+        preprocessedResult = expanderFactory.preprocess();
+    }
+
+    if (!opts.preprocessSaveFilename_.empty()) {
+        std::ofstream stream{opts.preprocessSaveFilename_,
+                std::ios::out | std::ios::trunc};
+        OutputArchive archive{stream};
+        archive << table;
+        archive << status;
+        archive << preprocessedResult;
+    }
+
+    auto createExpander = expanderFactory.factory(preprocessedResult);
     Solver solver(
             [&opts]() { return createPrioQueueFromOptions(opts); },
-            createExpander, 
+            createExpander,
             [&opts]() { return createDumperFromOptions(opts); });
     std::ofstream heurDump("plusHeur.dump", std::ios::out | std::ios::trunc);
     SolutionChecker solutionChecker(std::cerr, heurDump);
@@ -67,7 +103,7 @@ int main(int argc, char** argv) {
         util::ThreadPool threadPool;
         util::ThreadPoolRunner runner(threadPool);
         threadPool.setNumThreads(opts.numThreads_);
-        SubStatusForEach it(status.table(),
+        SubStatusForEach it(status->table(),
                 std::bind(solveTestProblem, std::ref(solutionChecker),
                     std::ref(solver), std::placeholders::_1),
                 SubStatusForEach::MinDistance{0}, SubStatusForEach::MaxDistance{0},
@@ -79,7 +115,7 @@ int main(int argc, char** argv) {
                 ComplexChecker{expanderFactory.createBasicCheckers(calculator)});
         it.wait(true);
     } else {
-        std::deque<std::shared_ptr<Node>> solution = solver.solve(status);
+        std::deque<std::shared_ptr<Node>> solution = solver.solve(*status);
         SolutionData solutionData{*table, solution,
                 SolutionQuality::none, ExpandedNodes{expandedNodes},
                 TotalTime{timeMeter.data()},
@@ -87,7 +123,7 @@ int main(int argc, char** argv) {
                 PreprocessingIterationTime{preprocessingIterationTime}};
         if (!solution.empty())
         {
-            if (solutionChecker.checkResult(status, solution)) {
+            if (solutionChecker.checkResult(*status, solution)) {
                 solutionData.solutionQuality = SolutionQuality::good;
             } else {
                 solutionData.solutionQuality = SolutionQuality::bad;

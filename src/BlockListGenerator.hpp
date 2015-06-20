@@ -60,9 +60,9 @@ public:
     BlockListGenerator(std::unique_ptr<const Solver> solver, std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker, const Options& options);
     ~BlockListGenerator();
-    std::shared_ptr<const Checker> checker();
-    std::shared_ptr<const HeurCalculator> vectorHeurCalculator(float heurMultiplier);
-    std::shared_ptr<const HeurCalculator> decisionTreeHeurCalculator(std::size_t maxDepth,
+    std::shared_ptr<Checker> checker();
+    std::shared_ptr<HeurCalculator> vectorHeurCalculator(float heurMultiplier);
+    std::shared_ptr<HeurCalculator> decisionTreeHeurCalculator(std::size_t maxDepth,
             bool useChecker, float heurMultiplier);
     void init(const Table& table);
     util::TimerData chokePointFinderTime() const { return chokePointFinderTime_; }

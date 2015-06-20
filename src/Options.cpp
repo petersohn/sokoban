@@ -44,6 +44,12 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
              "Produce help message, then quit.")
             ("filename", po::value(&options.filename_),
              "Input file name")
+            ("load-preprocessed-result", defaultValue(&options.preprocessLoadFilename_),
+             "Load preprocessed results from this file. No preprocessing is done. "
+             "--filename and all preprocessing arguments are ignored.\n")
+            ("save-preprocessed-result", defaultValue(&options.preprocessSaveFilename_),
+             "Save preprocessed results to this file. If this file is loaded the same "
+             "results and arguments are used.")
             ("test", defaultValue(&options.test_),
              "Instead of solving a problem, solve each possible problem with "
              "the given number of stones on the table.")
@@ -166,7 +172,7 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
             printHelp(argv[0], optionsDescription);
             exit(0);
         }
-        if (options.filename_.empty()) {
+        if (options.filename_.empty() && options.preprocessLoadFilename_.empty()) {
             std::cerr << "No filename given." << std::endl;
             exit(1);
         }

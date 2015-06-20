@@ -12,6 +12,7 @@ private:
     Point destination_;
 
 public:
+    Table() = default;
     Table(size_t width, size_t height):walls_(width, height, true) {}
 
     Table(const Table&) = default;

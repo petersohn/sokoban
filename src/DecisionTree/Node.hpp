@@ -3,6 +3,11 @@
 
 #include <Status/Point.hpp>
 
+#include <boost/serialization/type_info_implementation.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/variant.hpp>
+#include <boost/serialization/vector.hpp>
 #include <boost/variant.hpp>
 #include <boost/variant/recursive_variant.hpp>
 
@@ -48,6 +53,12 @@ public:
     {
         return value_;
     }
+
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int /*version*/)
+    {
+        ar & value_;
+    }
 };
 
 template <class Status, class T, class Node>
@@ -60,6 +71,7 @@ class DecisionNode {
     ChildType falseChild_;
     ChildType trueChild_;
 public:
+    DecisionNode() = default;
     DecisionNode(Point  point):
         point_(point)
     {}
@@ -83,6 +95,14 @@ public:
 
     ChildType& falseChild() { return falseChild_; }
     ChildType& trueChild() { return trueChild_; }
+
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int /*version*/)
+    {
+        ar & point_;
+        ar & falseChild_;
+        ar & trueChild_;
+    }
 }; // class DecisionNode
 
 template <class Status, class T>

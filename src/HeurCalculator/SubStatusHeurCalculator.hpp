@@ -5,12 +5,17 @@
 #include "Status/PseudoStatus.hpp"
 #include "Node.hpp"
 
+#include <boost/serialization/base_object.hpp>
+
 template <typename NextFactory>
 class SubStatusHeurCalculator: public HeurCalculator {
     float heurMultiplier_;
     std::shared_ptr<const HeurCalculator> baseCalculator_;
     NextFactory nextFactory_;
 public:
+    SubStatusHeurCalculator() : heurMultiplier_(0.0) {
+    }
+
     SubStatusHeurCalculator(
             float heurMultiplier,
             const std::shared_ptr<const HeurCalculator>& baseCalculator,
@@ -19,6 +24,16 @@ public:
                 baseCalculator_(std::move(baseCalculator)),
                 nextFactory_(std::move(nextFactory))
     {
+    }
+
+    void setBaseCalculator(const std::shared_ptr<const HeurCalculator>& value)
+    {
+        baseCalculator_ = value;
+    }
+
+    void setHeurMultiplier(float value)
+    {
+        heurMultiplier_ = value;
     }
 
     float calculateStone(const Status& status, Point p) const override
@@ -51,6 +66,11 @@ public:
         return result * heurMultiplier_;
     }
 
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int /*version*/) {
+        ar & boost::serialization::base_object<HeurCalculator>(*this);
+        ar & nextFactory_;
+    }
 };
 
 #endif /* SRC_SUBSTATUSHEURCALCULATOR_HPP */

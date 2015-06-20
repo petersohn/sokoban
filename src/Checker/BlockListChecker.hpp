@@ -1,13 +1,17 @@
-#ifndef BLOCKLISTCHECKER_HPP_
-#define BLOCKLISTCHECKER_HPP_
+#ifndef CHECKER_BLOCKLISTCHECKER_HPP
+#define CHECKER_BLOCKLISTCHECKER_HPP
 
 #include "Checker/Checker.hpp"
 #include "IndexedStatusList.hpp"
+
+#include <boost/serialization/base_object.hpp>
 
 class BlockListChecker: public Checker {
 private:
     IndexedStatusList blockList_;
 public:
+    BlockListChecker() = default;
+
     BlockListChecker(IndexedStatusList blockList):
             blockList_(std::move(blockList))
     {
@@ -15,7 +19,13 @@ public:
 
     bool check(const Status& status, Point  p) const override;
     const char* errorMessage() const override;
+
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int /*version*/) {
+        ar & boost::serialization::base_object<Checker>(*this);
+        ar & blockList_;
+    }
 };
 
 
-#endif /* BLOCKLISTCHECKER_HPP_ */
+#endif // CHECKER_BLOCKLISTCHECKER_HPP

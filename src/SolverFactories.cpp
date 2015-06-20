@@ -1,5 +1,6 @@
 #include "SolverFactories.hpp"
 
+#include "Checker/BlockListChecker.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
 #include "Checker/CorridorChecker.hpp"
 #include "Checker/DistanceChecker.hpp"
@@ -16,10 +17,13 @@
 
 #include "HeurCalculator/AdvancedHeurCalculator.hpp"
 #include "HeurCalculator/BasicHeurCalculator.hpp"
-#include "BlockListGenerator.hpp"
+#include "HeurCalculator/BlockListHeurCalculator.hpp"
+#include "HeurCalculator/DecisionTreeHeurCalculator.hpp"
 #include "HeurCalculator/HeurCalculator.hpp"
 
+#include "BlockListGenerator.hpp"
 #include "CompareQueue.hpp"
+#include "DynamicVisitor.hpp"
 #include "ExpandedNodeLimiter.hpp"
 #include "MultiThreadExpander.hpp"
 #include "NodeFactory.hpp"
@@ -27,6 +31,8 @@
 #include "PrioNodeQueue.hpp"
 #include "Solver.hpp"
 #include "StonePusher.hpp"
+
+#include <boost/mpl/vector.hpp>
 
 #include <functional>
 #include <vector>
@@ -138,19 +144,33 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
     return expander;
 }
 
-ExpanderFactory OptionsBasedExpanderFactory::factory()
+std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createHeurCalculator(
+        float heurMultiplier)
 {
-    std::shared_ptr<const HeurCalculator> calculator =
-        options_.useAdvancedHeurCalculator_ ?
-        createAdvancedHeurCalcularor(options_.heurMultiplier_) :
-        std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_},
-                options_.heurMultiplier_);
-    std::shared_ptr<const HeurCalculator> experimentalCalculator;
+    return options_.useAdvancedHeurCalculator_ ?
+            createAdvancedHeurCalcularor(heurMultiplier) :
+            std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_},
+                    heurMultiplier);
+}
+
+ExpanderFactory OptionsBasedExpanderFactory::factory(
+        const PreprocessedResult& preprocessedResult)
+{
+    std::shared_ptr<const HeurCalculator> calculator;
+
+    if (preprocessedResult.heurCalculator) {
+        calculator = preprocessedResult.heurCalculator;
+    } else {
+        calculator = createHeurCalculator(options_.heurMultiplier_);
+    }
+
     auto checkers = createBasicCheckers(calculator);
 
-    if (options_.blockListStones_ > 1) {
-        preprocess(calculator, checkers);
+    if (preprocessedResult.checker) {
+        checkers.push_back(preprocessedResult.checker);
     }
+
+    std::shared_ptr<const HeurCalculator> experimentalCalculator;
 //    experimentalCalculator = calculator;
     return [=](const Status& status) {
             auto nodeCheckers = createBasicNodeCheckers(calculator, status);
@@ -173,15 +193,12 @@ ExpanderFactory OptionsBasedExpanderFactory::factory()
         };
 }
 
-void OptionsBasedExpanderFactory::preprocess(
-        std::shared_ptr<const HeurCalculator>& calculator, Checkers& checkers)
+PreprocessedResult OptionsBasedExpanderFactory::preprocess()
 {
-    ComplexChecker checker{checkers};
     std::shared_ptr<const HeurCalculator> preprocessingCalculator =
-            options_.useAdvancedHeurCalculator_ ?
-            createAdvancedHeurCalcularor(1.0f) :
-            std::make_shared<BasicHeurCalculator>(BasicStoneCalculator{table_}, 1.0f);
+            createHeurCalculator(1.0f);
 
+    ComplexChecker checker{createBasicCheckers(preprocessingCalculator)};
     auto solver = std::make_unique<Solver>(
             std::bind(&createPrioQueueFromOptions, options_),
             [=](const Status& status) {
@@ -202,20 +219,37 @@ void OptionsBasedExpanderFactory::preprocess(
         *preprocessingIterationTime_ = blockListGenerator.iteratingTime();
     }
 
-    checkers.push_back(blockListGenerator.checker());
+    PreprocessedResult result;
+    result.checker = blockListGenerator.checker();
+
     switch (options_.blocklistHeurCalculatorType_) {
     case BlockListHeurType::none:
         break;
     case BlockListHeurType::vector:
-        calculator = blockListGenerator.vectorHeurCalculator(options_.heurMultiplier_);
+         result.heurCalculator = blockListGenerator.vectorHeurCalculator(options_.heurMultiplier_);
         break;
     case BlockListHeurType::decisionTree:
-        calculator = blockListGenerator.decisionTreeHeurCalculator(
+        result.heurCalculator = blockListGenerator.decisionTreeHeurCalculator(
                 options_.maxDecisionTreeDepth_,
                 options_.useCheckerForDecisionTree_,
                 options_.heurMultiplier_);
         break;
     }
+
+    return result;
+}
+
+void OptionsBasedExpanderFactory::setHeurCalculatorParameters(
+        HeurCalculator& heurCalculator)
+{
+    applyDynamicVisitor<boost::mpl::vector<
+            BlockListHeurCalculator, DecisionTreeHeurCalculator>>(
+            [this](auto& heurCalculator) {
+                heurCalculator.setBaseCalculator(createHeurCalculator(
+                        options_.heurMultiplier_));
+                heurCalculator.setHeurMultiplier(options_.heurMultiplier_);
+            },
+            heurCalculator);
 }
 
 namespace {

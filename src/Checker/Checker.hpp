@@ -14,6 +14,10 @@ public:
     // return a *real* string constant, or at least
     // remain valid until the next call
     virtual const char* errorMessage() const = 0;
+
+    template <typename Ar>
+    void serialize(Ar& /*ar*/, const unsigned int /*version*/) {
+    }
 };
 
 #endif // CHECKER_HPP

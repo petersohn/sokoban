@@ -199,13 +199,13 @@ void BlockListGenerator::updateResult()
         });
 }
 
-std::shared_ptr<const Checker> BlockListGenerator::checker()
+std::shared_ptr<Checker> BlockListGenerator::checker()
 {
     assert(table_);
     return std::make_shared<BlockListChecker>(blockList_);
 }
 
-std::shared_ptr<const HeurCalculator> BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
+std::shared_ptr<HeurCalculator> BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
 {
     assert(table_);
     return std::make_shared<BlockListHeurCalculator>(
@@ -215,7 +215,7 @@ std::shared_ptr<const HeurCalculator> BlockListGenerator::vectorHeurCalculator(f
 }
 
 
-std::shared_ptr<const HeurCalculator> BlockListGenerator::decisionTreeHeurCalculator(
+std::shared_ptr<HeurCalculator> BlockListGenerator::decisionTreeHeurCalculator(
         std::size_t maxDepth, bool useChecker, float heurMultiplier)
 {
     assert(table_);

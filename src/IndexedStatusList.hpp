@@ -1,5 +1,5 @@
-#ifndef SRC_INDEXEDSTATUSLIST_HPP
-#define SRC_INDEXEDSTATUSLIST_HPP
+#ifndef INDEXEDSTATUSLIST_HPP
+#define INDEXEDSTATUSLIST_HPP
 
 #include "Status/Status.hpp"
 
@@ -28,6 +28,12 @@ public:
     bool hasSubStatus(const Status& status, Point p) const;
 
     size_t size() const { return size_; }
+
+    template <typename Ar>
+    void serialize(Ar& ar, const unsigned int /*version*/) {
+        ar & index_;
+        ar & size_;
+    }
 };
 
-#endif /* SRC_INDEXEDSTATUSLIST_HPP */
+#endif // INDEXEDSTATUSLIST_HPP

@@ -17,6 +17,10 @@ public:
             const Status& status,
             const MoveDescriptor* moveDescriptor = nullptr,
             const std::shared_ptr<Node>& ancestor = std::shared_ptr<Node>()) const = 0;
+
+    template <typename Ar>
+    void serialize(Ar& /*ar*/, const unsigned int /*version*/) {
+    }
 };
 
 #endif /* HEURCALCULATOR_H_ */
