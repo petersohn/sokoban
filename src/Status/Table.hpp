@@ -3,6 +3,7 @@
 
 #include "Array.hpp"
 
+#include <iosfwd>
 #include <memory>
 
 class Table {
@@ -58,5 +59,7 @@ inline
 bool operator!=(const Table& lhs, const Table& rhs) {
     return !(lhs == rhs);
 }
+
+std::ostream& operator<<(std::ostream& os, const Table& table);
 
 #endif /* TABLE_H_ */

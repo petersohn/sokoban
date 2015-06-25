@@ -10,8 +10,8 @@
 
 #include <deque>
 #include <functional>
+#include <iosfwd>
 #include <memory>
-#include <ostream>
 #include <unordered_map>
 #include <vector>
 

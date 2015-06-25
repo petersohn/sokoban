@@ -7,6 +7,7 @@
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
@@ -331,6 +332,29 @@ BOOST_AUTO_TEST_CASE(serialize) {
     in >> status2;
 
     BOOST_CHECK_EQUAL(status2, status1);
+}
+
+BOOST_AUTO_TEST_CASE(serialize_to_pointer) {
+    std::size_t width = 3;
+    std::size_t height = 3;
+    auto data = createStatus(width, height, {
+            "**x",
+            ".o.",
+            "o.y"});
+    auto status1 = std::make_shared<Status>(data.second);
+
+    std::stringstream stream;
+
+    boost::archive::text_oarchive out{stream};
+    out << status1;
+
+    std::shared_ptr<Status> status2;
+    boost::archive::text_iarchive in{stream};
+    in >> status2;
+
+    BOOST_CHECK_EQUAL(status2->table(), status1->table());
+    Status status3{status1->table(), status2->state(), status2->currentPos()};
+    BOOST_CHECK_EQUAL(status3, *status1);
 }
 
 

@@ -4,6 +4,8 @@
 #include "Status/floodFill.hpp"
 #include "Node.hpp"
 
+#include <ostream>
+
 #ifndef NO_UNSAFE_DIAGNOSTICS
 std::size_t Status::copyCount(0);
 std::size_t Status::moveCount(0);
