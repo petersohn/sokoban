@@ -33,7 +33,7 @@ void printHelp(const char* name, const po::options_description& optionsDescripti
 
 }
 
-Options parseOptions(int argc, char **argv, const char *configFileName)
+Options parseOptions(int argc, const char* argv[], const char *configFileName)
 {
     bool help = false;
     Options options;

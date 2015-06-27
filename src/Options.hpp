@@ -85,7 +85,7 @@ struct Options {
     std::size_t         test_ = 0;
 };
 
-Options parseOptions(int argc, char **argv, const char *configFileName);
+Options parseOptions(int argc, const char* argv[], const char *configFileName);
 
 template <typename Ar>
 void serialize(Ar& ar, Options& options, const unsigned int /*version*/)
