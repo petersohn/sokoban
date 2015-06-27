@@ -41,18 +41,24 @@ Options parseOptions(int argc, char **argv, const char *configFileName)
 
     commandLineDesctiption.add_options()
             ("help,h", po::bool_switch(&help),
-             "Produce help message, then quit.")
+             "Produce help message, then quit.\n")
             ("filename", po::value(&options.filename_),
-             "Input file name")
+             "The input file name.\n")
             ("load-preprocessed-result", defaultValue(&options.preprocessLoadFilename_),
              "Load preprocessed results from this file. No preprocessing is done. "
              "--filename and all preprocessing arguments are ignored.\n")
             ("save-preprocessed-result", defaultValue(&options.preprocessSaveFilename_),
              "Save preprocessed results to this file. If this file is loaded the same "
-             "results and arguments are used.")
+             "results and arguments are used.\n")
+            ("save-progress", defaultValue(&options.saveProgress_),
+             "Save progress into the given file. If the file already exists, "
+             "load the results from this file and continue from that points. "
+             "All general options except --num-threads, --output-format, "
+             "--solution-dump-filename and --work-queue-length are saved to this "
+             "file and these values are ignored from command line when loading.\n")
             ("test", defaultValue(&options.test_),
              "Instead of solving a problem, solve each possible problem with "
-             "the given number of stones on the table.")
+             "the given number of stones on the table.\n")
         ;
 
     po::options_description generalDescription("General options");

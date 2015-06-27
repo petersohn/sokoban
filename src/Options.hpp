@@ -70,8 +70,6 @@ struct Options {
     std::string         outputFormat_ = "";
     bool                parallelExpand_ = false;
     std::string         partitionsDumpFilename_ = "partitions.dump";
-    std::string         preprocessLoadFilename_;
-    std::string         preprocessSaveFilename_;
     std::size_t         reverseSearchMaxDepth_ = 2;
     std::string         solutionDumpFilename_ = "solution.dump";
     std::size_t         statusPoolSize_ = 0;
@@ -81,9 +79,47 @@ struct Options {
     std::size_t         workQueueLength_ = 100;
 
     std::string         filename_;
+    std::string         saveProgress_;
+    std::string         preprocessLoadFilename_;
+    std::string         preprocessSaveFilename_;
     std::size_t         test_ = 0;
 };
 
 Options parseOptions(int argc, char **argv, const char *configFileName);
+
+template <typename Ar>
+void serialize(Ar& ar, Options& options, const unsigned int /*version*/)
+{
+    ar & options.blocklistDecisionTreeDepth_;
+    ar & options.blockListDistance_;
+    ar & options.blocklistHeurCalculatorType_;
+    ar & options.blockListStones_;
+    ar & options.chokePointDistance_;
+    ar & options.chokePointDistantNum_;
+    ar & options.chokePointNum_;
+    ar & options.compare_;
+    ar & options.corridorCheckerType_;
+    ar & options.distanceLimiter_;
+    ar & options.dumpFilename_;
+    ar & options.dumpFilter_;
+    ar & options.dumpFilterType_;
+    ar & options.dumpStyle_;
+    ar & options.expandedNodeLimit_;
+    ar & options.heurMultiplier_;
+    ar & options.maxDecisionTreeDepth_;
+    ar & options.maxHeurListSize_;
+    ar & options.movableCheckerType_;
+    //ar & options.numThreads_;
+    //ar & options.outputFormat_;
+    ar & options.parallelExpand_;
+    ar & options.partitionsDumpFilename_;
+    ar & options.reverseSearchMaxDepth_;
+    //ar & options.solutionDumpFilename_;
+    ar & options.statusPoolSize_;
+    ar & options.useAdvancedHeurCalculator_;
+    ar & options.useCheckerForDecisionTree_;
+    ar & options.useStonePusher_;
+    //ar & options.workQueueLength_;
+}
 
 #endif /* OPTIONS_H_ */
