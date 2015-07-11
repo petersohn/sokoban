@@ -115,8 +115,7 @@ void BlockListGenerator::init(const Table& table)
 
     for (std::size_t n = 2; n <= options_.blockListStones_; ++n) {
         incrementalCalculator_ = n == 2 ?
-            calculator_ :
-                decisionTreeDepth > 0 ?
+            calculator_ : decisionTreeDepth > 0 ?
                 decisionTreeHeurCalculator(decisionTreeDepth, false, 1.0f) :
                 vectorHeurCalculator(1.0f);
 

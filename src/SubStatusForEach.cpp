@@ -86,10 +86,10 @@ bool SubStatusForEach::checkDistances(const State& state, Point p)
 
 bool SubStatusForEach::processState(const State& state, std::size_t stones)
 {
-    auto parts = getPartitions(*table_, state, reverseSearchMaxDepth_);
+    auto partitions = getPartitions(*table_, state, reverseSearchMaxDepth_);
     bool result = false;
 
-    for (auto& status: parts) {
+    for (const Status& status: partitions) {
         float heur = heurCalculator_->calculateStatus(status);
         if (heur < 0) {
             continue;
