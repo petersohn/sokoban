@@ -96,16 +96,16 @@ void BlockListGenerator::init(const Table& table)
             options_.blocklistDecisionTreeDepth_ : 0;
 
     std::cerr << "Calculating block list..." << std::endl;
-    SubStatusForEach subStatusForEach(table,
-            std::bind(&BlockListGenerator::calculateHeurList, this, std::placeholders::_1),
+    SubStatusForEach subStatusForEach{table,
+            [this](const Status& status) { calculateHeurList(status); },
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{options_.blockListDistance_},
             SubStatusForEach::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
-                    options_.chokePointDistantNum_ : 0},
+                options_.chokePointDistantNum_ : 0},
             calculateChokePoints(),
             SubStatusForEach::WorkQueueLength{options_.workQueueLength_},
             SubStatusForEach::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
-            threadPool_.getIoService());
+            threadPool_.getIoService()};
 
     blockList_.clear();
     heurList_.clear();
