@@ -117,7 +117,7 @@ StonePusher::StonePusher(std::shared_ptr<Expander> expander,
         nodeFactory_(std::move(nodeFactory))
 
 {
-    assert(calculator_ != NULL);
+    assert(calculator_ != nullptr);
 }
 
 void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,

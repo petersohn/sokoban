@@ -12,7 +12,7 @@ Node::Node(const State& stones, const MoveDescriptor& moveDescriptor,
     moveDescriptor_(moveDescriptor),
     time_(time)
 {
-    if (ancestor.get() == NULL)
+    if (ancestor.get() == nullptr)
     {
         depth_ = 0;
         cost_ = c;
@@ -26,7 +26,7 @@ Node::Node(const State& stones, const MoveDescriptor& moveDescriptor,
 deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::shared_ptr<Node> base)
 {
     deque<std::shared_ptr<Node>> result;
-    while (node.get() != NULL && node != base)
+    while (node.get() != nullptr && node != base)
     {
         result.push_front(node);
         node = node->ancestor();

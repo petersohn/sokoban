@@ -97,7 +97,7 @@ NormalExpander::NormalExpander(
         maxDepth_(0),
         expandedNodes_(expandedNodes)
 {
-    assert(calculator_.get() != NULL);
+    assert(calculator_.get() != nullptr);
 }
 
 NormalExpander::~NormalExpander()

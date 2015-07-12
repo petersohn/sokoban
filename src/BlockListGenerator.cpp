@@ -59,7 +59,7 @@ std::deque<std::shared_ptr<Node>> BlockListGenerator::doCalculateBlockList(const
     if (result.empty()) {
         auto threadId = *util::ThreadPool::getCurrentThreadId();
         calculationInfos_[threadId]->blockList_.push_back(status);
-        dumpStatus(status, NULL, "Blocked");
+        dumpStatus(status, nullptr, "Blocked");
     }
     return result;
 }
@@ -80,7 +80,7 @@ void BlockListGenerator::calculateHeurList(const Status& status)
             auto threadId = *util::ThreadPool::getCurrentThreadId();
             calculationInfos_[threadId]->dump_ <<
                     heur << " --> " << cost << "(" << difference << ")\n";
-            dumpStatus(status, NULL, "Added heur");
+            dumpStatus(status, nullptr, "Added heur");
             HeurInfo heurInfo{status, cost};
             calculationInfos_[threadId]->heurList_.push_back(
                     IncrementInfo{std::move(heurInfo), difference});

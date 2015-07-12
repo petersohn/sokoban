@@ -69,13 +69,13 @@ void dumpStatus(std::ostream& file, const Status& status, std::string title = ""
                 output[p] = '*';
             else if (status.value(p) == FieldType::floor)
             {
-                if (highlight != NULL && (*highlight)[p])
+                if (highlight != nullptr && (*highlight)[p])
                     output[p] = '+';
                 else
                     output[p] = '.';
             } else if (status.value(p) == FieldType::stone)
             {
-                if (highlight != NULL && (*highlight)[p])
+                if (highlight != nullptr && (*highlight)[p])
                     output[p] = 'O';
                 else
                     output[p] = 'o';

@@ -21,7 +21,7 @@ class ComplexCheckerBase {
         lastError_ = "";
 #endif
         for (const auto& func: funcs_) {
-            assert(func.get() != NULL);
+            assert(func.get() != nullptr);
             if (!func->check(args...)) {
 #ifndef NO_UNSAFE_DIAGNOSTICS
                 lastError_ = func->errorMessage();

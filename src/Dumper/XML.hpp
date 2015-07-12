@@ -41,7 +41,7 @@ public:
 };
 
 
-void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename = NULL);
+void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename = nullptr);
 
 } // namespace xml
 

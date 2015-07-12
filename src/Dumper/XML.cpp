@@ -26,11 +26,11 @@ string XMLText::toString() const {
 }
 
 void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename) {
-    assert(filename != NULL);
-    assert(rootElement.get() != NULL);
+    assert(filename != nullptr);
+    assert(rootElement.get() != nullptr);
     ofstream file(filename, ios::out | ios::trunc);
     file << "<?xml version=\"1.0\"?>" << endl;
-    if (dtdFilename != NULL) {
+    if (dtdFilename != nullptr) {
         file << "<!DOCTYPE " << rootElement->name() << " SYSTEM \"" << dtdFilename << "\">" << std::endl;
     }
     file << rootElement->toString();

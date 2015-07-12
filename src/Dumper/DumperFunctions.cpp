@@ -14,7 +14,7 @@ void dumpNode(std::ostream& file, const Table& table, const Node& node,
                 node.minDistance()).str();
     Status status(table, node);
     Array<bool> highlight2;
-    if (highlight != NULL)
+    if (highlight != nullptr)
         highlight2 = *highlight;
     else
         highlight2.reset(status.width(), status.height(), false);

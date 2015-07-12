@@ -24,8 +24,8 @@ public:
         dumper_(dumper),
         costFgv_(-1)
     {
-        assert(queue_.get() != NULL);
-        assert(expander_.get() != NULL);
+        assert(queue_.get() != nullptr);
+        assert(expander_.get() != nullptr);
     }
 
     bool expandSerial(Status& status)
