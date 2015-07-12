@@ -53,7 +53,8 @@ BlockListGenerator::BlockListGenerator(std::unique_ptr<const Solver> solver,
 BlockListGenerator::~BlockListGenerator()
 {}
 
-std::deque<std::shared_ptr<Node>> BlockListGenerator::doCalculateBlockList(const Status& status)
+std::deque<std::shared_ptr<Node>> BlockListGenerator::calculateBlockList(
+        const Status& status)
 {
     std::deque<std::shared_ptr<Node>> result = solver_->solve(status);
     if (result.empty()) {
@@ -64,14 +65,9 @@ std::deque<std::shared_ptr<Node>> BlockListGenerator::doCalculateBlockList(const
     return result;
 }
 
-void BlockListGenerator::calculateBlockList(const Status& status)
-{
-    doCalculateBlockList(status);
-}
-
 void BlockListGenerator::calculateHeurList(const Status& status)
 {
-    std::deque<std::shared_ptr<Node>> result = doCalculateBlockList(status);
+    std::deque<std::shared_ptr<Node>> result = calculateBlockList(status);
     if (!result.empty()) {
         float heur = incrementalCalculator_->calculateStatus(status);
         float cost = result.back()->cost();

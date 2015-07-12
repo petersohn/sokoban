@@ -49,8 +49,7 @@ private:
     util::TimerData chokePointFinderTime_;
     util::TimerData iteratingTime_;
 
-    std::deque<std::shared_ptr<Node>> doCalculateBlockList(const Status& status);
-    void calculateBlockList(const Status& status);
+    std::deque<std::shared_ptr<Node>> calculateBlockList(const Status& status);
     void calculateHeurList(const Status& status);
     void dumpStatus(const Status& status, const Point *p, const std::string& title);
     void updateResult();
