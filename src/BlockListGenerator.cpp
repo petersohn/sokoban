@@ -87,25 +87,31 @@ void BlockListGenerator::calculateHeurList(const Status& status)
 void BlockListGenerator::init(const Table& table)
 {
     table_ = &table;
-    std::size_t decisionTreeDepth =
-        options_.blocklistHeurCalculatorType_ == BlockListHeurType::decisionTree ?
-            options_.blocklistDecisionTreeDepth_ : 0;
-
     std::cerr << "Calculating block list..." << std::endl;
-    SubStatusForEach subStatusForEach{table,
+    subStatusForEach_ = std::make_unique<SubStatusForEach>(table,
             [this](const Status& status) { calculateHeurList(status); },
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{options_.blockListDistance_},
             SubStatusForEach::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
-                options_.chokePointDistantNum_ : 0},
+                    options_.chokePointDistantNum_ : 0},
             calculateChokePoints(),
             SubStatusForEach::WorkQueueLength{options_.workQueueLength_},
-            SubStatusForEach::ReverseSearchMaxDepth{options_.reverseSearchMaxDepth_},
-            threadPool_.getIoService()};
+            SubStatusForEach::ReverseSearchMaxDepth{
+                    options_.reverseSearchMaxDepth_},
+            threadPool_.getIoService());
 
     blockList_.clear();
     heurList_.clear();
     calculationInfos_.resize(options_.numThreads_);
+
+}
+
+void BlockListGenerator::run() {
+    std::size_t decisionTreeDepth =
+            options_.blocklistHeurCalculatorType_ ==
+                    BlockListHeurType::decisionTree ?
+            options_.blocklistDecisionTreeDepth_ : 0;
+
     util::TimeMeter timeMeter;
     util::ThreadPoolRunner runner(threadPool_);
 
@@ -123,8 +129,8 @@ void BlockListGenerator::init(const Table& table)
 
         ComplexChecker actualChecker{checker_};
         actualChecker.append(checker());
-        subStatusForEach.start(n, calculator_, actualChecker);
-        subStatusForEach.wait(true);
+        subStatusForEach_->start(n, calculator_, actualChecker);
+        subStatusForEach_->wait(true);
         updateResult();
     }
 

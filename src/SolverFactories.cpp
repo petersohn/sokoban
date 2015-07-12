@@ -211,6 +211,7 @@ PreprocessedResult OptionsBasedExpanderFactory::preprocess()
     BlockListGenerator blockListGenerator(
             std::move(solver), preprocessingCalculator, checker, options_);
     blockListGenerator.init(table_);
+    blockListGenerator.run();
 
     if (chokePointFindingTime_) {
         *chokePointFindingTime_ = blockListGenerator.chokePointFinderTime();
