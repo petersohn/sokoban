@@ -180,10 +180,6 @@ void BlockListGenerator::updateResult()
         std::move(calculationInfo->heurList_.begin(),
                 calculationInfo->heurList_.end(),
                 std::back_inserter(heurList_));
-        boost::sort(calculationInfo->heurList_,
-                [](const IncrementInfo& lhs, const IncrementInfo& rhs) {
-                    return lhs.difference_ > rhs.difference_;
-                });
     }
 
     std::cerr << "Block list size = " << blockList_.size() << std::endl;
