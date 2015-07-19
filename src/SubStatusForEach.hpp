@@ -71,6 +71,11 @@ public:
             std::shared_ptr<const HeurCalculator> heurCalculator,
             ComplexChecker checker, boost::optional<Array<bool>> excludeList = {});
     void wait(bool print);
+
+    void synchronize(const std::function<void()>& function)
+    {
+        worker.synchronize(function);
+    }
 };
 
 

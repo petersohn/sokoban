@@ -12,6 +12,11 @@ struct Compare {
     {}
 };
 
-
+template <typename Ar>
+void serialize(Ar& ar, Compare& compare, const unsigned int /*version*/)
+{
+    ar & compare.type;
+    ar & compare.reverse;
+}
 
 #endif /* SRC_COMPARE_HPP */

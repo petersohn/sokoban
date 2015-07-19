@@ -13,17 +13,23 @@
 #include "Status/StatusCreator.hpp"
 #include "Status/Table.hpp"
 
+#include "BlockListGenerator.hpp"
 #include "formatOutput.hpp"
 #include "Loader.hpp"
 #include "Node.hpp"
+#include "PreprocessedResult.hpp"
 #include "Solver.hpp"
 #include "SolverFactories.hpp"
 #include "SubStatusForEach.hpp"
 
 #include "util/ThreadPool.hpp"
 
+#include <boost/filesystem.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/unique_ptr.hpp>
+#include <boost/serialization/unordered_set.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -36,7 +42,10 @@ Sokoban::Sokoban(int argc, const char* argv[]):
 {
     Status::statusPoolSize(options.statusPoolSize_);
 
-    if (!options.preprocessLoadFilename_.empty()) {
+    if (!options.saveProgress_.empty() &&
+            boost::filesystem::exists(options.saveProgress_)) {
+        load();
+    } else if (!options.preprocessLoadFilename_.empty()) {
         loader = std::make_unique<Loader>(options.preprocessLoadFilename_);
         loader->get() >> table;
         loader->get() >> status;
@@ -45,8 +54,8 @@ Sokoban::Sokoban(int argc, const char* argv[]):
         table = std::move(data.first);
         status = std::make_unique<Status>(std::move(data.second));
     }
-    dumpStatus(std::cerr, *status);
 
+    dumpStatus(std::cerr, *status);
 }
 
 Sokoban::~Sokoban() = default;
@@ -63,33 +72,31 @@ void solveTestProblem(SolutionChecker& solutionChecker, Solver& solver, Status s
 
 }
 
+void Sokoban::createExpanderFactory()
+{
+    assert(table);
+    if (!expanderFactory) {
+        expanderFactory = std::make_unique<OptionsBasedExpanderFactory>(options,
+                *table,
+                [this](const BlockListGenerator& blockListGenerator) {
+                    savePreprocess(blockListGenerator);
+                },
+                (options.test_ ? nullptr : &expandedNodes),
+                &chokePointFinderTime, &preprocessingIterationTime);
+    }
+}
+
 int Sokoban::run()
 {
     namespace pt = boost::posix_time;
-    OptionsBasedExpanderFactory expanderFactory(options, status->table(),
-            (options.test_ ? nullptr : &expandedNodes),
-            &chokePointFinderTime, &preprocessingIterationTime);
 
-    PreprocessedResult preprocessedResult;
+    createExpanderFactory();
 
-    if (loader) {
-        loader->get() >> preprocessedResult;
-        expanderFactory.setHeurCalculatorParameters(
-                *preprocessedResult.heurCalculator);
-    } else {
-        preprocessedResult = expanderFactory.preprocess();
+    if (progressStatus < ProgressStatus::preprocessing) {
+        preprocess();
     }
 
-    if (!options.preprocessSaveFilename_.empty()) {
-        std::ofstream stream{options.preprocessSaveFilename_,
-                std::ios::out | std::ios::trunc};
-        OutputArchive archive{stream};
-        archive << table;
-        archive << status;
-        archive << preprocessedResult;
-    }
-
-    auto createExpander = expanderFactory.factory(preprocessedResult);
+    auto createExpander = expanderFactory->factory(preprocessedResult);
     Solver solver(
             [this]() { return createPrioQueueFromOptions(options); },
             createExpander,
@@ -100,7 +107,7 @@ int Sokoban::run()
 
     if (options.test_ > 0) {
         std::shared_ptr<const HeurCalculator> calculator =
-                expanderFactory.createAdvancedHeurCalcularor(1.0);
+                expanderFactory->createAdvancedHeurCalcularor(1.0);
         util::ThreadPool threadPool;
         util::ThreadPoolRunner runner(threadPool);
         threadPool.setNumThreads(options.numThreads_);
@@ -113,7 +120,7 @@ int Sokoban::run()
                 SubStatusForEach::ReverseSearchMaxDepth{0},
                 threadPool.getIoService());
         it.start(options.test_, calculator,
-                ComplexChecker{expanderFactory.createBasicCheckers(calculator)});
+                ComplexChecker{expanderFactory->createBasicCheckers(calculator)});
         it.wait(true);
     } else {
         std::deque<std::shared_ptr<Node>> solution = solver.solve(*status);
@@ -140,5 +147,71 @@ int Sokoban::run()
     return returnCode;
 }
 
+void Sokoban::preprocess()
+{
+    if (loader) {
+        loader->get() >> preprocessedResult;
+        expanderFactory->setHeurCalculatorParameters(
+                *preprocessedResult.heurCalculator);
+    } else {
+        auto blockListGenerator = expanderFactory->createBlockListGenerator();
+        preprocessedResult = expanderFactory->preprocess(*blockListGenerator);
+    }
+
+    if (!options.preprocessSaveFilename_.empty()) {
+        std::ofstream stream{options.preprocessSaveFilename_,
+                std::ios::out | std::ios::trunc};
+        OutputArchive archive{stream};
+        archive << table;
+        archive << status;
+        archive << preprocessedResult;
+    }
+}
+
+void Sokoban::saveBasics(OutputArchive& archive)
+{
+    archive << progressStatus;
+    archive << options;
+    archive << table;
+    archive << status;
+}
+
+void Sokoban::savePreprocess(const BlockListGenerator& blockListGenerator)
+{
+    std::ofstream stream{options.saveProgress_,
+            std::ios::out | std::ios::trunc};
+    OutputArchive archive{stream};
+
+    progressStatus = ProgressStatus::preprocessing;
+    saveBasics(archive);
+    archive << blockListGenerator;
+}
+
+void Sokoban::load()
+{
+    Loader loader{options.saveProgress_};
+    InputArchive& archive = loader.get();
+
+    archive >> progressStatus;
+    archive >> options;
+    archive >> table;
+    archive >> status;
+
+    switch (progressStatus) {
+    case ProgressStatus::preprocessing:
+        preprocessedResult = loadPreprocessedResult(archive);
+        break;
+    default:
+        throw std::runtime_error{"Unsupported progress status"};
+    }
+}
+
+PreprocessedResult Sokoban::loadPreprocessedResult(InputArchive& archive)
+{
+    createExpanderFactory();
+    auto blockListGenerator = expanderFactory->createBlockListGenerator();
+    archive >> *blockListGenerator;
+    return expanderFactory->preprocess(*blockListGenerator);
+}
 
 

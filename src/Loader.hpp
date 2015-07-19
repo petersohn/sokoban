@@ -1,14 +1,13 @@
 #ifndef LOADER_HPP
 #define LOADER_HPP
 
+#include "ArchiveFwd.hpp"
+
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 
 #include <fstream>
 #include <string>
-
-using InputArchive = boost::archive::binary_iarchive;
-using OutputArchive = boost::archive::binary_oarchive;
 
 class Loader {
 public:

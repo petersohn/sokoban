@@ -80,6 +80,7 @@ struct Options {
 
     std::string         filename_;
     std::string         saveProgress_;
+    float               saveInterval_ = 0.0;
     std::string         preprocessLoadFilename_;
     std::string         preprocessSaveFilename_;
     std::size_t         test_ = 0;

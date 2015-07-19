@@ -15,7 +15,7 @@ public:
 private:
     boost::asio::io_service& ioService;
     MutexType iterMutex;
-    ConditionVariableType done;
+    ConditionVariableType doneCondition;
 
     std::size_t workQueueLength;
 
@@ -23,6 +23,7 @@ private:
     IterationState iterationState = IterationState::idle;
     std::size_t iters = 0;
     std::size_t solved = 0;
+    std::size_t numRunning = 0;
 
     void cleanWorkQueue();
     void doWork(const std::vector<Action>& actions);
@@ -39,6 +40,7 @@ public:
     void addAction(const Action& action);
     void wait(bool print);
     IterationState getIterationState() const { return iterationState; }
+    void synchronize(const std::function<void()>& function);
 };
 
 #endif // MULTITHREADWORKER_HPP

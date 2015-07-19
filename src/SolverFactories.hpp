@@ -11,44 +11,38 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 
-class HeurCalculator;
-struct Options;
-class Dumper;
+class BlockListGenerator;
 class Checker;
+class Dumper;
+class HeurCalculator;
 class NodeChecker;
+struct Options;
+struct PreprocessedResult;
 class Table;
 
 std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts);
 std::shared_ptr<Dumper> createDumperFromOptions(const Options& opts);
-
-struct PreprocessedResult {
-    std::shared_ptr<Checker> checker;
-    std::shared_ptr<HeurCalculator> heurCalculator;
-
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/)
-    {
-        ar & checker;
-        ar & heurCalculator;
-    }
-};
 
 class OptionsBasedExpanderFactory {
     using Checkers = std::vector<std::shared_ptr<const Checker>>;
     using NodeCheckers = std::deque<std::shared_ptr<NodeChecker>>;
     const Options& options_;
     const Table& table_;
+    std::function<void(const BlockListGenerator&)> preprocessSaver;
     std::size_t* expandedNodes_;
     util::TimerData* chokePointFindingTime_;
     util::TimerData* preprocessingIterationTime_;
 
-    std::shared_ptr<const HeurCalculator> createHeurCalculator(float heurMultiplier);
+    std::shared_ptr<const HeurCalculator> createHeurCalculator(
+            float heurMultiplier);
 public:
     OptionsBasedExpanderFactory(const Options& opts, const Table& table,
+            std::function<void(const BlockListGenerator&)> preprocessSaver,
             std::size_t* expandedNodes, util::TimerData* chokePointFindingTime,
             util::TimerData* preprocessingIterationTime):
         options_(opts),
         table_(table),
+        preprocessSaver(preprocessSaver),
         expandedNodes_(expandedNodes),
         chokePointFindingTime_(chokePointFindingTime),
         preprocessingIterationTime_(preprocessingIterationTime)
@@ -56,9 +50,11 @@ public:
     }
 
     OptionsBasedExpanderFactory(const OptionsBasedExpanderFactory&) = delete;
-    OptionsBasedExpanderFactory& operator=(const OptionsBasedExpanderFactory&) = delete;
+    OptionsBasedExpanderFactory& operator=(
+            const OptionsBasedExpanderFactory&) = delete;
 
-    std::shared_ptr<const HeurCalculator> createAdvancedHeurCalcularor(float heurMultiplier);
+    std::shared_ptr<const HeurCalculator> createAdvancedHeurCalcularor(
+            float heurMultiplier);
 
     std::shared_ptr<Expander> createExpander(
             bool allowMultiThread,
@@ -76,7 +72,8 @@ public:
             const std::shared_ptr<const HeurCalculator>& calculator,
             const Status& status);
 
-    PreprocessedResult preprocess();
+    std::unique_ptr<BlockListGenerator> createBlockListGenerator();
+    PreprocessedResult preprocess(BlockListGenerator& blockListGenerator);
 
     ExpanderFactory factory(const PreprocessedResult& preprocessedResult);
 

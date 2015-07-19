@@ -56,6 +56,8 @@ Options parseOptions(int argc, const char* argv[], const char *configFileName)
              "All general options except --num-threads, --output-format, "
              "--solution-dump-filename and --work-queue-length are saved to this "
              "file and these values are ignored from command line when loading.\n")
+            ("save-interval", defaultValue(&options.saveInterval_),
+             "Save the progress this often, in seconds. 0 means do not save.\n")
             ("test", defaultValue(&options.test_),
              "Instead of solving a problem, solve each possible problem with "
              "the given number of stones on the table.\n")

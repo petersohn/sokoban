@@ -11,11 +11,18 @@ class VisitedStateInfo {
     State state_;
     Point firstReachable_;
 public:
-    VisitedStateInfo() {}
-    VisitedStateInfo(const Status& status);
+    VisitedStateInfo() = default;
+    explicit VisitedStateInfo(const Status& status);
 
     const State& state() const { return state_; }
-    Point  firstReachable() const { return firstReachable_; }
+    Point firstReachable() const { return firstReachable_; }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & state_;
+        ar & firstReachable_;
+    }
 };
 
 bool operator==(const VisitedStateInfo& left, const VisitedStateInfo& right);

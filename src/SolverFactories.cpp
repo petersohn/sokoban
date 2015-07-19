@@ -28,6 +28,7 @@
 #include "MultiThreadExpander.hpp"
 #include "NodeFactory.hpp"
 #include "NormalExpander.hpp"
+#include "PreprocessedResult.hpp"
 #include "PrioNodeQueue.hpp"
 #include "Solver.hpp"
 #include "StonePusher.hpp"
@@ -144,8 +145,8 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
     return expander;
 }
 
-std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createHeurCalculator(
-        float heurMultiplier)
+std::shared_ptr<const HeurCalculator>
+OptionsBasedExpanderFactory::createHeurCalculator(float heurMultiplier)
 {
     return options_.useAdvancedHeurCalculator_ ?
             createAdvancedHeurCalcularor(heurMultiplier) :
@@ -193,7 +194,8 @@ ExpanderFactory OptionsBasedExpanderFactory::factory(
         };
 }
 
-PreprocessedResult OptionsBasedExpanderFactory::preprocess()
+std::unique_ptr<BlockListGenerator>
+OptionsBasedExpanderFactory::createBlockListGenerator()
 {
     std::shared_ptr<const HeurCalculator> preprocessingCalculator =
             createHeurCalculator(1.0f);
@@ -208,9 +210,16 @@ PreprocessedResult OptionsBasedExpanderFactory::preprocess()
                         nullptr);
             });
 
-    BlockListGenerator blockListGenerator(
-            std::move(solver), preprocessingCalculator, checker, options_);
-    blockListGenerator.init(table_);
+    auto blockListGenerator = std::make_unique<BlockListGenerator>(
+            std::move(solver), preprocessingCalculator, checker,
+            options_, preprocessSaver);
+    blockListGenerator->init(table_);
+    return blockListGenerator;
+}
+
+PreprocessedResult OptionsBasedExpanderFactory::preprocess(
+        BlockListGenerator& blockListGenerator)
+{
     blockListGenerator.run();
 
     if (chokePointFindingTime_) {

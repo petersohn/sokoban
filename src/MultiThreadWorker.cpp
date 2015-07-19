@@ -1,6 +1,8 @@
 #include "MultiThreadWorker.hpp"
 #include "ProgressBar.hpp"
 
+#include "util/Finally.hpp"
+
 #include <boost/asio/io_service.hpp>
 #include <boost/thread.hpp>
 
@@ -46,18 +48,24 @@ void MultiThreadWorker::cleanWorkQueue() {
 }
 
 void MultiThreadWorker::doWork(const std::vector<Action>& actions) {
+    {
+        boost::unique_lock<MutexType> lock(iterMutex);
+        ++numRunning;
+    }
+
     for (const auto& action: actions) {
         action();
     }
 
-    boost::lock_guard<MutexType> lck(iterMutex);
+    boost::unique_lock<MutexType> lock(iterMutex);
     ++solved;
+    --numRunning;
 
     if (iterationState == IterationState::working && solved == iters) {
         iterationState = IterationState::done;
     }
 
-    done.notify_all();
+    doneCondition.notify_all();
 }
 
 void MultiThreadWorker::wait(bool print)
@@ -71,7 +79,7 @@ void MultiThreadWorker::wait(bool print)
 
         boost::unique_lock<MutexType> lock(iterMutex);
         while (iterationState != IterationState::done) {
-            done.wait(lock);
+            doneCondition.wait(lock);
             auto currentIterationState = iterationState;
             auto currentSolved = solved;
             lock.unlock();
@@ -92,3 +100,11 @@ void MultiThreadWorker::wait(bool print)
     iterationState = IterationState::idle;
 }
 
+void MultiThreadWorker::synchronize(const std::function<void()>& function)
+{
+    boost::unique_lock<MutexType> lock(iterMutex);
+    while (numRunning != 0) {
+        doneCondition.wait(lock);
+    }
+    function();
+}
