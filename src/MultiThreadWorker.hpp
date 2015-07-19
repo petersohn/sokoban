@@ -16,6 +16,7 @@ private:
     boost::asio::io_service& ioService;
     MutexType iterMutex;
     ConditionVariableType doneCondition;
+    ConditionVariableType synchronizationCondition;
 
     std::size_t workQueueLength;
 
@@ -24,6 +25,7 @@ private:
     std::size_t iters = 0;
     std::size_t solved = 0;
     std::size_t numRunning = 0;
+    bool synchronizationRequested = false;
 
     void cleanWorkQueue();
     void doWork(const std::vector<Action>& actions);

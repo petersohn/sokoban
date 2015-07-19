@@ -63,9 +63,14 @@ void MultiThreadWorker::doWork(const std::vector<Action>& actions) {
 
     if (iterationState == IterationState::working && solved == iters) {
         iterationState = IterationState::done;
+
     }
 
     doneCondition.notify_all();
+
+    while (synchronizationRequested) {
+        synchronizationCondition.wait(lock);
+    }
 }
 
 void MultiThreadWorker::wait(bool print)
@@ -103,6 +108,12 @@ void MultiThreadWorker::wait(bool print)
 void MultiThreadWorker::synchronize(const std::function<void()>& function)
 {
     boost::unique_lock<MutexType> lock(iterMutex);
+    synchronizationRequested = true;
+    auto guard = util::finally(
+            [this]() {
+                synchronizationRequested = false;
+                synchronizationCondition.notify_all();
+            });
     while (numRunning != 0) {
         doneCondition.wait(lock);
     }
