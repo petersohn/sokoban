@@ -13,6 +13,7 @@
 #include "Status/StatusCreator.hpp"
 #include "Status/Table.hpp"
 
+#include "BackupSaver.hpp"
 #include "BlockListGenerator.hpp"
 #include "formatOutput.hpp"
 #include "Loader.hpp"
@@ -178,8 +179,8 @@ void Sokoban::saveBasics(OutputArchive& archive)
 
 void Sokoban::savePreprocess(const BlockListGenerator& blockListGenerator)
 {
-    std::ofstream stream{options.saveProgress_,
-            std::ios::out | std::ios::trunc};
+    BackupSaver backupSaver{options.saveProgress_};
+    std::ofstream& stream = backupSaver.get();
     OutputArchive archive{stream};
 
     progressStatus = ProgressStatus::preprocessing;
