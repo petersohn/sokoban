@@ -14,7 +14,7 @@
 #include "Status/Table.hpp"
 
 #include "BackupSaver.hpp"
-#include "BlockListGenerator.hpp"
+#include "Preprocessor.hpp"
 #include "formatOutput.hpp"
 #include "Loader.hpp"
 #include "Node.hpp"
@@ -79,8 +79,8 @@ void Sokoban::createExpanderFactory()
     if (!expanderFactory) {
         expanderFactory = std::make_unique<OptionsBasedExpanderFactory>(options,
                 *table,
-                [this](const BlockListGenerator& blockListGenerator) {
-                    savePreprocess(blockListGenerator);
+                [this](const Preprocessor& preprocessor) {
+                    savePreprocess(preprocessor);
                 },
                 (options.test_ ? nullptr : &expandedNodes),
                 &chokePointFinderTime, &preprocessingIterationTime);
@@ -155,8 +155,8 @@ void Sokoban::preprocess()
         expanderFactory->setHeurCalculatorParameters(
                 *preprocessedResult.heurCalculator);
     } else {
-        auto blockListGenerator = expanderFactory->createBlockListGenerator();
-        preprocessedResult = expanderFactory->preprocess(*blockListGenerator);
+        auto preprocessor = expanderFactory->createPreprocessor();
+        preprocessedResult = expanderFactory->preprocess(*preprocessor);
     }
 
     if (!options.preprocessSaveFilename_.empty()) {
@@ -177,7 +177,7 @@ void Sokoban::saveBasics(OutputArchive& archive)
     archive << status;
 }
 
-void Sokoban::savePreprocess(const BlockListGenerator& blockListGenerator)
+void Sokoban::savePreprocess(const Preprocessor& preprocessor)
 {
     BackupSaver backupSaver{options.saveProgress_};
     std::ofstream& stream = backupSaver.get();
@@ -185,7 +185,7 @@ void Sokoban::savePreprocess(const BlockListGenerator& blockListGenerator)
 
     progressStatus = ProgressStatus::preprocessing;
     saveBasics(archive);
-    archive << blockListGenerator;
+    archive << preprocessor;
 }
 
 void Sokoban::load()
@@ -210,9 +210,9 @@ void Sokoban::load()
 PreprocessedResult Sokoban::loadPreprocessedResult(InputArchive& archive)
 {
     createExpanderFactory();
-    auto blockListGenerator = expanderFactory->createBlockListGenerator();
-    archive >> *blockListGenerator;
-    return expanderFactory->preprocess(*blockListGenerator);
+    auto preprocessor = expanderFactory->createPreprocessor();
+    archive >> *preprocessor;
+    return expanderFactory->preprocess(*preprocessor);
 }
 
 

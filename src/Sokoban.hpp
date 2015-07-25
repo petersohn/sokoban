@@ -10,7 +10,7 @@
 
 #include <memory>
 
-class BlockListGenerator;
+class Preprocessor;
 class Loader;
 class OptionsBasedExpanderFactory;
 class Status;
@@ -43,7 +43,7 @@ private:
     void preprocess();
 
     void saveBasics(OutputArchive& archive);
-    void savePreprocess(const BlockListGenerator& blockListGenerator);
+    void savePreprocess(const Preprocessor& preprocessor);
 
     void load();
     PreprocessedResult loadPreprocessedResult(InputArchive& archive);

@@ -11,7 +11,7 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 
-class BlockListGenerator;
+class Preprocessor;
 class Checker;
 class Dumper;
 class HeurCalculator;
@@ -28,7 +28,7 @@ class OptionsBasedExpanderFactory {
     using NodeCheckers = std::deque<std::shared_ptr<NodeChecker>>;
     const Options& options_;
     const Table& table_;
-    std::function<void(const BlockListGenerator&)> preprocessSaver;
+    std::function<void(const Preprocessor&)> preprocessSaver;
     std::size_t* expandedNodes_;
     util::TimerData* chokePointFindingTime_;
     util::TimerData* preprocessingIterationTime_;
@@ -37,7 +37,7 @@ class OptionsBasedExpanderFactory {
             float heurMultiplier);
 public:
     OptionsBasedExpanderFactory(const Options& opts, const Table& table,
-            std::function<void(const BlockListGenerator&)> preprocessSaver,
+            std::function<void(const Preprocessor&)> preprocessSaver,
             std::size_t* expandedNodes, util::TimerData* chokePointFindingTime,
             util::TimerData* preprocessingIterationTime):
         options_(opts),
@@ -72,8 +72,8 @@ public:
             const std::shared_ptr<const HeurCalculator>& calculator,
             const Status& status);
 
-    std::unique_ptr<BlockListGenerator> createBlockListGenerator();
-    PreprocessedResult preprocess(BlockListGenerator& blockListGenerator);
+    std::unique_ptr<Preprocessor> createPreprocessor();
+    PreprocessedResult preprocess(Preprocessor& preprocessor);
 
     ExpanderFactory factory(const PreprocessedResult& preprocessedResult);
 

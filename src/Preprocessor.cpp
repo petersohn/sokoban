@@ -2,7 +2,7 @@
 
 #include "Dumper/DumperFunctions.hpp"
 
-#include "BlockListGenerator.hpp"
+#include "Preprocessor.hpp"
 #include "HeurCalculator/BlockListHeurCalculator.hpp"
 #include "HeurCalculator/DecisionTreeHeurCalculator.hpp"
 #include "HeurCalculator/TableHeurCalculator.hpp"
@@ -22,7 +22,7 @@
 #include <iostream>
 #include <cstdlib>
 
-BlockListGenerator::BlockListGenerator(std::unique_ptr<const Solver> solver,
+Preprocessor::Preprocessor(std::unique_ptr<const Solver> solver,
         std::shared_ptr<const HeurCalculator> calculator, ComplexChecker checker,
         const Options& options, Saver saver):
     solver_(std::move(solver)),
@@ -36,10 +36,10 @@ BlockListGenerator::BlockListGenerator(std::unique_ptr<const Solver> solver,
     threadPool_.setNumThreads(options.numThreads_);
 }
 
-BlockListGenerator::~BlockListGenerator()
+Preprocessor::~Preprocessor()
 {}
 
-std::deque<std::shared_ptr<Node>> BlockListGenerator::calculateBlockList(
+std::deque<std::shared_ptr<Node>> Preprocessor::calculateBlockList(
         const Status& status)
 {
     std::deque<std::shared_ptr<Node>> result = solver_->solve(status);
@@ -51,7 +51,7 @@ std::deque<std::shared_ptr<Node>> BlockListGenerator::calculateBlockList(
     return result;
 }
 
-void BlockListGenerator::calculateHeurList(const Status& status)
+void Preprocessor::calculateHeurList(const Status& status)
 {
     std::size_t threadId = *util::ThreadPool::getCurrentThreadId();
     auto& calculationInfo = calculationInfos_[threadId];
@@ -81,7 +81,7 @@ void BlockListGenerator::calculateHeurList(const Status& status)
     calculationInfo->calculatedStatuses_.insert(info);
 }
 
-void BlockListGenerator::init(const Table& table)
+void Preprocessor::init(const Table& table)
 {
     table_ = &table;
     std::cerr << "Calculating block list..." << std::endl;
@@ -104,7 +104,7 @@ void BlockListGenerator::init(const Table& table)
     currentStoneNum_ = 2;
 }
 
-void BlockListGenerator::run() {
+void Preprocessor::run() {
     std::size_t decisionTreeDepth =
             options_.blocklistHeurCalculatorType_ ==
                     BlockListHeurType::decisionTree ?
@@ -141,6 +141,7 @@ void BlockListGenerator::run() {
         ComplexChecker actualChecker{checker_};
         actualChecker.append(checker());
         subStatusForEach_->start(currentStoneNum_, calculator_, actualChecker);
+        std::cerr << "Waiting for processing to finish..." << std::endl;
 
         if (saverThread) {
             saverThread->start();
@@ -163,12 +164,12 @@ void BlockListGenerator::run() {
     }
 
     std::cerr << "Heur list size = " << heurList_.size() << "\n" <<
-            "Processor time spent on saving: " << savingTime_.processorTime << 
+            "Processor time spent on saving: " << savingTime_.processorTime <<
             "\nReal time spent on saving: " << savingTime_.realTime << "\n";
     dump_.flush();
 }
 
-void BlockListGenerator::save()
+void Preprocessor::save()
 {
     util::TimeMeter timeMeter;
 
@@ -186,7 +187,7 @@ void BlockListGenerator::save()
     savingTime_.realTime += timeMeter.realTime();
 }
 
-Array<bool> BlockListGenerator::calculateChokePoints()
+Array<bool> Preprocessor::calculateChokePoints()
 {
     Array<bool> result;
 
@@ -209,7 +210,7 @@ Array<bool> BlockListGenerator::calculateChokePoints()
     return result;
 }
 
-void BlockListGenerator::updateResult()
+void Preprocessor::updateResult()
 {
     std::size_t callNum = aggregateThreadResults();
     calculatedStatuses_.clear();
@@ -227,7 +228,7 @@ void BlockListGenerator::updateResult()
         });
 }
 
-std::size_t BlockListGenerator::aggregateThreadResults()
+std::size_t Preprocessor::aggregateThreadResults()
 {
     std::size_t callNum = 0;
     for (const auto& calculationInfo: calculationInfos_) {
@@ -251,13 +252,13 @@ std::size_t BlockListGenerator::aggregateThreadResults()
     return callNum;
 }
 
-std::shared_ptr<Checker> BlockListGenerator::checker()
+std::shared_ptr<Checker> Preprocessor::checker()
 {
     assert(table_);
     return std::make_shared<BlockListChecker>(blockList_);
 }
 
-std::shared_ptr<HeurCalculator> BlockListGenerator::vectorHeurCalculator(float heurMultiplier)
+std::shared_ptr<HeurCalculator> Preprocessor::vectorHeurCalculator(float heurMultiplier)
 {
     assert(table_);
     return std::make_shared<BlockListHeurCalculator>(
@@ -267,7 +268,7 @@ std::shared_ptr<HeurCalculator> BlockListGenerator::vectorHeurCalculator(float h
 }
 
 
-std::shared_ptr<HeurCalculator> BlockListGenerator::decisionTreeHeurCalculator(
+std::shared_ptr<HeurCalculator> Preprocessor::decisionTreeHeurCalculator(
         std::size_t maxDepth, bool useChecker, float heurMultiplier)
 {
     assert(table_);
@@ -288,7 +289,7 @@ std::shared_ptr<HeurCalculator> BlockListGenerator::decisionTreeHeurCalculator(
                 options_.numThreads_});
 }
 
-void BlockListGenerator::dumpStatus(const Status& status, const Point *p, const std::string& title)
+void Preprocessor::dumpStatus(const Status& status, const Point *p, const std::string& title)
 {
     const std::size_t* threadId = util::ThreadPool::getCurrentThreadId();
     std::ostream* dump = &dump_;

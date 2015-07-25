@@ -21,7 +21,7 @@
 #include "HeurCalculator/DecisionTreeHeurCalculator.hpp"
 #include "HeurCalculator/HeurCalculator.hpp"
 
-#include "BlockListGenerator.hpp"
+#include "Preprocessor.hpp"
 #include "CompareQueue.hpp"
 #include "DynamicVisitor.hpp"
 #include "ExpandedNodeLimiter.hpp"
@@ -194,8 +194,8 @@ ExpanderFactory OptionsBasedExpanderFactory::factory(
         };
 }
 
-std::unique_ptr<BlockListGenerator>
-OptionsBasedExpanderFactory::createBlockListGenerator()
+std::unique_ptr<Preprocessor>
+OptionsBasedExpanderFactory::createPreprocessor()
 {
     std::shared_ptr<const HeurCalculator> preprocessingCalculator =
             createHeurCalculator(1.0f);
@@ -210,36 +210,36 @@ OptionsBasedExpanderFactory::createBlockListGenerator()
                         nullptr);
             });
 
-    auto blockListGenerator = std::make_unique<BlockListGenerator>(
+    auto preprocessor = std::make_unique<Preprocessor>(
             std::move(solver), preprocessingCalculator, checker,
             options_, preprocessSaver);
-    blockListGenerator->init(table_);
-    return blockListGenerator;
+    preprocessor->init(table_);
+    return preprocessor;
 }
 
 PreprocessedResult OptionsBasedExpanderFactory::preprocess(
-        BlockListGenerator& blockListGenerator)
+        Preprocessor& preprocessor)
 {
-    blockListGenerator.run();
+    preprocessor.run();
 
     if (chokePointFindingTime_) {
-        *chokePointFindingTime_ = blockListGenerator.chokePointFinderTime();
+        *chokePointFindingTime_ = preprocessor.chokePointFinderTime();
     }
     if (preprocessingIterationTime_) {
-        *preprocessingIterationTime_ = blockListGenerator.iteratingTime();
+        *preprocessingIterationTime_ = preprocessor.iteratingTime();
     }
 
     PreprocessedResult result;
-    result.checker = blockListGenerator.checker();
+    result.checker = preprocessor.checker();
 
     switch (options_.blocklistHeurCalculatorType_) {
     case BlockListHeurType::none:
         break;
     case BlockListHeurType::vector:
-         result.heurCalculator = blockListGenerator.vectorHeurCalculator(options_.heurMultiplier_);
+         result.heurCalculator = preprocessor.vectorHeurCalculator(options_.heurMultiplier_);
         break;
     case BlockListHeurType::decisionTree:
-        result.heurCalculator = blockListGenerator.decisionTreeHeurCalculator(
+        result.heurCalculator = preprocessor.decisionTreeHeurCalculator(
                 options_.maxDecisionTreeDepth_,
                 options_.useCheckerForDecisionTree_,
                 options_.heurMultiplier_);

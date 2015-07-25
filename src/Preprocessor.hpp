@@ -1,5 +1,5 @@
-#ifndef BLOCKLISTGENERATOR_H
-#define BLOCKLISTGENERATOR_H
+#ifndef PREPROCESSOR_HPP
+#define PREPROCESSOR_HPP
 
 #include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/ComplexCheckerBase.hpp"
@@ -67,9 +67,9 @@ void load_construct_data(Archive& ar, IncrementInfo* incrementInfo,
     ::new(incrementInfo)IncrementInfo{{status, 0.0}, 0.0};
 }
 
-class BlockListGenerator {
+class Preprocessor {
 public:
-    using Saver = std::function<void(const BlockListGenerator&)>;
+    using Saver = std::function<void(const Preprocessor&)>;
 private:
     using IncrementList = std::vector<IncrementInfo>;
 
@@ -112,10 +112,10 @@ private:
     void save();
 
 public:
-    BlockListGenerator(std::unique_ptr<const Solver> solver,
+    Preprocessor(std::unique_ptr<const Solver> solver,
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker, const Options& options, Saver saver);
-    ~BlockListGenerator();
+    ~Preprocessor();
     std::shared_ptr<Checker> checker();
     std::shared_ptr<HeurCalculator> vectorHeurCalculator(float heurMultiplier);
     std::shared_ptr<HeurCalculator> decisionTreeHeurCalculator(
@@ -138,4 +138,4 @@ public:
     }
 };
 
-#endif /* BLOCKLISTGENERATOR_H */
+#endif // PREPROCESSOR_HPP
