@@ -112,17 +112,18 @@ int Sokoban::run()
         util::ThreadPool threadPool;
         util::ThreadPoolRunner runner(threadPool);
         threadPool.setNumThreads(options.numThreads_);
-        SubStatusForEach it(status->table(),
-                std::bind(solveTestProblem, std::ref(solutionChecker),
-                        std::ref(solver), std::placeholders::_1),
+        SubStatusForEach subStatusForEach(status->table(),
+                [&](const Status& status, std::size_t /*index*/) {
+                    solveTestProblem(solutionChecker, solver, status);
+                },
                 SubStatusForEach::MinDistance{0}, SubStatusForEach::MaxDistance{0},
                 SubStatusForEach::ChokePointDistantNum{0}, {},
                 SubStatusForEach::WorkQueueLength{options.workQueueLength_},
                 SubStatusForEach::ReverseSearchMaxDepth{0},
                 threadPool.getIoService());
-        it.start(options.test_, calculator,
+        subStatusForEach.start(options.test_, calculator,
                 ComplexChecker{expanderFactory->createBasicCheckers(calculator)});
-        it.wait(true);
+        subStatusForEach.wait(true);
     } else {
         std::deque<std::shared_ptr<Node>> solution = solver.solve(*status);
         SolutionData solutionData{*table, solution,

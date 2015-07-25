@@ -102,8 +102,9 @@ bool SubStatusForEach::processState(const State& state, std::size_t stones)
             // shared pointers that are potentially modified are shared
             // between the threads.
             auto copiedStatus = status.deepCopy();
-            worker.addAction([this, copiedStatus]() {
-                    action_(copiedStatus);
+            std::size_t index = index_++;
+            worker.addAction([this, copiedStatus, index]() {
+                    action_(copiedStatus, index);
                 });
         } else {
             result = true;
@@ -136,6 +137,8 @@ void SubStatusForEach::start(std::size_t numStones,
             excludeList_[p] = true;
         }
     }
+
+    index_ = 0;
 
     worker.startFilling();
     initIter(range_.begin(), numStones, State());

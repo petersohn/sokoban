@@ -50,12 +50,15 @@ public:
 
         util::ThreadPool threadPool{options.numThreads_};
         SubStatusForEach subStatusForEach(*table,
-                std::bind(&ChokePointFinder::checkChokePoint, this, std::placeholders::_1),
+                [this](const Status& status, std::size_t /*index*/) {
+                    checkChokePoint(status);
+                },
                 SubStatusForEach::MinDistance{options.chokePointDistance_},
                 SubStatusForEach::MaxDistance{0},
                 SubStatusForEach::ChokePointDistantNum{0}, {},
                 SubStatusForEach::WorkQueueLength{options.workQueueLength_},
-                SubStatusForEach::ReverseSearchMaxDepth{options.reverseSearchMaxDepth_},
+                SubStatusForEach::ReverseSearchMaxDepth{
+                        options.reverseSearchMaxDepth_},
                 threadPool.getIoService());
 
         calculationInfos.resize(options.numThreads_, CalculationInfo{
@@ -73,8 +76,11 @@ public:
             }
 
             for (Point p: arrayRange(*table)) {
-                if (std::any_of(calculationInfos.begin(), calculationInfos.end(),
-                            [p](const CalculationInfo& info) { return info[p]; })) {
+                if (std::any_of(
+                            calculationInfos.begin(), calculationInfos.end(),
+                            [p](const CalculationInfo& info) {
+                                return info[p];
+                            })) {
                     result[p] = true;
                 }
             }

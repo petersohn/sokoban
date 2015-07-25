@@ -25,7 +25,7 @@ struct SubStatusForEachFixture {
     std::shared_ptr<MockChecker> checker =
         std::make_shared<MockChecker>();
     boost::asio::io_service ioService;
-    MOCK_FUNCTOR(action, void(const Status&));
+    MOCK_FUNCTOR(action, void(const Status&, std::size_t));
 };
 
 BOOST_FIXTURE_TEST_SUITE(SubStatusForEachTest, SubStatusForEachFixture)
@@ -38,23 +38,45 @@ BOOST_AUTO_TEST_CASE(iterate_through_points)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy.",
                     "..."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "yo.",
                     "..."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "y.o",
                     "..."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "y..",
                     ".o."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "y..",
                     "..o"
-                }));
+                }), mock::any);
+
+    SubStatusForEach subStatusForEachUnderTest{*table, action,
+            SubStatusForEach::MinDistance{0},
+            SubStatusForEach::MaxDistance{0},
+            SubStatusForEach::ChokePointDistantNum{0}, {},
+            SubStatusForEach::WorkQueueLength{1},
+            SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
+    subStatusForEachUnderTest.start(1, heurCalculator, ComplexChecker{checker});
+    ioService.run();
+    subStatusForEachUnderTest.wait(false);
+}
+
+BOOST_AUTO_TEST_CASE(iterate_with_correct_indexes)
+{
+    MOCK_EXPECT(heurCalculator->calculateStone).returns(1);
+    MOCK_EXPECT(heurCalculator->calculateStatus).returns(1);
+    MOCK_EXPECT(checker->check).returns(true);
+    MOCK_EXPECT(action).once().with(mock::any, 0);
+    MOCK_EXPECT(action).once().with(mock::any, 1);
+    MOCK_EXPECT(action).once().with(mock::any, 2);
+    MOCK_EXPECT(action).once().with(mock::any, 3);
+    MOCK_EXPECT(action).once().with(mock::any, 4);
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
@@ -80,15 +102,15 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy*",
                     "..*"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "yo*",
                     "..*"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "y.*",
                     ".o*"
-                }));
+                }), mock::any);
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
@@ -114,31 +136,31 @@ BOOST_AUTO_TEST_CASE(multiple_partitions)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy.",
                     ".*."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "y*."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "yo.",
                     ".*."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oy",
                     ".*."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".yo",
                     ".*."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     ".*y"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "y..",
                     ".*o"
-                }));
+                }), mock::any);
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{0},
@@ -159,59 +181,59 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_partitions)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oo.",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o.o",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy.",
                     ".o."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oo",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oy",
                     "..o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "...",
                     "yoo"
-                }));
+                }), mock::any);
 
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
@@ -233,51 +255,51 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oo.",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy.",
                     ".o."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oo",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oy",
                     "..o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "...",
                     "yoo"
-                }));
+                }), mock::any);
 
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
@@ -299,55 +321,55 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point1)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oo.",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy.",
                     ".o."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oo",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oy",
                     "..o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "...",
                     "yoo"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o.o",
                     "y.."
-                }));
+                }), mock::any);
 
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
@@ -370,59 +392,59 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point2)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oo.",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "oy.",
                     ".o."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oo",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".o.",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     ".oy",
                     "..o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "yo."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     ".oy"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "..o",
                     "y.o"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "...",
                     "yoo"
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o.o",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "y.o"
-                }));
+                }), mock::any);
 
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
@@ -445,15 +467,11 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_minimum_distance)
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o.o",
                     "y.."
-                }));
+                }), mock::any);
     MOCK_EXPECT(action).once().with(createTestStatus(*table, {
                     "o..",
                     "y.o"
-                }));
-    MOCK_EXPECT(action).calls([](const Status& status) {
-            dumpStatus(std::cerr, status, "this is called");
-        });
-
+                }), mock::any);
 
     SubStatusForEach subStatusForEachUnderTest{*table, action,
             SubStatusForEach::MinDistance{2},

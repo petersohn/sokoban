@@ -76,7 +76,7 @@ private:
     struct CalculationInfo {
         std::ostringstream dump_;
         std::vector<Status> blockList_;
-        std::unordered_set<VisitedStateInfo> calculatedStatuses_;
+        std::size_t maxIndex_;
         IncrementList heurList_;
         std::size_t callNum_ = 0;
     };
@@ -94,7 +94,7 @@ private:
 
     std::unique_ptr<SubStatusForEach> subStatusForEach_;
     std::vector<CalculationInfoPtr> calculationInfos_;
-    std::unordered_set<VisitedStateInfo> calculatedStatuses_;
+    std::size_t maxIndex_;
     std::size_t currentStoneNum_;
     std::ofstream dump_;
     util::ThreadPool threadPool_;
@@ -103,7 +103,7 @@ private:
     util::TimerData savingTime_;
 
     std::deque<std::shared_ptr<Node>> calculateBlockList(const Status& status);
-    void calculateHeurList(const Status& status);
+    void calculateHeurList(const Status& status, std::size_t index);
     void dumpStatus(const Status& status, const Point *p,
             const std::string& title);
     void updateResult();
@@ -134,7 +134,7 @@ public:
         ar & currentStoneNum_;
         ar & blockList_;
         ar & heurList_;
-        ar & calculatedStatuses_;
+        ar & maxIndex_;
     }
 };
 

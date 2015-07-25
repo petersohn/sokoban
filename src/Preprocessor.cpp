@@ -51,15 +51,14 @@ std::deque<std::shared_ptr<Node>> Preprocessor::calculateBlockList(
     return result;
 }
 
-void Preprocessor::calculateHeurList(const Status& status)
+void Preprocessor::calculateHeurList(const Status& status, std::size_t index)
 {
-    std::size_t threadId = *util::ThreadPool::getCurrentThreadId();
-    auto& calculationInfo = calculationInfos_[threadId];
-    VisitedStateInfo info{status};
-
-    if (calculatedStatuses_.count(info)) {
+    if (index < maxIndex_) {
         return;
     }
+
+    std::size_t threadId = *util::ThreadPool::getCurrentThreadId();
+    auto& calculationInfo = calculationInfos_[threadId];
 
     ++calculationInfo->callNum_;
 
@@ -78,7 +77,7 @@ void Preprocessor::calculateHeurList(const Status& status)
         }
     }
 
-    calculationInfo->calculatedStatuses_.insert(info);
+    calculationInfo->maxIndex_ = index;
 }
 
 void Preprocessor::init(const Table& table)
@@ -86,7 +85,9 @@ void Preprocessor::init(const Table& table)
     table_ = &table;
     std::cerr << "Calculating block list..." << std::endl;
     subStatusForEach_ = std::make_unique<SubStatusForEach>(table,
-            [this](const Status& status) { calculateHeurList(status); },
+            [this](const Status& status, std::size_t index) {
+                calculateHeurList(status, index);
+            },
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{options_.blockListDistance_},
             SubStatusForEach::ChokePointDistantNum{options_.chokePointNum_ > 0 ?
@@ -102,6 +103,7 @@ void Preprocessor::init(const Table& table)
     calculationInfos_.resize(options_.numThreads_);
 
     currentStoneNum_ = 2;
+    maxIndex_ = 0;
 }
 
 void Preprocessor::run() {
@@ -175,12 +177,11 @@ void Preprocessor::save()
 
     aggregateThreadResults();
 
-    for (const auto& calculationInfo: calculationInfos_) {
-        std::move(calculationInfo->calculatedStatuses_.begin(),
-                calculationInfo->calculatedStatuses_.end(),
-                std::inserter(calculatedStatuses_, calculatedStatuses_.end()));
-        calculationInfo->calculatedStatuses_.clear();
-    }
+    maxIndex_ = (*std::max_element(
+            calculationInfos_.begin(), calculationInfos_.end(),
+            [](const auto& lhs, const auto& rhs) {
+                return lhs->maxIndex_ < rhs->maxIndex_;
+            }))->maxIndex_ + 1;
 
     saver_(*this);
     savingTime_.processorTime += timeMeter.processorTime();
@@ -213,7 +214,7 @@ Array<bool> Preprocessor::calculateChokePoints()
 void Preprocessor::updateResult()
 {
     std::size_t callNum = aggregateThreadResults();
-    calculatedStatuses_.clear();
+    maxIndex_ = 0;
 
     std::cerr << "Block list size = " << blockList_.size() << std::endl;
     std::cerr << "Heur list size = " << heurList_.size() << std::endl;

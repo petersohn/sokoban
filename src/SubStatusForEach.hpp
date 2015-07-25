@@ -23,7 +23,8 @@ namespace boost { namespace asio { class io_service; }}
 
 class SubStatusForEach {
 public:
-    typedef std::function<void(const Status&)> Action;
+    using Action = std::function<void(const Status&, std::size_t)>;
+
 private:
     MultiThreadWorker worker;
 
@@ -39,6 +40,7 @@ private:
     Array<bool> excludeList_;
     Array<bool> chokePoints_;
     util::TimeMeter timeMeter_;
+    std::size_t index_;
 
     void initIter(PointRange::iterator it, std::size_t stones,
             const State& state);
