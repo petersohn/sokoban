@@ -53,10 +53,6 @@ std::deque<std::shared_ptr<Node>> Preprocessor::calculateBlockList(
 
 void Preprocessor::calculateHeurList(const Status& status, std::size_t index)
 {
-    if (index < maxIndex_) {
-        return;
-    }
-
     std::size_t threadId = *util::ThreadPool::getCurrentThreadId();
     auto& calculationInfo = calculationInfos_[threadId];
 
@@ -142,7 +138,9 @@ void Preprocessor::run() {
 
         ComplexChecker actualChecker{checker_};
         actualChecker.append(checker());
-        subStatusForEach_->start(currentStoneNum_, calculator_, actualChecker);
+        subStatusForEach_->start(currentStoneNum_, calculator_, actualChecker,
+                Array<bool>{table_->width(), table_->height(), false},
+                maxIndex_);
         std::cerr << "Waiting for processing to finish..." << std::endl;
 
         if (saverThread) {

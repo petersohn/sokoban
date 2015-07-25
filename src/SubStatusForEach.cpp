@@ -97,15 +97,18 @@ bool SubStatusForEach::processState(const State& state, std::size_t stones)
         if (!checkStatus(checker_, status)) {
             continue;
         }
+
+        std::size_t index = index_++;
         if (stones == 0) {
-            // This will be accessed from another thread. Make sure that no
-            // shared pointers that are potentially modified are shared
-            // between the threads.
-            auto copiedStatus = status.deepCopy();
-            std::size_t index = index_++;
-            worker.addAction([this, copiedStatus, index]() {
-                    action_(copiedStatus, index);
-                });
+            if (index >= startingIndex_) {
+                // This will be accessed from another thread. Make sure that no
+                // shared pointers that are potentially modified are shared
+                // between the threads.
+                auto copiedStatus = status.deepCopy();
+                worker.addAction([this, copiedStatus, index]() {
+                        action_(copiedStatus, index);
+                    });
+            }
         } else {
             result = true;
         }
@@ -116,7 +119,8 @@ bool SubStatusForEach::processState(const State& state, std::size_t stones)
 
 void SubStatusForEach::start(std::size_t numStones,
             std::shared_ptr<const HeurCalculator> heurCalculator,
-            ComplexChecker checker, boost::optional<Array<bool>> excludeList)
+            ComplexChecker checker, boost::optional<Array<bool>> excludeList,
+            std::size_t startingIndex)
 {
     heurCalculator_ = std::move(heurCalculator);
     checker_ = std::move(checker);
@@ -139,6 +143,7 @@ void SubStatusForEach::start(std::size_t numStones,
     }
 
     index_ = 0;
+    startingIndex_ = startingIndex;
 
     worker.startFilling();
     initIter(range_.begin(), numStones, State());

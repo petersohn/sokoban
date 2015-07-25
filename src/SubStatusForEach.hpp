@@ -40,6 +40,7 @@ private:
     Array<bool> excludeList_;
     Array<bool> chokePoints_;
     util::TimeMeter timeMeter_;
+    std::size_t startingIndex_;
     std::size_t index_;
 
     void initIter(PointRange::iterator it, std::size_t stones,
@@ -71,7 +72,9 @@ public:
 
     void start(std::size_t numStones,
             std::shared_ptr<const HeurCalculator> heurCalculator,
-            ComplexChecker checker, boost::optional<Array<bool>> excludeList = {});
+            ComplexChecker checker,
+            boost::optional<Array<bool>> excludeList = {},
+            std::size_t startingIndex = 0);
     void wait(bool print);
 
     void synchronize(const std::function<void()>& function)
