@@ -1,13 +1,17 @@
 #include "ProgressBar.hpp"
+#include <util/TerminalSize.hpp>
 #include <iostream>
 
 void ProgressBar::draw(std::size_t solved)
 {
+    util::TerminalSize terminalSize = util::getTerminalSize();
+    int progressBarSize = terminalSize.width - 2;
+
     if (solved <= iters_) {
-        float div = iters_ / 100.0f;
+        float div = static_cast<float>(iters_) / progressBarSize;
         std::size_t n1 = static_cast<std::size_t>(solved / div);
         if (n1 != lastTicks_) {
-            std::size_t n2 = 100 - n1;
+            std::size_t n2 = progressBarSize - n1;
             std::cerr << "[";
             for (std::size_t i = 0; i < n1; ++i)
                 std::cerr << "#";
