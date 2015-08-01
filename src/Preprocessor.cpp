@@ -231,14 +231,6 @@ void Preprocessor::updateResult()
     std::cerr << "Block list size = " << blockList_.size() << std::endl;
     std::cerr << "Heur list size = " << heurList_.size() << std::endl;
     std::cerr << "Calculations made = " << callNum << "\n";
-    boost::sort(heurList_, [](const IncrementInfo& left, const IncrementInfo& right)
-        {
-            return left.difference_ > right.difference_ ||
-                    (left.difference_ == right.difference_ &&
-                    left.heurInfo_.first.state().size() <
-                    right.heurInfo_.first.state().size()
-                    );
-        });
 }
 
 std::size_t Preprocessor::aggregateThreadResults()
@@ -261,6 +253,15 @@ std::size_t Preprocessor::aggregateThreadResults()
         calculationInfo->blockList_.clear();
         calculationInfo->heurList_.clear();
     }
+
+    boost::sort(heurList_,
+            [](const IncrementInfo& left, const IncrementInfo& right)
+            {
+                return left.difference_ > right.difference_ ||
+                        (left.difference_ == right.difference_ &&
+                        left.heurInfo_.first.state().size() <
+                        right.heurInfo_.first.state().size());
+            });
 
     return callNum;
 }
