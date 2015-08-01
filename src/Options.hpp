@@ -83,6 +83,7 @@ struct Options {
     float               saveInterval_ = 0.0;
     std::string         preprocessLoadFilename_;
     std::string         preprocessSaveFilename_;
+    bool                preprocessFillBeforeCalculate_ = false;
     std::size_t         test_ = 0;
 };
 

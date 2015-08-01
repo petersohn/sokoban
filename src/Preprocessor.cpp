@@ -122,7 +122,9 @@ void Preprocessor::run() {
     }
 
     util::TimeMeter timeMeter;
-    util::ThreadPoolRunner runner(threadPool_);
+    if (!options_.preprocessFillBeforeCalculate_) {
+        threadPool_.start();
+    }
 
     for (; currentStoneNum_ <= options_.blockListStones_; ++currentStoneNum_) {
         incrementalCalculator_ = currentStoneNum_ == 2 ?
@@ -147,13 +149,25 @@ void Preprocessor::run() {
             saverThread->start();
         }
 
+        if (options_.preprocessFillBeforeCalculate_) {
+            threadPool_.start();
+        }
+
         subStatusForEach_->wait(true);
+
+        if (options_.preprocessFillBeforeCalculate_) {
+            threadPool_.wait();
+        }
 
         if (saverThread) {
             saverThread->stop();
         }
 
         updateResult();
+    }
+
+    if (!options_.preprocessFillBeforeCalculate_) {
+        threadPool_.wait();
     }
 
     iteratingTime_ = timeMeter.data();

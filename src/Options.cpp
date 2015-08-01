@@ -47,6 +47,8 @@ Options parseOptions(int argc, const char* argv[], const char *configFileName)
             ("load-preprocessed-result", defaultValue(&options.preprocessLoadFilename_),
              "Load preprocessed results from this file. No preprocessing is done. "
              "--filename and all preprocessing arguments are ignored.\n")
+            ("preprocess-fill-before-calculate", defaultValue(&options.preprocessFillBeforeCalculate_),
+             "Fill the queue before starting to calculate the preprocessing.")
             ("save-preprocessed-result", defaultValue(&options.preprocessSaveFilename_),
              "Save preprocessed results to this file. If this file is loaded the same "
              "results and arguments are used.\n")
