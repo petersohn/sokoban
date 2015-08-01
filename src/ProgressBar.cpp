@@ -1,11 +1,18 @@
 #include "ProgressBar.hpp"
+
 #include <util/TerminalSize.hpp>
+
 #include <iostream>
+#include <unistd.h>
 
 void ProgressBar::draw(std::size_t solved)
 {
-    util::TerminalSize terminalSize = util::getTerminalSize();
-    int progressBarSize = terminalSize.width - 2;
+    util::TerminalSize terminalSize = util::getTerminalSize(2);
+    if (terminalSize.width < 2) {
+        return;
+    }
+
+    int progressBarSize = terminalSize.width - STDERR_FILENO;
 
     if (solved <= iters_) {
         float div = static_cast<float>(iters_) / progressBarSize;
