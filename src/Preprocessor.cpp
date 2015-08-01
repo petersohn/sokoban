@@ -112,11 +112,9 @@ void Preprocessor::run() {
     if (!options_.saveProgress_.empty() && options_.saveInterval_ > 0) {
         saverThread = std::make_unique<SaverThread>(
                 [this]() {
-                        subStatusForEach_->synchronize(
-                                [this]() {
-                                    save();
-                                });
-                }, boost::posix_time::millisec(
+                        subStatusForEach_->synchronize( [this]() { save(); });
+                },
+                boost::posix_time::millisec(
                         static_cast<int>(options_.saveInterval_ * 1000.0f)));
 
     }
@@ -189,8 +187,7 @@ void Preprocessor::save()
 
     aggregateThreadResults();
 
-    maxIndex_ = (*std::max_element(
-            calculationInfos_.begin(), calculationInfos_.end(),
+    maxIndex_ = (*boost::max_element(calculationInfos_,
             [](const auto& lhs, const auto& rhs) {
                 return lhs->maxIndex_ < rhs->maxIndex_;
             }))->maxIndex_ + 1;

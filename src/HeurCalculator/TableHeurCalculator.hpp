@@ -16,6 +16,7 @@ public:
         calculator_(std::move(calculator)),
         heurMultiplier_(heurMultiplier)
     {}
+
     float calculateStatus(
             const Status& status,
             const MoveDescriptor*,
@@ -30,6 +31,7 @@ public:
         }
         return result;
     }
+
     float calculateStone(const Status& status, Point p) const override
     {
         return calculator_(status, p) * heurMultiplier_;

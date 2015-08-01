@@ -6,6 +6,7 @@
 
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/range/algorithm.hpp>
 
 #include <algorithm>
 #include <string>
@@ -14,20 +15,21 @@
 
 /* AdvancedStoneCalculator::HeurDumper */
 
-void AdvancedStoneCalculator::HeurDumper::open() 
+void AdvancedStoneCalculator::HeurDumper::open()
 {
     if (!file_.is_open())
         file_.open(filename_, std::ofstream::out | std::ofstream::trunc);
 }
 
-void AdvancedStoneCalculator::HeurDumper::dumpPartition(
-        const Table& table, const Partition& partition)
+void AdvancedStoneCalculator::HeurDumper::dumpPartition(const Table& table,
+        const Partition& partition)
 {
     open();
     Status s(table);
     s.addStone(partition.pos);
     s.currentPos(Point(-1, -1));
-    dumpStatus(file_, s, (boost::format("Partition (%d)") % partition.heur).str(),
+    dumpStatus(file_, s,
+            (boost::format("Partition (%d)") % partition.heur).str(),
             &partition.reachable);
     file_ << std::endl;
 }
@@ -86,7 +88,8 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
         if (p == table.destination())
             partition.heur = 0;
         else {
-            std::deque<std::shared_ptr<Node>> res = solver_->solve(std::move(status));
+            std::deque<std::shared_ptr<Node>> res =
+                    solver_->solve(std::move(status));
             if (!res.empty())
                 partition.heur = res.back()->cost();
         }
@@ -97,12 +100,10 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
 float AdvancedStoneCalculator::operator()(const Status& status, Point p) const
 {
     std::vector<Partition>::const_iterator it;
-    // If the current position equals p, then partitions
-    // can't be used. Use the minimal non-negative
-    // partition's value instead
+    // If the current position equals p, then partitions can't be used. Use the
+    // minimal non-negative partition's value instead
     if (status.currentPos() == p) {
-        auto minElement = std::min_element(
-                partitions_[p].begin(), partitions_[p].end(),
+        auto minElement = boost::min_element(partitions_[p],
                 [](const Partition& left, const Partition& right)
                 {
                     return static_cast<unsigned>(left.heur) <
@@ -110,7 +111,7 @@ float AdvancedStoneCalculator::operator()(const Status& status, Point p) const
                 });
         return (minElement == partitions_[p].end()) ? -1 : minElement->heur;
     } else {
-        auto it = std::find_if(partitions_[p].begin(), partitions_[p].end(),
+        auto it = boost::find_if(partitions_[p],
                 [&status](const Partition& partition)
                 { return partition.reachable[status.currentPos()]; });
         return (it == partitions_[p].end()) ? -1 : it->heur;
