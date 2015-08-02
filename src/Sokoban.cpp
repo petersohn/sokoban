@@ -49,14 +49,14 @@ Sokoban::Sokoban(int argc, const char* argv[]):
     } else if (!options.preprocessLoadFilename_.empty()) {
         loader = std::make_unique<Loader>(options.preprocessLoadFilename_);
         loader->get() >> table;
-        loader->get() >> status;
+        loader->get() >> initialStatus;
     } else {
         auto data(loadStatusFromFile(options.filename_.c_str()));
         table = std::move(data.first);
-        status = std::make_unique<Status>(std::move(data.second));
+        initialStatus = std::make_unique<Status>(std::move(data.second));
     }
 
-    dumpStatus(std::cerr, *status);
+    dumpStatus(std::cerr, *initialStatus);
 }
 
 Sokoban::~Sokoban() = default;
@@ -112,7 +112,7 @@ int Sokoban::run()
         util::ThreadPool threadPool;
         util::ThreadPoolRunner runner(threadPool);
         threadPool.setNumThreads(options.numThreads_);
-        SubStatusForEach subStatusForEach(status->table(),
+        SubStatusForEach subStatusForEach(initialStatus->table(),
                 [&](const Status& status, std::size_t /*index*/) {
                     solveTestProblem(solutionChecker, solver, status);
                 },
@@ -125,7 +125,7 @@ int Sokoban::run()
                 ComplexChecker{expanderFactory->createBasicCheckers(calculator)});
         subStatusForEach.wait(true);
     } else {
-        std::deque<std::shared_ptr<Node>> solution = solver.solve(*status);
+        std::deque<std::shared_ptr<Node>> solution = solver.solve(*initialStatus);
         SolutionData solutionData{*table, solution,
                 SolutionQuality::none, ExpandedNodes{expandedNodes},
                 TotalTime{timeMeter.data()},
@@ -133,7 +133,7 @@ int Sokoban::run()
                 PreprocessingIterationTime{preprocessingIterationTime}};
         if (!solution.empty())
         {
-            if (solutionChecker.checkResult(*status, solution)) {
+            if (solutionChecker.checkResult(*initialStatus, solution)) {
                 solutionData.solutionQuality = SolutionQuality::good;
             } else {
                 solutionData.solutionQuality = SolutionQuality::bad;
@@ -165,7 +165,7 @@ void Sokoban::preprocess()
                 std::ios::out | std::ios::trunc};
         OutputArchive archive{stream};
         archive << table;
-        archive << status;
+        archive << initialStatus;
         archive << preprocessedResult;
     }
 }
@@ -175,7 +175,7 @@ void Sokoban::saveBasics(OutputArchive& archive)
     archive << progressStatus;
     archive << options;
     archive << table;
-    archive << status;
+    archive << *initialStatus;
 }
 
 void Sokoban::savePreprocess(const Preprocessor& preprocessor)
@@ -197,7 +197,10 @@ void Sokoban::load()
     archive >> progressStatus;
     archive >> options;
     archive >> table;
-    archive >> status;
+
+    initialStatus = std::make_unique<Status>(*table);
+    archive >> *initialStatus;
+    assert(&initialStatus->table() == table.get());
 
     switch (progressStatus) {
     case ProgressStatus::preprocessing:

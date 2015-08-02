@@ -27,7 +27,7 @@ private:
     Options options;
 
     std::unique_ptr<const Table> table;
-    std::unique_ptr<Status> status;
+    std::unique_ptr<Status> initialStatus;
     std::unique_ptr<Loader> loader;
     std::unique_ptr<OptionsBasedExpanderFactory> expanderFactory;
 
