@@ -194,8 +194,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory(
         };
 }
 
-std::unique_ptr<Preprocessor>
-OptionsBasedExpanderFactory::createPreprocessor()
+std::unique_ptr<Preprocessor> OptionsBasedExpanderFactory::createPreprocessor()
 {
     std::shared_ptr<const HeurCalculator> preprocessingCalculator =
             createHeurCalculator(1.0f);
@@ -236,7 +235,8 @@ PreprocessedResult OptionsBasedExpanderFactory::preprocess(
     case BlockListHeurType::none:
         break;
     case BlockListHeurType::vector:
-         result.heurCalculator = preprocessor.vectorHeurCalculator(options_.heurMultiplier_);
+         result.heurCalculator =
+                 preprocessor.vectorHeurCalculator(options_.heurMultiplier_);
         break;
     case BlockListHeurType::decisionTree:
         result.heurCalculator = preprocessor.decisionTreeHeurCalculator(
