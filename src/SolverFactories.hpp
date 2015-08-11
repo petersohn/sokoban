@@ -20,7 +20,7 @@ struct Options;
 struct PreprocessedResult;
 class Table;
 
-std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts);
+PrioNodeQueue createPrioQueueFromOptions(const Options& opts);
 std::shared_ptr<Dumper> createDumperFromOptions(const Options& opts);
 
 class OptionsBasedExpanderFactory {

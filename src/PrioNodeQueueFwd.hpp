@@ -9,7 +9,7 @@ class CompareQueue;
 template <typename T, typename Greater> class PrioQueue;
 
 using PrioNodeQueue = PrioQueue<std::shared_ptr<Node>, CompareQueue>;
-using QueueFactory = std::function<std::shared_ptr<PrioNodeQueue>()>;
+using QueueFactory = std::function<PrioNodeQueue()>;
 
 
 #endif /* SRC_PRIONODEQUEUEFWD_HPP */

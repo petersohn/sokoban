@@ -7,9 +7,14 @@ template <typename T, typename Greater>
 class PrioQueue {
     std::priority_queue<T, std::vector<T>, Greater> queue_;
 public:
-    PrioQueue(Greater greater = Greater{}):
+    explicit PrioQueue(Greater greater = Greater{}):
         queue_(std::move(greater))
     {}
+
+    PrioQueue(const PrioQueue&) = default;
+    PrioQueue(PrioQueue&&) = default;
+    PrioQueue& operator=(const PrioQueue&) = default;
+    PrioQueue& operator=(PrioQueue&&) = default;
 
     void push(const T& t) { queue_.push(t); }
 

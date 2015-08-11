@@ -40,17 +40,17 @@
 
 namespace {
 
-std::shared_ptr<PrioNodeQueue> createPrioQueue()
+PrioNodeQueue createPrioQueue()
 {
     std::vector<Compare> compares{{CompareMethod::depth, true}};
-    return std::make_shared<PrioNodeQueue>(CompareQueue{std::move(compares)});
+    return PrioNodeQueue{CompareQueue{std::move(compares)}};
 }
 
 } // unnamed namespace
 
-std::shared_ptr<PrioNodeQueue> createPrioQueueFromOptions(const Options& opts)
+PrioNodeQueue createPrioQueueFromOptions(const Options& options)
 {
-    return std::make_shared<PrioNodeQueue>(CompareQueue{opts.compare_});
+    return PrioNodeQueue{CompareQueue{options.compare_}};
 }
 
 std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(

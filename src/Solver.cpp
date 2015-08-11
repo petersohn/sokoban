@@ -11,27 +11,27 @@
 #include <boost/lexical_cast.hpp>
 
 class InternalSolver {
-    std::shared_ptr<PrioNodeQueue> queue_;
+    PrioNodeQueue queue_;
     std::shared_ptr<Expander> expander_;
     std::shared_ptr<Dumper> dumper_;
     int costFgv_;
     std::shared_ptr<Node> currentNode_;
 public:
-    InternalSolver(std::shared_ptr<PrioNodeQueue> queue, std::shared_ptr<Expander> expander,
+    InternalSolver(PrioNodeQueue queue,
+            std::shared_ptr<Expander> expander,
             std::shared_ptr<Dumper> dumper):
         queue_(std::move(queue)),
         expander_(std::move(expander)),
         dumper_(dumper),
         costFgv_(-1)
     {
-        assert(queue_.get() != nullptr);
         assert(expander_.get() != nullptr);
     }
 
     bool expandSerial(Status& status)
     {
-        expander_->expand(status, currentNode_, *queue_, dumper_);
-        currentNode_ = queue_->pop();
+        expander_->expand(status, currentNode_, queue_, dumper_);
+        currentNode_ = queue_.pop();
         if (!currentNode_) {
             return false;
         }

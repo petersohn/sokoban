@@ -19,6 +19,7 @@
 #include "Loader.hpp"
 #include "Node.hpp"
 #include "PreprocessedResult.hpp"
+#include "PrioNodeQueue.hpp"
 #include "Solver.hpp"
 #include "SolverFactories.hpp"
 #include "SubStatusForEach.hpp"
