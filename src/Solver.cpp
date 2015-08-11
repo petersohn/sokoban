@@ -15,13 +15,13 @@
 
 class InternalSolver {
     PrioNodeQueue queue_;
-    std::shared_ptr<Expander> expander_;
+    std::unique_ptr<Expander> expander_;
     std::shared_ptr<Dumper> dumper_;
     int costFgv_;
     std::shared_ptr<Node> currentNode_;
 public:
     InternalSolver(PrioNodeQueue queue,
-            std::shared_ptr<Expander> expander,
+            std::unique_ptr<Expander> expander,
             std::shared_ptr<Dumper> dumper):
         queue_(std::move(queue)),
         expander_(std::move(expander)),

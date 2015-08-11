@@ -56,7 +56,7 @@ public:
     std::shared_ptr<const HeurCalculator> createAdvancedHeurCalcularor(
             float heurMultiplier);
 
-    std::shared_ptr<Expander> createExpander(
+    std::unique_ptr<Expander> createExpander(
             bool allowMultiThread,
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker,

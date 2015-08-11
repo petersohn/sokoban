@@ -115,7 +115,7 @@ auto OptionsBasedExpanderFactory::createBasicNodeCheckers(
     return {std::make_shared<VisitedStatesChecker>(visitedStates)};
 }
 
-std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
+std::unique_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
             bool allowMultiThread,
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker,
@@ -125,19 +125,19 @@ std::shared_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
 {
     auto nodeFactory = std::make_shared<NodeFactory>(calculator,
                 experimentalCalculator);
-    std::shared_ptr<Expander> expander;
+    std::unique_ptr<Expander> expander;
     if (allowMultiThread && options_.numThreads_ > 1 && options_.parallelExpand_) {
-        expander = std::make_shared<MultiThreadExpander>(
+        expander = std::make_unique<MultiThreadExpander>(
                 calculator, std::move(checker), nodeChecker, nodeFactory,
                 expandedNodes, options_.numThreads_);
     } else {
-        expander = std::make_shared<NormalExpander>(
+        expander = std::make_unique<NormalExpander>(
                 calculator, std::move(checker), nodeChecker, nodeFactory,
                 expandedNodes);
     }
 
     if (options_.useStonePusher_) {
-        expander = std::make_shared<StonePusher>(expander,
+        return std::make_unique<StonePusher>(std::move(expander),
                 std::move(nodeChecker),
                 calculator, nodeFactory);
     }

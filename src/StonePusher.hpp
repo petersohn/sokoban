@@ -3,8 +3,11 @@
 
 #include "Checker/ComplexCheckerBase.hpp"
 #include "Checker/ComplexCheckerFwd.hpp"
+
 #include "Expander.hpp"
 #include "PrioNodeQueueFwd.hpp"
+
+#include <memory>
 
 class HeurCalculator;
 class Node;
@@ -12,12 +15,12 @@ class NodeFactory;
 class State;
 
 class StonePusher: public Expander {
-    std::shared_ptr<Expander> expander_;
+    std::unique_ptr<Expander> expander_;
     ComplexNodeChecker nodeChecker_;
     std::shared_ptr<const HeurCalculator> calculator_;
     std::shared_ptr<NodeFactory> nodeFactory_;
 public:
-    StonePusher(std::shared_ptr<Expander> expander,
+    StonePusher(std::unique_ptr<Expander> expander,
             ComplexNodeChecker nodeChecker,
             std::shared_ptr<const HeurCalculator> calculator,
             std::shared_ptr<NodeFactory> nodeFactory);
