@@ -1,14 +1,17 @@
 #include "Solver.hpp"
-#include "Status/Status.hpp"
-#include "Node.hpp"
-#include "util/ThreadPool.hpp"
-#include "Dumper/DumperFunctions.hpp"
+
 #include "Dumper/Dumper.hpp"
-#include "PrioNodeQueue.hpp"
+#include "Dumper/DumperFunctions.hpp"
+
+#include "Status/Status.hpp"
+
 #include "Expander.hpp"
-#include <boost/foreach.hpp>
-#include <boost/thread.hpp>
-#include <boost/lexical_cast.hpp>
+#include "Node.hpp"
+#include "PrioNodeQueue.hpp"
+
+#include <util/ThreadPool.hpp>
+
+#include <memory>
 
 class InternalSolver {
     PrioNodeQueue queue_;
