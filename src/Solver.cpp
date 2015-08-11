@@ -16,16 +16,16 @@
 class InternalSolver {
     PrioNodeQueue queue_;
     std::unique_ptr<Expander> expander_;
-    std::shared_ptr<Dumper> dumper_;
+    std::unique_ptr<Dumper> dumper_;
     int costFgv_;
     std::shared_ptr<Node> currentNode_;
 public:
     InternalSolver(PrioNodeQueue queue,
             std::unique_ptr<Expander> expander,
-            std::shared_ptr<Dumper> dumper):
+            std::unique_ptr<Dumper> dumper):
         queue_(std::move(queue)),
         expander_(std::move(expander)),
-        dumper_(dumper),
+        dumper_(std::move(dumper)),
         costFgv_(-1)
     {
         assert(expander_.get() != nullptr);
@@ -33,7 +33,7 @@ public:
 
     bool expandSerial(Status& status)
     {
-        expander_->expand(status, currentNode_, queue_, dumper_);
+        expander_->expand(status, currentNode_, queue_, dumper_.get());
         currentNode_ = queue_.pop();
         if (!currentNode_) {
             return false;

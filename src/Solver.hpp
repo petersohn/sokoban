@@ -13,7 +13,7 @@ class Node;
 
 class NullDumperFactory {
 public:
-    std::shared_ptr<Dumper> operator()() { return std::shared_ptr<Dumper>(); }
+    std::unique_ptr<Dumper> operator()() { return {}; }
 };
 
 class Solver {

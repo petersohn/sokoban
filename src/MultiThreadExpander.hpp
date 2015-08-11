@@ -32,7 +32,7 @@ public:
             std::size_t numThreads);
     ~MultiThreadExpander();
     void expand(const Status& status, std::shared_ptr<Node> base,
-            PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) override;
+            PrioNodeQueue& queue, Dumper* dumper) override;
 };
 
 

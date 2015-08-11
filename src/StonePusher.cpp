@@ -122,13 +122,13 @@ StonePusher::StonePusher(std::unique_ptr<Expander> expander,
 }
 
 void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
-        PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper)
+        PrioNodeQueue& queue, Dumper* dumper)
 {
     InternalPusher sp(*calculator_, *nodeFactory_);
     std::shared_ptr<Node> node = sp.pushStones(status, base);
 
     if (!node) {
-        expander_->expand(status, std::move(base), queue, std::move(dumper));
+        expander_->expand(status, std::move(base), queue, dumper);
         return;
     }
 
@@ -157,7 +157,7 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
         return;
     }
 
-    expander_->expand(newStatus, std::move(node), queue, std::move(dumper));
+    expander_->expand(newStatus, std::move(node), queue, dumper);
 }
 
 

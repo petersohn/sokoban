@@ -134,10 +134,10 @@ MultiThreadExpander::~MultiThreadExpander()
     threadPool_.wait();
 }
 
-void MultiThreadExpander::expand(const Status& status, std::shared_ptr<Node> base,
-        PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) {
+void MultiThreadExpander::expand(const Status& status,
+        std::shared_ptr<Node> base, PrioNodeQueue& queue, Dumper* dumper) {
     status.reachableArray();
-    InternalExpander exp(status, std::move(base), queue, dumper.get(), *this);
+    InternalExpander exp(status, std::move(base), queue, dumper, *this);
     exp.expand();
 }
 

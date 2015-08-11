@@ -271,7 +271,7 @@ std::string getDumpFilename(const Options& options, const std::string& defaultVa
 
 }
 
-std::shared_ptr<Dumper> createDumperFromOptions(const Options & opts)
+std::unique_ptr<Dumper> createDumperFromOptions(const Options & opts)
 {
     switch (opts.dumpStyle_) {
     case DumpStyle::text: {
@@ -289,14 +289,17 @@ std::shared_ptr<Dumper> createDumperFromOptions(const Options & opts)
             break;
         }
 
-        return std::make_shared<TextDumper>(getDumpFilename(opts, "dump.dump"), dumpFilter);
+        return std::make_unique<TextDumper>(
+                getDumpFilename(opts, "dump.dump"), dumpFilter);
     }
     case DumpStyle::xml:
-        return std::make_shared<XDumper>(getDumpFilename(opts, "dump.xml"));
+        return std::make_unique<XDumper>(
+                getDumpFilename(opts, "dump.xml"));
     case DumpStyle::statistics:
-        return std::make_shared<StatisticsDumper>(getDumpFilename(opts, "dump.csv"));
+        return std::make_unique<StatisticsDumper>(
+                getDumpFilename(opts, "dump.csv"));
     case DumpStyle::best:
-        return std::make_shared<BestDumper>(getDumpFilename(opts, "dump.dump"));
+        return std::make_unique<BestDumper>(getDumpFilename(opts, "dump.dump"));
     default:
         return {};
     }

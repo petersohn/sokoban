@@ -21,7 +21,7 @@ struct PreprocessedResult;
 class Table;
 
 PrioNodeQueue createPrioQueueFromOptions(const Options& opts);
-std::shared_ptr<Dumper> createDumperFromOptions(const Options& opts);
+std::unique_ptr<Dumper> createDumperFromOptions(const Options& opts);
 
 class OptionsBasedExpanderFactory {
     using Checkers = std::vector<std::shared_ptr<const Checker>>;

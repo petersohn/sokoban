@@ -25,7 +25,7 @@ public:
             std::size_t* expandedNodes = nullptr);
     ~NormalExpander();
     void expand(const Status& status, std::shared_ptr<Node> base,
-            PrioNodeQueue& queue, std::shared_ptr<Dumper> dumper) override;
+            PrioNodeQueue& queue, Dumper* dumper) override;
 };
 
 #endif /* NORMALEXPANDER_H_ */

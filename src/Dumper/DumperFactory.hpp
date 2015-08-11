@@ -5,7 +5,7 @@
 
 class Dumper;
 
-typedef std::function<std::shared_ptr<Dumper>()> DumperFactory;
+typedef std::function<std::unique_ptr<Dumper>()> DumperFactory;
 
 
 #endif /* SRC_DUMPER_DUMPERFACTORY_HPP */

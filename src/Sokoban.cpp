@@ -4,6 +4,7 @@
 #include "Checker/ComplexCheckerFwd.hpp"
 #include "Checker/SolutionChecker.hpp"
 
+#include "Dumper/Dumper.hpp"
 #include "Dumper/DumperFunctions.hpp"
 
 #include "HeurCalculator/HeurCalculator.hpp"
