@@ -1,9 +1,13 @@
 #ifndef SRC_COMPAREQUEUE_HPP
 #define SRC_COMPAREQUEUE_HPP
 
-#include <utility>
-#include "Node.hpp"
 #include "Compare.hpp"
+#include "Node.hpp"
+
+#include <boost/serialization/vector.hpp>
+
+#include <utility>
+#include <vector>
 
 class CompareQueue {
 private:
@@ -63,6 +67,11 @@ public:
         }
 
         return value > 0;
+    }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
+        ar & compares;
     }
 };
 

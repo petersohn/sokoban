@@ -1,14 +1,19 @@
 #ifndef SRC_PRIOQUEUE_HPP
 #define SRC_PRIOQUEUE_HPP
 
+#include <functional>
+#include <memory>
 #include <queue>
 
 template <typename T, typename Greater>
 class PrioQueue {
-    std::priority_queue<T, std::vector<T>, Greater> queue_;
+    Greater greater;
+    std::priority_queue<T, std::vector<T>,
+            std::reference_wrapper<Greater>> queue;
 public:
     explicit PrioQueue(Greater greater = Greater{}):
-        queue_(std::move(greater))
+        greater(std::move(greater)),
+        queue(std::ref(this->greater))
     {}
 
     PrioQueue(const PrioQueue&) = default;
@@ -16,28 +21,51 @@ public:
     PrioQueue& operator=(const PrioQueue&) = default;
     PrioQueue& operator=(PrioQueue&&) = default;
 
-    void push(const T& t) { queue_.push(t); }
+    void push(const T& t) { queue.push(t); }
 
     T pop()
     {
-        if (queue_.empty())
+        if (queue.empty())
             return T{};
-        auto result = queue_.top();
-        queue_.pop();
+        auto result = queue.top();
+        queue.pop();
         return result;
     }
 
     T peek() const
     {
-        if (queue_.empty())
+        if (queue.empty())
             return T{};
-        auto result = queue_.top();
+        auto result = queue.top();
         return result;
     }
 
-    std::size_t size() const { return queue_.size(); }
+    const Greater& getGreater() const { return greater; }
+
+    std::size_t size() const { return queue.size(); }
+
+    template <typename Archive>
+    void serialize(const Archive& ar, const unsigned int /*version*/)
+    {
+        ar & queue;
+    }
 };
 
+template <typename Archive, typename T, typename Greater>
+void save_construct_data(Archive& ar, const PrioQueue<T, Greater>* queue,
+        const unsigned int /*version*/)
+{
+    auto greater = std::make_unique<Greater>(queue->getGreater());
+    ar << greater;
+}
 
+template <typename Archive, typename T, typename Greater>
+void load_construct_data(Archive& ar, PrioQueue<T, Greater>* queue,
+        const unsigned int /*version*/)
+{
+    std::unique_ptr<Greater> greater;
+    ar >> greater;
+    ::new(queue)PrioQueue<T, Greater>{std::move(*greater)};
+}
 
 #endif /* SRC_PRIOQUEUE_HPP */

@@ -10,6 +10,11 @@ struct MoveDescriptor {
         from_(p), d_(d) {}
 };
 
-
+template <typename Archive>
+void serialize(Archive& ar, MoveDescriptor& moveDescriptor, 
+        const unsigned int /*version*/) {
+    ar & moveDescriptor.from_;
+    ar & moveDescriptor.d_;
+}
 
 #endif /* MOVEDESCRIPTOR_H_ */

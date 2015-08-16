@@ -14,7 +14,10 @@ public:
     virtual void expand(const Status&, std::shared_ptr<Node>, PrioNodeQueue&,
             Dumper*) = 0;
     virtual ~Expander() {}
-};
 
+    template <typename Archive>
+    void serialize(Archive& /*ar*/, const unsigned int /*version*/)
+    {}
+};
 
 #endif /* EXPANDER_H_ */
