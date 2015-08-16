@@ -37,7 +37,6 @@
 #include <iostream>
 #include <fstream>
 #include <deque>
-#include <boost/format.hpp>
 #include <functional>
 
 Sokoban::Sokoban(int argc, const char* argv[]):
