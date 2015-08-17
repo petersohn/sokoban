@@ -1,6 +1,12 @@
 #ifndef SRC_PRIOQUEUE_HPP
 #define SRC_PRIOQUEUE_HPP
 
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/priority_queue.hpp>
+
 #include <functional>
 #include <memory>
 #include <queue>
@@ -45,7 +51,7 @@ public:
     std::size_t size() const { return queue.size(); }
 
     template <typename Archive>
-    void serialize(const Archive& ar, const unsigned int /*version*/)
+    void serialize(Archive& ar, const unsigned int /*version*/)
     {
         ar & queue;
     }
