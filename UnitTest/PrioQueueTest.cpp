@@ -1,5 +1,7 @@
 #include "PrioQueue.hpp"
 
+#include <turtle/mock.hpp>
+
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/shared_ptr.hpp>
@@ -31,19 +33,49 @@ bool operator==(const Dummy& lhs, const Dummy& rhs)
     return lhs.i == rhs.i;
 }
 
-struct DummyCompare {
+struct MockSerializer {
+    MOCK_METHOD(load, 0, void())
+    MOCK_METHOD(save, 0, void())
+};
+
+class DummyCompare {
+public:
+    explicit DummyCompare(
+            const std::shared_ptr<MockSerializer>& mockSerializer = {}):
+            mockSerializer(mockSerializer)
+    {}
+
     bool operator()(const std::shared_ptr<Dummy>& lhs,
             const std::shared_ptr<Dummy>& rhs) {
         return lhs->i > rhs->i;
     }
 
     template <typename Archive>
-    void serialize(Archive& /*ar*/, const unsigned int /*version*/) {}
+    void load(Archive& /*ar*/, const unsigned int /*version*/)
+    {
+        if (mockSerializer) {
+            mockSerializer->load();
+        }
+    }
+
+    template <typename Archive>
+    void save(Archive& /*ar*/, const unsigned int /*version*/) const
+    {
+        if (mockSerializer) {
+            mockSerializer->save();
+        }
+    }
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
+private:
+    std::shared_ptr<MockSerializer> mockSerializer;
 };
 
 struct PrioQueueTestFixture {
     using PrioQueue = PrioQueue<std::shared_ptr<Dummy>, DummyCompare>;
-    PrioQueue queueUnderTest;
+    std::shared_ptr<MockSerializer> mockSerializer =
+            std::make_shared<MockSerializer>();
+    PrioQueue queueUnderTest{DummyCompare{mockSerializer}};
 };
 
 BOOST_FIXTURE_TEST_SUITE(PrioQueueTest, PrioQueueTestFixture)
@@ -108,12 +140,16 @@ BOOST_AUTO_TEST_CASE(serialize)
         queueUnderTest.push(value);
     }
 
+    mock::sequence seq;
+    MOCK_EXPECT(mockSerializer->save).in(seq);
+    MOCK_EXPECT(mockSerializer->load).in(seq);
+
     std::stringstream stream;
     boost::archive::text_oarchive saver{stream};
     saver << queueUnderTest;
 
     boost::archive::text_iarchive loader{stream};
-    PrioQueue loadedQueue;
+    PrioQueue loadedQueue{DummyCompare{mockSerializer}};
     loader >> loadedQueue;
 
     BOOST_CHECK_EQUAL(*loadedQueue.pop(), *values[2]);
