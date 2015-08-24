@@ -12,6 +12,10 @@ class TableHeurCalculator: public HeurCalculator {
     StoneCalculator calculator_;
     float heurMultiplier_;
 public:
+    TableHeurCalculator():
+            calculator_{}, heurMultiplier_{1.0}
+    {}
+
     TableHeurCalculator(StoneCalculator calculator, float heurMultiplier):
         calculator_(std::move(calculator)),
         heurMultiplier_(heurMultiplier)
@@ -37,6 +41,13 @@ public:
         return calculator_(status, p) * heurMultiplier_;
     }
 
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & boost::serialization::base_object<HeurCalculator>(*this);
+        ar & calculator_;
+        ar & heurMultiplier_;
+    }
 };
 
 #endif /* TABLEHEURCALCULATOR_H_ */

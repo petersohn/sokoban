@@ -1,5 +1,5 @@
-#ifndef HEURCALCULATOR_H_
-#define HEURCALCULATOR_H_
+#ifndef HEURCALCULATOR_HEURCALCULATOR_HPP
+#define HEURCALCULATOR_HEURCALCULATOR_HPP
 
 #include <memory>
 #include <boost/noncopyable.hpp>
@@ -16,12 +16,13 @@ public:
     virtual float calculateStatus(
             const Status& status,
             const MoveDescriptor* moveDescriptor = nullptr,
-            const std::shared_ptr<Node>& ancestor = 
+            const std::shared_ptr<Node>& ancestor =
                     std::shared_ptr<Node>()) const = 0;
 
     template <typename Archive>
-    void serialize(Archive& /*ar*/, const unsigned int /*version*/) {
+    void serialize(Archive& /*ar*/, const unsigned int /*version*/)
+    {
     }
 };
 
-#endif /* HEURCALCULATOR_H_ */
+#endif // HEURCALCULATOR_HEURCALCULATOR_HPP

@@ -53,12 +53,13 @@ PrioNodeQueue createPrioQueueFromOptions(const Options& options)
     return PrioNodeQueue{CompareQueue{options.compare_}};
 }
 
-std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
+std::shared_ptr<const HeurCalculator> 
+OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
         float heurMultiplier)
 {
     auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
             BasicStoneCalculator{table_}, 1.0f);
-    auto solver = std::make_unique<const Solver>(createPrioQueue,
+    Solver solver{createPrioQueue,
         [this, basicHeurCalculator](const Status& status) {
             return createExpander(
                     false,
@@ -67,9 +68,9 @@ std::shared_ptr<const HeurCalculator> OptionsBasedExpanderFactory::createAdvance
                     ComplexNodeChecker{createBasicNodeCheckers(
                             basicHeurCalculator, status)},
                     nullptr);
-        });
+        }};
     return std::make_shared<AdvancedHeurCalculator>(AdvancedStoneCalculator{
-            table_, std::move(solver), options_.reverseSearchMaxDepth_,
+            table_, solver, options_.reverseSearchMaxDepth_,
             options_.partitionsDumpFilename_}, heurMultiplier);
 }
 

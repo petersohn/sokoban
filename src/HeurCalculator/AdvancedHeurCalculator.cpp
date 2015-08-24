@@ -43,7 +43,9 @@ void AdvancedStoneCalculator::HeurDumper::printText(const char *text)
 
 /* AdvancedStoneCalculator */
 
-void AdvancedStoneCalculator::init(const Table& table)
+void AdvancedStoneCalculator::init(const Table& table, const Solver& solver,
+        std::size_t reverseSearchMaxDepth,
+        const boost::optional<std::string>& filename)
 {
     Array<std::string> dump(table.width(), table.height());
     std::vector<Partition> dumpPartitions;
@@ -53,14 +55,14 @@ void AdvancedStoneCalculator::init(const Table& table)
             dump[p] = "*";
             continue;
         }
-        initPartitions(table, p);
+        initPartitions(table, p, solver, reverseSearchMaxDepth);
         dump[p] =
                 partitions_[p].empty() ? "#" :
                 partitions_[p].size() > 1 ? "?" :
                 boost::lexical_cast<std::string>(partitions_[p][0].heur);
     }
-    if (filename_) {
-        HeurDumper dumper{*filename_};
+    if (filename) {
+        HeurDumper dumper{*filename};
         dumper.printText("Heuristics table:");
         dumper.dumpArray(dump);
         dumper.printText("\nPartitions:");
@@ -74,12 +76,13 @@ void AdvancedStoneCalculator::init(const Table& table)
     }
 }
 
-void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
+void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p,
+        const Solver& solver, std::size_t reverseSearchMaxDepth)
 {
     State state;
     state.addStone(p);
     std::vector<Status> parts = getPartitions(table, state,
-            reverseSearchMaxDepth_);
+            reverseSearchMaxDepth);
     for (Status& status: parts) {
         Partition partition(table.width(), table.height());
         partition.pos = p;
@@ -89,7 +92,7 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p)
             partition.heur = 0;
         else {
             std::deque<std::shared_ptr<Node>> res =
-                    solver_->solve(std::move(status));
+                    solver.solve(std::move(status));
             if (!res.empty())
                 partition.heur = res.back()->cost();
         }

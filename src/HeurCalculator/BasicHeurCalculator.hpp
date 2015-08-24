@@ -8,6 +8,7 @@ class BasicStoneCalculator {
     Array<float> distances_;
     bool checkDistance(const Table& table, Point  p, Point  d, int dist);
 public:
+    BasicStoneCalculator() = default;
     BasicStoneCalculator(const Table& table);
 
     BasicStoneCalculator(const BasicStoneCalculator&) = default;
@@ -16,6 +17,12 @@ public:
     BasicStoneCalculator& operator=(BasicStoneCalculator&&) = default;
 
     float operator()(const Status& status, Point p) const;
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & distances_;
+    }
 };
 
 using BasicHeurCalculator = TableHeurCalculator<BasicStoneCalculator>;

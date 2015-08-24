@@ -5,6 +5,7 @@
 #include "HeurCalculator/TableHeurCalculator.hpp"
 
 #include <boost/optional.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -18,14 +19,25 @@ class AdvancedStoneCalculator {
         Point pos;
         Array<bool> reachable;
         float heur;
+
+        Partition() = default;
         Partition(size_t width, size_t height):
-            reachable(width, height, false),
-            heur(0)
-            {}
+                reachable(width, height, false),
+                heur(0)
+        {}
+
         Partition(const Partition&) = default;
         Partition& operator=(const Partition&) = default;
         Partition(Partition&&) = default;
         Partition& operator=(Partition&&) = default;
+
+        template <typename Archive>
+        void serialize(Archive& ar, const unsigned int /*version*/)
+        {
+            ar & pos;
+            ar & reachable;
+            ar & heur;
+        }
     };
     class HeurDumper {
         std::string filename_;
@@ -43,23 +55,21 @@ class AdvancedStoneCalculator {
     };
 
     Array<std::vector<Partition>> partitions_;
-    std::unique_ptr<const Solver> solver_;
-    std::size_t reverseSearchMaxDepth_;
-    boost::optional<std::string> filename_;
-    void init(const Table& table);
 
-    void initPartitions(const Table& table, Point p);
-public:
-    AdvancedStoneCalculator(const Table& table, std::unique_ptr<const Solver> solver,
+    void init(const Table& table, const Solver& solver,
             std::size_t reverseSearchMaxDepth,
-            const boost::optional<std::string>& filename):
-        solver_(std::move(solver)),
-        reverseSearchMaxDepth_(reverseSearchMaxDepth),
-        filename_(filename)
+            const boost::optional<std::string>& filename);
+    void initPartitions(const Table& table, Point p, const Solver& solver,
+            std::size_t reverseSearchMaxDepth);
+public:
+    AdvancedStoneCalculator(const Table& table, const Solver& solver,
+            std::size_t reverseSearchMaxDepth,
+            const boost::optional<std::string>& filename)
     {
-        assert(solver_.get());
-        init(table);
+        init(table, solver, reverseSearchMaxDepth, filename);
     }
+
+    AdvancedStoneCalculator() = default;
 
     AdvancedStoneCalculator(const AdvancedStoneCalculator&) = default;
     AdvancedStoneCalculator& operator=(const AdvancedStoneCalculator&) = default;
@@ -67,6 +77,12 @@ public:
     AdvancedStoneCalculator& operator=(AdvancedStoneCalculator&&) = default;
 
     float operator()(const Status& status, Point p) const;
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & partitions_;
+    }
 };
 
 using AdvancedHeurCalculator = TableHeurCalculator<AdvancedStoneCalculator>;
