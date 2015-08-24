@@ -42,8 +42,8 @@ struct IncrementInfo {
     }
 };
 
-template <typename Ar>
-void serialize(Ar& ar, IncrementInfo& incrementInfo,
+template <typename Archive>
+void serialize(Archive& ar, IncrementInfo& incrementInfo,
         const unsigned int /*version*/) {
     ar & incrementInfo.heurInfo_;
     ar & incrementInfo.difference_;
@@ -129,8 +129,8 @@ public:
     }
     util::TimerData iteratingTime() const { return iteratingTime_; }
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/) {
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
         ar & currentStoneNum_;
         ar & blockList_;
         ar & heurList_;

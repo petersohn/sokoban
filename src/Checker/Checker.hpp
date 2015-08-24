@@ -15,8 +15,8 @@ public:
     // remain valid until the next call
     virtual const char* errorMessage() const = 0;
 
-    template <typename Ar>
-    void serialize(Ar& /*ar*/, const unsigned int /*version*/) {
+    template <typename Archive>
+    void serialize(Archive& /*ar*/, const unsigned int /*version*/) {
     }
 };
 

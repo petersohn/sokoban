@@ -20,8 +20,8 @@ public:
     bool check(const Status& status, Point  p) const override;
     const char* errorMessage() const override;
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/) {
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
         ar & boost::serialization::base_object<Checker>(*this);
         ar & blockList_;
     }

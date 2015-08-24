@@ -29,8 +29,8 @@ public:
 
     size_t size() const { return size_; }
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/) {
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
         ar & index_;
         ar & size_;
     }

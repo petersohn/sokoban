@@ -41,8 +41,8 @@ public:
         return Next{this};
     }
 
-    template <typename Ar>
-    void save(Ar& ar, const unsigned int /*version*/) const {
+    template <typename Archive>
+    void save(Archive& ar, const unsigned int /*version*/) const {
         std::vector<std::pair<std::shared_ptr<Status>, float>> v;
         v.reserve(heurList_.size());
 
@@ -53,8 +53,8 @@ public:
         ar << v;
     }
 
-    template <typename Ar>
-    void load(Ar& ar, const unsigned int /*version*/) {
+    template <typename Archive>
+    void load(Archive& ar, const unsigned int /*version*/) {
         std::vector<std::pair<std::shared_ptr<Status>, float>> v;
         ar >> v;
 

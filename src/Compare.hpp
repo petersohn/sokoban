@@ -12,8 +12,8 @@ struct Compare {
     {}
 };
 
-template <typename Ar>
-void serialize(Ar& ar, Compare& compare, const unsigned int /*version*/)
+template <typename Archive>
+void serialize(Archive& ar, Compare& compare, const unsigned int /*version*/)
 {
     ar & compare.type;
     ar & compare.reverse;

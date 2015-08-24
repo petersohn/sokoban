@@ -54,8 +54,8 @@ public:
         return value_;
     }
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/)
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
     {
         ar & value_;
     }
@@ -96,8 +96,8 @@ public:
     ChildType& falseChild() { return falseChild_; }
     ChildType& trueChild() { return trueChild_; }
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/)
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
     {
         ar & point_;
         ar & falseChild_;

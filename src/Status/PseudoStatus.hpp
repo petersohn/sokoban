@@ -35,8 +35,8 @@ public:
     Array<bool>& reachableArray() { return reachableArray_; }
     const Array<bool>& reachableArray() const { return reachableArray_; }
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int)
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int)
     {
         ar & table_;
         ar & state_;

@@ -73,8 +73,8 @@ public:
         return Next{this};
     }
 
-    template <typename Ar>
-    void serialize(Ar& ar, const unsigned int /*version*/) {
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/) {
         ar & decisionTree_;
     }
 };

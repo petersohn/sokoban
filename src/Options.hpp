@@ -89,8 +89,8 @@ struct Options {
 
 Options parseOptions(int argc, const char* argv[], const char *configFileName);
 
-template <typename Ar>
-void serialize(Ar& ar, Options& options, const unsigned int /*version*/)
+template <typename Archive>
+void serialize(Archive& ar, Options& options, const unsigned int /*version*/)
 {
     ar & options.blocklistDecisionTreeDepth_;
     ar & options.blockListDistance_;
