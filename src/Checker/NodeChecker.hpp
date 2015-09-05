@@ -14,6 +14,9 @@ public:
     // return a *real* string constant, or at least
     // remain valid until the next call
     virtual const char* errorMessage() const = 0;
+
+    template <typename Archive>
+    void serialize(Archive& /*ar*/, const unsigned int /*version*/) {}
 };
 
 #endif // NODECHECKER_HPP

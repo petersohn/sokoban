@@ -8,6 +8,8 @@
 #include "Status/floodFill.hpp"
 #include "FieldType.hpp"
 
+#include <boost/serialization/shared_ptr.hpp>
+
 class CorridorCheckerStrategy {
     const HeurCalculator* calculator_;
     const Status& status;
@@ -16,6 +18,7 @@ public:
             const Status& status):
         calculator_(calculator), status(status)
     {}
+
     bool checkCorridorEnding(Point p0, Point side) const
     {
         Point p1 = p0 + side;
@@ -26,6 +29,7 @@ public:
                 (calculator_->calculateStone(status, p1) >= 0 ||
                  calculator_->calculateStone(status, pm1) >= 0);
     }
+
     void floodFill(Point p0, Array<bool>& result, MinMax& minmax)
     {
         ::floodFill(status, p0, result, minmax);
@@ -33,16 +37,25 @@ public:
 };
 
 class CorridorCheckerStrategyFactory {
-    std::shared_ptr<const HeurCalculator> calculator_;
+    std::shared_ptr<HeurCalculator> calculator_;
 
 public:
-    CorridorCheckerStrategyFactory(std::shared_ptr<const HeurCalculator> heurCalculator):
+    CorridorCheckerStrategyFactory() = default;
+
+    CorridorCheckerStrategyFactory(
+            std::shared_ptr<HeurCalculator> heurCalculator):
         calculator_(std::move(heurCalculator))
     {}
 
     CorridorCheckerStrategy operator()(const Status& status) const
     {
         return CorridorCheckerStrategy{calculator_.get(), status};
+    }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & calculator_;
     }
 };
 

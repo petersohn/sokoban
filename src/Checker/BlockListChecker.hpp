@@ -21,7 +21,8 @@ public:
     const char* errorMessage() const override;
 
     template <typename Archive>
-    void serialize(Archive& ar, const unsigned int /*version*/) {
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
         ar & boost::serialization::base_object<Checker>(*this);
         ar & blockList_;
     }

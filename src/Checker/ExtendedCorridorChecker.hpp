@@ -8,6 +8,7 @@
 #include "Status/Status.hpp"
 #include "Status/floodFill.hpp"
 #include "FieldType.hpp"
+
 #include <memory>
 
 class ExtendedCorridorCheckerStrategy {
@@ -44,16 +45,25 @@ public:
 };
 
 class ExtendedCorridorCheckerStrategyFactory {
-    std::shared_ptr<const HeurCalculator> calculator_;
+    std::shared_ptr<HeurCalculator> calculator_;
 
 public:
-    ExtendedCorridorCheckerStrategyFactory(std::shared_ptr<const HeurCalculator> heurCalculator):
+    ExtendedCorridorCheckerStrategyFactory() = default;
+
+    ExtendedCorridorCheckerStrategyFactory(
+            std::shared_ptr<HeurCalculator> heurCalculator):
         calculator_(std::move(heurCalculator))
     {}
 
     ExtendedCorridorCheckerStrategy operator()(const Status& status) const
     {
         return ExtendedCorridorCheckerStrategy{calculator_.get(), status};
+    }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & calculator_;
     }
 };
 

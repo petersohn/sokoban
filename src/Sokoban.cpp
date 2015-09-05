@@ -108,7 +108,7 @@ int Sokoban::run()
     int returnCode = 0;
 
     if (options.test_ > 0) {
-        std::shared_ptr<const HeurCalculator> calculator =
+        std::shared_ptr<HeurCalculator> calculator =
                 expanderFactory->createAdvancedHeurCalcularor(1.0);
         util::ThreadPool threadPool;
         util::ThreadPoolRunner runner(threadPool);

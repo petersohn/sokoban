@@ -5,12 +5,14 @@
 #include "Checker/VisitedStates.hpp"
 #include "Node.hpp"
 
+#include <boost/serialization/base_object.hpp>
+
 #include <memory>
 
 class VisitedStatesChecker: public NodeChecker {
     VisitedStates visitedStates;
 public:
-	VisitedStatesChecker(VisitedStates visitedStates):
+	VisitedStatesChecker(VisitedStates visitedStates = {}):
 			visitedStates(std::move(visitedStates)) {
 	}
 
@@ -24,6 +26,13 @@ public:
 	{
 		return "already visited";
 	}
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & boost::serialization::base_object<NodeChecker>(*this);
+        ar & visitedStates;
+    }
 };
 
 #endif // VISITEDSTATESCHECKER_HPP

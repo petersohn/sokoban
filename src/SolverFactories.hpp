@@ -33,7 +33,7 @@ class OptionsBasedExpanderFactory {
     util::TimerData* chokePointFindingTime_;
     util::TimerData* preprocessingIterationTime_;
 
-    std::shared_ptr<const HeurCalculator> createHeurCalculator(
+    std::shared_ptr<HeurCalculator> createHeurCalculator(
             float heurMultiplier);
 public:
     OptionsBasedExpanderFactory(const Options& opts, const Table& table,
@@ -53,23 +53,23 @@ public:
     OptionsBasedExpanderFactory& operator=(
             const OptionsBasedExpanderFactory&) = delete;
 
-    std::shared_ptr<const HeurCalculator> createAdvancedHeurCalcularor(
+    std::shared_ptr<HeurCalculator> createAdvancedHeurCalcularor(
             float heurMultiplier);
 
     std::unique_ptr<Expander> createExpander(
             bool allowMultiThread,
-            std::shared_ptr<const HeurCalculator> calculator,
+            std::shared_ptr<HeurCalculator> calculator,
             ComplexChecker checker,
             ComplexNodeChecker nodeChecker,
             std::size_t* expandedNodes,
-            std::shared_ptr<const HeurCalculator> experimentalCalculator =
-                    std::shared_ptr<const HeurCalculator>());
+            std::shared_ptr<HeurCalculator> experimentalCalculator =
+                    std::shared_ptr<HeurCalculator>());
 
     Checkers createBasicCheckers(
-            const std::shared_ptr<const HeurCalculator>& calculator);
+            const std::shared_ptr<HeurCalculator>& calculator);
 
     NodeCheckers createBasicNodeCheckers(
-            const std::shared_ptr<const HeurCalculator>& calculator,
+            const std::shared_ptr<HeurCalculator>& calculator,
             const Status& status);
 
     std::unique_ptr<Preprocessor> createPreprocessor();

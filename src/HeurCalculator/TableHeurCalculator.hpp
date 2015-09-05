@@ -7,6 +7,8 @@
 #include "Array.hpp"
 #include "Mutexes.hpp"
 
+#include <boost/serialization/base_object.hpp>
+
 template <typename StoneCalculator>
 class TableHeurCalculator: public HeurCalculator {
     StoneCalculator calculator_;

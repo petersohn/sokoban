@@ -53,7 +53,7 @@ PrioNodeQueue createPrioQueueFromOptions(const Options& options)
     return PrioNodeQueue{CompareQueue{options.compare_}};
 }
 
-std::shared_ptr<const HeurCalculator> 
+std::shared_ptr<HeurCalculator>
 OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
         float heurMultiplier)
 {
@@ -75,7 +75,7 @@ OptionsBasedExpanderFactory::createAdvancedHeurCalcularor(
 }
 
 auto OptionsBasedExpanderFactory::createBasicCheckers(
-        const std::shared_ptr<const HeurCalculator>& calculator) -> Checkers
+        const std::shared_ptr<HeurCalculator>& calculator) -> Checkers
 {
     std::vector<std::shared_ptr<const Checker>> checkers;
     switch (options_.movableCheckerType_) {
@@ -106,7 +106,7 @@ auto OptionsBasedExpanderFactory::createBasicCheckers(
 }
 
 auto OptionsBasedExpanderFactory::createBasicNodeCheckers(
-        const std::shared_ptr<const HeurCalculator>& calculator,
+        const std::shared_ptr<HeurCalculator>& calculator,
         const Status& status) -> NodeCheckers
 {
     VisitedStates visitedStates;
@@ -118,11 +118,11 @@ auto OptionsBasedExpanderFactory::createBasicNodeCheckers(
 
 std::unique_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
             bool allowMultiThread,
-            std::shared_ptr<const HeurCalculator> calculator,
+            std::shared_ptr<HeurCalculator> calculator,
             ComplexChecker checker,
             ComplexNodeChecker nodeChecker,
             std::size_t* expandedNodes,
-            std::shared_ptr<const HeurCalculator> experimentalCalculator)
+            std::shared_ptr<HeurCalculator> experimentalCalculator)
 {
     auto nodeFactory = std::make_shared<NodeFactory>(calculator,
                 experimentalCalculator);
@@ -146,7 +146,7 @@ std::unique_ptr<Expander> OptionsBasedExpanderFactory::createExpander(
     return expander;
 }
 
-std::shared_ptr<const HeurCalculator>
+std::shared_ptr<HeurCalculator>
 OptionsBasedExpanderFactory::createHeurCalculator(float heurMultiplier)
 {
     return options_.useAdvancedHeurCalculator_ ?
@@ -158,7 +158,7 @@ OptionsBasedExpanderFactory::createHeurCalculator(float heurMultiplier)
 ExpanderFactory OptionsBasedExpanderFactory::factory(
         const PreprocessedResult& preprocessedResult)
 {
-    std::shared_ptr<const HeurCalculator> calculator;
+    std::shared_ptr<HeurCalculator> calculator;
 
     if (preprocessedResult.heurCalculator) {
         calculator = preprocessedResult.heurCalculator;
@@ -172,7 +172,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory(
         checkers.push_back(preprocessedResult.checker);
     }
 
-    std::shared_ptr<const HeurCalculator> experimentalCalculator;
+    std::shared_ptr<HeurCalculator> experimentalCalculator;
 //    experimentalCalculator = calculator;
     return [=](const Status& status) {
             auto nodeCheckers = createBasicNodeCheckers(calculator, status);
@@ -197,7 +197,7 @@ ExpanderFactory OptionsBasedExpanderFactory::factory(
 
 std::unique_ptr<Preprocessor> OptionsBasedExpanderFactory::createPreprocessor()
 {
-    std::shared_ptr<const HeurCalculator> preprocessingCalculator =
+    std::shared_ptr<HeurCalculator> preprocessingCalculator =
             createHeurCalculator(1.0f);
 
     ComplexChecker checker{createBasicCheckers(preprocessingCalculator)};

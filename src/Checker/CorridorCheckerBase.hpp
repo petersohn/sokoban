@@ -4,6 +4,8 @@
 #include "Checker/Checker.hpp"
 #include "Status/floodFill.hpp"
 
+#include <boost/serialization/base_object.hpp>
+
 template <typename StrategyFactory>
 class CorridorCheckerBase: public Checker {
     StrategyFactory strategyFactory;
@@ -22,8 +24,10 @@ public:
         for (p1.x = 0; p1.x < 3; p1.x++)
             for (p1.y = 0; p1.y < 3; p1.y++) {
                 Point p = p0 + p1 - p11;
-                if (!unchecked[p1] || status.value(p) != FieldType::floor || status.reachable(p))
+                if (!unchecked[p1] || status.value(p) != FieldType::floor ||
+                        status.reachable(p)) {
                     continue;
+                }
                 Array<bool> reach(status.width(), status.height(), false);
                 MinMax minmax;
                 strategy.floodFill(p, reach, minmax);
@@ -71,6 +75,13 @@ public:
     const char* errorMessage() const override
     {
         return "corridor found";
+    }
+
+    template <typename Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & boost::serialization::base_object<Checker>(*this);
+        ar & strategyFactory;
     }
 };
 
