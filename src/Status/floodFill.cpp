@@ -7,7 +7,7 @@
 namespace sokoban {
 
 template <typename Action>
-void floodFillImpl(const Status& status, Point p0, Array<bool> &result,
+void floodFillImpl(const Status& status, Point p0, Matrix<bool> &result,
         Action action)
 {
     result.fill(false);
@@ -20,7 +20,7 @@ void floodFillImpl(const Status& status, Point p0, Array<bool> &result,
         Point p = pointsToVisit.back();
         pointsToVisit.pop_back();
 
-        if (!arrayAt(result, p, true)) {
+        if (!matrixAt(result, p, true)) {
             action(p);
 
             if (status.value(p) == FieldType::floor) {
@@ -36,7 +36,7 @@ void floodFillImpl(const Status& status, Point p0, Array<bool> &result,
     }
 }
 
-void floodFill(const Status& status, Point p0, Array<bool>& result)
+void floodFill(const Status& status, Point p0, Matrix<bool>& result)
 {
     floodFillImpl(status, p0, result, [](Point){});
 }
@@ -46,7 +46,7 @@ namespace {
 class BorderAction {
     const Status& status;
     Status::BorderType& border;
-    Array<bool> visitedStones;
+    Matrix<bool> visitedStones;
 
 public:
 
@@ -92,19 +92,19 @@ public:
 
 }
 
-void floodFill(const Status& status, Point p0, Array<bool>& result,
+void floodFill(const Status& status, Point p0, Matrix<bool>& result,
             Status::BorderType& border)
 {
     floodFillImpl(status, p0, result, BorderAction{status, border});
 }
 
-void floodFill(const Status& status, Point p0, Array<bool>& result,
+void floodFill(const Status& status, Point p0, Matrix<bool>& result,
             MinMax& minmax)
 {
     floodFillImpl(status, p0, result, MinmaxAction{status, minmax});
 }
 
-void floodFill(const Status& status, Point p0, Array<bool>& result,
+void floodFill(const Status& status, Point p0, Matrix<bool>& result,
             MinMax& minmax, Status::BorderType& border)
 {
     BorderAction borderAction{status, border};

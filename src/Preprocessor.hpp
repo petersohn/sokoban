@@ -110,7 +110,7 @@ private:
             const std::string& title);
     void updateResult();
     std::size_t aggregateThreadResults();
-    Array<bool> calculateChokePoints();
+    Matrix<bool> calculateChokePoints();
     void save();
 
 public:

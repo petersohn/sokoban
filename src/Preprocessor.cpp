@@ -141,7 +141,7 @@ void Preprocessor::run() {
         ComplexChecker actualChecker{checker_};
         actualChecker.append(checker());
         subStatusForEach_->start(currentStoneNum_, calculator_, actualChecker,
-                Array<bool>{table_->width(), table_->height(), false},
+                Matrix<bool>{table_->width(), table_->height(), false},
                 maxIndex_);
         std::cerr << "Waiting for processing to finish..." << std::endl;
 
@@ -199,9 +199,9 @@ void Preprocessor::save()
     savingTime_.realTime += timeMeter.realTime();
 }
 
-Array<bool> Preprocessor::calculateChokePoints()
+Matrix<bool> Preprocessor::calculateChokePoints()
 {
-    Array<bool> result;
+    Matrix<bool> result;
 
     util::TimeMeter timeMeter;
     if (options_.chokePointNum_ > 0) {
@@ -210,7 +210,7 @@ Array<bool> Preprocessor::calculateChokePoints()
         chokePointFinderTime_ = timeMeter.data();
         Status chokePointStatus{*table_};
 
-        for (Point p: arrayRange(result)) {
+        for (Point p: matrixRange(result)) {
             if (result[p]) {
                 chokePointStatus.addStone(p);
             }
@@ -310,11 +310,11 @@ void Preprocessor::dumpStatus(const Status& status, const Point *p, const std::s
         dump = &calculationInfos_[*threadId]->dump_;
     }
     if (p) {
-        Array<bool> hl = status.reachableArray();
+        Matrix<bool> hl = status.reachableMatrix();
         hl[*p] = true;
         sokoban::dumpStatus(*dump, status, title, &hl);
     } else {
-        sokoban::dumpStatus(*dump, status, title, &status.reachableArray());
+        sokoban::dumpStatus(*dump, status, title, &status.reachableMatrix());
     }
 }
 

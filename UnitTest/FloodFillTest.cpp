@@ -1,10 +1,12 @@
 #include "Status/floodFill.hpp"
 #include "Status/StatusCreator.hpp"
 
-#include "ArrayIO.hpp"
+#include "MatrixIO.hpp"
 #include "BorderTypeIO.hpp"
 
 #include <boost/test/unit_test.hpp>
+
+#include <algorithm>
 
 using namespace sokoban;
 
@@ -16,7 +18,7 @@ BOOST_AUTO_TEST_CASE(floors_are_reachable_but_walls_and_stones_are_not)
 {
     std::size_t width = 4;
     std::size_t height = 2;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x...",
             "y*o."
@@ -37,7 +39,7 @@ BOOST_AUTO_TEST_CASE(walls_and_stones_block_reachability)
 {
     std::size_t width = 4;
     std::size_t height = 2;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.*.",
             "y.o."
@@ -68,7 +70,7 @@ BOOST_AUTO_TEST_CASE(walls_and_stones_block_reachability_diagonally_1)
 {
     std::size_t width = 4;
     std::size_t height = 2;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.*.",
             "yo.."
@@ -99,7 +101,7 @@ BOOST_AUTO_TEST_CASE(walls_and_stones_block_reachability_diagonally_2)
 {
     std::size_t width = 4;
     std::size_t height = 2;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x*..",
             "y.o."
@@ -134,7 +136,7 @@ BOOST_AUTO_TEST_CASE(single_stone_in_the_middle)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x...",
             "y.o."
@@ -151,7 +153,7 @@ BOOST_AUTO_TEST_CASE(multiple_reachable_stones)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x...",
             "y.o.",
@@ -160,6 +162,7 @@ BOOST_AUTO_TEST_CASE(multiple_reachable_stones)
 
     Status::BorderType border;
     floodFill(data.second, Point{1, 0}, result, border);
+    std::sort(border.begin(), border.end());
     BOOST_CHECK_EQUAL(border, (Status::BorderType{
                 Point{2, 1}, Point{1, 2}, Point{3, 2}}));
 }
@@ -168,7 +171,7 @@ BOOST_AUTO_TEST_CASE(one_stone_is_blocked_by_other_stones)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x..o",
             "y.o.",
@@ -177,15 +180,16 @@ BOOST_AUTO_TEST_CASE(one_stone_is_blocked_by_other_stones)
 
     Status::BorderType border;
     floodFill(data.second, Point{1, 0}, result, border);
+    std::sort(border.begin(), border.end());
     BOOST_CHECK_EQUAL(border, (Status::BorderType{
-                Point{3, 0}, Point{1, 2}, Point{2, 1}}));
+                Point{3, 0}, Point{2, 1}, Point{1, 2}}));
 }
 
 BOOST_AUTO_TEST_CASE(stones_are_blocked_by_walls_and_other_stones)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.*o",
             "y.o.",
@@ -202,8 +206,8 @@ BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_border)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> resultBorder{width, height};
-    Array<bool> resultNoBorder{width, height};
+    Matrix<bool> resultBorder{width, height};
+    Matrix<bool> resultNoBorder{width, height};
     auto data = createStatus(width, height, {
             "x.*o",
             "y.o.",
@@ -224,7 +228,7 @@ BOOST_AUTO_TEST_CASE(full_table)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x..o",
             "yoo.",
@@ -240,7 +244,7 @@ BOOST_AUTO_TEST_CASE(one_corner)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.o.",
             "yo..",
@@ -256,7 +260,7 @@ BOOST_AUTO_TEST_CASE(enclosed_1x1_area)
 {
     std::size_t width = 4;
     std::size_t height = 3;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.o.",
             "yo.o",
@@ -272,7 +276,7 @@ BOOST_AUTO_TEST_CASE(enclosed_bigger_area)
 {
     std::size_t width = 4;
     std::size_t height = 4;
-    Array<bool> result{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.o.",
             "yo.o",
@@ -289,8 +293,8 @@ BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_minmax)
 {
     std::size_t width = 4;
     std::size_t height = 4;
-    Array<bool> resultMinmax{width, height};
-    Array<bool> resultNoMinmax{width, height};
+    Matrix<bool> resultMinmax{width, height};
+    Matrix<bool> resultNoMinmax{width, height};
     auto data = createStatus(width, height, {
             "x.o.",
             "yo.o",
@@ -312,9 +316,9 @@ BOOST_AUTO_TEST_CASE(result_is_the_same_when_using_minmax)
 {
     std::size_t width = 4;
     std::size_t height = 4;
-    Array<bool> resultMinmax{width, height};
-    Array<bool> resultBorder{width, height};
-    Array<bool> result{width, height};
+    Matrix<bool> resultMinmax{width, height};
+    Matrix<bool> resultBorder{width, height};
+    Matrix<bool> result{width, height};
     auto data = createStatus(width, height, {
             "x.o.",
             "yo.o",

@@ -19,7 +19,7 @@ class ChokePointFinder {
     std::shared_ptr<const HeurCalculator> calculator;
     ComplexChecker checker;
 
-    using CalculationInfo = Array<bool>;
+    using CalculationInfo = Matrix<bool>;
 
     std::vector<CalculationInfo> calculationInfos;
     CalculationInfo result;
@@ -77,7 +77,7 @@ public:
                 subStatusForEach.wait(print);
             }
 
-            for (Point p: arrayRange(*table)) {
+            for (Point p: matrixRange(*table)) {
                 if (std::any_of(
                             calculationInfos.begin(), calculationInfos.end(),
                             [p](const CalculationInfo& info) {
@@ -98,7 +98,7 @@ public:
 
 }
 
-Array<bool> findChokePoints(const Table& table, Options options,
+Matrix<bool> findChokePoints(const Table& table, Options options,
             std::shared_ptr<const HeurCalculator> calculator,
             ComplexChecker checker, bool print)
 {

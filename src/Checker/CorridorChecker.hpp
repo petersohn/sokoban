@@ -3,7 +3,7 @@
 
 #include "Checker/CorridorCheckerBase.hpp"
 #include "HeurCalculator/HeurCalculator.hpp"
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "Status/Status.hpp"
 #include "Status/floodFill.hpp"
 #include "FieldType.hpp"
@@ -32,7 +32,7 @@ public:
                  calculator_->calculateStone(status, pm1) >= 0);
     }
 
-    void floodFill(Point p0, Array<bool>& result, MinMax& minmax)
+    void floodFill(Point p0, Matrix<bool>& result, MinMax& minmax)
     {
         sokoban::floodFill(status, p0, result, minmax);
     }

@@ -2,6 +2,7 @@
 #define MOVABLECHECKER_H_
 
 #include "Checker/Checker.hpp"
+#include "Status/Point.hpp"
 
 #include <boost/serialization/base_object.hpp>
 
@@ -11,7 +12,6 @@ namespace sokoban {
 
 class Status;
 class HeurCalculator;
-class Point;
 
 class MovableChecker: public Checker {
     std::shared_ptr<HeurCalculator> calculator_;

@@ -1,6 +1,6 @@
 #include "Status/Status.hpp"
 #include "Status/StatusCreator.hpp"
-#include "ArrayIO.hpp"
+#include "MatrixIO.hpp"
 
 #include "CreateTestStatus.hpp"
 #include "OperatorChecks.hpp"
@@ -100,11 +100,11 @@ BOOST_AUTO_TEST_CASE(shiftCurrentPos_leaves_reachability) {
     auto& status = data.second;
 
     Point originalCurrentPos = status.currentPos();
-    auto originalReachability = status.reachableArray();
+    auto originalReachability = status.reachableMatrix();
 
     status.shiftCurrentPos();
     BOOST_CHECK_NE(status.currentPos(), originalCurrentPos);
-    BOOST_CHECK_EQUAL(status.reachableArray(), originalReachability);
+    BOOST_CHECK_EQUAL(status.reachableMatrix(), originalReachability);
 }
 
 BOOST_AUTO_TEST_CASE(equal_statuses_are_equal) {

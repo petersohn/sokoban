@@ -11,10 +11,4 @@ std::string direction(Point d)
             d.y < 0 ? "up" : "???";
 }
 
-std::ostream& operator<<(std::ostream& os, Point p)
-{
-    os << '(' << p.x << ", " << p.y << ')';
-    return os;
-}
-
 } // namespace sokoban

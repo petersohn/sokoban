@@ -3,7 +3,7 @@
 
 #include "Checker/CorridorCheckerBase.hpp"
 #include "HeurCalculator/HeurCalculator.hpp"
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "Status/floodFill.hpp"
 #include "Status/Status.hpp"
 #include "Status/floodFill.hpp"
@@ -37,7 +37,7 @@ public:
                 (isMovableTo(p1, pm1) || isMovableTo(pm1, p1));
     }
 
-    void floodFill(Point p0, Array<bool>& result, MinMax& minmax)
+    void floodFill(Point p0, Matrix<bool>& result, MinMax& minmax)
     {
         Status::BorderType border;
         sokoban::floodFill(status, p0, result, minmax, border);

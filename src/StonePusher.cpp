@@ -10,7 +10,7 @@
 #include "Status/floodFill.hpp"
 #include "Status/Status.hpp"
 
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "FieldType.hpp"
 #include "intersect.hpp"
 #include "Node.hpp"
@@ -40,7 +40,7 @@ public:
 
 std::shared_ptr<Node> InternalPusher::pushStones(Status status, std::shared_ptr<Node> base) {
     node_ = std::move(base);
-    Array<bool> destReachable(status.width(), status.height(), false);
+    Matrix<bool> destReachable(status.width(), status.height(), false);
     bool touched;
     bool touched2 = false;
 

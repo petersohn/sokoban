@@ -3,7 +3,7 @@
 
 #include "Status/Table.hpp"
 #include "Status/State.hpp"
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "FieldType.hpp"
 
 #include <boost/thread/mutex.hpp>
@@ -26,10 +26,10 @@ private:
     const Table* table_;
     State state_;
     Point currentPos_;
-    Array<FieldType> fields_;
+    Matrix<FieldType> fields_;
 
     struct CalculatedData {
-        Array<bool> reachable_;
+        Matrix<bool> reachable_;
         BorderType border_;
 
         CalculatedData(std::size_t width, std::size_t height):
@@ -42,7 +42,7 @@ private:
     mutable  CalculatedDataPtr calculatedData_;
 
     static std::size_t statusPoolSize_;
-    static std::unordered_map<State, std::shared_ptr<Array<CalculatedDataPtr>>> statusPool_;
+    static std::unordered_map<State, std::shared_ptr<Matrix<CalculatedDataPtr>>> statusPool_;
     static boost::mutex statusPoolMutex_;
 
     void fillReachable() const;
@@ -140,15 +140,15 @@ public:
     std::size_t height() const { return table().height(); }
     const State& state() const { return state_; }
     bool reachable(Point p) const {
-        return arrayAt<bool>(calculatedData().reachable_, p, false);
+        return matrixAt<bool>(calculatedData().reachable_, p, false);
     }
-    const Array<bool>& reachableArray() const {
+    const Matrix<bool>& reachableMatrix() const {
         return calculatedData().reachable_;
     }
     const BorderType& border() const {
         return calculatedData().border_;
     }
-    FieldType value(Point p) const { return arrayAt<FieldType>(fields_, p, FieldType::wall); }
+    FieldType value(Point p) const { return matrixAt<FieldType>(fields_, p, FieldType::wall); }
     Point currentPos() const { return currentPos_; }
 
     bool currentPos(Point p);

@@ -4,7 +4,7 @@
 #include "Checker/ComplexCheckerBase.hpp"
 #include "Checker/ComplexCheckerFwd.hpp"
 #include "Status/PointRange.hpp"
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "MultiThreadWorker.hpp"
 
 #include "util/ExplicitType.hpp"
@@ -39,8 +39,8 @@ private:
     std::size_t chokePointDistantNum_;
     std::size_t reverseSearchMaxDepth_;
     PointRange range_;
-    Array<bool> excludeList_;
-    Array<bool> chokePoints_;
+    Matrix<bool> excludeList_;
+    Matrix<bool> chokePoints_;
     util::TimeMeter timeMeter_;
     std::size_t startingIndex_;
     std::size_t index_;
@@ -67,7 +67,7 @@ public:
             MinDistance minDistance,
             MaxDistance maxDistance,
             ChokePointDistantNum chokePointDistantNum,
-            Array<bool> chokePoints,
+            Matrix<bool> chokePoints,
             WorkQueueLength workQueueLength,
             ReverseSearchMaxDepth reverseSearchMaxDepth,
             boost::asio::io_service& ioService);
@@ -75,7 +75,7 @@ public:
     void start(std::size_t numStones,
             std::shared_ptr<const HeurCalculator> heurCalculator,
             ComplexChecker checker,
-            boost::optional<Array<bool>> excludeList = {},
+            boost::optional<Matrix<bool>> excludeList = {},
             std::size_t startingIndex = 0);
     void wait(bool print);
 

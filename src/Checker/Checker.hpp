@@ -1,12 +1,13 @@
 #ifndef CHECKER_HPP
 #define CHECKER_HPP
 
+#include "Status/Point.hpp"
+
 #include <string>
 
 namespace sokoban {
 
 class Status;
-class Point;
 
 class Checker {
 public:

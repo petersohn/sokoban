@@ -4,9 +4,9 @@
 #include "Status/StatusCreator.hpp"
 #include "Status/Status.hpp"
 
-#include "ArrayIO.hpp"
+#include "MatrixIO.hpp"
 #include "ChokePointFinder.hpp"
-#include "createBoolArray.hpp"
+#include "createBoolMatrix.hpp"
 #include "MockChecker.hpp"
 #include "MockHeurCalculator.hpp"
 
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(no_choke_point_in_empty_table)
     auto chokePoints = findChokePoints(*data.first, options, heurCalculator,
             ComplexChecker{checker}, false);
 
-    BOOST_CHECK_EQUAL(chokePoints, createBoolArray(*data.first, {}));
+    BOOST_CHECK_EQUAL(chokePoints, createBoolMatrix(*data.first, {}));
 }
 
 BOOST_AUTO_TEST_CASE(single_choke_point)
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(single_choke_point)
             ComplexChecker{checker}, false);
 
     BOOST_CHECK_EQUAL(chokePoints,
-            createBoolArray(*data.first, expectedResult));
+            createBoolMatrix(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_CASE(multiple_choke_points)
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(multiple_choke_points)
             ComplexChecker{checker}, false);
 
     BOOST_CHECK_EQUAL(chokePoints,
-            createBoolArray(*data.first, expectedResult));
+            createBoolMatrix(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_CASE(no_choke_points_if_more_stones_are_needed)
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(no_choke_points_if_more_stones_are_needed)
     auto chokePoints = findChokePoints(*data.first, options, heurCalculator,
             ComplexChecker{checker}, false);
 
-    BOOST_CHECK_EQUAL(chokePoints, createBoolArray(*data.first, {}));
+    BOOST_CHECK_EQUAL(chokePoints, createBoolMatrix(*data.first, {}));
 }
 
 BOOST_AUTO_TEST_CASE(more_choke_points_in_options)
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(more_choke_points_in_options)
             ComplexChecker{checker}, false);
 
     BOOST_CHECK_EQUAL(chokePoints,
-            createBoolArray(*data.first, expectedResult));
+            createBoolMatrix(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_CASE(single_choke_point_with_more_points_in_options)
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(single_choke_point_with_more_points_in_options)
             ComplexChecker{checker}, false);
 
     BOOST_CHECK_EQUAL(chokePoints,
-            createBoolArray(*data.first, expectedResult));
+            createBoolMatrix(*data.first, expectedResult));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

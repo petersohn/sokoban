@@ -21,7 +21,7 @@ public:
     bool check(const Status& status, Point p0) const override
     {
         auto strategy = strategyFactory(status);
-        Array<bool> unchecked(3, 3, true);
+        Matrix<bool> unchecked(3, 3, true);
         Point p1;
         for (p1.x = 0; p1.x < 3; p1.x++)
             for (p1.y = 0; p1.y < 3; p1.y++) {
@@ -30,7 +30,7 @@ public:
                         status.reachable(p)) {
                     continue;
                 }
-                Array<bool> reach(status.width(), status.height(), false);
+                Matrix<bool> reach(status.width(), status.height(), false);
                 MinMax minmax;
                 strategy.floodFill(p, reach, minmax);
                 if (!reach[status.table().destination()]) {
@@ -67,7 +67,7 @@ public:
                 for (p2.x = 0; p2.x < 3; p2.x++)
                     for (p2.y = 0; p2.y < 3; p2.y++) {
                         Point pp = p0 + p2 - p11;
-                        if (arrayAt<bool>(reach, pp, false))
+                        if (matrixAt<bool>(reach, pp, false))
                             unchecked[p2] = false;
                     }
             }

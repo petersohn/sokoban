@@ -4,7 +4,7 @@
 #include "HeurCalculator/HeurCalculator.hpp"
 #include "Status/Status.hpp"
 #include "Status/Table.hpp"
-#include "Array.hpp"
+#include "Matrix.hpp"
 #include "Mutexes.hpp"
 
 #include <boost/serialization/base_object.hpp>

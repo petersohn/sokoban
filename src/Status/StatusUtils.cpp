@@ -8,9 +8,9 @@ namespace sokoban {
 std::vector<Status> getPartitions(const Table& table, const State& state,
             std::size_t maxDepth)
 {
-    Array<bool> pointsToProcess(table.width(), table.height(), false);
+    Matrix<bool> pointsToProcess(table.width(), table.height(), false);
     int numberOfPoints = 0;
-    for (Point  p: arrayRange(table)) {
+    for (Point  p: matrixRange(table)) {
         if (!table.wall(p) && !state[p])
         {
             pointsToProcess[p] = true;
@@ -19,7 +19,7 @@ std::vector<Status> getPartitions(const Table& table, const State& state,
             pointsToProcess[p] = false;
     }
     std::vector<Status> result;
-    auto searchRange = arrayRange(table);
+    auto searchRange = matrixRange(table);
     auto searchIterator = searchRange.begin();
     while (numberOfPoints > 0) {
         while (!pointsToProcess[*searchIterator]) {

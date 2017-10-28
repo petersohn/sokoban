@@ -12,14 +12,14 @@ class PseudoStatus {
     const Table* table_;
     State state_;
     Point currentPos_;
-    Array<bool> reachableArray_;
+    Matrix<bool> reachableMatrix_;
 public:
     PseudoStatus(): table_{nullptr} {}
     explicit PseudoStatus(const Status& status):
         table_(&status.table()),
         state_(status.state()),
         currentPos_(status.currentPos()),
-        reachableArray_(status.reachableArray())
+        reachableMatrix_(status.reachableMatrix())
     {}
 
     size_t width() const { return table().width(); }
@@ -33,9 +33,9 @@ public:
     }
     Point& currentPos() { return currentPos_; }
     Point  currentPos() const { return currentPos_; }
-    bool reachable(Point  p) const { return arrayAt<bool>(reachableArray_, p, false); }
-    Array<bool>& reachableArray() { return reachableArray_; }
-    const Array<bool>& reachableArray() const { return reachableArray_; }
+    bool reachable(Point  p) const { return matrixAt<bool>(reachableMatrix_, p, false); }
+    Matrix<bool>& reachableMatrix() { return reachableMatrix_; }
+    const Matrix<bool>& reachableMatrix() const { return reachableMatrix_; }
 
     template <typename Archive>
     void serialize(Archive& ar, const unsigned int)
@@ -43,7 +43,7 @@ public:
         ar & table_;
         ar & state_;
         ar & currentPos_;
-        ar & reachableArray_;
+        ar & reachableMatrix_;
     }
 };
 

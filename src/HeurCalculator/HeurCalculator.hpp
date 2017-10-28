@@ -1,12 +1,13 @@
 #ifndef HEURCALCULATOR_HEURCALCULATOR_HPP
 #define HEURCALCULATOR_HEURCALCULATOR_HPP
 
+#include "Status/Point.hpp"
+
 #include <memory>
 #include <boost/noncopyable.hpp>
 
 namespace sokoban {
 
-class Point;
 class Status;
 class Node;
 struct MoveDescriptor;

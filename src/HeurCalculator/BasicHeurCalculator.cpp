@@ -10,7 +10,7 @@ BasicStoneCalculator::BasicStoneCalculator(const Table& table)
     Point p;
     do {
         touched = false;
-        for (Point  p: arrayRange(table)) {
+        for (Point  p: matrixRange(table)) {
             if (distances_[p] == 0)
                 continue;
             float newDist = distances_[p]+1.0f;

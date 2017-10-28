@@ -138,7 +138,7 @@ MultiThreadExpander::~MultiThreadExpander()
 
 void MultiThreadExpander::expand(const Status& status,
         std::shared_ptr<Node> base, PrioNodeQueue& queue, Dumper* dumper) {
-    status.reachableArray();
+    status.reachableMatrix();
     InternalExpander exp(status, std::move(base), queue, dumper, *this);
     exp.expand();
 }

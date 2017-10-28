@@ -10,7 +10,7 @@ namespace sokoban {
 
 class IndexedStatusList {
 private:
-    Array<std::vector<Status>> index_;
+    Matrix<std::vector<Status>> index_;
     size_t size_;
 
 public:

@@ -2,12 +2,12 @@
 #define BASICHEURCALCULATOR_H_
 
 #include "HeurCalculator/TableHeurCalculator.hpp"
-#include "Array.hpp"
+#include "Matrix.hpp"
 
 namespace sokoban {
 
 class BasicStoneCalculator {
-    Array<float> distances_;
+    Matrix<float> distances_;
     bool checkDistance(const Table& table, Point  p, Point  d, int dist);
 public:
     BasicStoneCalculator() = default;

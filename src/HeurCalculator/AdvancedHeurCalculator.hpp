@@ -19,7 +19,7 @@ class AdvancedStoneCalculator {
     struct Partition
     {
         Point pos;
-        Array<bool> reachable;
+        Matrix<bool> reachable;
         float heur;
 
         Partition() = default;
@@ -49,14 +49,14 @@ class AdvancedStoneCalculator {
         HeurDumper(std::string filename): filename_(std::move(filename)) {}
         void dumpPartition(const Table& table, const Partition& partition);
         template<class T>
-        void dumpArray(const Array<T>& arr)
+        void dumpMatrix(const Matrix<T>& arr)
         {
-            ::sokoban::dumpArray<std::string>(file_, arr);
+            ::sokoban::dumpMatrix<std::string>(file_, arr);
         }
         void printText(const char* text);
     };
 
-    Array<std::vector<Partition>> partitions_;
+    Matrix<std::vector<Partition>> partitions_;
 
     void init(const Table& table, const Solver& solver,
             std::size_t reverseSearchMaxDepth,

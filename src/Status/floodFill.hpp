@@ -11,12 +11,12 @@ struct MinMax {
     int minX, maxX, minY, maxY;
 };
 
-void floodFill(const Status& status, Point p0, Array<bool>& result);
-void floodFill(const Status& status, Point p0, Array<bool>& result,
+void floodFill(const Status& status, Point p0, Matrix<bool>& result);
+void floodFill(const Status& status, Point p0, Matrix<bool>& result,
             Status::BorderType& border);
-void floodFill(const Status& status, Point p0, Array<bool>& result,
+void floodFill(const Status& status, Point p0, Matrix<bool>& result,
             MinMax& minmax);
-void floodFill(const Status& status, Point p0, Array<bool>& result,
+void floodFill(const Status& status, Point p0, Matrix<bool>& result,
             MinMax& minmax, Status::BorderType& border);
 
 inline

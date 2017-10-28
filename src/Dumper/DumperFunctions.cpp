@@ -7,15 +7,14 @@
 namespace sokoban {
 
 void dumpNode(std::ostream& file, const Table& table, const Node& node,
-        std::string title, const Array<bool> *highlight, int indent)
-{
+        std::string title, const Matrix<bool> *highlight, int indent) {
     if (title.length() > 0)
         title += ": ";
     title += (boost::format("heur = (%d + %d = %d) d = %d") %
                 node.cost() % node.heur() % node.costFgv() %
                 node.minDistance()).str();
     Status status(table, node);
-    Array<bool> highlight2;
+    Matrix<bool> highlight2;
     if (highlight != nullptr)
         highlight2 = *highlight;
     else

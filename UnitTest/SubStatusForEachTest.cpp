@@ -2,8 +2,8 @@
 
 #include "Status/StatusCreator.hpp"
 
-#include "Array.hpp"
-#include "createBoolArray.hpp"
+#include "Matrix.hpp"
+#include "createBoolMatrix.hpp"
 #include "CreateTestStatus.hpp"
 #include "MockChecker.hpp"
 #include "MockHeurCalculator.hpp"
@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point1)
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{1},
             SubStatusForEach::ChokePointDistantNum{1},
-            createBoolArray(*table, {Point{2, 0}}),
+            createBoolMatrix(*table, {Point{2, 0}}),
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
     subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});
@@ -453,7 +453,7 @@ BOOST_AUTO_TEST_CASE(multiple_stones_with_distance_limit_and_choke_point2)
             SubStatusForEach::MinDistance{0},
             SubStatusForEach::MaxDistance{1},
             SubStatusForEach::ChokePointDistantNum{1},
-            createBoolArray(*table, {Point{0, 0}}),
+            createBoolMatrix(*table, {Point{0, 0}}),
             SubStatusForEach::WorkQueueLength{1},
             SubStatusForEach::ReverseSearchMaxDepth{0}, ioService};
     subStatusForEachUnderTest.start(2, heurCalculator, ComplexChecker{checker});

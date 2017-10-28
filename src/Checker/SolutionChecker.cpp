@@ -61,11 +61,11 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
         if (std::abs(node->d().x) + std::abs(node->d().y) != 1) {
             ERROR("Invalid move.");
         }
-        if (!isInsideArray(status, node->from())) {
+        if (!isInsideMatrix(status, node->from())) {
             printError({}, {}, status, "'from' point outside table.");
             return false;
         }
-        if (!isInsideArray(status, to)) {
+        if (!isInsideMatrix(status, to)) {
             printError({}, {}, status, "'to' point outside table.");
             return false;
         }
@@ -100,7 +100,7 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
                     " (real=" << resultLength << ")" << std::endl;
             dumpStatus(heurDump_, status,
                     node->experimtntalCostFgv() > resultLength ? "bad heur" : "good heur",
-                    &status.reachableArray());
+                    &status.reachableMatrix());
         }
         status.set(*node);
         oldNode = node;

@@ -46,10 +46,10 @@ void AdvancedStoneCalculator::init(const Table& table, const Solver& solver,
         std::size_t reverseSearchMaxDepth,
         const boost::optional<std::string>& filename)
 {
-    Array<std::string> dump(table.width(), table.height());
+    Matrix<std::string> dump(table.width(), table.height());
     std::vector<Partition> dumpPartitions;
     partitions_.reset(table.width(), table.height());
-    for (Point  p: arrayRange(table)) {
+    for (Point  p: matrixRange(table)) {
         if (table.wall(p)) {
             dump[p] = "*";
             continue;
@@ -63,9 +63,9 @@ void AdvancedStoneCalculator::init(const Table& table, const Solver& solver,
     if (filename) {
         HeurDumper dumper{*filename};
         dumper.printText("Heuristics table:");
-        dumper.dumpArray(dump);
+        dumper.dumpMatrix(dump);
         dumper.printText("\nPartitions:");
-        for (Point  p: arrayRange(table)) {
+        for (Point  p: matrixRange(table)) {
             if (partitions_[p].size() > 1) {
                 for (const Partition& partition: partitions_[p]) {
                     dumper.dumpPartition(table, partition);
@@ -86,7 +86,7 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p,
         Partition partition(table.width(), table.height());
         partition.pos = p;
         partition.heur = -1;
-        partition.reachable = status.reachableArray();
+        partition.reachable = status.reachableMatrix();
         if (p == table.destination())
             partition.heur = 0;
         else {

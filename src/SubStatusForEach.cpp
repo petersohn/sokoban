@@ -14,7 +14,7 @@ SubStatusForEach::SubStatusForEach(
             MinDistance minDistance,
             MaxDistance maxDistance,
             ChokePointDistantNum chokePointDistantNum,
-            Array<bool> chokePoints,
+            Matrix<bool> chokePoints,
             WorkQueueLength workQueueLength,
             ReverseSearchMaxDepth reverseSearchMaxDepth,
             boost::asio::io_service& ioService):
@@ -25,7 +25,7 @@ SubStatusForEach::SubStatusForEach(
         maxDistance_(maxDistance.value()),
         chokePointDistantNum_(chokePointDistantNum.value()),
         reverseSearchMaxDepth_(reverseSearchMaxDepth.value()),
-        range_(arrayRange(table)),
+        range_(matrixRange(table)),
         chokePoints_(std::move(chokePoints))
     {
     }
@@ -120,7 +120,7 @@ bool SubStatusForEach::processState(const State& state, std::size_t stones)
 
 void SubStatusForEach::start(std::size_t numStones,
             std::shared_ptr<const HeurCalculator> heurCalculator,
-            ComplexChecker checker, boost::optional<Array<bool>> excludeList,
+            ComplexChecker checker, boost::optional<Matrix<bool>> excludeList,
             std::size_t startingIndex)
 {
     heurCalculator_ = std::move(heurCalculator);
@@ -137,7 +137,7 @@ void SubStatusForEach::start(std::size_t numStones,
 
     excludeList_[table_->destination()] = true;
 
-    for (Point p: arrayRange(*table_)) {
+    for (Point p: matrixRange(*table_)) {
         if (table_->wall(p)) {
             excludeList_[p] = true;
         }

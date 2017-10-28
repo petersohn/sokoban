@@ -14,7 +14,7 @@ std::size_t Status::moveCount(0);
 std::size_t Status::calculateReachableCount(0);
 #endif
 std::size_t Status::statusPoolSize_(0);
-std::unordered_map<State, std::shared_ptr<Array<Status::CalculatedDataPtr>>>
+std::unordered_map<State, std::shared_ptr<Matrix<Status::CalculatedDataPtr>>>
         Status::statusPool_;
 boost::mutex Status::statusPoolMutex_;
 
@@ -47,7 +47,7 @@ Status::Status(const Table& table, const Node& node):
 
 void Status::init() {
     Point p;
-    for (Point  p: arrayRange(table())) {
+    for (Point  p: matrixRange(table())) {
         fields_[p] =
                 table().wall(p) ? FieldType::wall : FieldType::floor;
     }
@@ -69,7 +69,7 @@ void Status::calculateReachable() const
 void Status::fillReachable() const
 {
     if (statusPoolSize_ > 0) {
-        std::shared_ptr<Array<CalculatedDataPtr>> poolElement;
+        std::shared_ptr<Matrix<CalculatedDataPtr>> poolElement;
         {
             boost::unique_lock<boost::mutex> lock{statusPoolMutex_};
             auto poolIterator = statusPool_.find(state_);
@@ -87,14 +87,14 @@ void Status::fillReachable() const
 
         {
             boost::unique_lock<boost::mutex> lock{statusPoolMutex_};
-            // if the array doesn't exist in the map, insert it
+            // if the matrix doesn't exist in the map, insert it
             if (!poolElement) {
                 poolElement = statusPool_.emplace(state_, std::make_shared<
-                        Array<CalculatedDataPtr>>(width(), height())).
+                        Matrix<CalculatedDataPtr>>(width(), height())).
                                 first->second;
             }
 
-            for (Point  p: arrayRange(table())) {
+            for (Point  p: matrixRange(table())) {
                 if (reachable(p)) {
                     (*poolElement)[p] = calculatedData_;
                 }

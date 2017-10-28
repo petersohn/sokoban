@@ -7,7 +7,7 @@ namespace sokoban {
 VisitedStateInfo::VisitedStateInfo(const Status& status):
     state_(status.state())
 {
-    for (Point  p: arrayRange(status)) {
+    for (Point  p: matrixRange(status)) {
         if (status.reachable(p)) {
             firstReachable_ = p;
             return;
