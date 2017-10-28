@@ -4,6 +4,8 @@
 #include "Dumper/Dumper.hpp"
 #include <fstream>
 
+namespace sokoban {
+
 class Table;
 
 class BestDumper: public Dumper {
@@ -28,5 +30,6 @@ private:
     std::size_t bestNodeNumber = 0;
 };
 
-#endif /* SRC_DUMPER_BESTDUMPER_HPP */
+} // namespace sokoban
 
+#endif /* SRC_DUMPER_BESTDUMPER_HPP */

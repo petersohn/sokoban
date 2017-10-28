@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <vector>
 
+namespace sokoban {
+
 LAZY_ARGUMENT_ENUM(DumpStyle, dumpStyles,
         (none)(text)(xml)(statistics)(best))
 LAZY_ARGUMENT_ENUM(BlockListHeurType, blockListHeurTypes,
@@ -123,5 +125,7 @@ void serialize(Archive& ar, Options& options, const unsigned int /*version*/)
     ar & options.useStonePusher_;
     //ar & options.workQueueLength_;
 }
+
+} // namespace sokoban
 
 #endif /* OPTIONS_H_ */

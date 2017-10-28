@@ -6,6 +6,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+using namespace sokoban;
+
 BOOST_AUTO_TEST_SUITE(StatusCreatorTest)
 
 BOOST_AUTO_TEST_CASE(simple_table)

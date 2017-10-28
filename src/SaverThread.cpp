@@ -1,5 +1,7 @@
 #include "SaverThread.hpp"
 
+namespace sokoban {
+
 void SaverThread::start()
 {
     stop();
@@ -36,3 +38,5 @@ void SaverThread::startSaveTimer()
                 }
             });
 }
+
+} // namespace sokoban

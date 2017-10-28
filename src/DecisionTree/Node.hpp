@@ -14,6 +14,7 @@
 #include <memory>
 #include <vector>
 
+namespace sokoban {
 namespace decisionTree {
 
 template <class Status, class T>
@@ -111,7 +112,7 @@ using Node = typename boost::make_recursive_variant<
                 DecisionNode<Status, T, boost::recursive_variant_>
         >::type;
 
-}
-
+} // namespace decisionTree
+} // namespace sokoban
 
 #endif /* DECISIONTREE_NODE_H_ */

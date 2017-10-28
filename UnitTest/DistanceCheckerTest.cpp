@@ -9,6 +9,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+using namespace sokoban;
+
 class DistanceCheckerFixture {
 public:
     std::shared_ptr<MockHeurCalculator> heurCalculator =

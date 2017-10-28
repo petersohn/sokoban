@@ -10,6 +10,8 @@
 #include <memory>
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
 
+namespace sokoban {
+
 class Node;
 class Table;
 
@@ -40,5 +42,6 @@ struct SolutionData {
 
 std::string formatOutput(const std::string& format, const SolutionData& data);
 
+} // namespace sokoban
 
 #endif /* FORMATOUTPUT_HPP */

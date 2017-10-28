@@ -4,6 +4,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/range/adaptor/map.hpp>
 
+namespace sokoban {
+
 void Statistics::update(const std::string& key)
 {
     if (startTime == boost::posix_time::not_a_date_time) {
@@ -54,3 +56,5 @@ void Statistics::init()
     startTime = boost::posix_time::microsec_clock::universal_time();
     nextPrintTime = startTime + printInterval;
 }
+
+} // namespace sokoban

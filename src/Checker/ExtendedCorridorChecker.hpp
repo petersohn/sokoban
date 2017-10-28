@@ -11,6 +11,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class ExtendedCorridorCheckerStrategy {
     const HeurCalculator* calculator_;
     const Status& status;
@@ -38,7 +40,7 @@ public:
     void floodFill(Point p0, Array<bool>& result, MinMax& minmax)
     {
         Status::BorderType border;
-        ::floodFill(status, p0, result, minmax, border);
+        sokoban::floodFill(status, p0, result, minmax, border);
         simpleStatus = std::make_unique<Status>(status.table(),
             State{std::move(std::move(border))}, status.currentPos());
     }
@@ -68,5 +70,7 @@ public:
 };
 
 using ExtendedCorridorChecker = CorridorCheckerBase<ExtendedCorridorCheckerStrategyFactory>;
+
+} // namespace sokoban
 
 #endif /* SRC_EXTENDEDCORRIDORCHECKER_HPP */

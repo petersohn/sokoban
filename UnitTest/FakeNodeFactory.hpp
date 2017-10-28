@@ -5,6 +5,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class FakeNodeFactory {
     int numNodes_ = 0;
 public:
@@ -18,5 +20,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif /* UNITTEST_FAKENODEFACTORY_HPP */

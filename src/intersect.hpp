@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <boost/optional.hpp>
 
+namespace sokoban {
+
 template<class T>
 std::vector<T> intersect(std::vector<T> l1, std::vector<T> l2)
 {
@@ -16,6 +18,6 @@ std::vector<T> intersect(std::vector<T> l1, std::vector<T> l2)
     return result;
 }
 
-
+} // namespace sokoban
 
 #endif /* SRC_INTERSECT_HPP */

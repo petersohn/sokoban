@@ -6,6 +6,8 @@
 #include <type_traits>
 #include <vector>
 
+namespace sokoban {
+
 template <typename Checker>
 class ComplexCheckerBase {
     typedef std::vector<std::shared_ptr<Checker>> ContainerType;
@@ -73,5 +75,7 @@ public:
 #endif
     }
 };
+
+} // namespace sokoban
 
 #endif /* SRC_COMPLEXCHECKERBASE_HPP */

@@ -14,12 +14,14 @@
 
 #include <functional>
 
+namespace boost { namespace asio { class io_service; }}
+
+namespace sokoban {
+
 class State;
 class Status;
 class HeurCalculator;
 class Table;
-
-namespace boost { namespace asio { class io_service; }}
 
 class SubStatusForEach {
 public:
@@ -83,5 +85,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif /* SRC_SUBSTATUSFOREACH_HPP */

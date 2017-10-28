@@ -11,6 +11,8 @@
 #include <memory>
 #include <queue>
 
+namespace sokoban {
+
 template <typename T, typename Greater>
 class PrioQueue {
     Greater greater;
@@ -73,5 +75,7 @@ void load_construct_data(Archive& ar, PrioQueue<T, Greater>* queue,
     ar >> greater;
     ::new(queue)PrioQueue<T, Greater>{std::move(*greater)};
 }
+
+} // namespace sokoban
 
 #endif /* SRC_PRIOQUEUE_HPP */

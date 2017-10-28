@@ -8,6 +8,8 @@
 #include <fstream>
 #include <regex>
 
+namespace sokoban {
+
 class Table;
 
 class TextDumper: public Dumper {
@@ -36,5 +38,7 @@ public:
     void reject(const std::shared_ptr<Node>& node, const char *text) override;
     void save() override;
 };
+
+} // namespace sokoban
 
 #endif /* TEXTDUMPER_H_ */

@@ -9,6 +9,8 @@
 #include <memory>
 #include <deque>
 
+namespace sokoban {
+
 class Node {
 private:
     std::shared_ptr<Node> ancestor_;
@@ -67,5 +69,7 @@ std::deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::sh
 inline std::deque<std::shared_ptr<Node>> pathToRoot(std::shared_ptr<Node> node) {
     return pathToBase(node, std::shared_ptr<Node>());
 }
+
+} // namespace sokoban
 
 #endif /* NODE_H_ */

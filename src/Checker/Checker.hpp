@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace sokoban {
+
 class Status;
 class Point;
 
@@ -19,5 +21,7 @@ public:
     void serialize(Archive& /*ar*/, const unsigned int /*version*/) {
     }
 };
+
+} // namespace sokoban
 
 #endif // CHECKER_HPP

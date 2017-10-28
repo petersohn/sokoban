@@ -20,6 +20,8 @@
 #include <fstream>
 #include <memory>
 
+namespace sokoban {
+
 class HeurCalculator;
 class Solver;
 class Checker;
@@ -137,5 +139,7 @@ public:
         ar & maxIndex_;
     }
 };
+
+} // namespace sokoban
 
 #endif // PREPROCESSOR_HPP

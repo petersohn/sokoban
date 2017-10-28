@@ -5,6 +5,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 template <typename Checker>
 struct MovableCheckerFixture {
     std::shared_ptr<MockHeurCalculator> heurCalculator =
@@ -12,6 +14,6 @@ struct MovableCheckerFixture {
     Checker movableCheckerUnderTest{heurCalculator};
 };
 
-
+} // namespace sokoban
 
 #endif /* SRC_MOVABLECHECKERFIXTURE_HPP */

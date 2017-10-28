@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+namespace sokoban {
+
 void ProgressBar::draw(std::size_t solved)
 {
     util::TerminalSize terminalSize = util::getTerminalSize(2);
@@ -35,3 +37,4 @@ ProgressBar::~ProgressBar()
     std::cerr << "\n";
 }
 
+} // namespace sokoban

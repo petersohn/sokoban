@@ -11,6 +11,8 @@
 
 #include <array>
 
+using namespace sokoban;
+
 template <int N>
 struct ComplexCheckerTestFixture {
     std::array<std::shared_ptr<MockChecker>, N> mockCheckers;

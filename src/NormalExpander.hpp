@@ -6,6 +6,8 @@
 #include "Expander.hpp"
 #include "Mutexes.hpp"
 
+namespace sokoban {
+
 class HeurCalculator;
 class NodeFactory;
 
@@ -27,5 +29,7 @@ public:
     void expand(const Status& status, std::shared_ptr<Node> base,
             PrioNodeQueue& queue, Dumper* dumper) override;
 };
+
+} // namespace sokoban
 
 #endif /* NORMALEXPANDER_H_ */

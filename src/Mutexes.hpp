@@ -12,6 +12,8 @@
 #include <string>
 #include <iostream>
 
+namespace sokoban {
+
 template <class Mutex>
 class TraceMutex {
     Mutex mutex;
@@ -81,8 +83,11 @@ typedef TraceMutex<boost::mutex> MutexType;
 typedef TraceMutex<boost::shared_mutex> SharedMutexType;
 typedef boost::condition_variable_any ConditionVariableType;
 
+} // namespace sokoban
 
 #else
+
+namespace sokoban {
 
 #define MUTEX_DECL(name) name{}
 
@@ -90,6 +95,7 @@ typedef boost::mutex MutexType;
 typedef boost::shared_mutex SharedMutexType;
 typedef boost::condition_variable ConditionVariableType;
 
+} // namespace sokoban
 
 #endif // #ifdef MUTEX_TRACE
 

@@ -4,6 +4,8 @@
 #include <memory>
 #include <boost/noncopyable.hpp>
 
+namespace sokoban {
+
 class Point;
 class Status;
 class Node;
@@ -24,5 +26,7 @@ public:
     {
     }
 };
+
+} // namespace sokoban
 
 #endif // HEURCALCULATOR_HEURCALCULATOR_HPP

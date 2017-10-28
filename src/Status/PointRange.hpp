@@ -8,6 +8,8 @@
 
 #include <stdexcept>
 
+namespace sokoban {
+
 class PointRangeIterator;
 
 class PointRange {
@@ -97,5 +99,6 @@ PointRange::iterator PointRange::end() const
     return iterator(*this, Point(begin_.x, end_.y));
 }
 
+} // namespace sokoban
 
 #endif /* POINTRANGE_H_ */

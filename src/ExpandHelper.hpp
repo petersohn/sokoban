@@ -11,6 +11,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 template <typename Function>
 void expandStatus(const Status& status, Function expandFunction)
 {
@@ -61,5 +63,7 @@ createNode(const Status& originalStatus, Point p, Point d,
 
     return {doCreateNode(), std::move(status)};
 }
+
+} // namespace sokoban
 
 #endif /* SRC_EXPANDHELPER_HPP */

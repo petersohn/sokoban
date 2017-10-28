@@ -38,6 +38,8 @@
 #include <functional>
 #include <vector>
 
+namespace sokoban {
+
 namespace {
 
 PrioNodeQueue createPrioQueue()
@@ -306,7 +308,4 @@ std::unique_ptr<Dumper> createDumperFromOptions(const Options & opts)
     }
 }
 
-
-
-
-
+} // namespace sokoban

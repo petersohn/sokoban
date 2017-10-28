@@ -1,5 +1,7 @@
 #include "FieldType.hpp"
 
+namespace sokoban {
+
 std::ostream& operator<<(std::ostream& os, FieldType fieldType)
 {
     switch (fieldType) {
@@ -9,4 +11,6 @@ std::ostream& operator<<(std::ostream& os, FieldType fieldType)
     default: return os;
     }
 }
+
+} // namespace sokoban
 

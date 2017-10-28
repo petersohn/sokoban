@@ -10,6 +10,8 @@
 
 #include <boost/serialization/shared_ptr.hpp>
 
+namespace sokoban {
+
 class CorridorCheckerStrategy {
     const HeurCalculator* calculator_;
     const Status& status;
@@ -32,7 +34,7 @@ public:
 
     void floodFill(Point p0, Array<bool>& result, MinMax& minmax)
     {
-        ::floodFill(status, p0, result, minmax);
+        sokoban::floodFill(status, p0, result, minmax);
     }
 };
 
@@ -60,5 +62,7 @@ public:
 };
 
 using CorridorChecker = CorridorCheckerBase<CorridorCheckerStrategyFactory>;
+
+} // namespace sokoban
 
 #endif /* CORRIDORCHECKER_H_ */

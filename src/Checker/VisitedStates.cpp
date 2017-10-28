@@ -1,6 +1,8 @@
 #include "Checker/VisitedStates.hpp"
 #include <boost/foreach.hpp>
 
+namespace sokoban {
+
 bool VisitedStates::checkAndPush(const VisitedStateInput& elem)
 {
     const Status& status = elem.first;
@@ -18,3 +20,4 @@ bool VisitedStates::checkAndPush(const VisitedStateInput& elem)
     return false;
 }
 
+} // namespace sokoban

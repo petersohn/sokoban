@@ -2,6 +2,7 @@
 
 #include "Status/StatusUtils.hpp"
 
+namespace sokoban {
 
 void IndexedStatusList::add(const Status& status)
 {
@@ -28,3 +29,5 @@ bool IndexedStatusList::hasSubStatus(const Status& status, Point p) const
     }
     return false;
 }
+
+} // namespace sokoban

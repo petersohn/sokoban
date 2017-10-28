@@ -14,6 +14,8 @@
 
 #include <vector>
 
+using namespace sokoban;
+
 struct SubStatusForEachFixture {
     std::pair<std::unique_ptr<Table>, Status> data = createStatus(3, 2, {
             "y.o",

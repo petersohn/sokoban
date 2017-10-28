@@ -12,6 +12,8 @@
 
 #include "util/TimeMeter.hpp"
 
+namespace sokoban {
+
 class DecisionTreeHeurListFactory {
     typedef decisionTree::Node<PseudoStatus, float> NodeType;
     typedef decisionTree::NodeTypes<PseudoStatus, float> NodeTypes;
@@ -78,5 +80,7 @@ public:
         ar & decisionTree_;
     }
 };
+
+} // namespace sokoban
 
 #endif // HEURCALCULATOR_DECISIONTREEHEURCALCULATOR_HPP

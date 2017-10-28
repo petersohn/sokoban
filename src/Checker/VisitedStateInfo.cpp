@@ -2,6 +2,8 @@
 #include "Status/Status.hpp"
 #include "Dumper/DumperFunctions.hpp"
 
+namespace sokoban {
+
 VisitedStateInfo::VisitedStateInfo(const Status& status):
     state_(status.state())
 {
@@ -21,8 +23,4 @@ bool operator==(const VisitedStateInfo& left, const VisitedStateInfo& right)
     return left.firstReachable() == right.firstReachable() && left.state() == right.state();
 }
 
-
-
-
-
-
+} // namespace sokoban

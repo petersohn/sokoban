@@ -9,6 +9,8 @@
 
 #include <boost/serialization/base_object.hpp>
 
+namespace sokoban {
+
 template <typename StoneCalculator>
 class TableHeurCalculator: public HeurCalculator {
     StoneCalculator calculator_;
@@ -51,5 +53,7 @@ public:
         ar & heurMultiplier_;
     }
 };
+
+} // namespace sokoban
 
 #endif /* TABLEHEURCALCULATOR_H_ */

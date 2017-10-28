@@ -3,6 +3,7 @@
 
 #include "DecisionTree/NodeBuilder.hpp"
 
+namespace sokoban {
 namespace decisionTree {
 
 template <typename Key, typename T, typename PointList>
@@ -20,9 +21,7 @@ Node<Key, T> buildNode(
             pointList);
 } // buildNode
 
-
 } // namespace decisionTree
-
-
+} // namespace sokoban
 
 #endif /* DECISIONTREE_H_ */

@@ -7,6 +7,8 @@
 
 #include <boost/serialization/base_object.hpp>
 
+namespace sokoban {
+
 template <typename NextFactory>
 class SubStatusHeurCalculator: public HeurCalculator {
     float heurMultiplier_;
@@ -72,5 +74,7 @@ public:
         ar & nextFactory_;
     }
 };
+
+} // namespace sokoban
 
 #endif /* SRC_SUBSTATUSHEURCALCULATOR_HPP */

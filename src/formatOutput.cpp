@@ -9,6 +9,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
+namespace sokoban {
+
 namespace {
 
 std::string formatSolution(
@@ -124,3 +126,5 @@ std::string formatOutput(const std::string& format, const SolutionData& data)
 
     return formatter.formatString(format);
 }
+
+} // namespace sokoban

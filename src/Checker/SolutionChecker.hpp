@@ -5,6 +5,8 @@
 #include <memory>
 #include <ostream>
 
+namespace sokoban {
+
 class Status;
 class Node;
 
@@ -24,6 +26,6 @@ public:
     bool checkResult(const Status& initialStatus, const std::deque<std::shared_ptr<Node> >& solution);
 };
 
-
+} // namespace sokoban
 
 #endif /* SOLUTIONCHECKER_H_ */

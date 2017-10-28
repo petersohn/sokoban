@@ -11,6 +11,8 @@
 #include <fstream>
 #include <vector>
 
+namespace sokoban {
+
 class Solver;
 
 class AdvancedStoneCalculator {
@@ -49,7 +51,7 @@ class AdvancedStoneCalculator {
         template<class T>
         void dumpArray(const Array<T>& arr)
         {
-            ::dumpArray<std::string>(file_, arr);
+            ::sokoban::dumpArray<std::string>(file_, arr);
         }
         void printText(const char* text);
     };
@@ -87,5 +89,6 @@ public:
 
 using AdvancedHeurCalculator = TableHeurCalculator<AdvancedStoneCalculator>;
 
+} // namespace sokoban
 
 #endif /* ADVANCEDHEURCALCULATOR_H_ */

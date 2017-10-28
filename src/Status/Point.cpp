@@ -1,5 +1,7 @@
 #include "Status/Point.hpp"
 
+namespace sokoban {
+
 std::string direction(Point d)
 {
     return
@@ -15,3 +17,4 @@ std::ostream& operator<<(std::ostream& os, Point p)
     return os;
 }
 
+} // namespace sokoban

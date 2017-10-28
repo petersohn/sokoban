@@ -7,6 +7,7 @@
 #include <sstream>
 #include <boost/lexical_cast.hpp>
 
+namespace sokoban {
 
 XDumper::XDumper(const std::string& filename):
         filename_(filename)
@@ -105,4 +106,4 @@ void XDumper::dump() const {
     }
 }
 
-
+} // namespace sokoban

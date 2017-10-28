@@ -1,6 +1,6 @@
 #include "Node.hpp"
 
-using namespace std;
+namespace sokoban {
 
 Node::Node(const State& stones, const MoveDescriptor& moveDescriptor,
         std::shared_ptr<Node> ancestor,
@@ -23,9 +23,10 @@ Node::Node(const State& stones, const MoveDescriptor& moveDescriptor,
     }
 }
 
-deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::shared_ptr<Node> base)
+std::deque<std::shared_ptr<Node>>
+pathToBase(std::shared_ptr<Node> node, std::shared_ptr<Node> base)
 {
-    deque<std::shared_ptr<Node>> result;
+    std::deque<std::shared_ptr<Node>> result;
     while (node.get() != nullptr && node != base)
     {
         result.push_front(node);
@@ -34,3 +35,4 @@ deque<std::shared_ptr<Node>> pathToBase(std::shared_ptr<Node> node, std::shared_
     return result;
 }
 
+} // namespace sokoban

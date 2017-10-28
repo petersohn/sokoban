@@ -10,6 +10,8 @@
 
 #include <sstream>
 
+using namespace sokoban;
+
 struct SolutionCheckerTestFixture {
     std::ostringstream stream;
     SolutionChecker solutionCheckerUnderTest{stream, stream};

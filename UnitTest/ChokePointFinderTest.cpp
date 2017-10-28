@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+using namespace sokoban;
+
 struct ChokePointFinderTestFixture {
     Options options;
     std::shared_ptr<MockHeurCalculator> heurCalculator =

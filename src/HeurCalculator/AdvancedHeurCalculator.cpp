@@ -12,8 +12,7 @@
 #include <string>
 #include <vector>
 
-
-/* AdvancedStoneCalculator::HeurDumper */
+namespace sokoban {
 
 void AdvancedStoneCalculator::HeurDumper::open()
 {
@@ -121,5 +120,4 @@ float AdvancedStoneCalculator::operator()(const Status& status, Point p) const
     }
 }
 
-
-
+} // namespace sokoban

@@ -7,6 +7,8 @@
 #include <ostream>
 #include <string>
 
+namespace sokoban {
+
 class Statistics {
     using Data = std::map<std::string, unsigned>;
 
@@ -28,5 +30,6 @@ public:
     void printGlobal();
 };
 
+} // namespace sokoban
 
 #endif /* SRC_DUMPER_STATISTICS_HPP */

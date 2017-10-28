@@ -11,8 +11,8 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    auto data(loadStatusFromFile(argv[1]));
-    Status& status = data.second;
-    dumpStatus(std::cout, status);
+    auto data(sokoban::loadStatusFromFile(argv[1]));
+    sokoban::Status& status = data.second;
+    sokoban::dumpStatus(std::cout, status);
 }
 

@@ -4,6 +4,7 @@
 
 #include <vector>
 
+namespace sokoban {
 
 class ReverseExpander {
 
@@ -78,6 +79,4 @@ bool isStatusPossible(const Status& status, std::size_t maxDepth)
     return ReverseExpander{}.expand(status, maxDepth);
 }
 
-
-
-
+} // namespace sokoban

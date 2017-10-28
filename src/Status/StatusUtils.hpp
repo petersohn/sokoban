@@ -5,6 +5,8 @@
 #include "FieldType.hpp"
 #include "Checker/ComplexCheckerFwd.hpp"
 
+namespace sokoban {
+
 std::vector<Status> getPartitions(const Table& table, const State& state,
             std::size_t maxDepth);
 bool checkStatus(const ComplexChecker& checker, const Status& status);
@@ -25,6 +27,6 @@ inline bool isStone(const Status& status, Point  p)
     return status.value(p) == FieldType::stone;
 }
 
-
+} // namespace sokoban
 
 #endif /* STATUSUTILS_H_ */

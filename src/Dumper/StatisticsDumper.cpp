@@ -1,5 +1,7 @@
 #include "Dumper/StatisticsDumper.hpp"
 
+namespace sokoban {
+
 void StatisticsDumper::initialStatus(const Status&)
 {
     statistics.init();
@@ -39,5 +41,4 @@ void StatisticsDumper::save()
     statistics.printGlobal();
 }
 
-
-
+} // namespace sokoban

@@ -9,6 +9,8 @@
 #include <boost/mpl/list.hpp>
 #include <boost/test/unit_test.hpp>
 
+using namespace sokoban;
+
 BOOST_AUTO_TEST_SUITE(CorridorCheckerCommonTests)
 
 BOOST_AUTO_TEST_SUITE(NegativeTests)

@@ -5,6 +5,8 @@
 
 #include <ostream>
 
+namespace sokoban {
+
 struct MinMax {
     int minX, maxX, minY, maxY;
 };
@@ -28,5 +30,7 @@ bool operator==(const MinMax& lhs, const MinMax& rhs)
 }
 
 std::ostream& operator<<(std::ostream& os, const MinMax& minmax);
+
+} // namespace sokoban
 
 #endif /* SRC_STATUS_FLOODFILL_HPP */

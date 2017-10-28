@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+namespace sokoban {
+
 class ProgressBar {
     std::size_t lastTicks_;
     std::size_t iters_;
@@ -19,5 +21,7 @@ public:
 
     void draw(std::size_t solved);
 };
+
+} // namespace sokoban
 
 #endif /* PROGRESSBAR_H_ */

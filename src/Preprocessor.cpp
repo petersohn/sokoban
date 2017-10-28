@@ -22,6 +22,8 @@
 #include <iostream>
 #include <cstdlib>
 
+namespace sokoban {
+
 Preprocessor::Preprocessor(std::unique_ptr<const Solver> solver,
         std::shared_ptr<const HeurCalculator> calculator, ComplexChecker checker,
         const Options& options, Saver saver):
@@ -214,7 +216,7 @@ Array<bool> Preprocessor::calculateChokePoints()
             }
         }
 
-        ::dumpStatus(std::cerr, chokePointStatus, "Choke points");
+        sokoban::dumpStatus(std::cerr, chokePointStatus, "Choke points");
     }
 
     return result;
@@ -310,9 +312,10 @@ void Preprocessor::dumpStatus(const Status& status, const Point *p, const std::s
     if (p) {
         Array<bool> hl = status.reachableArray();
         hl[*p] = true;
-        ::dumpStatus(*dump, status, title, &hl);
+        sokoban::dumpStatus(*dump, status, title, &hl);
     } else {
-        ::dumpStatus(*dump, status, title, &status.reachableArray());
+        sokoban::dumpStatus(*dump, status, title, &status.reachableArray());
     }
 }
 
+} // namespace sokoban

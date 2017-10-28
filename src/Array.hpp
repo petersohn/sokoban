@@ -13,6 +13,8 @@
 #include <type_traits>
 #include <vector>
 
+namespace sokoban {
+
 template <typename Array>
 inline bool isInsideArray(const Array& array, Point p)
 {
@@ -115,19 +117,21 @@ inline bool operator!=(const Array<T>& lhs, const Array<T>& rhs)
     return !(lhs == rhs);
 }
 
+} // namespace sokoban
+
 namespace std {
 template<typename T>
-struct hash<Array<T>> {
-    size_t operator()(const Array<T>& arr) const
+struct hash<sokoban::Array<T>> {
+    size_t operator()(const sokoban::Array<T>& arr) const
     {
         size_t seed = 0;
         for (size_t i = 0; i < arr.size(); ++i) {
-            hash_combine(seed, arr[i]);
+            sokoban::hash_combine(seed, arr[i]);
         }
         return seed;
     }
 };
 
-}
+} // namespace std
 
 #endif /* ARRAY_H_ */

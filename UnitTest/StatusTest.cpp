@@ -14,6 +14,8 @@
 #include <ostream>
 #include <vector>
 
+using namespace sokoban;
+
 BOOST_AUTO_TEST_SUITE(StatusTest)
 
 BOOST_AUTO_TEST_CASE(consistent_table) {

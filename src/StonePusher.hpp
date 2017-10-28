@@ -9,6 +9,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class HeurCalculator;
 class Node;
 class NodeFactory;
@@ -28,6 +30,6 @@ public:
             PrioNodeQueue& queue, Dumper* dumper) override;
 };
 
-
+} // namespace sokoban
 
 #endif /* STONEPUSHER_H_ */

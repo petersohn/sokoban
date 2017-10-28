@@ -9,6 +9,8 @@
 #include <utility>
 #include <vector>
 
+namespace sokoban {
+
 class CompareQueue {
 private:
     std::vector<Compare> compares;
@@ -74,5 +76,7 @@ public:
         ar & compares;
     }
 };
+
+} // namespace sokoban
 
 #endif /* SRC_COMPAREQUEUE_HPP */

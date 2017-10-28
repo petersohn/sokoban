@@ -4,6 +4,8 @@
 
 #include <vector>
 
+namespace sokoban {
+
 template <typename Action>
 void floodFillImpl(const Status& status, Point p0, Array<bool> &result,
         Action action)
@@ -121,6 +123,4 @@ std::ostream& operator<<(std::ostream& os, const MinMax& minmax)
         minmax.minY << "->" << minmax.maxY << ')';
 }
 
-
-
-
+} // namespace sokoban

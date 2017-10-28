@@ -3,9 +3,13 @@
 
 #include "HeurCalculator/SubStatusHeurCalculatorFwd.hpp"
 
+namespace sokoban {
+
 class DecisionTreeHeurListFactory;
 
-using DecisionTreeHeurCalculator = 
+using DecisionTreeHeurCalculator =
         SubStatusHeurCalculator<DecisionTreeHeurListFactory>;
+
+} // namespace sokoban
 
 #endif // HEURCALCULATOR_DECISIONHEURCALCULATORFWD_HPP

@@ -7,6 +7,8 @@
 
 #define CHECK_CHECKER_RESULT(...) checkCheckerResult(__VA_ARGS__, __FILE__, __LINE__)
 
+namespace sokoban {
+
 inline
 void checkCheckerResult(const Checker& checker, const Status& status,
         bool expectedValue, const char* file, int line)
@@ -22,5 +24,7 @@ void checkCheckerResult(const Checker& checker, const Status& status,
             boost::unit_test::framework::current_test_case().p_name <<
             ": checkCheckerResult");
 }
+
+} // namespace sokoban
 
 #endif /* UNITTEST_CHECKERTEST_HPP */

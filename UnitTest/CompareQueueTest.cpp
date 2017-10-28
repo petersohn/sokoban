@@ -22,6 +22,8 @@
     BOOST_PP_SEQ_FOR_EACH_I(CHECK_NODE_ORDER_INNER_LOOP, \
             BOOST_PP_SEQ_TAIL(nodes), nodes)
 
+using namespace sokoban;
+
 struct CompareQueueTestFixture {
     FakeNodeFactory nodeFactory;
     void zeroHeurAlwaysComesFirst(CompareQueue& compareQueueUnderTest)

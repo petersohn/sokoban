@@ -11,6 +11,8 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 
+namespace sokoban {
+
 class Preprocessor;
 class Checker;
 class Dumper;
@@ -80,5 +82,6 @@ public:
     void setHeurCalculatorParameters(HeurCalculator& heurCalculator);
 };
 
+} // namespace sokoban
 
 #endif /* SOLVERFACTORIES_H_ */

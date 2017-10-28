@@ -2,6 +2,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+using namespace sokoban;
 
 BOOST_AUTO_TEST_SUITE(IsSubStateTest)
 

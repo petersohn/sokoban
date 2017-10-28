@@ -11,6 +11,8 @@
 class Status;
 class Node;
 
+namespace sokoban {
+
 class NullDumperFactory {
 public:
     std::unique_ptr<Dumper> operator()() { return {}; }
@@ -33,5 +35,7 @@ public:
     ~Solver() {}
 private:
 };
+
+} // namespace sokoban
 
 #endif /* SOLVER_H_ */

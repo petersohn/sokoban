@@ -8,6 +8,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class HeurCalculator;
 
 class DistanceChecker: public NodeChecker {
@@ -25,5 +27,7 @@ public:
 private:
     std::shared_ptr<HeurCalculator> heurCalculator;
 };
+
+} // namespace sokoban
 
 #endif // CHECKER_DISTANCECHECKER_HPP

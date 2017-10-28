@@ -9,6 +9,8 @@
 #include <fstream>
 #include <string>
 
+namespace sokoban {
+
 class Loader {
 public:
     explicit Loader(const std::string& filename):
@@ -26,5 +28,6 @@ private:
     InputArchive archive;
 };
 
+} // namespace sokoban
 
 #endif // LOADER_HPP

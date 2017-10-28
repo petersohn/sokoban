@@ -39,6 +39,8 @@
 #include <deque>
 #include <functional>
 
+namespace sokoban {
+
 Sokoban::Sokoban(int argc, const char* argv[]):
         options(parseOptions(argc, argv, "sokoban.cfg"))
 {
@@ -220,4 +222,4 @@ PreprocessedResult Sokoban::loadPreprocessedResult(InputArchive& archive)
     return expanderFactory->preprocess(*preprocessor);
 }
 
-
+} // namespace sokoban

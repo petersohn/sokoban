@@ -8,6 +8,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+using namespace sokoban;
+
 BOOST_FIXTURE_TEST_SUITE(ExtendedMovableCheckerTest,
         MovableCheckerFixture<ExtendedMovableChecker>)
 

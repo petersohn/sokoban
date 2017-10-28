@@ -10,6 +10,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class Preprocessor;
 class Loader;
 class OptionsBasedExpanderFactory;
@@ -50,3 +52,5 @@ private:
 };
 
 #endif // SOKOBAN_HPP
+
+} // namespace sokoban

@@ -5,6 +5,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 template <typename Checker>
 struct CorridorCheckerFixture {
     std::shared_ptr<MockHeurCalculator> heurCalculator =
@@ -13,5 +15,6 @@ struct CorridorCheckerFixture {
         typename Checker::StrategyFactoryType{heurCalculator}};
 };
 
+} // namespace sokoban
 
 #endif /* UNITTEST_CORRIDORCHECKERFIXTURE_HPP */

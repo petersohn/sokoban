@@ -6,6 +6,8 @@
 
 #include <boost/serialization/vector.hpp>
 
+namespace sokoban {
+
 class PseudoStatus {
     const Table* table_;
     State state_;
@@ -45,5 +47,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif /* PSEUDOSTATUS_H_ */

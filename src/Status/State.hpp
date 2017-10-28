@@ -13,6 +13,8 @@
 #include <memory>
 #include <unordered_set>
 
+namespace sokoban {
+
 class State {
     typedef std::unordered_set<Point> ContainerType;
     typedef std::shared_ptr<ContainerType> ContainerPtr;
@@ -124,17 +126,19 @@ public:
     State& get() { return state_; }
 };
 
-BOOST_SERIALIZATION_SPLIT_FREE(State)
+} // namespace sokoban
+
+BOOST_SERIALIZATION_SPLIT_FREE(sokoban::State)
 
 namespace std {
 
 template<>
-struct hash<State> {
-    size_t operator()(const State& state) const
+struct hash<sokoban::State> {
+    size_t operator()(const sokoban::State& state) const
     {
         size_t result = 0;
-        std::hash<Point> h;
-        for (State::const_iterator it = state.begin();
+        std::hash<sokoban::Point> h;
+        for (sokoban::State::const_iterator it = state.begin();
                 it != state.end(); ++it) {
             result += h(*it); // the order of elements doesn't count
         }
@@ -142,7 +146,6 @@ struct hash<State> {
     }
 };
 
-}
-
+} // namespace std
 
 #endif /* STATE_H_ */

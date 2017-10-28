@@ -20,6 +20,8 @@
 #include <iostream>
 #include <memory>
 
+namespace sokoban {
+
 class InternalPusher {
 public:
 private:
@@ -160,4 +162,4 @@ void StonePusher::expand(const Status& status, std::shared_ptr<Node> base,
     expander_->expand(newStatus, std::move(node), queue, dumper);
 }
 
-
+} // namespace sokoban

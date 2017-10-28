@@ -4,6 +4,7 @@
 
 #include <unordered_set>
 
+using namespace sokoban;
 
 BOOST_AUTO_TEST_SUITE(PointRangeTest)
 

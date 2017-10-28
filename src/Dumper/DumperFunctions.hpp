@@ -9,6 +9,8 @@
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 
+namespace sokoban {
+
 class Table;
 class Node;
 
@@ -85,7 +87,6 @@ void dumpStatus(std::ostream& file, const Status& status, std::string title = ""
     dumpArray(file, output, title, indent);
 }
 
-
-
+} // namespace sokoban
 
 #endif /* DUMPERFUNCTIONS_H_ */

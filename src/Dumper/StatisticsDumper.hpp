@@ -6,6 +6,8 @@
 #include <string>
 #include <fstream>
 
+namespace sokoban {
+
 class StatisticsDumper: public Dumper {
     std::ofstream file;
     Statistics statistics;
@@ -28,5 +30,6 @@ public:
 
 };
 
+} // namespace sokoban
 
 #endif /* SRC_DUMPER_STATISTICSDUMPER_HPP */

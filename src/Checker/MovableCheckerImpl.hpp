@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include <algorithm>
 
+namespace sokoban {
+
 class MovableCheckerImpl {
     const Status& status_;
     boost::optional<Status> simpleStatus_;
@@ -78,5 +80,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif /* SRC_MOVABLECHECKERIMPL_HPP */

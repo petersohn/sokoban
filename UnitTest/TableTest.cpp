@@ -7,6 +7,8 @@
 
 #include <sstream>
 
+using namespace sokoban;
+
 BOOST_AUTO_TEST_SUITE(TableTest)
 
 BOOST_AUTO_TEST_CASE(size) {

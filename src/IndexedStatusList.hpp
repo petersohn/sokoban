@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 
+namespace sokoban {
+
 class IndexedStatusList {
 private:
     Array<std::vector<Status>> index_;
@@ -35,5 +37,7 @@ public:
         ar & size_;
     }
 };
+
+} // namespace sokoban
 
 #endif // INDEXEDSTATUSLIST_HPP

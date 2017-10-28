@@ -1,6 +1,8 @@
 #include "CreateTestStatus.hpp"
 #include "Exception.hpp"
 
+namespace sokoban {
+
 Status createTestStatus(const Table& table, const std::vector<std::string>& lines)
 {
     Status result{table};
@@ -35,3 +37,4 @@ Status createTestStatus(const Table& table, const std::vector<std::string>& line
     return result;
 }
 
+} // namespace sokoban

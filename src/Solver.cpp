@@ -13,6 +13,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class InternalSolver {
     PrioNodeQueue queue_;
     std::unique_ptr<Expander> expander_;
@@ -82,3 +84,4 @@ std::deque<std::shared_ptr<Node>> Solver::solve(Status status) const
 
 }
 
+} // namespace sokoban

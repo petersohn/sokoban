@@ -9,6 +9,8 @@
 
 #include <unordered_map>
 
+namespace sokoban {
+
 class Status;
 
 typedef std::pair<const Status&, int> VisitedStateInput;
@@ -30,5 +32,7 @@ public:
         ar & visitedStates_;
     }
 };
+
+} // namespace sokoban
 
 #endif /* VISITEDSTATES_H_ */

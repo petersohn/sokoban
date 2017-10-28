@@ -6,6 +6,8 @@
 #include "Status/PseudoStatus.hpp"
 #include "Status/Status.hpp"
 
+namespace sokoban {
+
 template <class T>
 inline
 void indentedOutput(std::ostream& os, const T& t, int level)
@@ -30,6 +32,6 @@ void indentedOutput(std::ostream& os, const PseudoStatus& status, int level)
     dumpStatus(os, status, "", &status.reachableArray(), level);
 }
 
-
+} // namespace sokoban
 
 #endif /* INDENTEDOUTPUT_H_ */

@@ -10,6 +10,8 @@
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
 
+namespace sokoban {
+
 class BlockListHeurListFactory {
     HeurList heurList_;
 public:
@@ -66,5 +68,7 @@ public:
 
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
+
+} // namespace sokoban
 
 #endif // HEURCALCULATOR_BLOCKLISTHEURCALCULATOR_HPP

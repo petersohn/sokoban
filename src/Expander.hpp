@@ -4,6 +4,8 @@
 #include <memory>
 #include "PrioNodeQueueFwd.hpp"
 
+namespace sokoban {
+
 class Status;
 class Node;
 class Dumper;
@@ -19,5 +21,7 @@ public:
     void serialize(Archive& /*ar*/, const unsigned int /*version*/)
     {}
 };
+
+} // namespace sokoban
 
 #endif /* EXPANDER_H_ */

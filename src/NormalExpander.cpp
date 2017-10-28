@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+namespace sokoban {
+
 class NormalExpander::InternalExpander {
     const Status& status_;
     std::shared_ptr<Node> base_;
@@ -110,4 +112,4 @@ void NormalExpander::expand(const Status& status, std::shared_ptr<Node> base,
     exp.expand();
 }
 
-
+} // namespace sokoban

@@ -4,6 +4,8 @@
 #include "HeurCalculator/TableHeurCalculator.hpp"
 #include "Array.hpp"
 
+namespace sokoban {
+
 class BasicStoneCalculator {
     Array<float> distances_;
     bool checkDistance(const Table& table, Point  p, Point  d, int dist);
@@ -26,5 +28,7 @@ public:
 };
 
 using BasicHeurCalculator = TableHeurCalculator<BasicStoneCalculator>;
+
+} // namespace sokoban
 
 #endif /* BASICHEURCALCULATOR_H_ */

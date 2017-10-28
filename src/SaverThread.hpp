@@ -12,6 +12,8 @@
 #include <functional>
 #include <memory>
 
+namespace sokoban {
+
 class SaverThread {
 public:
     SaverThread(std::function<void()> saver,
@@ -35,5 +37,6 @@ private:
     void startSaveTimer();
 };
 
+} // namespace sokoban
 
 #endif // SAVERTHREAD_HPP

@@ -3,6 +3,8 @@
 
 #include "Status/Point.hpp"
 
+namespace sokoban {
+
 struct MoveDescriptor {
     Point from_;
     Point d_;
@@ -16,5 +18,7 @@ void serialize(Archive& ar, MoveDescriptor& moveDescriptor,
     ar & moveDescriptor.from_;
     ar & moveDescriptor.d_;
 }
+
+} // namespace sokoban
 
 #endif /* MOVEDESCRIPTOR_H_ */

@@ -11,6 +11,8 @@
 
 #include <turtle/mock.hpp>
 
+using namespace sokoban;
+
 BOOST_AUTO_TEST_SUITE(ExpandHelperTest)
 
 struct ExpandStatusFixture {

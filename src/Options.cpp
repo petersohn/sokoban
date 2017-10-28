@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 
+namespace sokoban {
+
 namespace po = boost::program_options;
 
 namespace {
@@ -220,3 +222,5 @@ std::ostream& operator<<(std::ostream& os, const Compare& value)
     assert(it != compares().end());
     return os << it->first;
 }
+
+} // namespace sokoban

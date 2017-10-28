@@ -8,6 +8,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 void MultiThreadWorker::startFilling()
 {
     assert(iterationState == IterationState::idle);
@@ -119,3 +121,5 @@ void MultiThreadWorker::synchronize(const std::function<void()>& function)
     }
     function();
 }
+
+} // namespace sokoban

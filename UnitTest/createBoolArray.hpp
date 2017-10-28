@@ -3,6 +3,8 @@
 
 #include "Array.hpp"
 
+namespace sokoban {
+
 template <typename Table>
 Array<bool> createBoolArray(const Table& table,
         const std::vector<Point>& trueList)
@@ -16,5 +18,6 @@ Array<bool> createBoolArray(const Table& table,
     return result;
 }
 
+} // namespace sokoban
 
 #endif /* UNITTEST_CREATEBOOLARRAY_HPP */

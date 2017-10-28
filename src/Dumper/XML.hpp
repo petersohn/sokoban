@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-
+namespace sokoban {
 namespace xml {
 
 class XMLNode {
@@ -44,6 +44,6 @@ public:
 void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, const char *dtdFilename = nullptr);
 
 } // namespace xml
-
+} // namespace sokoban
 
 #endif /* XML_H_ */

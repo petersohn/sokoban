@@ -6,6 +6,8 @@
 
 #include <boost/serialization/base_object.hpp>
 
+namespace sokoban {
+
 template <typename StrategyFactory>
 class CorridorCheckerBase: public Checker {
     StrategyFactory strategyFactory;
@@ -85,5 +87,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif /* CORRIDORCHECKERBASE_HPP */

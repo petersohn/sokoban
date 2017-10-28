@@ -8,6 +8,8 @@
 
 namespace boost { namespace asio { class io_service; }}
 
+namespace sokoban {
+
 class MultiThreadWorker {
 public:
     using Action = std::function<void()>;
@@ -44,5 +46,7 @@ public:
     IterationState getIterationState() const { return iterationState; }
     void synchronize(const std::function<void()>& function);
 };
+
+} // namespace sokoban
 
 #endif // MULTITHREADWORKER_HPP

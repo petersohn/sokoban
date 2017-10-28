@@ -10,6 +10,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 
+namespace sokoban {
+
 inline bool operator==(Status::BorderType lhs, Status::BorderType rhs)
 {
     if (lhs.size() != rhs.size()) {
@@ -35,5 +37,7 @@ inline std::ostream& operator<<(std::ostream& os, Status::BorderType border)
             border | boost::adaptors::transformed(boost::lexical_cast<std::string, Point>),
             ", ") << '}';
 }
+
+} // namespace sokoban
 
 #endif /* UNITTEST_BORDERTYPEIO_HPP */

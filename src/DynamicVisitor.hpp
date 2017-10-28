@@ -3,6 +3,8 @@
 
 #include <boost/mpl/for_each.hpp>
 
+namespace sokoban {
+
 namespace detail {
 
 template <typename T>
@@ -31,5 +33,6 @@ void applyDynamicVisitor(const Visitor& visitor, Base& object) {
             });
 }
 
+} // namespace sokoban
 
 #endif // DYNAMICVISITOR_HPP

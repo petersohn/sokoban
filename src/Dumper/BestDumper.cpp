@@ -5,6 +5,8 @@
 #include "Status/Status.hpp"
 #include <boost/format.hpp>
 
+namespace sokoban {
+
 void BestDumper::initialStatus(const Status& status)
 {
     table = &status.table();
@@ -54,5 +56,4 @@ void BestDumper::save()
     file.flush();
 }
 
-
-
+} // namespace sokoban

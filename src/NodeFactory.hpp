@@ -6,6 +6,8 @@
 #include "Status/Status.hpp"
 #include <memory>
 
+namespace sokoban {
+
 class NodeFactory {
     int numNodes_;
     std::shared_ptr<const HeurCalculator> calculator_;
@@ -34,5 +36,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif /* NODEFACTORY_HPP_ */

@@ -16,17 +16,17 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/serialization/export.hpp>
 
-BOOST_CLASS_EXPORT(MovableChecker)
-BOOST_CLASS_EXPORT(ExtendedMovableChecker)
-BOOST_CLASS_EXPORT(CorridorChecker)
-BOOST_CLASS_EXPORT(ExtendedCorridorChecker)
-BOOST_CLASS_EXPORT(BlockListChecker)
+BOOST_CLASS_EXPORT(sokoban::MovableChecker)
+BOOST_CLASS_EXPORT(sokoban::ExtendedMovableChecker)
+BOOST_CLASS_EXPORT(sokoban::CorridorChecker)
+BOOST_CLASS_EXPORT(sokoban::ExtendedCorridorChecker)
+BOOST_CLASS_EXPORT(sokoban::BlockListChecker)
 
-BOOST_CLASS_EXPORT(DistanceChecker)
-BOOST_CLASS_EXPORT(VisitedStatesChecker)
+BOOST_CLASS_EXPORT(sokoban::DistanceChecker)
+BOOST_CLASS_EXPORT(sokoban::VisitedStatesChecker)
 
-BOOST_CLASS_EXPORT(BasicHeurCalculator)
-BOOST_CLASS_EXPORT(AdvancedHeurCalculator)
-BOOST_CLASS_EXPORT(BlockListHeurCalculator)
-BOOST_CLASS_EXPORT(DecisionTreeHeurCalculator)
+BOOST_CLASS_EXPORT(sokoban::BasicHeurCalculator)
+BOOST_CLASS_EXPORT(sokoban::AdvancedHeurCalculator)
+BOOST_CLASS_EXPORT(sokoban::BlockListHeurCalculator)
+BOOST_CLASS_EXPORT(sokoban::DecisionTreeHeurCalculator)
 

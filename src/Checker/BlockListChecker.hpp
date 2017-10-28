@@ -6,6 +6,8 @@
 
 #include <boost/serialization/base_object.hpp>
 
+namespace sokoban {
+
 class BlockListChecker: public Checker {
 private:
     IndexedStatusList blockList_;
@@ -28,5 +30,6 @@ public:
     }
 };
 
+} // namespace sokoban
 
 #endif // CHECKER_BLOCKLISTCHECKER_HPP

@@ -5,6 +5,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+using namespace sokoban;
+
 struct IndexedStatusListTestFixture {
     IndexedStatusList indexedStatusListUnderTest;
     std::unique_ptr<Table> table;

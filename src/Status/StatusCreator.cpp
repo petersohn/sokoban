@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 
+namespace sokoban {
 
 std::pair<std::unique_ptr<Table>, Status>
 createStatus(int width, int height, const std::vector<std::string>& lines)
@@ -92,4 +93,4 @@ loadStatusFromFile(const char *filename) {
     return createStatus(width, height, lines);
 }
 
-
+} // namespace sokoban

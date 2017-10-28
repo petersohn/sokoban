@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace sokoban {
+
 class Status;
 class Node;
 
@@ -18,6 +20,8 @@ public:
     template <typename Archive>
     void serialize(Archive& /*ar*/, const unsigned int /*version*/) {}
 };
+
+} // namespace sokoban
 
 #endif // NODECHECKER_HPP
 

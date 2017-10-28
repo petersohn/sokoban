@@ -6,6 +6,7 @@
 #include "Status/StatusUtils.hpp"
 #include "Status/Table.hpp"
 
+namespace sokoban {
 
 SubStatusForEach::SubStatusForEach(
             const Table& table,
@@ -162,3 +163,4 @@ void SubStatusForEach::wait(bool print)
     }
 }
 
+} // namespace sokoban

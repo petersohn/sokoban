@@ -4,6 +4,8 @@
 #include "Node.hpp"
 #include <boost/format.hpp>
 
+namespace sokoban {
+
 using std::endl;
 
 bool SolutionChecker::isSuccessor(const Status& oldStatus, const Node& node)
@@ -113,3 +115,5 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
     }
     return result;
 }
+
+} // namespace sokoban

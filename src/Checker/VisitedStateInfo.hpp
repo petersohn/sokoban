@@ -5,6 +5,8 @@
 #include "Status/State.hpp"
 #include "Hash.hpp"
 
+namespace sokoban {
+
 class Status;
 
 class VisitedStateInfo {
@@ -32,19 +34,21 @@ bool operator!=(const VisitedStateInfo& left, const VisitedStateInfo& right) {
     return !(left == right);
 }
 
+} // namespace sokoban
+
 namespace std {
 
 template<>
-struct hash<VisitedStateInfo> {
-    size_t operator()(const VisitedStateInfo& state) const
+struct hash<sokoban::VisitedStateInfo> {
+    size_t operator()(const sokoban::VisitedStateInfo& state) const
     {
         size_t seed = 0;
-        hash_combine(seed, state.state());
-        hash_combine(seed, state.firstReachable());
+        sokoban::hash_combine(seed, state.state());
+        sokoban::hash_combine(seed, state.firstReachable());
         return seed;
     }
 };
 
-}
+} // namespace std
 
 #endif /* VISITEDSTATE_H_ */

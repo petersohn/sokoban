@@ -5,6 +5,8 @@
 
 #include <fstream>
 
+namespace sokoban {
+
 class BackupSaver {
 public:
     BackupSaver(const std::string& filename):
@@ -26,5 +28,6 @@ private:
     std::ofstream stream;
 };
 
+} // namespace sokoban
 
 #endif // BACKUPSAVER_HPP

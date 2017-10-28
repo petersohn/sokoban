@@ -25,6 +25,7 @@
 #include <iostream>
 #include <iterator>
 
+namespace sokoban {
 namespace decisionTree {
 
 namespace detail {
@@ -299,7 +300,6 @@ namespace detail {
 } // namespace detail
 
 } // namespace decisionTree
-
-
+} // namespace sokoban
 
 #endif /* NODEBUILDER_H_ */

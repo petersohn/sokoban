@@ -1,5 +1,6 @@
 #include "HeurCalculator/BasicHeurCalculator.hpp"
 
+namespace sokoban {
 
 BasicStoneCalculator::BasicStoneCalculator(const Table& table)
 {
@@ -45,3 +46,5 @@ bool BasicStoneCalculator::checkDistance(const Table& table, Point  p, Point  d,
         distances_[pd] = dist;
     return result;
 }
+
+} // namespace sokoban

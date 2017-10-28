@@ -3,6 +3,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class Checker;
 class HeurCalculator;
 
@@ -19,5 +21,6 @@ void serialize(Archive& ar, PreprocessedResult& preprocessedResult,
     ar & preprocessedResult.heurCalculator;
 }
 
+} // namespace sokoban
 
 #endif // PREPROCESSEDRESULT_HPP

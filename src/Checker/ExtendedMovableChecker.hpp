@@ -7,6 +7,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class Status;
 class HeurCalculator;
 class Point;
@@ -27,5 +29,7 @@ public:
         ar & calculator_;
     }
 };
+
+} // namespace sokoban
 
 #endif /* SRC_EXTENDEDMOVABLECHECKER_HPP */

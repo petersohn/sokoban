@@ -3,6 +3,8 @@
 
 #include <memory>
 
+namespace sokoban {
+
 class Status;
 class Node;
 
@@ -18,5 +20,7 @@ public:
     virtual void save() = 0;
     virtual ~Dumper() {}
 };
+
+} // namespace sokoban
 
 #endif /* DUMPER_H_ */

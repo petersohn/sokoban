@@ -9,6 +9,8 @@
 
 #include "util/ThreadPool.hpp"
 
+namespace sokoban {
+
 class HeurCalculator;
 class NodeFactory;
 
@@ -35,6 +37,6 @@ public:
             PrioNodeQueue& queue, Dumper* dumper) override;
 };
 
-
+} // namespace sokoban
 
 #endif // MULTITHREADEXPANDER_HPP

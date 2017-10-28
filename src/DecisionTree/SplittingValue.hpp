@@ -1,6 +1,7 @@
 #ifndef SPLITTINGVALUE_H_
 #define SPLITTINGVALUE_H_
 
+namespace sokoban {
 namespace decisionTree {
 
 template <typename Arg>
@@ -41,8 +42,7 @@ SplittingValue<PointIterator> calculateSplittingValue(
     return SplittingValue<PointIterator>(iterator, trueNum, falseNum);
 }
 
-}
-
-
+} // namespace decisionTree
+} // namespace sokoban
 
 #endif /* SPLITTINGVALUE_H_ */

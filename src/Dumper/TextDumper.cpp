@@ -6,6 +6,8 @@
 
 #include <string>
 
+namespace sokoban {
+
 class FilterVisitor {
     const std::string& text;
 public:
@@ -67,3 +69,5 @@ void TextDumper::reject(const std::shared_ptr<Node>& node, const char *text) {
 void TextDumper::save() {
     file_.flush();
 }
+
+} // namespace sokoban

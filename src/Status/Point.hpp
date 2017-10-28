@@ -6,6 +6,8 @@
 #include <ostream>
 #include <stddef.h>
 
+namespace sokoban {
+
 class Point {
 public:
     int x, y;
@@ -75,15 +77,17 @@ inline constexpr bool operator<(Point p1, Point p2) {
 std::string direction(Point d);
 std::ostream& operator<<(std::ostream& os, Point p);
 
+} // namespace sokoban
+
 namespace std {
 
 template<>
-struct hash<Point> {
-    size_t operator()(Point p) const
+struct hash<sokoban::Point> {
+    size_t operator()(sokoban::Point p) const
     {
         size_t seed = 0;
-        hash_combine(seed, p.x);
-        hash_combine(seed, p.y);
+        sokoban::hash_combine(seed, p.x);
+        sokoban::hash_combine(seed, p.y);
         return seed;
     }
 };

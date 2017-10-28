@@ -9,6 +9,8 @@
 #include "util/ThreadPool.hpp"
 #include <algorithm>
 
+namespace sokoban {
+
 namespace {
 
 class ChokePointFinder {
@@ -106,3 +108,4 @@ Array<bool> findChokePoints(const Table& table, Options options,
     return finder.get();
 }
 
+} // namespace sokoban

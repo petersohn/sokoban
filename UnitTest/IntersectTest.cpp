@@ -6,6 +6,8 @@
 
 #include <algorithm>
 
+using namespace sokoban;
+
 BOOST_AUTO_TEST_SUITE(IntersectTest)
 
 BOOST_AUTO_TEST_CASE(distinct_sets)

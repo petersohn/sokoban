@@ -11,6 +11,8 @@
 #include <sstream>
 #include <vector>
 
+using namespace sokoban;
+
 struct Dummy {
     int i;
     Dummy(): i(0) {}

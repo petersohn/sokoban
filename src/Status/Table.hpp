@@ -6,6 +6,8 @@
 #include <iosfwd>
 #include <memory>
 
+namespace sokoban {
+
 class Table {
 private:
     Array<bool> walls_;
@@ -61,5 +63,7 @@ bool operator!=(const Table& lhs, const Table& rhs) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Table& table);
+
+} // namespace sokoban
 
 #endif /* TABLE_H_ */

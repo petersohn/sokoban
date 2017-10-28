@@ -1,5 +1,7 @@
 #include "HeurCalculator/DecisionTreeHeurCalculator.hpp"
 
+namespace sokoban {
+
 std::vector<Point>
 DecisionTreeHeurListFactory::pointList(const Table& table)
 {
@@ -29,3 +31,5 @@ DecisionTreeHeurListFactory::Next::operator()(const PseudoStatus& pseudoStatus)
 
     return iterator_ == heurList_->end() ? nullptr : (iterator_++)->get();
 }
+
+} // namespace sokoban

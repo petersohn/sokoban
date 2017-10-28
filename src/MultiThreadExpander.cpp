@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+namespace sokoban {
+
 class MultiThreadExpander::InternalExpander {
     const Status& status_;
     std::shared_ptr<Node> base_;
@@ -141,5 +143,4 @@ void MultiThreadExpander::expand(const Status& status,
     exp.expand();
 }
 
-
-
+} // namespace sokoban

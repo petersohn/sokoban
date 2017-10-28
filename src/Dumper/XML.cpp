@@ -5,6 +5,7 @@
 
 using namespace std;
 
+namespace sokoban {
 namespace xml {
 
 string XMLElement::toString() const {
@@ -36,4 +37,5 @@ void saveXMLFile(std::shared_ptr<XMLElement> rootElement, const char *filename, 
     file << rootElement->toString();
 }
 
-}
+} // namespace xml
+} // namespace sokoban

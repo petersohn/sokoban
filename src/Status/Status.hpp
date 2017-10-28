@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include <vector>
 
+namespace sokoban {
+
 class Node;
 
 class Status {
@@ -208,6 +210,8 @@ void load_construct_data(Archive& ar, Status* status,
 
 std::ostream& operator<<(std::ostream& os, const Status& status);
 
-BOOST_SERIALIZATION_SPLIT_FREE(Status)
+} // namespace sokoban
+
+BOOST_SERIALIZATION_SPLIT_FREE(sokoban::Status)
 
 #endif /* STATUS_H_ */

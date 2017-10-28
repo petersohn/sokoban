@@ -3,6 +3,8 @@
 #include "Checker/ComplexCheckerBase.hpp"
 #include "Checker/Checker.hpp"
 
+namespace sokoban {
+
 std::vector<Status> getPartitions(const Table& table, const State& state,
             std::size_t maxDepth)
 {
@@ -62,6 +64,4 @@ bool checkState(const ComplexChecker& checker, const Table& table, const State& 
     return false;
 }
 
-
-
-
+} // namespace sokoban

@@ -6,6 +6,8 @@
 
 #include <ostream>
 
+namespace sokoban {
+
 #ifndef NO_UNSAFE_DIAGNOSTICS
 std::size_t Status::copyCount(0);
 std::size_t Status::moveCount(0);
@@ -185,3 +187,5 @@ std::ostream& operator<<(std::ostream& os, const Status& status)
     dumpStatus(os, status, " ");
     return os;
 }
+
+} // namespace sokoban

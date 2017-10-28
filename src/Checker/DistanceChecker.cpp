@@ -9,6 +9,8 @@
 
 #include <functional>
 
+namespace sokoban {
+
 DistanceChecker::DistanceChecker(std::shared_ptr<HeurCalculator> heurCalculator):
         heurCalculator(std::move(heurCalculator))
 {
@@ -39,4 +41,4 @@ const char* DistanceChecker::errorMessage() const
     return "distance check failed";
 }
 
-
+} // namespace sokoban

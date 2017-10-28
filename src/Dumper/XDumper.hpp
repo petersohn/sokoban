@@ -7,6 +7,8 @@
 #include <map>
 #include <memory>
 
+namespace sokoban {
+
 class Table;
 
 class XDumper: public Dumper {
@@ -34,5 +36,7 @@ public:
     void save() override;
     void dump() const;
 };
+
+} // namespace sokoban
 
 #endif /* XDUMPER_H_ */
