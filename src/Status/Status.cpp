@@ -21,6 +21,7 @@ boost::mutex Status::statusPoolMutex_;
 Status::Status(const Table& table):
     table_(&table),
     state_(),
+    currentPos_(table.startingPoint()),
     fields_(table.width(), table.height())
 {
     init();

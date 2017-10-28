@@ -6,6 +6,8 @@
 
 namespace sokoban {
 
+namespace {
+
 template <typename Action>
 void floodFillImpl(const Status& status, Point p0, Matrix<bool> &result,
         Action action)
@@ -30,18 +32,10 @@ void floodFillImpl(const Status& status, Point p0, Matrix<bool> &result,
                 pointsToVisit.push_back(p+p01);
                 pointsToVisit.push_back(p-p01);
             }
-        } else {
         }
 
     }
 }
-
-void floodFill(const Status& status, Point p0, Matrix<bool>& result)
-{
-    floodFillImpl(status, p0, result, [](Point){});
-}
-
-namespace {
 
 class BorderAction {
     const Status& status;
@@ -90,6 +84,11 @@ public:
     }
 };
 
+} // unnamed namespace
+
+void floodFill(const Status& status, Point p0, Matrix<bool>& result)
+{
+    floodFillImpl(status, p0, result, [](Point){});
 }
 
 void floodFill(const Status& status, Point p0, Matrix<bool>& result,
