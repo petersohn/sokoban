@@ -7,7 +7,7 @@ INCLUDE_DIRS += -isystem$(TURTLE_DIR)/include
 : foreach *.cpp |> !cxx |>
 
 include $(LINK_TUP)
-LIBS += -lboost_unit_test_framework
+LIBS += -lboost_unit_test_framework -lboost_program_options
 
 : ./*.o $(SOURCE_DIR)/*.o $(CHECKER_DIR)/*.o $(DECISION_TREE_DIR)/*.o \
 		$(DUMPER_DIR)/*.o $(HEUR_CALCULATOR_DIR)/*.o $(STATUS_DIR)/*.o \

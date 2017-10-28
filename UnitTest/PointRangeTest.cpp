@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(InRange)
     PointRange range(begin, end);
     std::unordered_set<Point> pointsConsidered;
     for (Point  p: range) {
-        BOOST_MESSAGE(p);
+        BOOST_TEST_MESSAGE(p);
         BOOST_REQUIRE_GE(p.x, begin.x);
         BOOST_REQUIRE_LT(p.x, end.x);
         BOOST_REQUIRE_GE(p.y, begin.y);

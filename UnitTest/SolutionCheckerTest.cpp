@@ -30,7 +30,7 @@ struct SolutionCheckerTestFixture {
 
     ~SolutionCheckerTestFixture()
     {
-        BOOST_MESSAGE(stream.str());
+        BOOST_TEST_MESSAGE(stream.str());
     }
 
 

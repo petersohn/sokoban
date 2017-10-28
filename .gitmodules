@@ -1,3 +1,6 @@
 [submodule "cpp-util"]
 	path = cpp-util
 	url = git@github.com:petersohn/cpp-util.git
+[submodule "turtle"]
+	path = turtle
+	url = git@github.com:mat007/turtle.git

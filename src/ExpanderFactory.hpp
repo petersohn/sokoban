@@ -1,6 +1,7 @@
 #ifndef SRC_EXPANDERFACTORY_HPP
 #define SRC_EXPANDERFACTORY_HPP
 
+#include <functional>
 #include <memory>
 
 class Expander;

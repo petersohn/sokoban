@@ -1,6 +1,7 @@
 #ifndef SRC_DUMPER_DUMPERFACTORY_HPP
 #define SRC_DUMPER_DUMPERFACTORY_HPP
 
+#include <functional>
 #include <memory>
 
 class Dumper;
