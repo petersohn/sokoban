@@ -45,18 +45,21 @@ createNode(const Status& originalStatus, Point p, Point d,
         return {};
     }
 
-    std::shared_ptr<Node> node =
-            nodeFactory.createNode(status, MoveDescriptor(p, d), base);
+    auto doCreateNode =
+            [&]() {
+                return nodeFactory.createNode(
+                        status, MoveDescriptor(p, d), base);
+            };
     if (pd != status.table().destination()) {
         if (!checker.check(status, pd)) {
             if (dumper) {
-                dumper->reject(node, checker.errorMessage());
+                dumper->reject(doCreateNode(), checker.errorMessage());
             }
             return {};
         }
     }
 
-    return {std::move(node), std::move(status)};
+    return {doCreateNode(), std::move(status)};
 }
 
 #endif /* SRC_EXPANDHELPER_HPP */
