@@ -302,20 +302,19 @@ std::shared_ptr<HeurCalculator> Preprocessor::decisionTreeHeurCalculator(
                 options_.numThreads_});
 }
 
-void Preprocessor::dumpStatus(const Status& status, const Point *p, const std::string& title)
+void Preprocessor::dumpStatus(const Status& status, const Point *p,
+        const std::string& title)
 {
     const std::size_t* threadId = util::ThreadPool::getCurrentThreadId();
     std::ostream* dump = &dump_;
     if (threadId) {
         dump = &calculationInfos_[*threadId]->dump_;
     }
+    Matrix<Highlight> hl = status.reachableMatrix();
     if (p) {
-        Matrix<bool> hl = status.reachableMatrix();
         hl[*p] = true;
-        sokoban::dumpStatus(*dump, status, title, &hl);
-    } else {
-        sokoban::dumpStatus(*dump, status, title, &status.reachableMatrix());
     }
+    sokoban::dumpStatus(*dump, status, title, hl);
 }
 
 } // namespace sokoban

@@ -22,14 +22,16 @@ template <>
 inline
 void indentedOutput(std::ostream& os, const Status& status, int level)
 {
-    dumpStatus(os, status, "", &status.reachableMatrix(), level);
+    dumpStatus(os, status, "",
+            Matrix<Highlight>(status.reachableMatrix()), level);
 }
 
 template <>
 inline
 void indentedOutput(std::ostream& os, const PseudoStatus& status, int level)
 {
-    dumpStatus(os, status, "", &status.reachableMatrix(), level);
+    dumpStatus(os, status, "",
+            Matrix<Highlight>(status.reachableMatrix()), level);
 }
 
 } // namespace sokoban

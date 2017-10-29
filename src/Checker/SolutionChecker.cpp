@@ -99,18 +99,21 @@ bool SolutionChecker::checkResult(const Status& initialStatus, const std::deque<
                     node->experimtntalCostFgv() <<
                     " (real=" << resultLength << ")" << std::endl;
             dumpStatus(heurDump_, status,
-                    node->experimtntalCostFgv() > resultLength ? "bad heur" : "good heur",
-                    &status.reachableMatrix());
+                    node->experimtntalCostFgv() > resultLength
+                            ? "bad heur" : "good heur",
+                    Matrix<Highlight>(status.reachableMatrix()));
         }
         status.set(*node);
         oldNode = node;
     }
     if (oldNode && oldNode->heur() != 0) {
-        printError(std::shared_ptr<Node>(), oldNode, status, "Last heur is not 0.");
+        printError(std::shared_ptr<Node>(), oldNode, status,
+                "Last heur is not 0.");
         result = false;
     }
     if (!status.state().empty()) {
-        printError(std::shared_ptr<Node>(), std::shared_ptr<Node>(), status, "Last status contains stones.");
+        printError(std::shared_ptr<Node>(), std::shared_ptr<Node>(), status,
+                "Last status contains stones.");
         result = false;
     }
     return result;

@@ -57,7 +57,8 @@ Matrix<bool> getHighlightedPath(const Status& status, const Node& node) {
 } // unnamed namespace
 
 void dumpNode(std::ostream& file, const Table& table, const Node& node,
-        std::string title, const Matrix<bool> *highlight, int indent) {
+        std::string title,
+        boost::optional<Matrix<Highlight>> highlight, int indent) {
     if (title.length() > 0)
         title += ": ";
     title += (boost::format("heur = (%d + %d = %d) d = %d") %
@@ -65,13 +66,29 @@ void dumpNode(std::ostream& file, const Table& table, const Node& node,
                 node.minDistance()).str();
     Status status = getInitialStatus(table, node);
     Matrix<bool> highlightedPath = getHighlightedPath(status, node);
-    if (highlight != nullptr) {
-        for (Point p : matrixRange(highlightedPath)) {
-            highlightedPath[p] = highlightedPath[p] && (*highlight)[p];
+    if (!highlight) {
+        highlight = Matrix<Highlight>{status.width(), status.height(), false};
+    }
+    for (Point p : matrixRange(highlightedPath)) {
+        if (highlightedPath[p]) {
+           (*highlight)[p] = true;
         }
     }
-    highlightedPath[node.from()] = true;
-    dumpStatus(file, status, title, &highlightedPath, indent);
+    Point arrowPosition = node.from() - node.d();
+    char arrowValue = '+';
+    if (node.d().x > 0) {
+        arrowValue = '>';
+    } else if (node.d().x < 0) {
+        arrowValue = '<';
+    } else if (node.d().y > 0) {
+        arrowValue = 'v';
+    } else if (node.d().y < 0) {
+        arrowValue = '^';
+    }
+
+    (*highlight)[arrowPosition] = arrowValue;
+    (*highlight)[node.from()] = true;
+    dumpStatus(file, status, title, highlight, indent);
 }
 
 } // namespace sokoban

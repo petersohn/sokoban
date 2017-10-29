@@ -29,7 +29,7 @@ void AdvancedStoneCalculator::HeurDumper::dumpPartition(const Table& table,
     s.currentPos(Point(-1, -1));
     dumpStatus(file_, s,
             (boost::format("Partition (%d)") % partition.heur).str(),
-            &partition.reachable);
+            Matrix<Highlight>(partition.reachable));
     file_ << std::endl;
 }
 
