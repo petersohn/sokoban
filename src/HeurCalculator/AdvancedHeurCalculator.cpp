@@ -101,7 +101,6 @@ void AdvancedStoneCalculator::initPartitions(const Table& table, Point  p,
 
 float AdvancedStoneCalculator::operator()(const Status& status, Point p) const
 {
-    std::vector<Partition>::const_iterator it;
     // If the current position equals p, then partitions can't be used. Use the
     // minimal non-negative partition's value instead
     if (status.currentPos() == p) {
