@@ -63,10 +63,8 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
     return {std::move(table), result};
 }
 
-std::pair<std::unique_ptr<Table>, Status>
-loadStatusFromFile(const char *filename) {
+std::pair<std::unique_ptr<Table>, Status> loadStatusFromStream(std::istream& file) {
     using namespace std;
-    ifstream file(filename, ifstream::in);
     stringstream ss;
     while (file.good()) {
         string s;
@@ -91,6 +89,12 @@ loadStatusFromFile(const char *filename) {
         lines.push_back(std::move(line));
     }
     return createStatus(width, height, lines);
+}
+
+std::pair<std::unique_ptr<Table>, Status>
+loadStatusFromFile(const char *filename) {
+    std::ifstream file(filename, std::ifstream::in);
+    return loadStatusFromStream(file);
 }
 
 } // namespace sokoban
