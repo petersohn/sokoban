@@ -67,7 +67,7 @@ void NormalExpander::InternalExpander::expandNode(Point p, Point d)
     }
 
     owner_.maxDepth_ = std::max(node->depth(), owner_.maxDepth_);
-    if (owner_.expandedNodes_ && ++*owner_.expandedNodes_ % 10000 == 0) {
+    if (owner_.expandedNodes_ && ++*owner_.expandedNodes_ % 1 == 0) {
         std::cerr << boost::format(
                 "Expanded nodes: %d.\n"
                 "Nodes in queue: %d.\n"

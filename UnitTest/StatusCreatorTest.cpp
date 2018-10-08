@@ -63,6 +63,27 @@ BOOST_AUTO_TEST_CASE(trim)
     BOOST_CHECK_EQUAL(data.first->height(), 2);
 }
 
+BOOST_AUTO_TEST_CASE(remove_unreachable_points)
+{
+    auto data = createStatus({
+            "o.*xy*.",
+            ".o*o**.",
+        });
+    BOOST_CHECK_EQUAL(data.first->width(), 5);
+    BOOST_CHECK_EQUAL(data.first->height(), 2);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{0, 0}), true);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{1, 0}), true);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{2, 0}), true);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{3, 0}), false);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{4, 0}), false);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{0, 1}), true);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{1, 1}), true);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{2, 1}), true);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{3, 1}), false);
+    BOOST_CHECK_EQUAL(data.first->wall(Point{4, 1}), true);
+    BOOST_CHECK_EQUAL(data.second.state().size(), 1);
+}
+
 BOOST_AUTO_TEST_CASE(no_lines)
 {
     BOOST_CHECK_THROW(createStatus({}), SokobanException);
@@ -79,6 +100,14 @@ BOOST_AUTO_TEST_CASE(no_nonwalls)
             "**",
             "**",
             "**"}), SokobanException);
+}
+
+BOOST_AUTO_TEST_CASE(split)
+{
+    BOOST_CHECK_THROW(createStatus({
+            "x.o",
+            "***",
+            "yo."}), SokobanException);
 }
 
 BOOST_AUTO_TEST_CASE(missing_destination)

@@ -2,9 +2,11 @@
 
 #include "Status/Status.hpp"
 #include "Exception.hpp"
+#include "floodFill.hpp"
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 namespace sokoban {
 
@@ -25,7 +27,6 @@ createStatus(const std::vector<std::string>& lines)
     auto table = std::make_unique<Table>(width, height);
     State state;
     bool startPosOK = false, destinationOK = false;
-    int stoneNum = 0;
     Point p;
     for (const std::string& line: lines)
     {
@@ -53,7 +54,6 @@ createStatus(const std::vector<std::string>& lines)
             case 'O':
                 table->wall(p, false);
                 state.addStone(p);
-                ++stoneNum;
                 break;
             default:
                 table->wall(p, true);
@@ -62,11 +62,26 @@ createStatus(const std::vector<std::string>& lines)
         if (++p.y >= static_cast<int>(height))
             break;
     }
+
+    Status status{*table, {}, table->destination()};
+    Matrix<bool> reachable{table->width(), table->height(), false};
+    floodFill(status, table->destination(), reachable);
+    for (Point p : matrixRange(reachable)) {
+        if (!reachable[p]) {
+            table->wall(p, true);
+            state.removeStone(p);
+        }
+    }
+    if (table->wall(table->startingPoint())) {
+        throw SokobanException("Starting point and destination not connected.");
+    }
+
     table->trim();
     if (table->width() == 0 || table->height() == 0) {
         throw SokobanException("Empty table");
     }
-    if (stoneNum == 0) {
+
+    if (state.size() == 0) {
         throw SokobanException("No stones");
     }
     if (!startPosOK) {
