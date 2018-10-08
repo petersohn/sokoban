@@ -9,11 +9,13 @@
 namespace sokoban {
 
 std::pair<std::unique_ptr<Table>, Status>
-createStatus(int width, int height, const std::vector<std::string>& lines)
+createStatus(const std::vector<std::string>& lines)
 {
-    if (width == 0 || height == 0) {
-        throw std::logic_error("Invalid table size");
-    }
+    std::size_t width = std::max_element(lines.begin(), lines.end(),
+            [](const std::string& lhs, const std::string& rhs) {
+                return lhs.size() < rhs.size();
+            })->size();
+    std::size_t height = lines.size();
     auto table = std::make_unique<Table>(width, height);
     State state;
     bool startPosOK = false, destinationOK = false;
@@ -21,7 +23,8 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
     Point p;
     for (const std::string& line: lines)
     {
-        for (p.x = 0; p.x < static_cast<int>(line.length()) && p.x < width; p.x++)
+        for (p.x = 0; p.x < static_cast<int>(line.length())
+                && p.x < static_cast<int>(width); p.x++)
         {
             switch (line[p.x])
             {
@@ -50,7 +53,7 @@ createStatus(int width, int height, const std::vector<std::string>& lines)
                 table->wall(p, true);
             }
         }
-        if (++p.y >= height)
+        if (++p.y >= static_cast<int>(height))
             break;
     }
     if (stoneNum == 0) {
@@ -81,7 +84,7 @@ std::pair<std::unique_ptr<Table>, Status> loadStatusFromStream(std::istream& fil
     }
     ss.seekg(0);
     size_t height, width;
-    ss >> height >> width;
+    ss >> height >> width; // keep this for backwards compatibility
     string line;
     getline(ss, line); // dummy
     std::vector<std::string> lines;
@@ -91,7 +94,7 @@ std::pair<std::unique_ptr<Table>, Status> loadStatusFromStream(std::istream& fil
         getline(ss, line);
         lines.push_back(std::move(line));
     }
-    return createStatus(width, height, lines);
+    return createStatus(lines);
 }
 
 std::pair<std::unique_ptr<Table>, Status>

@@ -41,7 +41,7 @@ BOOST_FIXTURE_TEST_SUITE(DistanceCheckerTest, DistanceCheckerFixture)
 
 BOOST_AUTO_TEST_CASE(allow_single_input)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "...x"
         });
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(allow_single_input)
 
 BOOST_AUTO_TEST_CASE(allow_single_input_with_multiple_stones)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "o..x"
         });
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(allow_single_input_with_multiple_stones)
 
 BOOST_AUTO_TEST_CASE(allow_input_if_stone_is_moved_farther)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "...x"
         });
@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(allow_input_if_stone_is_moved_farther)
 
 BOOST_AUTO_TEST_CASE(do_not_allow_input_if_stone_is_moved_closer)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "...x"
         });
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(do_not_allow_input_if_stone_is_moved_closer)
 
 BOOST_AUTO_TEST_CASE(allow_input_if_nearer_stone_is_moved_farther)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "o..x"
         });
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(allow_input_if_nearer_stone_is_moved_farther)
 
 BOOST_AUTO_TEST_CASE(do_not_allow_input_if_nearer_stone_is_moved_closer)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "o..x"
         });
@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE(do_not_allow_input_if_nearer_stone_is_moved_closer)
 
 BOOST_AUTO_TEST_CASE(allow_input_if_farther_stone_is_moved_farther)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "..oy",
             ".o.x"
         });
@@ -175,7 +175,7 @@ BOOST_AUTO_TEST_CASE(allow_input_if_farther_stone_is_moved_farther)
 
 BOOST_AUTO_TEST_CASE(allow_input_if_farther_stone_is_moved_closer)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y..o",
             ".o.x"
         });
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(allow_input_if_farther_stone_is_moved_closer)
 
 BOOST_AUTO_TEST_CASE(allow_empty_input)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y...",
             "..ox"
         });
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE(allow_empty_input)
 
 BOOST_AUTO_TEST_CASE(allow_empty_input_after_non_empty_input)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y...",
             "..ox"
         });

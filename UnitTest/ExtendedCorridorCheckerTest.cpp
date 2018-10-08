@@ -16,7 +16,7 @@ BOOST_FIXTURE_TEST_SUITE(ExtendedCorridorCheckerTest,
 
 BOOST_AUTO_TEST_CASE(blocked_when_opening_source_points_are_not_reachable_horizontally)
 {
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".ooo.",
             "o...o",
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(blocked_when_opening_source_points_are_not_reachable_horizo
 
 BOOST_AUTO_TEST_CASE(blocked_when_opening_source_points_are_not_reachable_vertically)
 {
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y.o..",
             ".o.o.",
             ".o.o.",

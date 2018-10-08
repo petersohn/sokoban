@@ -30,7 +30,7 @@ struct ComplexCheckerTestFixture {
 
         complexCheckerUnderTest = std::make_unique<ComplexChecker>(mockCheckers);
 
-        std::tie(table, status) = createStatus(2, 2, {
+        std::tie(table, status) = createStatus({
             "x.",
             "yo"});
 

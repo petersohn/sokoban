@@ -15,7 +15,7 @@ BOOST_FIXTURE_TEST_SUITE(ExtendedMovableCheckerTest,
 
 BOOST_AUTO_TEST_CASE(blocked_when_source_point_not_reachable_vertically)
 {
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             ".....",
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(blocked_when_source_point_not_reachable_vertically)
 
 BOOST_AUTO_TEST_CASE(blocked_when_source_point_not_reachable_horizontally)
 {
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             "...o*",

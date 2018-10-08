@@ -17,7 +17,7 @@
 using namespace sokoban;
 
 struct SubStatusForEachFixture {
-    std::pair<std::unique_ptr<Table>, Status> data = createStatus(3, 2, {
+    std::pair<std::unique_ptr<Table>, Status> data = createStatus({
             "y.o",
             "x..",
         });
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(iterate_with_correct_indexes)
 
 BOOST_AUTO_TEST_CASE(ignore_walls)
 {
-    data = createStatus(3, 2, {
+    data = createStatus({
             "yo*",
             "x.*",
         });
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE(ignore_walls)
 
 BOOST_AUTO_TEST_CASE(multiple_partitions)
 {
-    auto data = createStatus(3, 2, {
+    auto data = createStatus({
             "yo.",
             "x*.",
         });

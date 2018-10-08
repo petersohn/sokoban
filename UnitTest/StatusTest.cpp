@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_SUITE(StatusTest)
 BOOST_AUTO_TEST_CASE(consistent_table) {
     std::size_t width = 3;
     std::size_t height = 2;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".oy"});
     const auto& status = data.second;
@@ -32,9 +32,7 @@ BOOST_AUTO_TEST_CASE(consistent_table) {
 }
 
 BOOST_AUTO_TEST_CASE(consistent_state) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -59,9 +57,7 @@ BOOST_AUTO_TEST_CASE(consistent_state) {
 }
 
 BOOST_AUTO_TEST_CASE(consistent_current_pos) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -71,9 +67,7 @@ BOOST_AUTO_TEST_CASE(consistent_current_pos) {
 }
 
 BOOST_AUTO_TEST_CASE(consistent_reachable) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -91,9 +85,7 @@ BOOST_AUTO_TEST_CASE(consistent_reachable) {
 }
 
 BOOST_AUTO_TEST_CASE(shiftCurrentPos_leaves_reachability) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -108,9 +100,7 @@ BOOST_AUTO_TEST_CASE(shiftCurrentPos_leaves_reachability) {
 }
 
 BOOST_AUTO_TEST_CASE(equal_statuses_are_equal) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -126,9 +116,7 @@ BOOST_AUTO_TEST_CASE(equal_statuses_are_equal) {
 }
 
 BOOST_AUTO_TEST_CASE(statuses_with_currentPos_in_same_region_are_equal) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -144,9 +132,7 @@ BOOST_AUTO_TEST_CASE(statuses_with_currentPos_in_same_region_are_equal) {
 }
 
 BOOST_AUTO_TEST_CASE(statuses_with_currentPos_in_different_region_are_different) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -162,9 +148,7 @@ BOOST_AUTO_TEST_CASE(statuses_with_currentPos_in_different_region_are_different)
 }
 
 BOOST_AUTO_TEST_CASE(statuses_with_different_stones_are_different) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -180,9 +164,7 @@ BOOST_AUTO_TEST_CASE(statuses_with_different_stones_are_different) {
 }
 
 BOOST_AUTO_TEST_CASE(statuses_with_stones_on_different_positions_are_different) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -198,9 +180,7 @@ BOOST_AUTO_TEST_CASE(statuses_with_stones_on_different_positions_are_different) 
 }
 
 BOOST_AUTO_TEST_CASE(addStone) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -217,9 +197,7 @@ BOOST_AUTO_TEST_CASE(addStone) {
 }
 
 BOOST_AUTO_TEST_CASE(moveStone) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -236,9 +214,7 @@ BOOST_AUTO_TEST_CASE(moveStone) {
 }
 
 BOOST_AUTO_TEST_CASE(removeStone) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "..y"});
@@ -255,9 +231,7 @@ BOOST_AUTO_TEST_CASE(removeStone) {
 }
 
 BOOST_AUTO_TEST_CASE(moveStone_out_of_the_table_fails) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -267,9 +241,7 @@ BOOST_AUTO_TEST_CASE(moveStone_out_of_the_table_fails) {
 }
 
 BOOST_AUTO_TEST_CASE(moveStone_to_other_stone_fails) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             "...",
             "ooy"});
@@ -279,9 +251,7 @@ BOOST_AUTO_TEST_CASE(moveStone_to_other_stone_fails) {
 }
 
 BOOST_AUTO_TEST_CASE(moveStone_into_wall_fails) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -291,9 +261,7 @@ BOOST_AUTO_TEST_CASE(moveStone_into_wall_fails) {
 }
 
 BOOST_AUTO_TEST_CASE(remove_non_existing_stone_fails) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             "...",
             "ooy"});
@@ -303,9 +271,7 @@ BOOST_AUTO_TEST_CASE(remove_non_existing_stone_fails) {
 }
 
 BOOST_AUTO_TEST_CASE(add_stone_onto_other_stone_fails) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -315,9 +281,7 @@ BOOST_AUTO_TEST_CASE(add_stone_onto_other_stone_fails) {
 }
 
 BOOST_AUTO_TEST_CASE(serialize) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});
@@ -337,9 +301,7 @@ BOOST_AUTO_TEST_CASE(serialize) {
 }
 
 BOOST_AUTO_TEST_CASE(serialize_to_pointer) {
-    std::size_t width = 3;
-    std::size_t height = 3;
-    auto data = createStatus(width, height, {
+    auto data = createStatus({
             "**x",
             ".o.",
             "o.y"});

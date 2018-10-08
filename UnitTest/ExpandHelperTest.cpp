@@ -29,7 +29,7 @@ MOCK_FUNCTION(mockExpandFunction, 2, void(Point, Point));
 
 BOOST_AUTO_TEST_CASE(expandStatus_expand_one_stone)
 {
-    auto data = createStatus(4, 3, {
+    auto data = createStatus({
             "x...",
             ".o..",
             "y..."});
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(expandStatus_expand_one_stone)
 
 BOOST_AUTO_TEST_CASE(expandStatus_expand_more_stones)
 {
-    auto data = createStatus(4, 3, {
+    auto data = createStatus({
             "xo..",
             "...o",
             "y..."});
@@ -65,7 +65,7 @@ struct CreateNodeFixture {
             std::make_shared<MockHeurCalculator>();
     MockChecker checker;
     NodeFactory nodeFactory{heurCalculator};
-    std::pair<std::unique_ptr<Table>, Status> data = createStatus(4, 3, {
+    std::pair<std::unique_ptr<Table>, Status> data = createStatus({
             "xo..",
             "..o.",
             ".oy."});

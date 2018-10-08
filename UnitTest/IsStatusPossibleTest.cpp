@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_SUITE(IsStatusPossibleTest)
 
 BOOST_AUTO_TEST_CASE(possible_when_point_is_near_destination)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "x.o."
         });
@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(possible_when_point_is_near_destination)
 
 BOOST_AUTO_TEST_CASE(possible_when_point_is_on_destination)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "..oy",
             "x..o"
         });
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(possible_when_point_is_on_destination)
 
 BOOST_AUTO_TEST_CASE(possible_when_way_is_open)
 {
-    auto data = createStatus(5, 2, {
+    auto data = createStatus({
             "y.o..",
             ".ox.."
         });
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(possible_when_way_is_open)
 
 BOOST_AUTO_TEST_CASE(impossible_when_point_is_isolated_not_on_destination)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "y.o.",
             "x..o"
         });
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(impossible_when_point_is_isolated_not_on_destination)
 
 BOOST_AUTO_TEST_CASE(possible_when_maxDepth_is_too_small)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "yo..",
             "x.oo"
         });
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(possible_when_maxDepth_is_too_small)
 
 BOOST_AUTO_TEST_CASE(impossible_when_maxDepth_is_big_enough)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "yo..",
             "x.oo"
         });
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(impossible_when_maxDepth_is_big_enough)
 
 BOOST_AUTO_TEST_CASE(impossible_when_destination_is_in_the_way)
 {
-    auto data = createStatus(4, 2, {
+    auto data = createStatus({
             "yox.",
             "..oo"
         });
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(impossible_when_destination_is_in_the_way)
 
 BOOST_AUTO_TEST_CASE(complex_impossible1)
 {
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "....x",
             "..o..",
             ".o.o.",
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(complex_impossible1)
 
 BOOST_AUTO_TEST_CASE(complex_impossible2)
 {
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "**..x",
             "..o..",
             "..o..",
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE(complex_impossible2)
 
 BOOST_AUTO_TEST_CASE(complex_impossible3)
 {
-    auto data = createStatus(5, 3, {
+    auto data = createStatus({
             "x...*",
             "..oo.",
             "y*..."

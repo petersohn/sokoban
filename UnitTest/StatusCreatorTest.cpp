@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_SUITE(StatusCreatorTest)
 
 BOOST_AUTO_TEST_CASE(simple_table)
 {
-    auto data = createStatus(3, 2,{
+    auto data = createStatus({
             "x.o",
             "..y"
         });
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(simple_table)
 
 BOOST_AUTO_TEST_CASE(walls)
 {
-    auto data = createStatus(3, 2,{
+    auto data = createStatus({
             "x.o",
             "*y*"
         });
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(walls)
 
 BOOST_AUTO_TEST_CASE(missing_destination)
 {
-    BOOST_CHECK_THROW(createStatus(3, 2,{
+    BOOST_CHECK_THROW(createStatus({
             "..o",
             ".y."
         }), SokobanException);
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(missing_destination)
 
 BOOST_AUTO_TEST_CASE(missing_starting_position)
 {
-    BOOST_CHECK_THROW(createStatus(3, 2,{
+    BOOST_CHECK_THROW(createStatus({
             "x.o",
             "..."
         }), SokobanException);
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(missing_starting_position)
 
 BOOST_AUTO_TEST_CASE(missing_stones)
 {
-    BOOST_CHECK_THROW(createStatus(3, 2,{
+    BOOST_CHECK_THROW(createStatus({
             "x..",
             ".y."
         }), SokobanException);

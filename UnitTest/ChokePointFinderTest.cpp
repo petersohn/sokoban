@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(no_choke_point_in_empty_table)
 {
     options.chokePointNum_ = 1;
 
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "yo...",
             ".....",
             ".....",
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(single_choke_point)
 {
     options.chokePointNum_ = 1;
 
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "yo...",
             ".....",
             "**.**",
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(multiple_choke_points)
 {
     options.chokePointNum_ = 1;
 
-    auto data = createStatus(5, 8, {
+    auto data = createStatus({
             "yo...",
             ".....",
             "*.***",
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(no_choke_points_if_more_stones_are_needed)
 {
     options.chokePointNum_ = 1;
 
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "yo...",
             ".....",
             "*.*.*",
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(more_choke_points_in_options)
 {
     options.chokePointNum_ = 2;
 
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "yo...",
             ".....",
             "*.*.*",
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(single_choke_point_with_more_points_in_options)
 {
     options.chokePointNum_ = 2;
 
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "yo...",
             ".....",
             "**.**",

@@ -20,7 +20,7 @@ using checkerTypes = boost::mpl::list<CorridorChecker, ExtendedCorridorChecker>;
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_1x1_corridor_cannot_be_opened1, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..oo.",
             ".o.o.",
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_1x1_corridor_cannot_be_opened1, Check
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_1x1_corridor_cannot_be_opened2, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".oo..",
             ".o.o.",
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_1x1_corridor_cannot_be_opened2, Check
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_openings_are_not_movable, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..o..",
             ".o.o.",
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_openings_are_not_movable, Checker, ch
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_horizontal_corridor_cannot_be_opened1, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(7, 7, {
+    auto data = createStatus({
             ".......",
             ".y.....",
             ".ooooo.",
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_horizontal_corridor_cannot_be_opened1
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_horizontal_corridor_cannot_be_opened2, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(7, 7, {
+    auto data = createStatus({
             ".......",
             ".y.....",
             "..oooo.",
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_horizontal_corridor_cannot_be_opened2
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_openings_are_not_movable_horizontally, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(7, 7, {
+    auto data = createStatus({
             ".......",
             ".y.....",
             "..ooo..",
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_openings_are_not_movable_horizontally
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_vertical_corridor_cannot_be_opened1, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(7, 7, {
+    auto data = createStatus({
             ".......",
             ".yoo...",
             "..o.o..",
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_vertical_corridor_cannot_be_opened1, 
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_vertical_corridor_cannot_be_opened2, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(7, 7, {
+    auto data = createStatus({
             ".......",
             ".yoo...",
             "..o.o..",
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_vertical_corridor_cannot_be_opened2, 
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_openings_are_not_movable_vertically, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(7, 7, {
+    auto data = createStatus({
             ".......",
             ".y.o...",
             "..o.o..",
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_openings_are_not_movable_vertically, 
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wall1, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..ooo",
             "..o..",
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wal
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wall2, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             ".oo..",
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wal
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wall3, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "ooo..",
             "..o..",
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wal
 BOOST_AUTO_TEST_CASE_TEMPLATE(blocked_when_corridor_cannot_be_opened_against_wall4, Checker, checkerTypes)
 {
     CorridorCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "yo.o.",
             ".o.o.",
             "..oo.",

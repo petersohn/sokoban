@@ -20,7 +20,7 @@ struct SolutionCheckerTestFixture {
 
     SolutionCheckerTestFixture()
     {
-        auto data = createStatus(5, 6, {
+        auto data = createStatus({
                 "xo...",
                 ".....",
                 "**.**",

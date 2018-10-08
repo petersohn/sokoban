@@ -20,7 +20,7 @@ using checkerTypes = boost::mpl::list<MovableChecker, ExtendedMovableChecker>;
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_single_stone_in_the_middle, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             "..o..",
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_single_stone_in_the_mi
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_in_the_middle_horizontally, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             ".ooo.",
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_in_the_
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_in_the_middle_vertically, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..o..",
             "..o..",
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_in_the_
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_in_the_middle_in_different_shapes, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".oo..",
             "..o..",
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_in_the_
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_movable_stones, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..o..",
             ".ooo.",
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_mo
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_walls_vertically, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".*.*.",
             ".*o*.",
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_wa
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_walls_horizontally, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".***.",
             "..o..",
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_wa
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_walls_vertically_and_movable_in_one_direction, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".*.*.",
             ".*o*.",
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_wa
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_walls_horizontally_and_movable_in_one_direction, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".***.",
             "..o..",
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_wa
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_walls_vertically_and_movable_in_another_direction, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".*.*.",
             ".*o*.",
@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_wa
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_walls_horizontally_and_movable_in_another_direction, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".***.",
             "..o..",
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_is_a_stone_surrounded_by_wa
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable_in_one_direction_horizonally, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             ".ooo.",
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable_in_one_direction_vertically, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..o..",
             "..o..",
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable_in_another_direction_horizonally, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             ".ooo.",
@@ -229,7 +229,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable_in_another_direction_vertically, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             "..o..",
             "..o..",
@@ -246,7 +246,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_there_are_multiple_stones_movable
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_indirectly_vertically, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y.*..",
             "..o..",
             "..*..",
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_indirectly_ver
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_indirectly_horizontally, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             "*o*o*",
@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_indirectly_hor
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_horizontally1, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "..*.y",
             "..*..",
             ".o*..",
@@ -290,7 +290,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direc
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_horizontally2, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y.*..",
             "..*..",
             "..*o.",
@@ -304,7 +304,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direc
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_vertically1, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             "y....",
             ".....",
             "..***",
@@ -318,7 +318,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direc
 BOOST_AUTO_TEST_CASE_TEMPLATE(not_blocked_when_stone_is_reachable_from_one_direction_vertically2, Checker, checkerTypes)
 {
     MovableCheckerFixture<Checker> fixture;
-    auto data = createStatus(5, 5, {
+    auto data = createStatus({
             ".x...",
             "*oo..",
             "..***",

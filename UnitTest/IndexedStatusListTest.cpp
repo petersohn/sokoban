@@ -13,7 +13,7 @@ struct IndexedStatusListTestFixture {
 
     IndexedStatusListTestFixture()
     {
-        auto data = createStatus(3, 3, {
+        auto data = createStatus({
                 "x..",
                 "y.o",
                 "..."});
