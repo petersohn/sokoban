@@ -100,7 +100,8 @@ int Sokoban::run()
         preprocess();
     }
 
-    auto createExpander = expanderFactory->factory(preprocessedResult);
+    auto heuristics = expanderFactory->createHeuristics(preprocessedResult);
+    auto createExpander = expanderFactory->factory(heuristics);
     Solver solver(
             [this]() { return createPrioQueueFromOptions(options); },
             createExpander,
@@ -128,7 +129,12 @@ int Sokoban::run()
                 ComplexChecker{expanderFactory->createBasicCheckers(calculator)});
         subStatusForEach.wait(true);
     } else {
-        std::deque<std::shared_ptr<Node>> solution = solver.solve(*initialStatus);
+        std::deque<std::shared_ptr<Node>> solution;
+        if (sanityCheck(heuristics)) {
+            solution = solver.solve(*initialStatus);
+        } else {
+            std::cerr << "No solution possible\n";
+        }
         SolutionData solutionData{*table, solution,
                 SolutionQuality::none, ExpandedNodes{expandedNodes},
                 TotalTime{timeMeter.data()},
@@ -150,6 +156,21 @@ int Sokoban::run()
         std::cout << formatOutput(options.outputFormat_, solutionData);
     }
     return returnCode;
+}
+
+bool Sokoban::sanityCheck(const Heuristics& heuristics)
+{
+    if (heuristics.heurCalculator->calculateStatus(*initialStatus) < 0) {
+        return false;
+    }
+    for (const auto& checker : heuristics.checkers) {
+        for (Point p : initialStatus->state()) {
+            if (!checker->check(*initialStatus, p)) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void Sokoban::preprocess()

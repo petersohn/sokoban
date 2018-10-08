@@ -37,12 +37,18 @@ createStatus(const std::vector<std::string>& lines)
             {
             case 'X':
             case 'x':
+                if (destinationOK) {
+                    throw SokobanException("Multiple destinations.");
+                }
                 table->destination(p);
                 table->wall(p, false);
                 destinationOK = true;
                 break;
             case 'Y':
             case 'y':
+                if (startPosOK) {
+                    throw SokobanException("Multiple start positions.");
+                }
                 table->startingPoint(p);
                 table->wall(p, false);
                 startPosOK = true;

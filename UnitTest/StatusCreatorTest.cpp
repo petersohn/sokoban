@@ -102,6 +102,22 @@ BOOST_AUTO_TEST_CASE(no_nonwalls)
             "**"}), SokobanException);
 }
 
+BOOST_AUTO_TEST_CASE(multiple_starting_points)
+{
+    BOOST_CHECK_THROW(createStatus({
+            "oy",
+            "x.",
+            "y."}), SokobanException);
+}
+
+BOOST_AUTO_TEST_CASE(multiple_destination)
+{
+    BOOST_CHECK_THROW(createStatus({
+            "ox",
+            "x.",
+            "y."}), SokobanException);
+}
+
 BOOST_AUTO_TEST_CASE(split)
 {
     BOOST_CHECK_THROW(createStatus({

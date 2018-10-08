@@ -25,6 +25,12 @@ class Table;
 PrioNodeQueue createPrioQueueFromOptions(const Options& opts);
 std::unique_ptr<Dumper> createDumperFromOptions(const Options& opts);
 
+struct Heuristics {
+    std::shared_ptr<HeurCalculator> heurCalculator;
+    std::shared_ptr<HeurCalculator> experimentalCalculator;
+    std::vector<std::shared_ptr<const Checker>> checkers;
+};
+
 class OptionsBasedExpanderFactory {
     using Checkers = std::vector<std::shared_ptr<const Checker>>;
     using NodeCheckers = std::deque<std::shared_ptr<NodeChecker>>;
@@ -77,7 +83,8 @@ public:
     std::unique_ptr<Preprocessor> createPreprocessor();
     PreprocessedResult preprocess(Preprocessor& preprocessor);
 
-    ExpanderFactory factory(const PreprocessedResult& preprocessedResult);
+    Heuristics createHeuristics(const PreprocessedResult& preprocessedResult);
+    ExpanderFactory factory(const Heuristics& heuristics);
 
     void setHeurCalculatorParameters(HeurCalculator& heurCalculator);
 };

@@ -157,27 +157,32 @@ OptionsBasedExpanderFactory::createHeurCalculator(float heurMultiplier)
                     heurMultiplier);
 }
 
-ExpanderFactory OptionsBasedExpanderFactory::factory(
-        const PreprocessedResult& preprocessedResult)
+auto OptionsBasedExpanderFactory::createHeuristics(
+        const PreprocessedResult& preprocessedResult) -> Heuristics
 {
-    std::shared_ptr<HeurCalculator> calculator;
+    Heuristics result;
 
     if (preprocessedResult.heurCalculator) {
-        calculator = preprocessedResult.heurCalculator;
+        result.heurCalculator = preprocessedResult.heurCalculator;
     } else {
-        calculator = createHeurCalculator(options_.heurMultiplier_);
+        result.heurCalculator = createHeurCalculator(options_.heurMultiplier_);
     }
 
-    auto checkers = createBasicCheckers(calculator);
+    result.checkers = createBasicCheckers(result.heurCalculator);
 
     if (preprocessedResult.checker) {
-        checkers.push_back(preprocessedResult.checker);
+        result.checkers.push_back(preprocessedResult.checker);
     }
 
-    std::shared_ptr<HeurCalculator> experimentalCalculator;
-//    experimentalCalculator = calculator;
-    return [=](const Status& status) {
-            auto nodeCheckers = createBasicNodeCheckers(calculator, status);
+    return result;
+}
+
+ExpanderFactory OptionsBasedExpanderFactory::factory(
+        const Heuristics& heuristics)
+{
+    return [this, heuristics](const Status& status) {
+            auto nodeCheckers = createBasicNodeCheckers(
+                    heuristics.heurCalculator, status);
             if (options_.distanceLimiter_) {
                 auto basicHeurCalculator = std::make_shared<BasicHeurCalculator>(
                         BasicStoneCalculator{table_}, 1.0f);
@@ -191,9 +196,10 @@ ExpanderFactory OptionsBasedExpanderFactory::factory(
                         *expandedNodes_, options_.expandedNodeLimit_));
             }
 
-            return createExpander(true, calculator, ComplexChecker{checkers},
+            return createExpander(true, heuristics.heurCalculator,
+                    ComplexChecker{heuristics.checkers},
                     ComplexNodeChecker{nodeCheckers}, expandedNodes_,
-                    experimentalCalculator);
+                    heuristics.experimentalCalculator);
         };
 }
 

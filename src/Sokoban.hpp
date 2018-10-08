@@ -17,6 +17,7 @@ class Loader;
 class OptionsBasedExpanderFactory;
 class Status;
 class Table;
+struct Heuristics;
 
 class Sokoban {
 public:
@@ -43,6 +44,7 @@ private:
 
     void createExpanderFactory();
     void preprocess();
+    bool sanityCheck(const Heuristics& heuristics);
 
     void saveBasics(OutputArchive& archive);
     void savePreprocess(const Preprocessor& preprocessor);
