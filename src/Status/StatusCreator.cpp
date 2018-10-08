@@ -11,6 +11,9 @@ namespace sokoban {
 std::pair<std::unique_ptr<Table>, Status>
 createStatus(int width, int height, const std::vector<std::string>& lines)
 {
+    if (width == 0 || height == 0) {
+        throw std::logic_error("Invalid table size");
+    }
     auto table = std::make_unique<Table>(width, height);
     State state;
     bool startPosOK = false, destinationOK = false;
