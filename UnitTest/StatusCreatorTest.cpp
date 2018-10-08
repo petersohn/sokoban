@@ -52,6 +52,35 @@ BOOST_AUTO_TEST_CASE(walls)
     BOOST_CHECK_EQUAL(data.second.currentPos(), (Point{1, 1}));
 }
 
+BOOST_AUTO_TEST_CASE(trim)
+{
+    auto data = createStatus({
+            "x.o**",
+            ".y.**",
+            "*****",
+        });
+    BOOST_CHECK_EQUAL(data.first->width(), 3);
+    BOOST_CHECK_EQUAL(data.first->height(), 2);
+}
+
+BOOST_AUTO_TEST_CASE(no_lines)
+{
+    BOOST_CHECK_THROW(createStatus({}), SokobanException);
+}
+
+BOOST_AUTO_TEST_CASE(no_columns)
+{
+    BOOST_CHECK_THROW(createStatus({"", "", ""}), SokobanException);
+}
+
+BOOST_AUTO_TEST_CASE(no_nonwalls)
+{
+    BOOST_CHECK_THROW(createStatus({
+            "**",
+            "**",
+            "**"}), SokobanException);
+}
+
 BOOST_AUTO_TEST_CASE(missing_destination)
 {
     BOOST_CHECK_THROW(createStatus({

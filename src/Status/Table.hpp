@@ -49,6 +49,8 @@ public:
                 destination_ == other.destination_;
     }
 
+    void trim();
+
     template <typename Archive>
     void serialize(Archive& ar, const unsigned int /*version*/) {
         ar & walls_;

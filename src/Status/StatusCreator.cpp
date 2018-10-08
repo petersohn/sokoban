@@ -11,10 +11,16 @@ namespace sokoban {
 std::pair<std::unique_ptr<Table>, Status>
 createStatus(const std::vector<std::string>& lines)
 {
+    if (lines.empty()) {
+        throw SokobanException("No input");
+    }
     std::size_t width = std::max_element(lines.begin(), lines.end(),
             [](const std::string& lhs, const std::string& rhs) {
                 return lhs.size() < rhs.size();
             })->size();
+    if (width == 0) {
+        throw SokobanException("Empty input");
+    }
     std::size_t height = lines.size();
     auto table = std::make_unique<Table>(width, height);
     State state;
@@ -55,6 +61,10 @@ createStatus(const std::vector<std::string>& lines)
         }
         if (++p.y >= static_cast<int>(height))
             break;
+    }
+    table->trim();
+    if (table->width() == 0 || table->height() == 0) {
+        throw SokobanException("Empty table");
     }
     if (stoneNum == 0) {
         throw SokobanException("No stones");
